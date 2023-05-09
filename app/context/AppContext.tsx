@@ -1,12 +1,12 @@
 import React, {createContext, useState} from 'react'
 
 export type AppProviderProps = {
-  mode: string
-  language: string
-  direction: string
-  changeMode: () => void
-  changeLanguage: () => void
-  changeDirection: () => void
+  mode?: string
+  language?: string
+  direction?: string
+  changeMode?: () => void
+  changeLanguage?: () => void
+  changeDirection?: () => void
 }
 
 export const AppContext = createContext<AppProviderProps>({

@@ -1,4 +1,5 @@
 import React, {useContext} from 'react'
+
 import {Layout, Text, Button} from '@ui-kitten/components'
 
 import {AuthContext, AuthProviderProps} from '@Context'
@@ -24,8 +25,8 @@ export default function DashboardFeature({navigation}: any) {
       <Button
         style={buttonStyle}
         onPress={() =>
-          navigation.navigate('Home', {
-            screen: 'Profile',
+          navigation.navigate('Travel', {
+            screen: 'Home',
           })
         }>
         Go to Profile

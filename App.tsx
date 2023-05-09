@@ -15,8 +15,8 @@ import {AuthProvider, AppProvider} from '@Context'
 function App(): JSX.Element {
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <AppProvider>
+      <AuthProvider value={{}}>
+        <AppProvider value={{}}>
           <MainNavigation />
         </AppProvider>
       </AuthProvider>

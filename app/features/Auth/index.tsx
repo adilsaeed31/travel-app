@@ -9,9 +9,6 @@ const primaryColor = {
   color: '#F8D03B',
 }
 
-// Black : #1C1C1C
-// Yellow: #F8D03B
-
 // Below is the UI kitten component Layout
 const SBLayoutView = styled(Layout)
 const SBText = styled(Text)

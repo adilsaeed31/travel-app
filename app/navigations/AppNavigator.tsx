@@ -13,7 +13,9 @@ const AppNavigator = () => (
     <Tab.Screen
       name="Dashboard"
       component={DashboardFeature}
-      options={{headerShown: false}}
+      options={{
+        headerShown: false,
+      }}
     />
 
     <Tab.Screen name="Travel" component={TravelNavigator} />

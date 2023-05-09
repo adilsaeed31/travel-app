@@ -1,19 +1,19 @@
 import React from 'react'
-import {createStackNavigator} from '@react-navigation/stack'
+import {createNativeStackNavigator} from '@react-navigation/native-stack'
 
 import {Text} from 'react-native'
 
-const Stack = createStackNavigator()
+const Stack = createNativeStackNavigator()
 
 const CardScreen = () => (
   <>
-    <Text>Travel Card Screen</Text>
+    <Text>Card App Screen</Text>
   </>
 )
 
 const CardNavigator = () => (
   <Stack.Navigator screenOptions={{headerShown: false}}>
-    <Stack.Screen name="Card" component={CardScreen} />
+    <Stack.Screen name="Home" component={CardScreen} />
   </Stack.Navigator>
 )
 
