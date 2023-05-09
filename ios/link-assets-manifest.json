@@ -1,0 +1,17 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "app/assets/fonts/CoText-Bold.otf",
+      "sha1": "32ff903e8701e9a72300618b09aa576b1f663ab3"
+    },
+    {
+      "path": "app/assets/fonts/CoText-Light.otf",
+      "sha1": "3b5dde18d4b3e168b32b0869eb0459f02f7b5994"
+    },
+    {
+      "path": "app/assets/fonts/CoText.otf",
+      "sha1": "d683e77b945ddf0acdb7c2dda59c3d6a25969f3b"
+    }
+  ]
+}

@@ -14,6 +14,9 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		7699B88040F8A987B510C191 /* libPods-travelcard-travelcardTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-travelcard-travelcardTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		3363EE0E19A547C997611DAA /* CoText-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3A4D3BFB121A4C9788F52923 /* CoText-Bold.otf */; };
+		C13D14A20B364A2CA6FBBDB5 /* CoText-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 609B60766E6A440EB91F01CB /* CoText-Light.otf */; };
+		D7FE49D2967849E5A0EBBB36 /* CoText.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9BB38BEED84C4B03BB5B5F9E /* CoText.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +47,9 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = travelcard/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-travelcard-travelcardTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-travelcard-travelcardTests.release.xcconfig"; path = "Target Support Files/Pods-travelcard-travelcardTests/Pods-travelcard-travelcardTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		3A4D3BFB121A4C9788F52923 /* CoText-Bold.otf */ = {isa = PBXFileReference; name = "CoText-Bold.otf"; path = "../app/assets/fonts/CoText-Bold.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		609B60766E6A440EB91F01CB /* CoText-Light.otf */ = {isa = PBXFileReference; name = "CoText-Light.otf"; path = "../app/assets/fonts/CoText-Light.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		9BB38BEED84C4B03BB5B5F9E /* CoText.otf */ = {isa = PBXFileReference; name = "CoText.otf"; path = "../app/assets/fonts/CoText.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +128,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				527C213FE52444B6834D5009 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -147,6 +154,17 @@
 			);
 			path = Pods;
 			sourceTree = "<group>";
+		};
+		527C213FE52444B6834D5009 /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				3A4D3BFB121A4C9788F52923 /* CoText-Bold.otf */,
+				609B60766E6A440EB91F01CB /* CoText-Light.otf */,
+				9BB38BEED84C4B03BB5B5F9E /* CoText.otf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -244,6 +262,9 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				3363EE0E19A547C997611DAA /* CoText-Bold.otf in Resources */,
+				C13D14A20B364A2CA6FBBDB5 /* CoText-Light.otf in Resources */,
+				D7FE49D2967849E5A0EBBB36 /* CoText.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
