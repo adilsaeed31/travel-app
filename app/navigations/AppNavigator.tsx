@@ -6,11 +6,11 @@ import {HelpScreen} from '@Screens'
 import {DashboardFeature} from '@Features'
 import {CardNavigator, TravelNavigator} from '@Navigations'
 
-const Tab = createBottomTabNavigator()
+const {Navigator, Screen} = createBottomTabNavigator()
 
 const AppNavigator = () => (
-  <Tab.Navigator>
-    <Tab.Screen
+  <Navigator>
+    <Screen
       name="Dashboard"
       component={DashboardFeature}
       options={{
@@ -18,12 +18,12 @@ const AppNavigator = () => (
       }}
     />
 
-    <Tab.Screen name="Travel" component={TravelNavigator} />
+    <Screen name="Travel" component={TravelNavigator} />
 
-    <Tab.Screen name="Card" component={CardNavigator} />
+    <Screen name="Card" component={CardNavigator} />
 
-    <Tab.Screen name="Help" component={HelpScreen} />
-  </Tab.Navigator>
+    <Screen name="Help" component={HelpScreen} />
+  </Navigator>
 )
 
 export default AppNavigator

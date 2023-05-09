@@ -1,20 +1,20 @@
 import React from 'react'
-import {createNativeStackNavigator} from '@react-navigation/native-stack'
+import {createStackNavigator} from '@react-navigation/stack'
 
 import {AuthFeature} from '@Features'
 
-const Stack = createNativeStackNavigator()
+const {Navigator, Screen} = createStackNavigator()
 
 export default function AuthNavigator() {
   return (
-    <Stack.Navigator>
-      <Stack.Screen
+    <Navigator>
+      <Screen
         name="Auth"
         options={{
           headerShown: false,
         }}
         component={AuthFeature}
       />
-    </Stack.Navigator>
+    </Navigator>
   )
 }

@@ -1,9 +1,9 @@
 import React from 'react'
-import {createNativeStackNavigator} from '@react-navigation/native-stack'
+import {createStackNavigator} from '@react-navigation/stack'
 
 import {Text} from 'react-native'
 
-const Stack = createNativeStackNavigator()
+const {Navigator, Screen} = createStackNavigator()
 
 const CardScreen = () => (
   <>
@@ -12,9 +12,9 @@ const CardScreen = () => (
 )
 
 const CardNavigator = () => (
-  <Stack.Navigator screenOptions={{headerShown: false}}>
-    <Stack.Screen name="Home" component={CardScreen} />
-  </Stack.Navigator>
+  <Navigator screenOptions={{headerShown: false}}>
+    <Screen name="Home" component={CardScreen} />
+  </Navigator>
 )
 
 export default CardNavigator
