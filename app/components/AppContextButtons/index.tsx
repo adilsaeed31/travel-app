@@ -27,7 +27,7 @@ const AppContextButtons = ({
   return (
     <ButtonGroup style={buttonStyle}>
       <Button onPress={changeMode}>
-        {`${mode === 'light' ? 'dark' : 'light'}`.toUpperCase()}
+        {`${mode === 'light' ? 'light' : 'dark'}`.toUpperCase()}
       </Button>
       <Button onPress={changeDirection}>
         {`${direction === 'rtl' ? 'ltr' : 'rtl'}`.toUpperCase()}

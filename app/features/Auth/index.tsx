@@ -4,9 +4,12 @@ import {styled} from 'nativewind'
 
 import {AppContextButtons} from '@Components'
 import {AppContext, AuthContext, AuthProviderProps} from '@Context'
+import SvgSaibLogo from '../../assets/icons/SaibLogo'
 
 const primaryColor = {
   color: '#F8D03B',
+  fontFamily:'Co Text',
+  fontWeight:'500'
 }
 
 // Below is the UI kitten component Layout
@@ -28,14 +31,13 @@ export default function AuthFeature() {
 
   return (
     <SBLayoutView className="flex-1 px-5 pt-20 pb-8">
-      <Text>Authentication Screen</Text>
 
       <SBLayoutView className="flex-1 items-center justify-center">
-        <SBText style={primaryColor} className="font-thin text-5xl">
-          Travel Card App
-        </SBText>
+      <SvgSaibLogo />
+        
+      
       </SBLayoutView>
-
+      
       <AppContextButtons
         mode={mode}
         language={language}

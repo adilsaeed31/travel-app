@@ -26,7 +26,7 @@ const MainNavigation = () => {
 
         <ApplicationProvider
           {...eva}
-          theme={mode === 'light' ? eva.light : eva.dark}>
+          theme={mode === 'dark' ? eva.light : eva.dark}>
           <Suspense fallback={<ActivityIndicator />}>
             {user ? <AppNavigator /> : <AuthNavigator />}
           </Suspense>
