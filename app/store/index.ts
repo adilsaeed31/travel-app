@@ -8,7 +8,7 @@ type LanguageStore = {
 
 export const useStore = create<LanguageStore>(set => ({
   language: 'en',
-  isRTL: true,
+  isRTL: false,
   toggleLanguage: () => {
     set(state => ({
       language: state.language === 'en' ? 'ar' : 'en',
