@@ -17,6 +17,7 @@ module.exports = {
       '@Hooks': `${__dirname}/app/hooks`,
       '@Features': `${__dirname}/app/features`,
       '@Screens': `${__dirname}/app/screens`,
+      '@Store': `${__dirname}/app/store`,
       '@Navigations': `${__dirname}/app/navigations`,
     },
   },
