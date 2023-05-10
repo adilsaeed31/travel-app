@@ -1,4 +1,5 @@
 import React, {createContext, useState, ReactNode} from 'react'
+import {useStore} from '@Store'
 
 export type AppProviderProps = {
   children?: ReactNode
@@ -7,7 +8,6 @@ export type AppProviderProps = {
   direction?: string
   changeMode?: () => void
   changeLanguage?: () => void
-  changeDirection?: () => void
 }
 
 export const AppContext = createContext<AppProviderProps>({
@@ -16,7 +16,6 @@ export const AppContext = createContext<AppProviderProps>({
   direction: 'ltr',
   changeMode: () => {},
   changeLanguage: () => {},
-  changeDirection: () => {},
 })
 
 /**
@@ -26,16 +25,18 @@ export const AppContext = createContext<AppProviderProps>({
  */
 
 export function AppProvider(props: AppProviderProps) {
+  const {setIsRTL} = useStore()
   let [mode, setMode] = useState('dark')
   let [language, setLanguage] = useState('en')
   let [direction, setDirection] = useState('ltr')
 
   const changeMode = () => setMode(mode === 'light' ? 'dark' : 'light')
 
-  const changeDirection = () =>
+  const changeLanguage = () => {
+    setLanguage(language === 'en' ? 'ar' : 'en')
     setDirection(direction === 'rtl' ? 'ltr' : 'rtl')
-
-  const changeLanguage = () => setLanguage(language === 'en' ? 'ar' : 'en')
+    setIsRTL(direction !== 'rtl')
+  }
 
   return (
     <AppContext.Provider
@@ -47,7 +48,6 @@ export function AppProvider(props: AppProviderProps) {
 
         changeMode,
         changeLanguage,
-        changeDirection,
       }}
     />
   )

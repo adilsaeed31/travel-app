@@ -1,7 +1,11 @@
 import {isRTL} from '@Utils'
 import {create} from 'zustand'
 
-export const useStore = create<{isRTL: boolean; language: string}>(set => ({
+export const useStore = create<{
+  isRTL: boolean
+  language: string
+  setIsRTL: (value: boolean) => void
+}>(set => ({
   isRTL: isRTL,
   language: 'en',
 
