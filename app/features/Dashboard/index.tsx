@@ -12,7 +12,7 @@ const containerStyle = {
 
 const buttonStyle = {
   marginTop: 20,
-  fontFamily:'Co Text'
+  fontFamily: 'Co Text',
 }
 
 export default function DashboardFeature({navigation}: any) {
@@ -20,8 +20,10 @@ export default function DashboardFeature({navigation}: any) {
 
   return (
     <Layout style={containerStyle}>
-      <Text style={{fontFamily:'Co Text'}}>Dashboard Screen</Text>
-      <Text style={{fontFamily:'Co Text'}}>User Information Data: {JSON.stringify(user)} </Text>
+      <Text style={{fontFamily: 'Co Text'}}>Dashboard Screen</Text>
+      <Text style={{fontFamily: 'Co Text'}}>
+        User Information Data: {JSON.stringify(user)}{' '}
+      </Text>
 
       <Button
         style={buttonStyle}

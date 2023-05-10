@@ -7,12 +7,12 @@ const buttonStyle = {
 }
 
 type AppContextButtonProps = {
-  mode: string
-  language: string
-  direction: string
-  changeMode: () => void
-  changeLanguage: () => void
-  changeDirection: () => void
+  mode?: string
+  language?: string
+  direction?: string
+  changeMode?: () => void
+  changeLanguage?: () => void
+  changeDirection?: () => void
 }
 
 const AppContextButtons = ({
@@ -29,9 +29,11 @@ const AppContextButtons = ({
       <Button onPress={changeMode}>
         {`${mode === 'light' ? 'light' : 'dark'}`.toUpperCase()}
       </Button>
+
       <Button onPress={changeDirection}>
         {`${direction === 'rtl' ? 'ltr' : 'rtl'}`.toUpperCase()}
       </Button>
+
       <Button onPress={changeLanguage}>
         {`${language === 'en' ? 'ar' : 'en'}`.toUpperCase()}
       </Button>

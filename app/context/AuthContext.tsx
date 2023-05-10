@@ -1,20 +1,23 @@
-import React, {useRef, useState, useEffect, createContext} from 'react'
+import React, {
+  useRef,
+  useState,
+  useEffect,
+  createContext,
+  ReactNode,
+} from 'react'
 import {AppState} from 'react-native'
 
 import {storeToken, storeUser, restoreUser, clearStorage} from '@Utils'
 
 export type AuthProviderProps = {
+  children?: ReactNode
   user?: {} | null
   error?: null | any
   isError?: boolean
   isLoading?: boolean
   login?: (credentials: {username: string; password: string}) => void
   logout?: () => void
-  setUser?: () => void
 }
-
-type AuthProps = JSX.IntrinsicAttributes &
-  React.ProviderProps<AuthProviderProps>
 
 export const AuthContext = createContext<AuthProviderProps>({
   user: {},
@@ -23,7 +26,6 @@ export const AuthContext = createContext<AuthProviderProps>({
   isLoading: false,
   login: () => {},
   logout: () => {},
-  setUser: () => {},
 })
 
 /**
@@ -32,7 +34,7 @@ export const AuthContext = createContext<AuthProviderProps>({
  * and logout function we are removing user object to logout user
  */
 
-export function AuthProvider(props: AuthProps) {
+export function AuthProvider(props: AuthProviderProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [isError, setIsError] = useState(false)
   const [error, setError] = useState<any>(null)
