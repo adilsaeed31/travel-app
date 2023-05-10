@@ -1,6 +1,7 @@
-import React, {createContext, useState} from 'react'
+import React, {createContext, useState, ReactNode} from 'react'
 
 export type AppProviderProps = {
+  children?: ReactNode
   mode?: string
   language?: string
   direction?: string
@@ -24,9 +25,7 @@ export const AppContext = createContext<AppProviderProps>({
  * We can also use changeMode, changeLanguage and changeDirection methods to change them
  */
 
-type AppProps = JSX.IntrinsicAttributes & React.ProviderProps<AppProviderProps>
-
-export function AppProvider(props: AppProps) {
+export function AppProvider(props: AppProviderProps) {
   let [mode, setMode] = useState('dark')
   let [language, setLanguage] = useState('en')
   let [direction, setDirection] = useState('ltr')

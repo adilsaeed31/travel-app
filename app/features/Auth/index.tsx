@@ -3,14 +3,8 @@ import {Layout, Text, Button} from '@ui-kitten/components'
 import {styled} from 'nativewind'
 
 import {AppContextButtons} from '@Components'
-import {AppContext, AuthContext, AuthProviderProps} from '@Context'
-import SvgSaibLogo from '../../assets/icons/SaibLogo'
-
-const primaryColor = {
-  color: '#F8D03B',
-  fontFamily:'Co Text',
-  fontWeight:'500'
-}
+import {AppContext, AuthContext} from '@Context'
+import {SaibLogo} from '@Assets'
 
 // Below is the UI kitten component Layout
 const SBLayoutView = styled(Layout)
@@ -26,18 +20,14 @@ export default function AuthFeature() {
     changeDirection,
   } = useContext(AppContext)
 
-  const {login, isLoading, isError, error} =
-    useContext<AuthProviderProps>(AuthContext)
+  const {login, isLoading, isError, error} = useContext(AuthContext)
 
   return (
     <SBLayoutView className="flex-1 px-5 pt-20 pb-8">
-
       <SBLayoutView className="flex-1 items-center justify-center">
-      <SvgSaibLogo />
-        
-      
+        <SaibLogo />
       </SBLayoutView>
-      
+
       <AppContextButtons
         mode={mode}
         language={language}
@@ -53,7 +43,7 @@ export default function AuthFeature() {
       <Button
         disabled={isLoading}
         onPress={() =>
-          login({username: 'w157mumo@saib.com.sa', password: 'Pass@123'})
+          login?.({username: 'w157mumo@saib.com.sa', password: 'Pass@123'})
         }>
         Sign In
       </Button>
