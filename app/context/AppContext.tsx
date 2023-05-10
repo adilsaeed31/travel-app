@@ -25,7 +25,7 @@ export const AppContext = createContext<AppProviderProps>({
  */
 
 export function AppProvider(props: AppProviderProps) {
-  const {setIsRTL} = useStore()
+  const {toggleLanguage} = useStore()
   let [mode, setMode] = useState('dark')
   let [language, setLanguage] = useState('en')
   let [direction, setDirection] = useState('ltr')
@@ -35,7 +35,7 @@ export function AppProvider(props: AppProviderProps) {
   const changeLanguage = () => {
     setLanguage(language === 'en' ? 'ar' : 'en')
     setDirection(direction === 'rtl' ? 'ltr' : 'rtl')
-    setIsRTL(direction !== 'rtl')
+    toggleLanguage()
   }
 
   return (

@@ -1,14 +1,18 @@
-import {isRTL} from '@Utils'
 import {create} from 'zustand'
 
-export const useStore = create<{
+type LanguageStore = {
+  language: 'en' | 'ar'
   isRTL: boolean
-  language: string
-  setIsRTL: (value: boolean) => void
-}>(set => ({
-  isRTL: isRTL,
-  language: 'en',
+  toggleLanguage: () => void
+}
 
-  setIsRTL: (value: any) => set({isRTL: value}),
-  setLanguage: (value: any) => set({language: value}),
+export const useStore = create<LanguageStore>(set => ({
+  language: 'en',
+  isRTL: true,
+  toggleLanguage: () => {
+    set(state => ({
+      language: state.language === 'en' ? 'ar' : 'en',
+      isRTL: !state.isRTL,
+    }))
+  },
 }))
