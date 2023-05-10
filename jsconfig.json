@@ -11,7 +11,8 @@
       "@Hooks": ["app/hooks"],
       "@Features": ["app/features"],
       "@Screens": ["app/screens"],
-      "@Navigations": ["app/navigations"]
+      "@Navigations": ["app/navigations"],
+      "@Store": ["app/store"],
     }
   },
   "include": ["app/**/*"],

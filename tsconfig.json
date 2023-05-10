@@ -1,6 +1,7 @@
 {
   "extends": "@tsconfig/react-native/tsconfig.json",
   "compilerOptions": {
+    "jsx": "react",
     "baseUrl": "./",
     "paths": {
       "@App": ["app"],
@@ -12,6 +13,7 @@
       "@Hooks": ["app/hooks"],
       "@Features": ["app/features"],
       "@Screens": ["app/screens"],
+      "@Store": ["app/store"],
       "@Navigations": ["app/navigations"]
     }
   }
