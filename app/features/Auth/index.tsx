@@ -10,7 +10,7 @@ const SBLayoutView = styled(Layout)
 const SBText = styled(Text)
 
 export default function AuthFeature() {
-  const {direction, language, changeLanguage} = useContext(AppContext)
+  const {changeLanguage} = useContext(AppContext)
 
   const {isLoading, isError, error} = useContext(AuthContext)
 
@@ -26,7 +26,7 @@ export default function AuthFeature() {
       {isError && <SBText className="py-5">Error: {error}</SBText>}
 
       <Button disabled={isLoading} onPress={() => changeLanguage?.()}>
-        {`Sign In ${direction} ${language}`}
+        Sign In
       </Button>
     </SBLayoutView>
   )
