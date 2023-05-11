@@ -1,13 +1,13 @@
 export const translation = {
   en: {
     auth: {
-      title: 'Travel App',
+      title: 'Welcome to Travel App {{name}}',
       buttonLogin: 'Sign In',
     },
   },
   ar: {
     auth: {
-      title: 'تطبيق السفر',
+      title: '{{name}} مرحبًا بك في تطبيق السفر',
       buttonLogin: 'تسجيل الدخول',
     },
   },
