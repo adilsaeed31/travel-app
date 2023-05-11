@@ -15,7 +15,7 @@ export default function SplashFeature() {
   const logoPosition = useRef(new Animated.ValueXY({x: 0, y: 0})).current
 
   const textOpacity = useRef(new Animated.Value(0)).current
-  const textPosition = useRef(new Animated.ValueXY({x: -60, y: 0})).current
+  const textPosition = useRef(new Animated.ValueXY({x: -60, y: 10})).current
 
   useEffect(() => {
     SplashScreen.hide()
