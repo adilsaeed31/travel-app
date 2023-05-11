@@ -65,18 +65,6 @@ export default function SplashScreens({
     })
   }, [logoPosition, logoScale, onCompleteAnimation, textOpacity, textPosition])
 
-  console.log(
-    windowDimensions,
-    'windowDimensions',
-    windowWidth,
-    'windowWidth',
-    windowHeight,
-    'windowHeight',
-    Platform.OS,
-    'Platform.OS',
-  )
-  console.log(screenDimensions, 'screenDimensions')
-
   return (
     <View className="flex-1 px-5 py-5">
       <Animated.Text
