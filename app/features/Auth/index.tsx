@@ -20,7 +20,7 @@ export default function AuthFeature() {
         <SaibLogo />
       </SBLayoutView>
 
-      <TextView>title</TextView>
+      <TextView>auth:title</TextView>
 
       {isLoading && <SBText className="py-5">Loading ...</SBText>}
       {isError && <SBText className="py-5">Error: {error}</SBText>}
