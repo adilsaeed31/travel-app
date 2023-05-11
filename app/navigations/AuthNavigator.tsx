@@ -7,14 +7,11 @@ const {Navigator, Screen} = createStackNavigator()
 
 export default function AuthNavigator() {
   return (
-    <Navigator>
-      <Screen
-        name="Auth"
-        options={{
-          headerShown: false,
-        }}
-        component={AuthFeature}
-      />
+    <Navigator
+      screenOptions={{
+        headerShown: false,
+      }}>
+      <Screen name="Auth" component={AuthFeature} />
     </Navigator>
   )
 }

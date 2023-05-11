@@ -5,15 +5,20 @@
  * @format
  */
 
-import React from 'react'
+import React, {useState} from 'react'
 import {QueryClientProvider} from '@tanstack/react-query'
-import SplashScreen from 'react-native-splash-screen'
+
 import {queryClient} from '@Api'
 import {MainNavigation} from '@Navigations'
 import {AuthProvider, AppProvider} from '@Context'
+import {SplashScreen} from '@Screens'
 
 function App(): JSX.Element {
-  SplashScreen.hide()
+  const [isAppReady, SetIsAppReady] = useState<boolean>(false)
+
+  if (!isAppReady) {
+    return <SplashScreen onCompleteAnimation={() => SetIsAppReady(true)} />
+  }
 
   return (
     <QueryClientProvider client={queryClient}>
