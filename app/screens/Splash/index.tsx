@@ -84,7 +84,7 @@ export default function SplashScreens({
           opacity: textOpacity,
           transform: [...textPosition.getTranslateTransform()],
         }}
-        className="absolute ml-16 mt-4 dark:text-gray-700 text-2xl font-bold">
+        className="absolute ml-16 mt-4 dark:text-white text-gray-700 text-2xl font-bold">
         Saudi Investment Bank
       </Animated.Text>
 
