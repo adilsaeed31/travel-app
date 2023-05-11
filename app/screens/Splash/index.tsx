@@ -1,21 +1,28 @@
 import React, {useEffect, useRef} from 'react'
 import {styled} from 'nativewind'
-import {Animated, Easing} from 'react-native'
+import {Animated, Easing, Dimensions, Platform, View} from 'react-native'
 import SplashScreen from 'react-native-splash-screen'
-
-import {Layout} from '@ui-kitten/components'
 
 import {SaibLogo} from '@Assets'
 
-// Below is the UI kitten component Layout
-const SBLayoutView = styled(Layout)
+const SBLayoutView = styled(View)
 
-export default function SplashFeature() {
+const windowDimensions = Dimensions.get('window')
+const screenDimensions = Dimensions.get('screen')
+
+const windowWidth = windowDimensions.width
+const windowHeight = windowDimensions.height
+
+export default function SplashScreens({
+  onCompleteAnimation,
+}: {
+  onCompleteAnimation: Function
+}) {
   const logoScale = useRef(new Animated.Value(1)).current
   const logoPosition = useRef(new Animated.ValueXY({x: 0, y: 0})).current
 
   const textOpacity = useRef(new Animated.Value(0)).current
-  const textPosition = useRef(new Animated.ValueXY({x: -60, y: 10})).current
+  const textPosition = useRef(new Animated.ValueXY({x: -60, y: 0})).current
 
   useEffect(() => {
     SplashScreen.hide()
@@ -23,7 +30,13 @@ export default function SplashFeature() {
     Animated.sequence([
       Animated.parallel([
         Animated.timing(logoPosition, {
-          toValue: {x: -140, y: -336},
+          toValue: {
+            x: windowWidth / 2 - windowWidth + 50,
+            y:
+              windowHeight / 2 -
+              windowHeight +
+              (Platform.OS === 'ios' ? 120 : 80),
+          },
           duration: 800,
           delay: 500,
           easing: Easing.elastic(0.5),
@@ -44,25 +57,34 @@ export default function SplashFeature() {
           useNativeDriver: true,
         }),
         Animated.timing(textPosition, {
-          toValue: {x: 35, y: 10},
+          toValue: {x: 35, y: Platform.OS === 'ios' ? 86 : 35},
           duration: 500,
           easing: Easing.elastic(0.5),
           useNativeDriver: true,
         }),
       ]),
-    ]).start()
-  }, [logoPosition, logoScale, textOpacity, textPosition])
+    ]).start(() => {
+      onCompleteAnimation()
+    })
+  }, [logoPosition, logoScale, onCompleteAnimation, textOpacity, textPosition])
+
+  console.log(
+    windowDimensions,
+    'windowDimensions',
+    windowWidth,
+    windowHeight,
+    Platform.OS,
+  )
+  console.log(screenDimensions, 'screenDimensions', Platform.OS)
 
   return (
     <SBLayoutView className="flex-1 px-5 py-5">
       <Animated.Text
-        // eslint-disable-next-line react-native/no-inline-styles
         style={{
-          position: 'absolute',
           opacity: textOpacity,
           transform: [...textPosition.getTranslateTransform()],
         }}
-        className="ml-16 mt-4 text-gray-700 text-2xl font-bold">
+        className="absolute ml-16 mt-4 text-gray-700 text-2xl font-bold">
         Saudi Investment Bank
       </Animated.Text>
 
