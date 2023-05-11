@@ -16,10 +16,9 @@ export default function AuthFeature() {
   const {isLoading, isError, error} = useContext(AuthContext)
 
   return (
-    <SBLayoutView className="flex-1 px-5 pt-20 pb-8">
-      <TextView className="dark:text-white text-white">
-        {t('auth:title', {name: ''})}
-      </TextView>
+    <SBLayoutView className="flex-1 p-5">
+      <TextView>{t('auth:title', {name: ''})}</TextView>
+
       <SBLayoutView className="flex-1 items-center justify-center">
         <SaibLogo />
       </SBLayoutView>

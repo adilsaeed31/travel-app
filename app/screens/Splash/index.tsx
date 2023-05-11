@@ -1,11 +1,8 @@
 import React, {useEffect, useRef} from 'react'
-import {styled} from 'nativewind'
-import {Animated, Easing, Dimensions, Platform, View} from 'react-native'
 import SplashScreen from 'react-native-splash-screen'
+import {Animated, Easing, Dimensions, Platform, View} from 'react-native'
 
 import {SaibLogo} from '@Assets'
-
-const SBLayoutView = styled(View)
 
 const windowDimensions = Dimensions.get('window')
 const screenDimensions = Dimensions.get('screen')
@@ -72,22 +69,24 @@ export default function SplashScreens({
     windowDimensions,
     'windowDimensions',
     windowWidth,
+    'windowWidth',
     windowHeight,
+    'windowHeight',
     Platform.OS,
+    'Platform.OS',
   )
-  console.log(screenDimensions, 'screenDimensions', Platform.OS)
+  console.log(screenDimensions, 'screenDimensions')
 
   return (
-    <SBLayoutView className="flex-1 px-5 py-5">
+    <View className="flex-1 px-5 py-5">
       <Animated.Text
         style={{
           opacity: textOpacity,
           transform: [...textPosition.getTranslateTransform()],
         }}
-        className="absolute ml-16 mt-4 dark:text-white text-gray-700 text-2xl font-bold">
+        className="absolute ml-16 mt-4 text-2xl font-bold">
         Saudi Investment Bank
       </Animated.Text>
-
       <Animated.View
         className="flex-1 items-center justify-center"
         style={{
@@ -98,6 +97,6 @@ export default function SplashScreens({
         }}>
         <SaibLogo />
       </Animated.View>
-    </SBLayoutView>
+    </View>
   )
 }

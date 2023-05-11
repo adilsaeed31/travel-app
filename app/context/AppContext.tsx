@@ -1,9 +1,11 @@
 import React, {createContext, useState, ReactNode} from 'react'
+import {useColorScheme} from 'react-native'
+
 import {useStore} from '@Store'
 
 export type AppProviderProps = {
   children?: ReactNode
-  mode?: string
+  mode?: 'dark' | 'light' | null
   language?: string
   direction?: string
   changeMode?: () => void
@@ -11,7 +13,7 @@ export type AppProviderProps = {
 }
 
 export const AppContext = createContext<AppProviderProps>({
-  mode: 'dark',
+  mode: 'light',
   language: 'en',
   direction: 'ltr',
   changeMode: () => {},
@@ -26,7 +28,7 @@ export const AppContext = createContext<AppProviderProps>({
 
 export function AppProvider(props: AppProviderProps) {
   const {toggleLanguage} = useStore()
-  let [mode, setMode] = useState('dark')
+  let [mode, setMode] = useState(useColorScheme())
   let [language, setLanguage] = useState('en')
   let [direction, setDirection] = useState('ltr')
 

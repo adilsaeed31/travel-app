@@ -1,23 +1,17 @@
 import React from 'react'
-import {Text} from 'react-native'
+import {Text} from '@ui-kitten/components'
 import {styled} from 'styled-components/native'
-import {styled as NativeWindStyled} from 'nativewind'
+
 import {useStore} from '@Store'
 
-const StyledTextView = styled(NativeWindStyled(Text))<{isRTL: boolean}>`
+const StyledTextView = styled(Text)<{isRTL: boolean}>`
   font-size: 16px;
   text-align: ${({isRTL}) => (isRTL ? 'right' : 'left')};
 `
 
-function TextView({
-  children,
-  className,
-}: {
-  children: string
-  className: string
-}) {
+function TextView({children}: {children: string}) {
   return (
-    <StyledTextView className={className} isRTL={useStore.getState().isRTL}>
+    <StyledTextView isRTL={useStore.getState().isRTL}>
       {children}
     </StyledTextView>
   )
