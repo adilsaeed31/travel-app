@@ -9,9 +9,9 @@ const StyledTextView = styled(Text)<{isRTL: boolean}>`
   text-align: ${({isRTL}) => (isRTL ? 'right' : 'left')};
 `
 
-function TextView({children}: {children: string}) {
+function TextView({children, ...rest}: {children: string; className: string}) {
   return (
-    <StyledTextView isRTL={useStore.getState().isRTL}>
+    <StyledTextView {...rest} isRTL={useStore.getState().isRTL}>
       {children}
     </StyledTextView>
   )
