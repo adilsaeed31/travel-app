@@ -66,5 +66,7 @@ yarn-error.log
 .npmrc
 
 # Ignore Yarn and NPM lock files
+.yarn/
 yarn.lock
 package-lock.json
+.yarnrc.yml
