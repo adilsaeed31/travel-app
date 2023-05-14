@@ -64,3 +64,7 @@ yarn-error.log
 
 # NPM Registry files to ignore for each user
 .npmrc
+
+# Ignore Yarn and NPM lock files
+yarn.lock
+package-lock.json
