@@ -5,7 +5,6 @@ import {Animated, Easing, Dimensions, Platform, View} from 'react-native'
 import {SaibLogo} from '@Assets'
 
 const windowDimensions = Dimensions.get('window')
-const screenDimensions = Dimensions.get('screen')
 
 const windowWidth = windowDimensions.width
 const windowHeight = windowDimensions.height
@@ -19,7 +18,9 @@ export default function SplashScreens({
   const logoPosition = useRef(new Animated.ValueXY({x: 0, y: 0})).current
 
   const textOpacity = useRef(new Animated.Value(0)).current
-  const textPosition = useRef(new Animated.ValueXY({x: -60, y: 0})).current
+  const textPosition = useRef(
+    new Animated.ValueXY({x: 0, y: Platform.OS === 'ios' ? 86 : 35}),
+  ).current
 
   useEffect(() => {
     SplashScreen.hide()
