@@ -1,0 +1,7 @@
+export {default as Svg1} from './1'
+export {default as Svg2} from './2'
+export {default as Svg3} from './3'
+export {default as Svg4} from './4'
+export {default as Svg5} from './5'
+export {default as Svg6} from './6'
+export {default as LoginSvg} from './LoginSvg'
