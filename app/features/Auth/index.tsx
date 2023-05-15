@@ -11,8 +11,8 @@ const SBLayoutView = styled(Layout)
 const SBText = styled(Text)
 
 export default function AuthFeature() {
-  const {changeLanguage} = useContext(AppContext)
   const {t} = useTranslation()
+  const {changeLanguage} = useContext(AppContext)
   const {isLoading, isError, error} = useContext(AuthContext)
 
   return (

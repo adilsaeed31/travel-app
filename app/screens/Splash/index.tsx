@@ -12,7 +12,7 @@ const windowHeight = windowDimensions.height
 export default function SplashScreens({
   onCompleteAnimation,
 }: {
-  onCompleteAnimation: Function
+  onCompleteAnimation: () => void
 }) {
   const logoScale = useRef(new Animated.Value(1)).current
   const logoPosition = useRef(new Animated.ValueXY({x: 0, y: 0})).current
