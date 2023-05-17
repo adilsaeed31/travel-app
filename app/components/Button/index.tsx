@@ -13,14 +13,10 @@ interface ButtonProps {
   className?: string
 }
 
-const TCButton: React.FC<ButtonProps> = ({children, onPress, ...rest}) => {
-  const isRTL = useStore.getState().isRTL
-
-  return (
-    <StyledButton onPress={onPress} isRTL={isRTL} {...rest}>
-      {children}
-    </StyledButton>
-  )
-}
+const TCButton: React.FC<ButtonProps> = ({children, onPress, ...rest}) => (
+  <StyledButton onPress={onPress} isRTL={useStore.getState().isRTL} {...rest}>
+    {children}
+  </StyledButton>
+)
 
 export default TCButton
