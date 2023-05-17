@@ -43,7 +43,7 @@ const AppLayout: React.FC<LayoutProps> = ({
         />
       )}
       <ContentWrapper>
-        {isHeader && <Header canLanguageChange={true} />}
+        {isHeader && <Header />}
         {children}
       </ContentWrapper>
     </Container>

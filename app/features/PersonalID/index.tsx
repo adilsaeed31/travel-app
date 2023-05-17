@@ -1,5 +1,4 @@
 import React from 'react'
-import {styled} from 'nativewind'
 import {useTranslation} from 'react-i18next'
 import {Layout, TCButton as Button, TCTextView as Text} from '@Components'
 import {TEXT_VARIANTS} from '@Utils'
@@ -9,7 +8,7 @@ function PersonalIdScreen() {
 
   return (
     <Layout>
-      <Button>
+      <Button style={{marginTop: 200}}>
         <Text variant={TEXT_VARIANTS.body}>{t('continue')}</Text>
       </Button>
     </Layout>

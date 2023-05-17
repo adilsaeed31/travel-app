@@ -10,12 +10,13 @@ import {Spacer} from '@Components'
 import {default as Text} from '../TextView'
 
 const Container = styled(View)`
-  padding: 76px 32px 0;
+  padding: 32px;
+  padding-top: 76px;
 `
 
 const LanguageText = styled(Text)`
-  font-weight: 700;
   line-height: 22px;
+  font-weight: 700;
   color: #3f3d36;
   opacity: 0.75;
 `
@@ -34,12 +35,12 @@ const TopNavigationSimpleUsageShowcase: React.FC<PropsType> = ({
   return (
     <Container {...props}>
       <StatusBar />
-      <View className="flex-1 items-center justify-center flex-row">
-        <SaibLogo width="59" height="64" />
+      <View className="flex-row justify-between">
+        <SaibLogo />
         {canLanguageChange ? (
           <>
-            <Spacer size={SPACER_SIZES.MM} />
             <TouchableOpacity onPress={changeLanguage}>
+              <Spacer size={SPACER_SIZES.MM} />
               <LanguageText variant={TEXT_VARIANTS.body700}>
                 {t('onboarding:lang')}
               </LanguageText>
