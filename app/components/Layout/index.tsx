@@ -5,10 +5,10 @@ import Header from './Header'
 import styled from 'styled-components/native'
 
 type LayoutProps = {
-  title: string
-  isHeader: boolean
-  isBackground: boolean
+  isHeader?: boolean
+  isBackground?: boolean
   children: React.ReactNode
+  className?: string
 }
 
 const Container = styled(View)`
@@ -29,11 +29,12 @@ const ContentWrapper = styled(View)`
 const AppLayout: React.FC<LayoutProps> = ({
   isHeader = true,
   isBackground = true,
+  className = '',
   children,
   ...rest
 }) => {
   return (
-    <Container {...rest}>
+    <Container className={className} {...rest}>
       {isBackground && (
         <BackgroundImage
           preserveAspectRatio="none"

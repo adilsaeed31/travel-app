@@ -15,6 +15,10 @@ export const TEXT_VARIANTS = {
       font-size: 16px;
       font-weight: normal;
     `,
+  body700: `
+  font-size: 16px;
+  font-weight: 700;
+`,
   caption: `
       font-size: 12px;
       font-weight: normal;
