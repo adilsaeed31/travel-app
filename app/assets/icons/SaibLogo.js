@@ -3,9 +3,10 @@ import Svg, {Path} from 'react-native-svg'
 const SvgSaibLogo = props => (
   <Svg
     xmlns="http://www.w3.org/2000/svg"
-    width={118}
-    height={129}
+    width={59}
+    height={65}
     fill="none"
+    viewBox="0 0 118 129"
     {...props}>
     <Path
       fill="#F8D03B"
