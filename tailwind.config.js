@@ -5,7 +5,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        saib: {
+        tc: {
           primary: '#f8d03b',
         },
       },

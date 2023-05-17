@@ -17,7 +17,7 @@ export default function AuthFeature() {
 
   return (
     <SBLayoutView className="flex-1 px-8 pt-8 ios:pt-16 pb-8">
-      <TextView className="text-slate dark:text-saib-primary">
+      <TextView className="text-slate dark:text-tc-primary">
         {t('auth:title', {name: ''}) as string}
       </TextView>
 

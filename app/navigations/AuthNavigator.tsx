@@ -1,7 +1,7 @@
 import React from 'react'
 import {createStackNavigator} from '@react-navigation/stack'
 
-import {IntroFeature} from '@Features'
+import {AuthFeature} from '@Features'
 
 const {Navigator, Screen} = createStackNavigator()
 
@@ -11,7 +11,7 @@ export default function AuthNavigator() {
       screenOptions={{
         headerShown: false,
       }}>
-      <Screen name="Intro" component={IntroFeature} />
+      <Screen name="Auth" component={AuthFeature} />
     </Navigator>
   )
 }
