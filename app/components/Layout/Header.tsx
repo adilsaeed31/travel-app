@@ -1,11 +1,13 @@
 import React, {useContext} from 'react'
-import {StatusBar, View} from 'react-native'
-import {SaibLogo} from '@Assets'
+import {StatusBar, View, TouchableOpacity} from 'react-native'
 import styled from 'styled-components/native'
-import {TouchableOpacity} from 'react-native-gesture-handler'
-import {TextView as Text} from '@Components'
 import {useTranslation} from 'react-i18next'
+
+import {SaibLogo} from '@Assets'
 import {AppContext} from '@Context'
+
+// import the module like below if its in the same alias folder
+import {default as Text} from '../TextView'
 
 const Container = styled(View)`
   padding: 76px 32px 0;
@@ -34,7 +36,7 @@ const TopNavigationSimpleUsageShowcase: React.FC<PropsType> = ({
   return (
     <Container {...props}>
       <StatusBar />
-      <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+      <View className="flex-1 items-center justify-center flex-row">
         <SaibLogo width="59" height="64" />
         {canLanguageChange ? (
           <TouchableOpacity onPress={changeLanguage}>

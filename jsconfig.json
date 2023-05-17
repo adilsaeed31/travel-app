@@ -13,7 +13,7 @@
       "@Features": ["app/features"],
       "@Screens": ["app/screens"],
       "@Navigations": ["app/navigations"],
-      "@Store": ["app/store"],
+      "@Store": ["app/store"]
     }
   },
   "include": ["app/**/*"],
