@@ -14,7 +14,7 @@ function TCTextView({
   ...rest
 }: {
   children: string
-  variant: any
+  variant?: any
   className?: string
 }) {
   return (

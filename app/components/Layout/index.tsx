@@ -1,8 +1,9 @@
 import React from 'react'
 import {View} from 'react-native'
-import {Background} from '@Assets'
-import Header from './Header'
 import styled from 'styled-components/native'
+
+import Header from './Header'
+import {Background} from '@Assets'
 
 type LayoutProps = {
   isHeader?: boolean
@@ -13,7 +14,6 @@ type LayoutProps = {
 
 const Container = styled(View)`
   flex: 1;
-  background-color: red;
 `
 
 const BackgroundImage = styled(Background)`
@@ -44,7 +44,7 @@ const AppLayout: React.FC<LayoutProps> = ({
       )}
       <ContentWrapper>
         {isHeader && <Header canLanguageChange={true} />}
-        <View>{children}</View>
+        {children}
       </ContentWrapper>
     </Container>
   )

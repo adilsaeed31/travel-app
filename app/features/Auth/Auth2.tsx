@@ -3,13 +3,13 @@ import {View, TouchableOpacity} from 'react-native'
 
 import {TCTextView, Layout as AppLayout} from '@Components'
 
-export default function AuthFeature({navigation}: any) {
+export default function AuthFeature2({navigation}: any) {
   return (
     <AppLayout>
       <View className="flex-1 items-center justify-center">
-        <TouchableOpacity onPress={() => navigation.navigate('Auth2')}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
           <TCTextView className="text-slate dark:text-tc-primary">
-            Login
+            Register
           </TCTextView>
         </TouchableOpacity>
       </View>
