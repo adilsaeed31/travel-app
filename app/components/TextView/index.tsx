@@ -9,7 +9,13 @@ const StyledTextView = styled(Text)<{isRTL: boolean}>`
   text-align: ${({isRTL}) => (isRTL ? 'right' : 'left')};
 `
 
-function TextView({children, ...rest}: {children: string; className: string}) {
+function TCTextView({
+  children,
+  ...rest
+}: {
+  children: string
+  className?: string
+}) {
   return (
     <StyledTextView {...rest} isRTL={useStore.getState().isRTL}>
       {children}
@@ -17,4 +23,4 @@ function TextView({children, ...rest}: {children: string; className: string}) {
   )
 }
 
-export default TextView
+export default TCTextView
