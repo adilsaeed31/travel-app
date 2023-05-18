@@ -1,22 +1,25 @@
 import React from 'react'
-import {View} from 'react-native'
+import {View, Text} from 'react-native'
 import {styled} from 'styled-components/native'
-import {useStore} from '@Store'
 import Ripple, {RippleProps} from 'react-native-material-ripple'
-
-const StyledRipple = styled(Ripple)<{isRTL: boolean}>`
-  align-self: ${({isRTL}) => (isRTL ? 'flex-end' : 'flex-start')};
-`
 
 const StyledView = styled(View)<{isRTL: boolean}>`
   flex-direction: row;
   justify-content: center;
   align-items: center;
   height: 100%;
+  width: 100%;
+  border: 1px solid #f8d03b;
+  background-color: #f8d03b;
+  min-height: 56px;
+  border-top-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  border-bottom-left-radius: 0px;
+  border-top-right-radius: 0px;
 `
 
 interface ButtonProps extends RippleProps {
-  children: React.ReactElement
+  children: React.ReactElement | string
   RippleColor?: string
   onPress?: () => void
   className?: string
@@ -28,16 +31,12 @@ const TCButton: React.FC<ButtonProps> = ({
   RippleColor = 'white',
   ...rest
 }) => {
-  const isRTL = useStore.getState().isRTL
-
   return (
-    <StyledRipple
-      onPress={onPress}
-      isRTL={isRTL}
-      rippleColor={RippleColor}
-      {...rest}>
-      <StyledView isRTL={false}>{children}</StyledView>
-    </StyledRipple>
+    <Ripple onPress={onPress} rippleColor={RippleColor} {...rest}>
+      <StyledView isRTL={false}>
+        <Text>{children}</Text>
+      </StyledView>
+    </Ripple>
   )
 }
 
