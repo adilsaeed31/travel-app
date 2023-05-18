@@ -31,7 +31,11 @@ const Input = styled(TextInput)`
   height: 24px;
 `
 
-const CustomInput: FC<CustomInputProps> = ({label, value, onChangeText}) => {
+const CustomInput: FC<CustomInputProps> = ({
+  label,
+  value,
+  onChangeText = () => {},
+}) => {
   const inputRef = useRef<TextInput>(null)
   const [isFocused, setIsFocused] = useState<boolean>(false)
 
@@ -59,6 +63,8 @@ const CustomInput: FC<CustomInputProps> = ({label, value, onChangeText}) => {
         placeholder={isFocused ? '' : '-'}
         onFocus={handleFocus}
         onBlur={handleBlur}
+        cursorColor={'#8c8a86'}
+        selectionColor={'#8c8a86'}
       />
     </InputWrapper>
   )
