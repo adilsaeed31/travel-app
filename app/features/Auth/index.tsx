@@ -52,7 +52,7 @@ const AuthFeature = () => {
               value={userName}
               onChangeText={setUserName}
             />
-            <Spacer horizontal={false} size={SPACER_SIZES.LG} />
+            <Spacer horizontal={false} size={SPACER_SIZES.XL} />
             <TCInput
               label={'Password'}
               value={password}
