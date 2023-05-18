@@ -15,8 +15,8 @@ import {SPACER_SIZES, TEXT_VARIANTS} from '@Utils'
 // import {SvgBg} from '@Assets'
 
 export default function AuthFeature() {
-  const {changeLanguage} = useContext(AppContext)
   const {t} = useTranslation()
+  const {changeLanguage} = useContext(AppContext)
   const {isLoading, isError, error} = useContext(AuthContext)
   const [inputValue, setInputValue] = useState('')
 

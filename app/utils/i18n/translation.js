@@ -1,5 +1,8 @@
 export const translation = {
   en: {
+    onboarding: {
+      lang: 'English',
+    },
     auth: {
       title: 'Welcome to Travel App {{name}}',
       buttonLogin: 'Log In',
@@ -7,6 +10,9 @@ export const translation = {
     },
   },
   ar: {
+    onboarding: {
+      lang: 'العربية',
+    },
     auth: {
       title: '{{name}} مرحبًا بك في تطبيق السفر',
       buttonLogin: 'تسجيل الدخول',
