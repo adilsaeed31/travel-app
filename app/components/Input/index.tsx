@@ -1,8 +1,15 @@
 import {TEXT_VARIANTS} from '@Utils'
-import React, {useState, useRef} from 'react'
+import React, {useState, useRef, FC} from 'react'
 import {TCTextView as Text} from '@Components'
 import {TextInput, View} from 'react-native'
+
 import styled from 'styled-components/native'
+
+interface CustomInputProps {
+  label: string
+  value?: string
+  onChangeText?: (text: string) => void
+}
 
 const InputWrapper = styled(View)`
   padding: 12px 16px;
@@ -11,7 +18,7 @@ const InputWrapper = styled(View)`
   margin-bottom: 8px;
 `
 
-const InputLabel = styled(Text)`
+const InputLabel = styled(Text)<{isFocused: boolean}>`
   line-height: 18px;
   color: #8c8a86;
   margin-bottom: 4px;
@@ -24,9 +31,21 @@ const Input = styled(TextInput)`
   height: 24px;
 `
 
-const CustomInput = ({label, value, onChangeText}) => {
-  const inputRef = useRef(null)
-  const [isFocused, setIsFocused] = useState(false)
+const CustomInput: FC<CustomInputProps> = ({label, value, onChangeText}) => {
+  const inputRef = useRef<TextInput>(null)
+  const [isFocused, setIsFocused] = useState<boolean>(false)
+
+  const handleFocus = (): void => {
+    setIsFocused(true)
+  }
+
+  const handleBlur = (): void => {
+    setIsFocused(false)
+  }
+
+  const handleChangeText = (text: string): void => {
+    onChangeText(text)
+  }
 
   return (
     <InputWrapper>
@@ -36,10 +55,10 @@ const CustomInput = ({label, value, onChangeText}) => {
       <Input
         ref={inputRef}
         value={value}
-        onChangeText={onChangeText}
+        onChangeText={handleChangeText}
         placeholder={isFocused ? '' : '-'}
-        onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
       />
     </InputWrapper>
   )
