@@ -1,91 +1,72 @@
-import React, {useEffect, useRef} from 'react'
-import SplashScreen from 'react-native-splash-screen'
-import {Animated, Easing, Dimensions, Platform, View} from 'react-native'
+import React, {useEffect, useRef, useState} from 'react'
+import {Animated, Easing} from 'react-native'
+import LottieView from 'lottie-react-native'
+import Splash from 'react-native-splash-screen'
 
-import {SaibLogo} from '@Assets'
+import {splashAnimationJson, introAnimation} from '@Assets'
 
-const windowDimensions = Dimensions.get('window')
-
-const windowWidth = windowDimensions.width
-const windowHeight = windowDimensions.height
-
-export default function SplashScreens({
-  onCompleteAnimation,
-}: {
+type SplashScreenProps = {
   onCompleteAnimation: () => void
-}) {
-  const logoScale = useRef(new Animated.Value(1)).current
-  const logoPosition = useRef(new Animated.ValueXY({x: 0, y: 0})).current
+}
 
-  const textOpacity = useRef(new Animated.Value(0)).current
-  const textPosition = useRef(
-    new Animated.ValueXY({x: 0, y: Platform.OS === 'ios' ? 86 : 35}),
-  ).current
+const SplashScreen: React.FC<SplashScreenProps> = ({onCompleteAnimation}) => {
+  const [showFirst, setShowFirst] = useState<boolean>(true)
+
+  const nextAnimRef = useRef<LottieView>(null)
+  const splashAnim = useRef(new Animated.Value(0)).current
+  const nextAnim = useRef(new Animated.Value(0)).current
+
+  const fadeIn = () => {
+    Animated.timing(nextAnim, {
+      toValue: 1,
+      duration: 250,
+      useNativeDriver: true,
+    }).start(() => {
+      nextAnimRef.current?.play()
+    })
+  }
 
   useEffect(() => {
-    SplashScreen.hide()
+    // hiding the splash screen below
+    Splash.hide()
 
-    Animated.sequence([
-      Animated.parallel([
-        Animated.timing(logoPosition, {
-          toValue: {
-            x: windowWidth / 2 - windowWidth + 50,
-            y:
-              windowHeight / 2 -
-              windowHeight +
-              (Platform.OS === 'ios' ? 120 : 80),
-          },
-          duration: 800,
-          delay: 500,
-          easing: Easing.elastic(0.5),
-          useNativeDriver: true,
-        }),
-        Animated.timing(logoScale, {
-          toValue: 0.5,
-          duration: 800,
-          delay: 500,
-          easing: Easing.elastic(0.5),
-          useNativeDriver: true,
-        }),
-      ]),
-      Animated.parallel([
-        Animated.timing(textOpacity, {
-          toValue: 1,
-          duration: 1000,
-          useNativeDriver: true,
-        }),
-        Animated.timing(textPosition, {
-          toValue: {x: 35, y: Platform.OS === 'ios' ? 86 : 35},
-          duration: 500,
-          easing: Easing.elastic(0.5),
-          useNativeDriver: true,
-        }),
-      ]),
-    ]).start(() => {
-      onCompleteAnimation()
-    })
-  }, [logoPosition, logoScale, onCompleteAnimation, textOpacity, textPosition])
+    // Added the fade opacity animation for 1 sec
+    Animated.timing(splashAnim, {
+      toValue: 1,
+      duration: 500,
+      easing: Easing.elastic(1),
+      useNativeDriver: true,
+    }).start()
+  }, [splashAnim])
 
-  return (
-    <View className="flex-1 px-5 py-5">
-      <Animated.Text
-        style={{
-          opacity: textOpacity,
-          transform: [...textPosition.getTranslateTransform()],
+  return showFirst ? (
+    <Animated.View style={{opacity: splashAnim}} className="flex-1">
+      <LottieView
+        autoPlay
+        loop={false}
+        resizeMode="cover"
+        source={splashAnimationJson}
+        onAnimationFinish={() => {
+          // changing the next animation with state
+          setShowFirst(false)
+          // starting fadeIn effect to land the next animation
+          fadeIn()
         }}
-        className="absolute ml-16 text-slate dark:text-saib-primary mt-4 text-2xl font-bold">
-        Saudi Investment Bank
-      </Animated.Text>
-      <Animated.View
-        className="flex-1 items-center justify-center"
-        style={{
-          transform: [
-            ...logoPosition.getTranslateTransform(),
-            {scale: logoScale},
-          ],
-        }}>
-        <SaibLogo />
-      </Animated.View>
-    </View>
+      />
+    </Animated.View>
+  ) : (
+    <Animated.View style={{opacity: nextAnim}} className="flex-1">
+      <LottieView
+        loop={false}
+        autoPlay={false}
+        resizeMode="cover"
+        ref={nextAnimRef}
+        source={introAnimation}
+        onLayout={() => console.log('rendered')}
+        onAnimationFinish={() => onCompleteAnimation()}
+      />
+    </Animated.View>
   )
 }
+
+export default SplashScreen

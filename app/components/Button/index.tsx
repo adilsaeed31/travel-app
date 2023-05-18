@@ -8,8 +8,8 @@ const StyledButton = styled(Button)<{isRTL: boolean}>`
 `
 
 interface ButtonProps {
-  children: string
-  onPress: () => void
+  children: React.ReactElement
+  onPress?: () => void
   className?: string
 }
 
