@@ -1,16 +1,16 @@
 import React, {useEffect, useState} from 'react'
-import {TouchableOpacity, View, Keyboard, Dimensions} from 'react-native'
+import {View, Keyboard, Dimensions, TouchableOpacity} from 'react-native'
 import {useTranslation} from 'react-i18next'
 import {
   Layout,
   TCButton as Button,
   TCTextView as Text,
-  TCInput as Input,
-  TCCheckbox as Checkbox,
+  TCOTP as OTP,
   Spacer,
 } from '@Components'
 import {SPACER_SIZES, TEXT_VARIANTS} from '@Utils'
 import styled from 'styled-components/native'
+import {Edit} from '@Assets'
 
 const StyledButton = styled(Button)`
   margin-left: 32px;
@@ -23,58 +23,22 @@ const ButtonContainer = styled(View)`
   width: ${Dimensions.get('window').width}px;
 `
 
-const DisclaimerView = styled(View)<{isKeyboardVisible: boolean}>`
-  position: absolute;
-  bottom: ${props => (props.isKeyboardVisible ? '60px' : '122px')};
-  margin-horizontal: 32px;
-`
-
-const UnderlineText = styled(Text)`
-  text-decoration-line: underline;
-  color: #3f3d36;
-  line-height: 16px;
-`
-
-const TermText = styled(Text)`
-  color: #3f3d36;
-  line-height: 16px;
-`
-
 const Row = styled(View)`
+  display: flex;
   flex-direction: row;
-  align-items: center;
-  width: 100%;
-  margin-top: 3px;
+  justify-content: space-between;
 `
 
-const Terms = () => {
-  const {t} = useTranslation()
+const EditIcon = styled(Edit)`
+  margin-right: 6px;
+`
 
-  return (
-    <View>
-      <Row>
-        <TermText variant={TEXT_VARIANTS.caption}>
-          {t("I've read and accept the ")}
-        </TermText>
-        <TouchableOpacity onPress={() => {}}>
-          <UnderlineText variant={TEXT_VARIANTS.caption}>
-            {t('Disclaimer')}
-          </UnderlineText>
-        </TouchableOpacity>
-        <TermText variant={TEXT_VARIANTS.caption}>{t(' and ')}</TermText>
-      </Row>
-      <View>
-        <TouchableOpacity onPress={() => {}}>
-          <UnderlineText variant={TEXT_VARIANTS.caption}>
-            {t(' Terms & Conditions')}
-          </UnderlineText>
-        </TouchableOpacity>
-      </View>
-    </View>
-  )
-}
+const BottomText = styled(Text)`
+  line-height: 20px;
+  color: #3f3d36;
+`
 
-const PersonalIdScreen = () => {
+const OtpPersonalIdScreen = () => {
   const {t} = useTranslation()
   const [isKeyboardVisible, setKeyboardVisible] = useState<boolean>(false)
   const [keyboardHeight, setKeyboardHeight] = useState<Number>(0)
@@ -105,23 +69,28 @@ const PersonalIdScreen = () => {
     <>
       <Layout>
         <Spacer horizontal={false} size={SPACER_SIZES.BASE * 3} />
-        <Text variant={TEXT_VARIANTS.heading}>{t('Credentials')}</Text>
-        <Spacer horizontal={false} size={SPACER_SIZES.BASE * 3} />
-        <Input label={t('National ID/Iqama')} />
-        <Spacer horizontal={false} size={SPACER_SIZES.BASE * 4} />
-        <Input label={t('Mobile')} />
+        <Text variant={TEXT_VARIANTS.heading}>{t('Enter OTP')}</Text>
+        <Spacer size={SPACER_SIZES.BASE * 3} />
+        <OTP value={'123'} />
+        <Spacer size={SPACER_SIZES.XL} />
+        <Row>
+          <TouchableOpacity>
+            <Row>
+              <EditIcon />
+              <BottomText variant={TEXT_VARIANTS.body}>
+                {t('+966 9513247609')}
+              </BottomText>
+            </Row>
+          </TouchableOpacity>
 
-        <DisclaimerView isKeyboardVisible={isKeyboardVisible}>
-          <Checkbox
-            label={
-              <Text variant={TEXT_VARIANTS.caption}>
-                {t('I agree to receive email from SAIB')}
-              </Text>
-            }
-          />
-          <Checkbox label={<Terms />} />
-        </DisclaimerView>
-
+          <View>
+            <TouchableOpacity>
+              <BottomText variant={TEXT_VARIANTS.body}>
+                {t('Resend OTP')}
+              </BottomText>
+            </TouchableOpacity>
+          </View>
+        </Row>
         {!isKeyboardVisible && (
           <ButtonContainer>
             <StyledButton>
@@ -158,4 +127,4 @@ const StickyButton = styled.TouchableOpacity`
   justify-content: center;
 `
 
-export default PersonalIdScreen
+export default OtpPersonalIdScreen
