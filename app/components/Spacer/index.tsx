@@ -1,7 +1,7 @@
 import styled from 'styled-components/native'
 
 interface SpacerProps {
-  horizontal: boolean
+  horizontal?: boolean
   size: number
 }
 

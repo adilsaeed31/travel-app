@@ -8,7 +8,15 @@ const StyledTextView = styled(Text)<any>`
   ${props => props.variant}
 `
 
-function TCTextView({children, variant, ...rest}: any) {
+function TCTextView({
+  children,
+  variant,
+  ...rest
+}: {
+  children: string
+  variant?: any
+  className?: string
+}) {
   return (
     <StyledTextView
       {...rest}

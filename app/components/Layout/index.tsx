@@ -1,19 +1,19 @@
 import React from 'react'
 import {View} from 'react-native'
-import {Background} from '@Assets'
-import Header from './Header'
 import styled from 'styled-components/native'
 
+import Header from './Header'
+import {Background} from '@Assets'
+
 type LayoutProps = {
-  title: string
-  isHeader: boolean
-  isBackground: boolean
+  isHeader?: boolean
+  isBackground?: boolean
   children: React.ReactNode
+  className?: string
 }
 
 const Container = styled(View)`
   flex: 1;
-  background-color: red;
 `
 
 const BackgroundImage = styled(Background)`
@@ -24,16 +24,18 @@ const BackgroundImage = styled(Background)`
 
 const ContentWrapper = styled(View)`
   flex: 1;
+  padding: 0px 32px;
 `
 
 const AppLayout: React.FC<LayoutProps> = ({
   isHeader = true,
   isBackground = true,
+  className = '',
   children,
   ...rest
 }) => {
   return (
-    <Container {...rest}>
+    <Container className={className} {...rest}>
       {isBackground && (
         <BackgroundImage
           preserveAspectRatio="none"
@@ -42,8 +44,8 @@ const AppLayout: React.FC<LayoutProps> = ({
         />
       )}
       <ContentWrapper>
-        {isHeader && <Header canLanguageChange={true} />}
-        <View>{children}</View>
+        {isHeader && <Header />}
+        {children}
       </ContentWrapper>
     </Container>
   )

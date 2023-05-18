@@ -8,6 +8,7 @@
       "@Api": ["app/api"],
       "@Assets": ["app/assets"],
       "@Components": ["app/components"],
+      "@Components/*": ["app/components/*"],
       "@Utils": ["app/utils"],
       "@Context": ["app/context"],
       "@Hooks": ["app/hooks"],

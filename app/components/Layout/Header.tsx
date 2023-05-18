@@ -1,23 +1,24 @@
 import React, {useContext} from 'react'
-import {StatusBar, View} from 'react-native'
-import {SaibLogo} from '@Assets'
+import {StatusBar, View, TouchableOpacity} from 'react-native'
 import styled from 'styled-components/native'
-import {TouchableOpacity} from 'react-native-gesture-handler'
-import {TextView as Text} from '@Components'
 import {useTranslation} from 'react-i18next'
+import {SaibLogo} from '@Assets'
 import {AppContext} from '@Context'
+import {SPACER_SIZES, TEXT_VARIANTS} from '@Utils'
+import {Spacer} from '@Components'
+// import the module like below if its in the same alias folder
+import {default as Text} from '../TextView'
 
 const Container = styled(View)`
-  padding: 76px 32px 0;
+  padding-top: 76px;
+  padding-bottom: 0;
 `
 
 const LanguageText = styled(Text)`
-  font-size: 16px;
-  font-weight: 700;
   line-height: 22px;
+  font-weight: 700;
   color: #3f3d36;
   opacity: 0.75;
-  padding-top: 19px;
 `
 
 type PropsType = {
@@ -34,12 +35,17 @@ const TopNavigationSimpleUsageShowcase: React.FC<PropsType> = ({
   return (
     <Container {...props}>
       <StatusBar />
-      <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-        <SaibLogo width="59" height="64" />
+      <View className="flex-row justify-between">
+        <SaibLogo />
         {canLanguageChange ? (
-          <TouchableOpacity onPress={changeLanguage}>
-            <LanguageText>{t('onboarding:lang')}</LanguageText>
-          </TouchableOpacity>
+          <>
+            <TouchableOpacity onPress={changeLanguage}>
+              <Spacer size={SPACER_SIZES.MM} />
+              <LanguageText variant={TEXT_VARIANTS.body700}>
+                {t('onboarding:lang')}
+              </LanguageText>
+            </TouchableOpacity>
+          </>
         ) : null}
       </View>
     </Container>

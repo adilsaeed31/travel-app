@@ -1,5 +1,6 @@
 // utils/constants.js
 export const SPACER_SIZES = {
+  BASE: 8,
   SM: 10,
   MM: 20,
   LG: 30,
