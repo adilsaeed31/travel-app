@@ -10,8 +10,8 @@ import {Spacer} from '@Components'
 import {default as Text} from '../TextView'
 
 const Container = styled(View)`
-  padding: 32px;
   padding-top: 76px;
+  padding-bottom: 0;
 `
 
 const LanguageText = styled(Text)`

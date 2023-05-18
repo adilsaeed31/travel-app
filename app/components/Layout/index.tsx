@@ -24,6 +24,7 @@ const BackgroundImage = styled(Background)`
 
 const ContentWrapper = styled(View)`
   flex: 1;
+  padding: 0px 32px;
 `
 
 const AppLayout: React.FC<LayoutProps> = ({
