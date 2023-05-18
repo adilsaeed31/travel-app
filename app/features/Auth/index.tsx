@@ -1,24 +1,26 @@
 /* eslint-disable no-alert */
 import React, {useContext, useState} from 'react'
-import {Layout} from '@ui-kitten/components'
 import {AppContext, AuthContext} from '@Context'
-import {SaibLogo, Bg} from '@Assets'
+import {SaibLogo, Bg, FaceIcon} from '@Assets'
 import {useTranslation} from 'react-i18next'
 import {
-  TCTextInput as Input,
+  TCInput as InputView,
   TCButton as Button,
   TCTextView,
   Spacer,
+  TCLinkButton,
+  TCMultiLinkButton,
 } from '@Components'
 import styled from 'styled-components/native'
 import {SPACER_SIZES, TEXT_VARIANTS} from '@Utils'
-// import {SvgBg} from '@Assets'
+import {Keyboard, TouchableWithoutFeedback} from 'react-native'
 
-export default function AuthFeature() {
+const AuthFeature = () => {
   const {t} = useTranslation()
   const {changeLanguage} = useContext(AppContext)
   const {isLoading, isError, error} = useContext(AuthContext)
-  const [inputValue, setInputValue] = useState('')
+  const [userName, setUserName] = useState('')
+  const [password, setPassword] = useState('')
 
   const successCall = (value: string) => {
     setInputValue(value)
@@ -29,53 +31,65 @@ export default function AuthFeature() {
   const handleLogin = () => {
     // Perform login logic here
   }
+
   return (
     <>
       <Bg style={{position: 'absolute'}} />
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <Container>
+          <TopContainer>
+            <SaibLogo />
+            <TCTextView variant={TEXT_VARIANTS.caption}>Ar</TCTextView>
+          </TopContainer>
 
-      <Container>
-        <TopContainer>
-          <SaibLogo />
-          <TCTextView variant={TEXT_VARIANTS.caption}>Ar</TCTextView>
-        </TopContainer>
+          <Spacer horizontal={false} size={SPACER_SIZES.XL} />
+          <TCTextView variant={TEXT_VARIANTS.heading}>Login</TCTextView>
+          <Spacer horizontal={false} size={SPACER_SIZES.XL} />
 
-        <Spacer horizontal={false} size={SPACER_SIZES.XL} />
-        <TCTextView variant={TEXT_VARIANTS.heading}>Login</TCTextView>
-        <Spacer horizontal={false} size={SPACER_SIZES.XL} />
+          <LoginForm>
+            <TCInput
+              label={'Username'}
+              value={userName}
+              onChangeText={setUserName}
+            />
+            <Spacer horizontal={false} size={SPACER_SIZES.LG} />
+            <TCInput
+              label={'Password'}
+              value={password}
+              onChangeText={setPassword}
+            />
+            <Spacer horizontal={false} size={SPACER_SIZES.LG} />
+            <ViewWrapper>
+              <TCLinkButton onPress={() => handleLogin()}>
+                {t('auth:buttonForget')}
+              </TCLinkButton>
+            </ViewWrapper>
+          </LoginForm>
 
-        <LoginForm>
-          <TCTextInput
-            placeholder="UserName"
-            successCall={successCall}
-            errorCall={errorCall}
-            isPassword={false}
-            validationRegex={/^\w+$/}
-          />
+          <Spacer horizontal={false} size={SPACER_SIZES.XXXL} />
+          <MultiTextWrapper>
+            <FaceIcon />
+          </MultiTextWrapper>
+
           <Spacer horizontal={false} size={SPACER_SIZES.LG} />
-          <TCTextInput
-            validationRegex={/^.{6,}$/}
-            placeholder="Password"
-            successCall={successCall}
-            errorCall={errorCall}
-            isPassword={true}
-          />
-          <Spacer horizontal={false} size={SPACER_SIZES.LG} />
-          <ViewWrapper>
-            <TCForgetButton onPress={() => handleLogin()}>
-              {t('auth:buttonForget')}
-            </TCForgetButton>
-          </ViewWrapper>
-        </LoginForm>
 
-        <Spacer horizontal={false} size={SPACER_SIZES.XXXLL} />
-        <Spacer horizontal={false} size={SPACER_SIZES.XXXL} />
-
-        <ButtonContainer>
-          <TCButton onPress={() => handleLogin()}>
-            {t('auth:buttonLogin')}
-          </TCButton>
-        </ButtonContainer>
-      </Container>
+          <ButtonContainer>
+            <TCButton onPress={() => handleLogin()}>
+              {t('auth:buttonLogin')}
+            </TCButton>
+          </ButtonContainer>
+          <Spacer horizontal={false} size={SPACER_SIZES.XXL} />
+          <MultiTextWrapper>
+            <TCMultiLinkButton
+              callbacks={[
+                e => alert('link clicked 1'),
+                e => alert('link clicked 2'),
+              ]}>
+              {t('auth:newToSaib')}
+            </TCMultiLinkButton>
+          </MultiTextWrapper>
+        </Container>
+      </TouchableWithoutFeedback>
     </>
   )
 }
@@ -91,54 +105,28 @@ const LoginForm = styled.View`
   width: 100%;
 `
 
+const MultiTextWrapper = styled.View`
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+`
+
 const ViewWrapper = styled.View`
   width: 100%;
   justify-content: flex-end;
   flex-direction: row;
 `
 
-const TCForgetButton = styled.Text`
-  width: 129px;
-  height: 24px;
+const TCButton = styled(Button)``
 
-  font-family: 'Co Text';
-  font-style: normal;
-  font-weight: 400;
-  font-size: 15px;
-  line-height: 24px;
-  /* identical to box height, or 160% */
-
-  display: flex;
-  align-items: flex-end;
-  justify-content: flex-end;
-  text-align: right;
-  letter-spacing: -0.4px;
-
-  /* Color/Black-Secondary */
-
-  color: #3f3d36;
+const TCInput = styled(InputView)`
+  width: 100%;
+  margin-top: 16px;
+  height: 100;
 `
-
-const TCButton = styled(Button)`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  width: 311px;
-  height: 56px;
-
-  /* Color/Yellow */
-  background: #f8d03b;
-  border: 1.6px solid #ffc900;
-  box-shadow: 0px 4px 12px rgba(47, 40, 15, 0.12);
-  border-radius: 24px 0px;
-`
-
-const TCTextInput = styled(Input)``
 
 const ButtonContainer = styled.View`
   width: 100%;
-  margin-top: 16px;
 `
 const TopContainer = styled.View`
   width: 100%;
@@ -147,3 +135,4 @@ const TopContainer = styled.View`
   align-items: center;
   flex-direction: row;
 `
+export default AuthFeature
