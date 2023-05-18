@@ -1,32 +1,85 @@
-import React, {useState, useContext} from 'react'
-import {Layout, Text, Button} from '@ui-kitten/components'
-import {styled} from 'nativewind'
-import {TextView} from '@Components'
-import {AppContext, AuthContext} from '@Context'
-import {SaibLogo} from '@Assets'
-import {useTranslation} from 'react-i18next'
-import SvgLoginSvg from '../../assets/illustrations/LoginSvg'
-import Svg3 from '../../assets/illustrations/3'
-import Svg4 from '../../assets/illustrations/4'
-import Svg5 from '../../assets/illustrations/5'
-// import Svg1 from '../../assets/illustrations/1'
+import React, {useEffect, useState} from 'react'
+import {Animated, Dimensions, Easing} from 'react-native'
 
-// Below is the UI kitten component Layout
-const SBLayoutView = styled(Layout)
-const SBText = styled(Text)
+import {LoginSvg as SvgLoginSvg, Svg3, Svg4, Svg5} from '@Assets'
+
+const screenWidth = Dimensions.get('screen').width
 
 export default function IntroFeature() {
-  // const {changeLanguage} = useContext(AppContext)
-  // const {t} = useTranslation()
-  // const {isLoading, isError, error} = useContext(AuthContext)
-  const [next, setNext] = useState<any>(1)
+  const [next, setNext] = useState<number>(1)
+
+  const tranAnim1 = new Animated.Value(screenWidth)
+
+  const transIn = () => {
+    Animated.timing(tranAnim1, {
+      toValue: 0,
+      duration: 500,
+      easing: Easing.elastic(1),
+      useNativeDriver: true,
+    }).start()
+  }
+
+  useEffect(() => transIn())
 
   return (
     <>
-      {next === 1 && <Svg3 onPress={() => setNext(2)} />}
-      {next === 2 && <Svg4 onPress={() => setNext(3)} />}
-      {next === 3 && <Svg5 onPress={() => setNext(4)} />}
-      {next === 4 && <SvgLoginSvg onPress={() => setNext(1)} />}
+      {next === 1 && (
+        <Animated.View
+          style={{
+            transform: [{translateX: tranAnim1}],
+          }}>
+          <Svg3
+            preserveAspectRatio="none"
+            onPress={() => {
+              setNext(2)
+              transIn()
+            }}
+          />
+        </Animated.View>
+      )}
+      {next === 2 && (
+        <Animated.View
+          style={{
+            transform: [{translateX: tranAnim1}],
+          }}>
+          <Svg5
+            preserveAspectRatio="none"
+            onPress={() => {
+              setNext(3)
+              transIn()
+            }}
+          />
+        </Animated.View>
+      )}
+      {next === 3 && (
+        <Animated.View
+          style={{
+            transform: [{translateX: tranAnim1}],
+          }}>
+          <Svg4
+            preserveAspectRatio="none"
+            onPress={() => {
+              setNext(4)
+              transIn()
+            }}
+          />
+        </Animated.View>
+      )}
+      {next === 4 && (
+        <Animated.View
+          style={{
+            transform: [{translateX: tranAnim1}],
+          }}>
+          <SvgLoginSvg
+            preserveAspectRatio="none"
+            onPress={() => {
+              setNext(1)
+              transIn()
+              tranAnim1.resetAnimation()
+            }}
+          />
+        </Animated.View>
+      )}
     </>
   )
 }
