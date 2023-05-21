@@ -12,11 +12,14 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		3363EE0E19A547C997611DAA /* CoText-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3A4D3BFB121A4C9788F52923 /* CoText-Bold.otf */; };
 		7699B88040F8A987B510C191 /* libPods-travelcard-travelcardTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-travelcard-travelcardTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		C13D14A20B364A2CA6FBBDB5 /* CoText-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 609B60766E6A440EB91F01CB /* CoText-Light.otf */; };
-		D7FE49D2967849E5A0EBBB36 /* CoText.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9BB38BEED84C4B03BB5B5F9E /* CoText.otf */; };
+		2F3988E23D3E4FEFB1833812 /* cotext.otf in Resources */ = {isa = PBXBuildFile; fileRef = 5B78AEBA11F846B091703F16 /* cotext.otf */; };
+		8604458A426742D19E9A4CD1 /* cotext_bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = B5B1073EDC2A4B85AC702BAC /* cotext_bold.otf */; };
+		308F84691B694C2EAA1E3FC2 /* cotext_light.otf in Resources */ = {isa = PBXBuildFile; fileRef = CF26E248C1C543F5BFF75FD4 /* cotext_light.otf */; };
+		BDCB1AA97E064068824338C0 /* cotext.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2D9891E74A93454287DE3B5E /* cotext.ttf */; };
+		B2718B10D5EA46E7B7235A87 /* cotext_bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4220BD72743545B2B9FC2325 /* cotext_bold.ttf */; };
+		85D6AA8391C247A8BDCAFB66 /* cotext_light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8D747E54B7F8474D895BBEE6 /* cotext_light.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,16 +43,19 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = travelcard/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = travelcard/main.m; sourceTree = "<group>"; };
 		19F6CBCC0A4E27FBF8BF4A61 /* libPods-travelcard-travelcardTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-travelcard-travelcardTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		3A4D3BFB121A4C9788F52923 /* CoText-Bold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "CoText-Bold.otf"; path = "../app/assets/fonts/CoText-Bold.otf"; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-travelcard.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-travelcard.debug.xcconfig"; path = "Target Support Files/Pods-travelcard/Pods-travelcard.debug.xcconfig"; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-travelcard.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-travelcard.release.xcconfig"; path = "Target Support Files/Pods-travelcard/Pods-travelcard.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-travelcard-travelcardTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-travelcard-travelcardTests.debug.xcconfig"; path = "Target Support Files/Pods-travelcard-travelcardTests/Pods-travelcard-travelcardTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-travelcard.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-travelcard.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		609B60766E6A440EB91F01CB /* CoText-Light.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "CoText-Light.otf"; path = "../app/assets/fonts/CoText-Light.otf"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = travelcard/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-travelcard-travelcardTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-travelcard-travelcardTests.release.xcconfig"; path = "Target Support Files/Pods-travelcard-travelcardTests/Pods-travelcard-travelcardTests.release.xcconfig"; sourceTree = "<group>"; };
-		9BB38BEED84C4B03BB5B5F9E /* CoText.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = CoText.otf; path = ../app/assets/fonts/CoText.otf; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		5B78AEBA11F846B091703F16 /* cotext.otf */ = {isa = PBXFileReference; name = "cotext.otf"; path = "../app/assets/fonts/cotext.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		B5B1073EDC2A4B85AC702BAC /* cotext_bold.otf */ = {isa = PBXFileReference; name = "cotext_bold.otf"; path = "../app/assets/fonts/cotext_bold.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		CF26E248C1C543F5BFF75FD4 /* cotext_light.otf */ = {isa = PBXFileReference; name = "cotext_light.otf"; path = "../app/assets/fonts/cotext_light.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		2D9891E74A93454287DE3B5E /* cotext.ttf */ = {isa = PBXFileReference; name = "cotext.ttf"; path = "../app/assets/fonts/cotext.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		4220BD72743545B2B9FC2325 /* cotext_bold.ttf */ = {isa = PBXFileReference; name = "cotext_bold.ttf"; path = "../app/assets/fonts/cotext_bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		8D747E54B7F8474D895BBEE6 /* cotext_light.ttf */ = {isa = PBXFileReference; name = "cotext_light.ttf"; path = "../app/assets/fonts/cotext_light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,9 +121,12 @@
 		527C213FE52444B6834D5009 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				3A4D3BFB121A4C9788F52923 /* CoText-Bold.otf */,
-				609B60766E6A440EB91F01CB /* CoText-Light.otf */,
-				9BB38BEED84C4B03BB5B5F9E /* CoText.otf */,
+				5B78AEBA11F846B091703F16 /* cotext.otf */,
+				B5B1073EDC2A4B85AC702BAC /* cotext_bold.otf */,
+				CF26E248C1C543F5BFF75FD4 /* cotext_light.otf */,
+				2D9891E74A93454287DE3B5E /* cotext.ttf */,
+				4220BD72743545B2B9FC2325 /* cotext_bold.ttf */,
+				8D747E54B7F8474D895BBEE6 /* cotext_light.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -261,9 +270,12 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				3363EE0E19A547C997611DAA /* CoText-Bold.otf in Resources */,
-				C13D14A20B364A2CA6FBBDB5 /* CoText-Light.otf in Resources */,
-				D7FE49D2967849E5A0EBBB36 /* CoText.otf in Resources */,
+				2F3988E23D3E4FEFB1833812 /* cotext.otf in Resources */,
+				8604458A426742D19E9A4CD1 /* cotext_bold.otf in Resources */,
+				308F84691B694C2EAA1E3FC2 /* cotext_light.otf in Resources */,
+				BDCB1AA97E064068824338C0 /* cotext.ttf in Resources */,
+				B2718B10D5EA46E7B7235A87 /* cotext_bold.ttf in Resources */,
+				85D6AA8391C247A8BDCAFB66 /* cotext_light.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -7,5 +7,6 @@ module.exports = {
   plugins: ['@tanstack/query'],
   rules: {
     semi: ['error', 'never'],
+    'no-extra-semi': 'off',
   },
 }

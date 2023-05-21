@@ -5,6 +5,7 @@ import {useStore} from '@Store'
 
 const StyledTextView = styled(Text)<{isRTL: boolean; variant: any}>`
   text-align: ${({isRTL}) => (isRTL ? 'right' : 'left')};
+  font-family: 'Co Text';
   ${props => props.variant}
 `
 
