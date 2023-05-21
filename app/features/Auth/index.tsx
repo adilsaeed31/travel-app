@@ -52,6 +52,7 @@ const AuthFeature = () => {
 
   return (
     <Animated.View
+      className="flex-1"
       style={{
         opacity: splashAnim,
         transform: [...transAnim.getTranslateTransform()],
