@@ -83,7 +83,7 @@ const IntroFeature: React.FC<IntroFeatureProps> = () => {
           style={{opacity: splashAnim}}
           className="flex-1 p-8 ios:pt-16">
           <TouchableOpacity className="mt-4 ios:mt-10" onPress={changeLanguage}>
-            <TCTextView className="text-right">
+            <TCTextView className="text-right text-tc-secondary dark:text-tc-primary">
               {t('onboarding:lang')}
             </TCTextView>
           </TouchableOpacity>
@@ -151,7 +151,7 @@ const IntroFeature: React.FC<IntroFeatureProps> = () => {
                 <TCTextView
                   className={cn(
                     m2(isRTL),
-                    'text-base txt-tc-seconedary font-tc-primary',
+                    'text-base txt-tc-seconedary dark:text-tc-primary font-tc-primary',
                   )}>
                   {t('intro:skip')}
                 </TCTextView>
