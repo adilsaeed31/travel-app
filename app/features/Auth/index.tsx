@@ -1,6 +1,5 @@
-/* eslint-disable no-alert */
-import React, {useContext, useState} from 'react'
-import {AppContext, AuthContext} from '@Context'
+import React, {useContext, useEffect, useRef, useState} from 'react'
+import {AppContext, AppProviderProps} from '@Context'
 import {SaibLogo, Bg, FaceIcon} from '@Assets'
 import {useTranslation} from 'react-i18next'
 import {
@@ -13,28 +12,51 @@ import {
 } from '@Components'
 import styled from 'styled-components/native'
 import {SPACER_SIZES, TEXT_VARIANTS} from '@Utils'
-import {Keyboard, TouchableWithoutFeedback} from 'react-native'
+import {
+  Animated,
+  Dimensions,
+  Keyboard,
+  TouchableWithoutFeedback,
+} from 'react-native'
 
 const AuthFeature = () => {
   const {t} = useTranslation()
-  const {changeLanguage} = useContext(AppContext)
-  const {isLoading, isError, error} = useContext(AuthContext)
+  const {isAppReady, hasIntroSeen} = useContext<AppProviderProps>(AppContext)
+  const splashAnim = useRef(new Animated.Value(0)).current
+  const transAnim = useRef(
+    new Animated.ValueXY({x: Dimensions.get('screen').width, y: 0}),
+  ).current
+
   const [userName, setUserName] = useState('')
   const [password, setPassword] = useState('')
-
-  const successCall = (value: string) => {
-    setInputValue(value)
-  }
-
-  const errorCall = () => {}
 
   const handleLogin = () => {
     // Perform login logic here
   }
 
+  useEffect(() => {
+    // Added the fade opacity animation for 1 sec
+    Animated.parallel([
+      Animated.timing(splashAnim, {
+        toValue: 1,
+        duration: 250,
+        useNativeDriver: true,
+      }),
+      Animated.timing(transAnim, {
+        toValue: {x: 0, y: 0},
+        duration: 500,
+        useNativeDriver: true,
+      }),
+    ]).start()
+  }, [splashAnim, transAnim, isAppReady, hasIntroSeen])
+
   return (
-    <>
-      <Bg style={{position: 'absolute'}} />
+    <Animated.View
+      style={{
+        opacity: splashAnim,
+        transform: [...transAnim.getTranslateTransform()],
+      }}>
+      <Bg className="absolute" />
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <Container>
           <TopContainer>
@@ -60,7 +82,7 @@ const AuthFeature = () => {
             />
             <Spacer horizontal={false} size={SPACER_SIZES.LG} />
             <ViewWrapper>
-              <TCLinkButton onPress={() => handleLogin()}>
+              <TCLinkButton onPress={handleLogin}>
                 {t('auth:buttonForget')}
               </TCLinkButton>
             </ViewWrapper>
@@ -74,23 +96,15 @@ const AuthFeature = () => {
           <Spacer horizontal={false} size={SPACER_SIZES.LG} />
 
           <ButtonContainer>
-            <TCButton onPress={() => handleLogin()}>
-              {t('auth:buttonLogin')}
-            </TCButton>
+            <TCButton onPress={handleLogin}>{t('auth:buttonLogin')}</TCButton>
           </ButtonContainer>
           <Spacer horizontal={false} size={SPACER_SIZES.XXL} />
           <MultiTextWrapper>
-            <TCMultiLinkButton
-              callbacks={[
-                e => alert('link clicked 1'),
-                e => alert('link clicked 2'),
-              ]}>
-              {t('auth:newToSaib')}
-            </TCMultiLinkButton>
+            <TCMultiLinkButton>{t('auth:newToSaib')}</TCMultiLinkButton>
           </MultiTextWrapper>
         </Container>
       </TouchableWithoutFeedback>
-    </>
+    </Animated.View>
   )
 }
 

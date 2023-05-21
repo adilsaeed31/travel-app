@@ -4,19 +4,25 @@ module.exports = {
   content: ['./App.{js,jsx,ts,tsx}', './app/**/*.{js,jsx,ts,tsx}'],
   theme: {
     extend: {
-      fontSize: {
+      fontFamily: {
+        'tc-primary': ["'Co Text'"],
+      },
+      bg: {
         tc: {
-          title: 48,
+          primary: '#ffc800',
         },
       },
+      fontSize: {
+        'tc-title': 24,
+      },
       fontWeight: {
-        tc: {
-          normal: '100',
-        },
+        'tc-normal': '100',
       },
       colors: {
         tc: {
           primary: '#f8d03b',
+          secondary: '#3f3d36',
+          black: '#131109',
         },
       },
     },
