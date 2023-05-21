@@ -16,7 +16,7 @@ import {SplashScreen} from '@Screens'
 function App(): JSX.Element {
   const [isAppReady, SetIsAppReady] = useState<boolean>(false)
 
-  if (!isAppReady) {
+  if (0 && !isAppReady) {
     return <SplashScreen onCompleteAnimation={() => SetIsAppReady(true)} />
   }
 

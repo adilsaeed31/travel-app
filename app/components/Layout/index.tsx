@@ -1,10 +1,16 @@
 import React from 'react'
-import {View, Dimensions, KeyboardAvoidingView} from 'react-native'
+import {
+  View,
+  Dimensions,
+  KeyboardAvoidingView,
+  Keyboard,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native'
 import styled from 'styled-components/native'
 
 import Header from './Header'
 import {Background} from '@Assets'
-import {ScrollView} from 'react-native-gesture-handler'
 
 type LayoutProps = {
   isHeader?: boolean
@@ -43,22 +49,25 @@ const AppLayout: React.FC<LayoutProps> = ({
   return (
     <KeyboardAvoidingView style={{flex: 1}} behavior="padding" enabled>
       <ScrollView
+        scrollEventThrottle={16}
         scrollEnabled={isScrollable}
-        keyboardShouldPersistTaps="always"
+        keyboardShouldPersistTaps="handled"
         onScroll={onScroll}>
-        <Container className={className} {...rest}>
-          {isBackground && (
-            <BackgroundImage
-              preserveAspectRatio="none"
-              width="100%"
-              height="100%"
-            />
-          )}
-          <ContentWrapper>
-            {isHeader && <Header />}
-            {children}
-          </ContentWrapper>
-        </Container>
+        <TouchableOpacity onPress={() => Keyboard.dismiss()} activeOpacity={1}>
+          <Container className={className} {...rest}>
+            {isBackground && (
+              <BackgroundImage
+                preserveAspectRatio="none"
+                width="100%"
+                height="100%"
+              />
+            )}
+            <ContentWrapper>
+              {isHeader && <Header />}
+              {children}
+            </ContentWrapper>
+          </Container>
+        </TouchableOpacity>
       </ScrollView>
     </KeyboardAvoidingView>
   )

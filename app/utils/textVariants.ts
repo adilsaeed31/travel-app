@@ -4,8 +4,8 @@ export const TEXT_VARIANTS = {
       font-weight: 700;
     `,
   subheading: `
-      font-size: 18px;
-      font-weight: 600;
+      font-size: 22px;
+      font-weight: 700;
     `,
   title: `
       font-size: 28px;

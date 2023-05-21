@@ -3,8 +3,10 @@ import Svg, {G, Path, Defs, ClipPath} from 'react-native-svg'
 const SvgBackground = props => (
   <Svg
     xmlns="http://www.w3.org/2000/svg"
-    viewBox={'0 0 375 812'}
+    width={375}
+    height={812}
     fill="none"
+    viewBox="0 0 375 812"
     {...props}>
     <G clipPath="url(#Background_svg__a)">
       <Path fill="#fff" d="M0 0h375v812H0z" />

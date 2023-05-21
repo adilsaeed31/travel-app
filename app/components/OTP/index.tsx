@@ -1,5 +1,9 @@
 import React, {useState, useRef, useEffect} from 'react'
-import {TextInput} from 'react-native'
+import {
+  TextInput,
+  NativeSyntheticEvent,
+  TextInputKeyPressEventData,
+} from 'react-native'
 import styled from 'styled-components/native'
 import Timer from './Timer'
 
@@ -23,18 +27,30 @@ const OtpInput = styled(TextInput)`
 
 interface OtpInputProps {
   value?: string
-  onChangeText?: () => any
-  onTimerComplete?: () => any
+  resetCount?: number
+  onChangeText?: (otp: string) => void
+  onTimerComplete?: () => void
 }
 
 const otpMaxLength = 4
 
-const OtpEnter: React.FC<OtpInputProps> = (onTimerComplete, onChangeText) => {
-  const [otp, setOtp] = useState('')
+const OtpEnter: React.FC<OtpInputProps> = ({
+  value = '',
+  resetCount = 0,
+  onTimerComplete = () => {},
+  onChangeText = () => {},
+}) => {
+  const [otp, setOtp] = useState(value)
 
   useEffect(() => {
-    //onChangeText(otp)
+    if (otp.length === 4 && onChangeText) {
+      onChangeText(otp)
+    }
   }, [onChangeText, otp])
+
+  useEffect(() => {
+    inputRefs.current[0].focus()
+  }, [])
 
   const inputRefs = useRef<TextInput[]>([])
 
@@ -51,7 +67,13 @@ const OtpEnter: React.FC<OtpInputProps> = (onTimerComplete, onChangeText) => {
     }
   }
 
-  //const handleKeyPress = (index: number, event: React.KeyboardEvent) => {}
+  const handleKeyPress = (
+    event: NativeSyntheticEvent<TextInputKeyPressEventData>,
+  ) => {
+    if (event.nativeEvent.key === 'Backspace') {
+      setOtp(otp.slice(0, otp.length - 1))
+    }
+  }
 
   const handleRefAssign = (ref: TextInput | null, index: number) => {
     if (ref) {
@@ -67,16 +89,22 @@ const OtpEnter: React.FC<OtpInputProps> = (onTimerComplete, onChangeText) => {
             key={index}
             value={otp[index] || ''}
             onChangeText={(text: string) => handleTextChange(index, text)}
-            //onKeyPress={(event: React.KeyboardEvent<HTMLInputElement>) => handleKeyPress(index, event)}
+            onKeyPress={(
+              event: NativeSyntheticEvent<TextInputKeyPressEventData>,
+            ) => handleKeyPress(event)}
             ref={(ref: TextInput | null) => handleRefAssign(ref, index)}
             keyboardType="numeric"
             maxLength={1}
-            cursorColor={'#8c8a86'}
-            selectionColor={'#8c8a86'}
+            cursorColor={'transparent'}
+            selectionColor={'transparent'}
           />
         ))}
       </OtpContainer>
-      <Timer seconds={120} />
+      <Timer
+        seconds={10}
+        onTimerComplete={onTimerComplete}
+        resetCount={resetCount}
+      />
     </>
   )
 }

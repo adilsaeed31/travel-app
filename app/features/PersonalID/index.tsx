@@ -11,6 +11,8 @@ import {
 } from '@Components'
 import {SPACER_SIZES, TEXT_VARIANTS} from '@Utils'
 import styled from 'styled-components/native'
+import {GovtIdValidator, MobileNumberValidator} from '@Utils'
+import {StackNavigationProp} from '@react-navigation/stack'
 
 const StyledButton = styled(Button)`
   margin-left: 32px;
@@ -19,25 +21,36 @@ const StyledButton = styled(Button)`
 
 const ButtonContainer = styled(View)`
   position: absolute;
-  bottom: 34px;
+  bottom: 107px;
   width: ${Dimensions.get('window').width}px;
 `
 
 const DisclaimerView = styled(View)<{isKeyboardVisible: boolean}>`
-  position: absolute;
-  bottom: ${props => (props.isKeyboardVisible ? '60px' : '122px')};
-  margin-horizontal: 32px;
+  position: ${props => (props.isKeyboardVisible ? 'static' : 'absolute')};
+  bottom: ${props => (props.isKeyboardVisible ? '0px' : '195px')};
+  margin-horizontal: ${props => (props.isKeyboardVisible ? '0px' : '32px')};
+  margin-top: 16px;
 `
 
 const UnderlineText = styled(Text)`
   text-decoration-line: underline;
-  color: #3f3d36;
+  color: rgba(63, 61, 54, 0.8);
   line-height: 16px;
 `
 
-const TermText = styled(Text)`
+const LoginText = styled(Text)`
   color: #3f3d36;
   line-height: 16px;
+  font-weight: 700;
+`
+
+const TermText = styled(Text)`
+  color: rgba(63, 61, 54, 0.8);
+  line-height: 16px;
+`
+
+const AgreeText = styled(Text)`
+  color: rgba(63, 61, 54, 0.8);
 `
 
 const Row = styled(View)`
@@ -45,6 +58,34 @@ const Row = styled(View)`
   align-items: center;
   width: 100%;
   margin-top: 3px;
+`
+
+const StickyButtonContainer = styled.View<{keyboardHeight: Number}>`
+  position: absolute;
+  bottom: ${props => props.keyboardHeight + 'px'};
+  left: 0;
+  right: 0;
+  align-items: center;
+`
+
+const StickyButton = styled.TouchableOpacity`
+  background-color: #f8d03b;
+  border: 1px solid #f8d03b;
+  width: 100%;
+  min-height: 56px;
+  align-items: center;
+  justify-content: center;
+`
+
+const RowCenter = styled.View<{isKeyboardVisible: boolean}>`
+  position: ${props => (props.isKeyboardVisible ? 'static' : 'absolute')};
+  bottom: ${props => (props.isKeyboardVisible ? '0px' : '51px')};
+  flex-direction: row;
+
+  justify-content: center;
+  margin-top: ${props => (props.isKeyboardVisible ? '24px' : '0px')};
+  width: ${props =>
+    props.isKeyboardVisible ? '100%' : Dimensions.get('window').width + 'px'};
 `
 
 const Terms = () => {
@@ -74,7 +115,30 @@ const Terms = () => {
   )
 }
 
-const PersonalIdScreen = () => {
+interface AlreadyAccountProps {
+  isKeyboardVisible: boolean
+}
+
+const AlreadyAccount = ({isKeyboardVisible}: AlreadyAccountProps) => {
+  const {t} = useTranslation()
+
+  return (
+    <RowCenter isKeyboardVisible={isKeyboardVisible}>
+      <TermText variant={TEXT_VARIANTS.caption}>
+        {t('Already have account? ')}
+      </TermText>
+      <TouchableOpacity onPress={() => {}}>
+        <LoginText variant={TEXT_VARIANTS.caption}>{t('Login')}</LoginText>
+      </TouchableOpacity>
+    </RowCenter>
+  )
+}
+
+type Props = {
+  navigation: StackNavigationProp<{OtpPersonalId: undefined}>
+}
+
+const PersonalIdScreen = ({navigation}: Props) => {
   const {t} = useTranslation()
   const [isKeyboardVisible, setKeyboardVisible] = useState<boolean>(false)
   const [keyboardHeight, setKeyboardHeight] = useState<Number>(0)
@@ -101,22 +165,38 @@ const PersonalIdScreen = () => {
     }
   }, [])
 
+  const onComplete = () => {
+    navigation.navigate('OtpPersonalId')
+  }
+
   return (
     <>
       <Layout>
         <Spacer horizontal={false} size={SPACER_SIZES.BASE * 3} />
         <Text variant={TEXT_VARIANTS.heading}>{t('Credentials')}</Text>
         <Spacer horizontal={false} size={SPACER_SIZES.BASE * 3} />
-        <Input label={t('National ID/Iqama')} />
+        <Input
+          label={t('National ID / Iqama')}
+          schema={GovtIdValidator}
+          onChangeText={text => {
+            console.log(text)
+          }}
+        />
         <Spacer horizontal={false} size={SPACER_SIZES.BASE * 4} />
-        <Input label={t('Mobile')} />
+        <Input
+          label={t('Mobile')}
+          schema={MobileNumberValidator}
+          onChangeText={text => {
+            console.log(text)
+          }}
+        />
 
         <DisclaimerView isKeyboardVisible={isKeyboardVisible}>
           <Checkbox
             label={
-              <Text variant={TEXT_VARIANTS.caption}>
+              <AgreeText variant={TEXT_VARIANTS.caption}>
                 {t('I agree to receive email from SAIB')}
-              </Text>
+              </AgreeText>
             }
           />
           <Checkbox label={<Terms />} />
@@ -124,11 +204,12 @@ const PersonalIdScreen = () => {
 
         {!isKeyboardVisible && (
           <ButtonContainer>
-            <StyledButton>
+            <StyledButton onPress={onComplete}>
               <Text variant={TEXT_VARIANTS.body}>{t('Continue')}</Text>
             </StyledButton>
           </ButtonContainer>
         )}
+        <AlreadyAccount isKeyboardVisible={isKeyboardVisible} />
       </Layout>
       {isKeyboardVisible && (
         <StickyButtonContainer keyboardHeight={keyboardHeight}>
@@ -140,22 +221,5 @@ const PersonalIdScreen = () => {
     </>
   )
 }
-
-const StickyButtonContainer = styled.View<{keyboardHeight: Number}>`
-  position: absolute;
-  bottom: ${props => props.keyboardHeight + 'px'};
-  left: 0;
-  right: 0;
-  align-items: center;
-`
-
-const StickyButton = styled.TouchableOpacity`
-  background-color: #f8d03b;
-  border: 1px solid #f8d03b;
-  width: 100%;
-  min-height: 56px;
-  align-items: center;
-  justify-content: center;
-`
 
 export default PersonalIdScreen

@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import {TouchableWithoutFeedback} from 'react-native'
 import styled from 'styled-components/native'
-
+import {Check} from '@Assets'
 interface CheckboxProps {
   label: React.ReactElement | string
   checked?: boolean
@@ -20,6 +20,17 @@ const CheckboxText = styled.Text`
   color: #3f3d36;
 `
 
+const CheckBox = styled.View<CheckBoxProps>`
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  background-color: ${({checked}) => (checked ? '#F8D03B' : 'transparent')};
+  border-width: 1px;
+  border-color: #131109;
+  justify-content: center;
+  align-items: center;
+`
+
 const Checkbox: React.FC<CheckboxProps> = ({
   label = '',
   checked = false,
@@ -34,9 +45,12 @@ const Checkbox: React.FC<CheckboxProps> = ({
   }
 
   return (
-    <TouchableWithoutFeedback onPress={handleToggle}>
+    <TouchableWithoutFeedback
+      onPress={handleToggle}
+      accessibilityRole="checkbox"
+      accessibilityState={{checked: isChecked}}>
       <CheckboxContainer>
-        <CheckBox checked={isChecked} />
+        <CheckBox checked={isChecked}>{isChecked && <Check />}</CheckBox>
         <CheckboxText>{label}</CheckboxText>
       </CheckboxContainer>
     </TouchableWithoutFeedback>
@@ -46,14 +60,5 @@ const Checkbox: React.FC<CheckboxProps> = ({
 interface CheckBoxProps {
   checked: boolean
 }
-
-const CheckBox = styled.View<CheckBoxProps>`
-  width: 18px;
-  height: 18px;
-  border-radius: 4px;
-  background-color: ${({checked}) => (checked ? '#F8D03B' : 'transparent')};
-  border-width: 1px;
-  border-color: #131109;
-`
 
 export default Checkbox
