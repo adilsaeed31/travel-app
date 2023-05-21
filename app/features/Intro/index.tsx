@@ -158,8 +158,10 @@ const IntroFeature: React.FC<IntroFeatureProps> = () => {
               </TouchableOpacity>
             </View>
 
-            <TCButton status="warning" onPress={startNextAnimation}>
-              {currentValue >= 720 ? t('auth:buttonLogin') : t('intro:next')}
+            <TCButton onPress={startNextAnimation}>
+              {currentValue >= LastSlideFrame
+                ? (t('auth:buttonLogin') as string)
+                : (t('intro:next') as string)}
             </TCButton>
           </View>
         </RNAnimated.View>
