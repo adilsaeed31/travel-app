@@ -40,9 +40,11 @@ const Input = styled(TextInput)`
   font-size: 18px;
   font-weight: 500;
   line-height: 24px;
-  height: 24px;
   width: 85%;
+  flex: 1;
   text-align: ${() => (useStore.getState().isRTL ? 'right' : 'left')};
+  padding: 0;
+  text-decoration: none;
 `
 
 const ErrorText = styled(Text)`

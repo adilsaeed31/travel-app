@@ -1,5 +1,11 @@
-import React, {useEffect, useState} from 'react'
-import {TouchableOpacity, View, Keyboard, Dimensions} from 'react-native'
+import React, {useEffect, useState, useContext} from 'react'
+import {
+  TouchableOpacity,
+  View,
+  Keyboard,
+  Dimensions,
+  Platform,
+} from 'react-native'
 import {useTranslation} from 'react-i18next'
 import {
   Layout,
@@ -13,6 +19,7 @@ import {SPACER_SIZES, TEXT_VARIANTS} from '@Utils'
 import styled from 'styled-components/native'
 import {GovtIdValidator, MobileNumberValidator} from '@Utils'
 import {StackNavigationProp} from '@react-navigation/stack'
+import {AppProviderProps, AppContext} from '@Context'
 
 const StyledButton = styled(Button)`
   margin-left: 32px;
@@ -62,7 +69,8 @@ const Row = styled(View)`
 
 const StickyButtonContainer = styled.View<{keyboardHeight: Number}>`
   position: absolute;
-  bottom: ${props => props.keyboardHeight + 'px'};
+  bottom: ${props =>
+    Platform.OS == 'ios' ? props.keyboardHeight + 'px' : '0px'};
   left: 0;
   right: 0;
   align-items: center;
@@ -90,12 +98,12 @@ const RowCenter = styled.View<{isKeyboardVisible: boolean}>`
 
 const Terms = () => {
   const {t} = useTranslation()
-
+  const {isRTL} = useContext<AppProviderProps>(AppContext)
   return (
     <View>
       <Row>
         <TermText variant={TEXT_VARIANTS.caption}>
-          {t("I've read and accept the ")}
+          {t("I've read and accept the ") + Platform.OS}
         </TermText>
         <TouchableOpacity onPress={() => {}}>
           <UnderlineText variant={TEXT_VARIANTS.caption}>
@@ -153,7 +161,7 @@ const PersonalIdScreen = ({navigation}: Props) => {
     )
 
     const keyboardDidHideListener = Keyboard.addListener(
-      'keyboardWillHide',
+      'keyboardDidHide',
       () => {
         setKeyboardVisible(false)
       },
