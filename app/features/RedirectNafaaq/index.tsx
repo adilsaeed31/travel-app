@@ -1,12 +1,12 @@
 import React from 'react'
-import {View, Dimensions} from 'react-native'
+import {View, Dimensions, Image} from 'react-native'
 import {useTranslation} from 'react-i18next'
 import {Layout, TCButton as Button, TCTextView as Text} from '@Components'
 import {TEXT_VARIANTS} from '@Utils'
 import styled from 'styled-components/native'
 
 import {StackNavigationProp} from '@react-navigation/stack'
-import {NafaaqLogo} from '@Assets'
+import {NafaathLogo} from '@Assets'
 
 const StyledButton = styled(Button)`
   margin-left: 32px;
@@ -24,10 +24,13 @@ const ButtonContainerSecond = styled(View)`
   bottom: 34px;
   width: ${Dimensions.get('window').width}px;
 `
-
-const NafaaqImg = styled(NafaaqLogo)`
-  box-shadow: 0px 4px 12px rgba(52, 61, 69, 0.3);
+const NafaaqImg = styled(Image)`
+  height: 135px;
+  width: 135px;
+  margin-top: 90px;
+  margin-bottom: 34px;
 `
+
 const Row = styled(View)`
   flex-direction: row;
   justify-content: center;
@@ -40,7 +43,10 @@ const Body = styled(Text)`
 `
 
 type Props = {
-  navigation: StackNavigationProp<{AfterNafaath: undefined}>
+  navigation: StackNavigationProp<{
+    AfterNafaath: undefined
+    PersonalID: undefined
+  }>
 }
 
 const NafaqScreen = ({navigation}: Props) => {
@@ -52,9 +58,13 @@ const NafaqScreen = ({navigation}: Props) => {
 
   return (
     <>
-      <Layout>
+      <Layout
+        isBack={true}
+        onBack={() => {
+          navigation.push('PersonalID')
+        }}>
         <Row>
-          <NafaaqImg />
+          <NafaaqImg source={NafaathLogo} />
         </Row>
         <Body variant={TEXT_VARIANTS.label}>
           {t(

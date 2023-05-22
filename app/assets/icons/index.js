@@ -1,5 +1,8 @@
+export {default as ArrowLeft} from './ArrowLeft'
 export {default as Edit} from './Edit'
+export {default as Warning} from './Warning'
 export {default as Check} from './Check'
+export {default as CheckWarning} from './CheckWarning'
 export {default as Eye} from './Eye'
 export {default as EyeClosed} from './EyeClosed'
 export {default as FaceIcon} from './FaceIcon'
