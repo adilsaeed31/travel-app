@@ -11,29 +11,27 @@ buildscript {
         ndkVersion = "23.1.7779620"
     }
     repositories {
-        google()
-        mavenCentral()
-//        google {
-//          url "https://nexus-dev.saibnet2.saib.com/repository/google-maven/"
-//          credentials {
-//            username "5ZBdQT--"
-//            password "IqpgzBtdQrESz0sDMqFnhZKKxWaEE8RfdTdedCGDhbKk"
-//          }
-//        }
-//        maven {
-//          url "https://nexus-dev.saibnet2.saib.com/repository/maven-public/"
-//          credentials {
-//              username "5ZBdQT--"
-//              password "IqpgzBtdQrESz0sDMqFnhZKKxWaEE8RfdTdedCGDhbKk"
-//          }
-//        }
-//        mavenCentral {
-//          url "https://nexus-dev.saibnet2.saib.com/repository/maven-central/"
-//          credentials {
-//              username "5ZBdQT--"
-//              password "IqpgzBtdQrESz0sDMqFnhZKKxWaEE8RfdTdedCGDhbKk"
-//          }
-//        }
+       google {
+         url "https://nexus-dev.saibnet2.saib.com/repository/google-maven/"
+         credentials {
+           username "5ZBdQT--"
+           password "IqpgzBtdQrESz0sDMqFnhZKKxWaEE8RfdTdedCGDhbKk"
+         }
+       }
+       maven {
+         url "https://nexus-dev.saibnet2.saib.com/repository/maven-public/"
+         credentials {
+             username "5ZBdQT--"
+             password "IqpgzBtdQrESz0sDMqFnhZKKxWaEE8RfdTdedCGDhbKk"
+         }
+       }
+       mavenCentral {
+         url "https://nexus-dev.saibnet2.saib.com/repository/maven-central/"
+         credentials {
+             username "5ZBdQT--"
+             password "IqpgzBtdQrESz0sDMqFnhZKKxWaEE8RfdTdedCGDhbKk"
+         }
+       }
     }
     dependencies {
         classpath("com.android.tools.build:gradle:7.3.1")
