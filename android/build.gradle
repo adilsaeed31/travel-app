@@ -11,7 +11,7 @@ buildscript {
         ndkVersion = "23.1.7779620"
     }
     repositories {
-        google {
+       google {
           url "https://nexus-dev.saibnet2.saib.com/repository/google-maven/"
           credentials {
             username System.getenv("MAVEN_USER")

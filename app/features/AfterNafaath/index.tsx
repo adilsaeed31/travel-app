@@ -50,13 +50,13 @@ const ButtonContainerSecond = styled(View)`
 `
 
 type Props = {
-  navigation: StackNavigationProp<{RedirectNafaaq: undefined}>
+  navigation: StackNavigationProp<{AfterInformation: undefined}>
 }
 
 const PersonalIdScreen = ({navigation}: Props) => {
   const {t} = useTranslation()
   const onComplete = () => {
-    navigation.navigate('RedirectNafaaq')
+    navigation.navigate('AfterInformation')
   }
 
   return (

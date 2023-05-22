@@ -10,7 +10,7 @@ import {
 import {SPACER_SIZES, TEXT_VARIANTS} from '@Utils'
 import styled from 'styled-components/native'
 import {StackNavigationProp} from '@react-navigation/stack'
-import {CheckWarning} from '@Assets'
+import {TravelCard} from '@Assets'
 
 const StyledButton = styled(Button)`
   margin-left: 32px;
@@ -23,20 +23,11 @@ const ButtonContainer = styled(View)`
   width: ${Dimensions.get('window').width}px;
 `
 
-const CheckWarningImg = styled(CheckWarning)`
-  box-shadow: 0px 4px 12px rgba(52, 61, 69, 0.12);
-`
-
 const Row = styled(View)`
   flex-direction: row;
   justify-content: center;
 `
 
-const Bodydark = styled(Text)`
-  line-height: 28px;
-  text-align: center;
-  color: #1c1c1c;
-`
 const Body = styled(Text)`
   line-height: 28px;
   text-align: center;
@@ -55,25 +46,22 @@ const PersonalIdScreen = ({navigation}: Props) => {
 
   return (
     <>
-      <Layout isHeader={false} isBackground={false}>
-        <Spacer horizontal={false} size={SPACER_SIZES.BASE * 23} />
+      <Layout isHeader={false} backgroundIndex={2}>
+        <Spacer horizontal={false} size={SPACER_SIZES.BASE * 19} />
         <Row>
-          <CheckWarningImg />
+          <TravelCard />
         </Row>
-        <Spacer horizontal={false} size={SPACER_SIZES.BASE * 14} />
+        <Spacer horizontal={false} size={SPACER_SIZES.BASE * 2} />
 
         <Body variant={TEXT_VARIANTS.body}>
           {t(
             'Your account opening application is submitted successfully & you will receive a call to confirm the account opening.',
           )}
         </Body>
-        <Spacer size={SPACER_SIZES.BASE * 2} />
-        <Bodydark variant={TEXT_VARIANTS.body}>
-          {t('Ref. # 1234-5678-9123')}
-        </Bodydark>
+
         <ButtonContainer>
           <StyledButton onPress={onComplete}>
-            <Text variant={TEXT_VARIANTS.body}>{t('Return to Login')}</Text>
+            <Text variant={TEXT_VARIANTS.body}>{t('Activate Card')}</Text>
           </StyledButton>
         </ButtonContainer>
       </Layout>
