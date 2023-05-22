@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect} from 'react'
-import {TCTextView as Text} from '@Components'
+import Text from '../TextView'
 import styled from 'styled-components/native'
 import {TEXT_VARIANTS} from '@Utils'
 
