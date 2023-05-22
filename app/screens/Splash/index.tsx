@@ -1,32 +1,40 @@
-import React, {useEffect, useRef, useState} from 'react'
+import React, {useContext, useEffect, useRef} from 'react'
 import {Animated, Easing} from 'react-native'
 import LottieView from 'lottie-react-native'
 import Splash from 'react-native-splash-screen'
 
-import {splashAnimationJson, introAnimation} from '@Assets'
+import {splashAnimationJson} from '@Assets'
+import {AppContext, AppProviderProps} from '@Context'
+import {getIntro} from '@Utils'
+import {useStore} from '@Store'
 
 type SplashScreenProps = {
-  onCompleteAnimation: () => void
+  navigation: any
 }
 
-const SplashScreen: React.FC<SplashScreenProps> = ({onCompleteAnimation}) => {
-  const [showFirst, setShowFirst] = useState<boolean>(true)
-
-  const nextAnimRef = useRef<LottieView>(null)
+const SplashScreen: React.FC<SplashScreenProps> = ({navigation}) => {
+  const {introHasBeenSeen} = useStore()
+  const {hasIntroSeen, setAppReady} = useContext<AppProviderProps>(AppContext)
   const splashAnim = useRef(new Animated.Value(0)).current
-  const nextAnim = useRef(new Animated.Value(0)).current
 
-  const fadeIn = () => {
-    Animated.timing(nextAnim, {
-      toValue: 1,
-      duration: 250,
-      useNativeDriver: true,
-    }).start(() => {
-      nextAnimRef.current?.play()
-    })
+  const gotToNextFeature = () => {
+    if (!hasIntroSeen) {
+      navigation.navigate('Intro')
+    } else {
+      setAppReady?.()
+    }
   }
 
   useEffect(() => {
+    // check on splash screen if the introFlag set
+    ;(async () => {
+      const introFlag = Boolean(await getIntro())
+
+      if (introFlag) {
+        introHasBeenSeen()
+      }
+    })()
+
     // hiding the splash screen below
     Splash.hide()
 
@@ -37,33 +45,17 @@ const SplashScreen: React.FC<SplashScreenProps> = ({onCompleteAnimation}) => {
       easing: Easing.elastic(1),
       useNativeDriver: true,
     }).start()
-  }, [splashAnim])
+  }, [introHasBeenSeen, splashAnim])
 
-  return showFirst ? (
+  return (
     <Animated.View style={{opacity: splashAnim}} className="flex-1">
       <LottieView
         autoPlay
         loop={false}
         resizeMode="cover"
         source={splashAnimationJson}
-        onAnimationFinish={() => {
-          // changing the next animation with state
-          setShowFirst(false)
-          // starting fadeIn effect to land the next animation
-          fadeIn()
-        }}
-      />
-    </Animated.View>
-  ) : (
-    <Animated.View style={{opacity: nextAnim}} className="flex-1">
-      <LottieView
-        loop={false}
-        autoPlay={false}
-        resizeMode="cover"
-        ref={nextAnimRef}
-        source={introAnimation}
-        onLayout={() => console.log('rendered')}
-        onAnimationFinish={() => onCompleteAnimation()}
+        // changing the next animation with state
+        onAnimationFinish={() => gotToNextFeature()}
       />
     </Animated.View>
   )

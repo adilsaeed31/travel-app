@@ -1,23 +1,33 @@
 import React, {createContext, useState, ReactNode} from 'react'
-import {useColorScheme} from 'react-native'
+import {useColorScheme, ColorSchemeName} from 'react-native'
 
 import {useStore} from '@Store'
+import {setIntro} from '@Utils'
 
 export type AppProviderProps = {
   children?: ReactNode
-  mode?: 'dark' | 'light' | null
+  mode?: ColorSchemeName
   language?: string
   direction?: string
+  isAppReady?: boolean
+  hasIntroSeen?: boolean
+  isRTL?: boolean
   changeMode?: () => void
   changeLanguage?: () => void
+  setAppReady?: () => void
 }
 
 export const AppContext = createContext<AppProviderProps>({
   mode: 'light',
   language: 'en',
   direction: 'ltr',
+  isAppReady: false,
+  hasIntroSeen: false,
+  isRTL: false,
+
   changeMode: () => {},
   changeLanguage: () => {},
+  setAppReady: () => {},
 })
 
 /**
@@ -27,17 +37,27 @@ export const AppContext = createContext<AppProviderProps>({
  */
 
 export function AppProvider(props: AppProviderProps) {
-  const {toggleLanguage} = useStore()
-  let [mode, setMode] = useState(useColorScheme())
-  let [language, setLanguage] = useState('en')
-  let [direction, setDirection] = useState('ltr')
+  const {toggleLanguage, hasIntroSeen, introHasBeenSeen, isRTL} = useStore()
+  const [language, setLanguage] = useState<string>('en')
+  const [direction, setDirection] = useState<string>('ltr')
+  const [mode, setMode] = useState<ColorSchemeName>(useColorScheme())
+  const [isAppReady, setIsAppReady] = useState<boolean>(false)
 
+  // changing the dark and light mode here
   const changeMode = () => setMode(mode === 'light' ? 'dark' : 'light')
 
+  // changing language and direction both here
   const changeLanguage = () => {
     setLanguage(language === 'en' ? 'ar' : 'en')
     setDirection(direction === 'rtl' ? 'ltr' : 'rtl')
     toggleLanguage()
+  }
+
+  // setting app isready here
+  const setAppReady = () => {
+    setIsAppReady(true)
+    setIntro()
+    introHasBeenSeen()
   }
 
   return (
@@ -45,10 +65,14 @@ export function AppProvider(props: AppProviderProps) {
       {...props}
       value={{
         mode,
+        isRTL,
         language,
         direction,
+        isAppReady,
+        hasIntroSeen,
 
         changeMode,
+        setAppReady,
         changeLanguage,
       }}
     />

@@ -1,12 +1,11 @@
 import React from 'react'
 import {
-  createStackNavigator,
   CardStyleInterpolators,
+  createStackNavigator,
 } from '@react-navigation/stack'
 
 import {
   AuthFeature,
-  AuthFeature2,
   PersonalID,
   OtpPersonalID,
   AfterOtpPersonalId,
@@ -19,9 +18,10 @@ import {
 
 const {Navigator, Screen} = createStackNavigator()
 
-export default function AuthNavigator() {
+const AuthNavigator = () => {
   return (
     <Navigator
+      initialRouteName="Auth"
       screenOptions={{
         headerShown: false,
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
@@ -36,7 +36,8 @@ export default function AuthNavigator() {
       <Screen name="OTPActivateCard" component={OTPActivateCard} />
 
       <Screen name="Auth" component={AuthFeature} />
-      <Screen name="Auth2" component={AuthFeature2} />
     </Navigator>
   )
 }
+
+export default AuthNavigator
