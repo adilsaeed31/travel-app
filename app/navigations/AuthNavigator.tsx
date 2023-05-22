@@ -13,6 +13,8 @@ import {
   RedirectNafaaq,
   AfterNafaath,
   AfterInformation,
+  OTPActivateCard,
+  ActivateCard,
 } from '@Features'
 
 const {Navigator, Screen} = createStackNavigator()
@@ -24,12 +26,15 @@ export default function AuthNavigator() {
         headerShown: false,
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       }}>
+      <Screen name="ActivateCard" component={ActivateCard} />
       <Screen name="PersonalID" component={PersonalID} />
       <Screen name="OtpPersonalId" component={OtpPersonalID} />
       <Screen name="AfterOtpPersonalId" component={AfterOtpPersonalId} />
       <Screen name="RedirectNafaaq" component={RedirectNafaaq} />
       <Screen name="AfterNafaath" component={AfterNafaath} />
       <Screen name="AfterInformation" component={AfterInformation} />
+      <Screen name="OTPActivateCard" component={OTPActivateCard} />
+
       <Screen name="Auth" component={AuthFeature} />
       <Screen name="Auth2" component={AuthFeature2} />
     </Navigator>
