@@ -1,4 +1,6 @@
 export {default as Edit} from './Edit'
 export {default as Check} from './Check'
+export {default as Eye} from './Eye'
+export {default as EyeClosed} from './EyeClosed'
 export {default as FaceIcon} from './FaceIcon'
 export {default as SaibLogo} from './SaibLogo'

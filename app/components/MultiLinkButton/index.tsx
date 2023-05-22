@@ -52,7 +52,6 @@ const MultiLink: FC<LinkProps> = ({
   const clickableTexts = children
     .match(regex)
     ?.map((text: string) => text.replace(/\[|\]/g, ''))
-
   const renderLinkText = () => {
     const parts = children.split(regex)
     return parts.map((part: any, index: any) => {
