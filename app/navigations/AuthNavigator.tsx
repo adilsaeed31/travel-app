@@ -26,7 +26,7 @@ const AuthNavigator = () => {
         headerShown: false,
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       }}>
-      <Screen name="ActivateCard" component={ActivateCard} />
+      <Screen name="Auth" component={AuthFeature} />
       <Screen name="PersonalID" component={PersonalID} />
       <Screen name="OtpPersonalId" component={OtpPersonalID} />
       <Screen name="AfterOtpPersonalId" component={AfterOtpPersonalId} />
@@ -34,8 +34,7 @@ const AuthNavigator = () => {
       <Screen name="AfterNafaath" component={AfterNafaath} />
       <Screen name="AfterInformation" component={AfterInformation} />
       <Screen name="OTPActivateCard" component={OTPActivateCard} />
-
-      <Screen name="Auth" component={AuthFeature} />
+      <Screen name="ActivateCard" component={ActivateCard} />
     </Navigator>
   )
 }

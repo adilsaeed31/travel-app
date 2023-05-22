@@ -1,7 +1,7 @@
 import {TEXT_VARIANTS} from '@Utils'
 import React, {useState, useRef, FC} from 'react'
-import {TCTextView as Text} from '@Components'
-import {TextInput, View, KeyboardAvoidingView} from 'react-native'
+import Text from '../TextView'
+import {TextInput, View} from 'react-native'
 import styled from 'styled-components/native'
 import {useTranslation} from 'react-i18next'
 

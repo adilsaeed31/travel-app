@@ -18,8 +18,16 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
 } from 'react-native'
+import {StackNavigationProp} from '@react-navigation/stack'
 
-const AuthFeature = () => {
+type Props = {
+  navigation: StackNavigationProp<{
+    AfterOtpPersonalId: undefined
+    PersonalID: undefined
+  }>
+}
+
+const AuthFeature = ({navigation}: Props) => {
   const {t} = useTranslation()
   const {isAppReady, hasIntroSeen} = useContext<AppProviderProps>(AppContext)
   const splashAnim = useRef(new Animated.Value(0)).current
@@ -101,7 +109,12 @@ const AuthFeature = () => {
           </ButtonContainer>
           <Spacer horizontal={false} size={SPACER_SIZES.XXL} />
           <MultiTextWrapper>
-            <TCMultiLinkButton>{t('auth:newToSaib')}</TCMultiLinkButton>
+            <TCMultiLinkButton
+              onPress={() => {
+                navigation.navigate('PersonalID')
+              }}>
+              {t('auth:newToSaib')}
+            </TCMultiLinkButton>
           </MultiTextWrapper>
         </Container>
       </TouchableWithoutFeedback>
