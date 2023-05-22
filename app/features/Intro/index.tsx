@@ -21,9 +21,9 @@ type IntroFeatureProps = {
 }
 
 // each slide frame of intro animation
-const FirstSlideFrame = 240
-const MiddleSlideFrame = 480
-const LastSlideFrame = 720
+const FirstSlideFrame = 238
+const MiddleSlideFrame = 476
+const LastSlideFrame = 714
 
 const IntroFeature: React.FC<IntroFeatureProps> = () => {
   const {t} = useTranslation()
