@@ -14,7 +14,7 @@ const Container = styled(View)<{isRTL: boolean | undefined}>`
   flex-direction: ${props => (props.isRTL ? 'row-reverse' : 'row')};
 `
 
-const ViewSub = styled(View)<{isRTL: boolean | undefined}>`
+const ViewSub = styled(View)<{isRTL?: boolean | undefined}>`
   justify-content: space-between;
   flex: 1;
   flex-direction: ${props => (props.isRTL ? 'row-reverse' : 'row')};
@@ -56,10 +56,10 @@ const TopNavigationSimpleUsageShowcase: React.FC<PropsType> = ({
       <StatusBar />
       {isBack ? (
         <TouchableOpacity onPress={onBack}>
-          <ViewSub isRTL={isRTL}>
+          <ViewSub>
             <ArrowLeftIcon />
             <LanguageBackText variant={TEXT_VARIANTS.bodyBold}>
-              {t('onboarding:Back')}
+              {t('onboarding:back')}
             </LanguageBackText>
           </ViewSub>
         </TouchableOpacity>

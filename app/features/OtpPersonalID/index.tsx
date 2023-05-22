@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, useContext} from 'react'
 import {View, Keyboard, Dimensions, TouchableOpacity} from 'react-native'
 import {useTranslation} from 'react-i18next'
 import {
@@ -12,6 +12,7 @@ import {SPACER_SIZES, TEXT_VARIANTS} from '@Utils'
 import styled from 'styled-components/native'
 import {Edit} from '@Assets'
 import {StackNavigationProp} from '@react-navigation/stack'
+import {AppProviderProps, AppContext} from '@Context'
 
 const StyledButton = styled(Button)`
   margin-left: 32px;
@@ -24,9 +25,9 @@ const ButtonContainer = styled(View)`
   width: ${Dimensions.get('window').width}px;
 `
 
-const Row = styled(View)`
+const Row = styled(View)<{isRTL: boolean | undefined}>`
   display: flex;
-  flex-direction: row;
+  flex-direction: ${({isRTL}) => (isRTL ? 'row-reverse' : 'row')};
   justify-content: space-between;
 `
 
@@ -70,6 +71,7 @@ const OtpPersonalIdScreen = ({navigation}: Props) => {
   const [keyboardHeight, setKeyboardHeight] = useState<Number>(0)
   const [resendCount, setResendCount] = useState<number>(0)
   const [resendAvailable, setResendAvailable] = useState<boolean>(false)
+  const {isRTL} = useContext<AppProviderProps>(AppContext)
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
@@ -104,9 +106,7 @@ const OtpPersonalIdScreen = ({navigation}: Props) => {
     <>
       <Layout>
         <Spacer horizontal={false} size={SPACER_SIZES.BASE * 3} />
-        <Text variant={TEXT_VARIANTS.heading}>
-          {t('Enter OTP') + resendCount}
-        </Text>
+        <Text variant={TEXT_VARIANTS.heading}>{t('onboarding:enterOTP')}</Text>
         <Spacer size={SPACER_SIZES.BASE * 3} />
         <OTP
           onChangeText={otp => {
@@ -118,9 +118,9 @@ const OtpPersonalIdScreen = ({navigation}: Props) => {
           resetCount={resendCount}
         />
         <Spacer size={SPACER_SIZES.XL} />
-        <Row>
+        <Row isRTL={isRTL}>
           <TouchableOpacity onPress={() => navigation.navigate('PersonalID')}>
-            <Row>
+            <Row isRTL={isRTL}>
               <EditIcon />
               <BottomText variant={TEXT_VARIANTS.body}>
                 {'+966 9513247609'}
@@ -134,12 +134,12 @@ const OtpPersonalIdScreen = ({navigation}: Props) => {
                   setResendCount(resendCount + 1)
                 }}>
                 <BottomText variant={TEXT_VARIANTS.body}>
-                  {t('Resend OTP')}
+                  {t('onboarding:resendOTP')}
                 </BottomText>
               </TouchableOpacity>
             ) : (
               <BottomText variant={TEXT_VARIANTS.body} disabled={true}>
-                {t('Resend OTP')}
+                {t('onboarding:resendOTP')}
               </BottomText>
             )}
           </View>
@@ -148,7 +148,9 @@ const OtpPersonalIdScreen = ({navigation}: Props) => {
           <ButtonContainer>
             <StyledButton
               onPress={() => navigation.navigate('AfterOtpPersonalId')}>
-              <Text variant={TEXT_VARIANTS.body}>{t('Continue')}</Text>
+              <Text variant={TEXT_VARIANTS.body}>
+                {t('onboarding:continue')}
+              </Text>
             </StyledButton>
           </ButtonContainer>
         )}
@@ -156,7 +158,7 @@ const OtpPersonalIdScreen = ({navigation}: Props) => {
       {isKeyboardVisible && (
         <StickyButtonContainer keyboardHeight={keyboardHeight}>
           <StickyButton>
-            <Text variant={TEXT_VARIANTS.body}>{t('Continue')}</Text>
+            <Text variant={TEXT_VARIANTS.body}>{t('onboarding:continue')}</Text>
           </StickyButton>
         </StickyButtonContainer>
       )}
