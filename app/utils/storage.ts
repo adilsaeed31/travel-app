@@ -3,6 +3,7 @@ import EncryptedStorage from 'react-native-encrypted-storage'
 const key = 'authToken' // setting token key
 const envKey = 'env' // setting env key
 const userKey = 'authUser' // Authenticated User Object
+const introKey = 'intro'
 
 const storeToken = async (token: string) => {
   try {
@@ -66,7 +67,23 @@ const setEnv = async (value: string) => {
   try {
     await EncryptedStorage.setItem(envKey, value)
   } catch (error) {
-    console.log('Error storing the auth token', error)
+    console.log('Error storing the env value', error)
+  }
+}
+
+const setIntro = () => {
+  try {
+    EncryptedStorage.setItem(introKey, 'true')
+  } catch (error) {
+    console.log('Error storing the intro key', error)
+  }
+}
+
+const getIntro = async () => {
+  try {
+    return await EncryptedStorage.getItem(introKey)
+  } catch (error) {
+    console.log('Error getting the intro key', error)
   }
 }
 
@@ -79,4 +96,6 @@ export {
   removeToken,
   storeToken,
   clearStorage,
+  getIntro,
+  setIntro,
 }

@@ -57,5 +57,14 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>UIAppFonts</key>
+	<array>
+		<string>cotext.otf</string>
+		<string>cotext_bold.otf</string>
+		<string>cotext_light.otf</string>
+		<string>cotext.ttf</string>
+		<string>cotext_bold.ttf</string>
+		<string>cotext_light.ttf</string>
+	</array>
 </dict>
 </plist>
