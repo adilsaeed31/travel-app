@@ -7,10 +7,18 @@ import {AppContext} from '@Context'
 import {SPACER_SIZES, TEXT_VARIANTS} from '@Utils'
 import {Spacer} from '@Components'
 import {default as Text} from '../TextView'
+import {useStore} from '@Store'
 
 const Container = styled(View)`
   padding-top: 76px;
   padding-bottom: 0;
+  flex-direction: ${() => (useStore.getState().isRTL ? 'row-reverse' : 'row')};
+`
+
+const ViewSub = styled(View)`
+  justify-content: space-between;
+  flex: 1;
+  flex-direction: ${() => (useStore.getState().isRTL ? 'row-reverse' : 'row')};
 `
 
 const LanguageText = styled(Text)`
@@ -50,15 +58,15 @@ const TopNavigationSimpleUsageShowcase: React.FC<PropsType> = ({
       <StatusBar />
       {isBack ? (
         <TouchableOpacity onPress={onBack}>
-          <View className="flex-row justify-start">
+          <ViewSub>
             <ArrowLeftIcon />
             <LanguageBackText variant={TEXT_VARIANTS.bodyBold}>
               {t('onboarding:Back')}
             </LanguageBackText>
-          </View>
+          </ViewSub>
         </TouchableOpacity>
       ) : (
-        <View className="flex-row justify-between">
+        <ViewSub>
           <SaibLogo />
           {canLanguageChange ? (
             <>
@@ -70,7 +78,7 @@ const TopNavigationSimpleUsageShowcase: React.FC<PropsType> = ({
               </TouchableOpacity>
             </>
           ) : null}
-        </View>
+        </ViewSub>
       )}
     </Container>
   )

@@ -147,15 +147,17 @@ const IntroFeature: React.FC<IntroFeatureProps> = () => {
                 <TCDot isActive={currentValue >= LastSlideFrame} />
               </Animated.View>
 
-              <TouchableOpacity onPress={setAppReady}>
-                <TCTextView
-                  className={cn(
-                    m2(isRTL),
-                    'text-base txt-tc-seconedary dark:text-tc-primary font-tc-primary',
-                  )}>
-                  {t('intro:skip')}
-                </TCTextView>
-              </TouchableOpacity>
+              {currentValue !== LastSlideFrame && (
+                <TouchableOpacity onPress={setAppReady}>
+                  <TCTextView
+                    className={cn(
+                      m2(isRTL),
+                      'text-base txt-tc-seconedary dark:text-tc-primary font-tc-primary',
+                    )}>
+                    {t('intro:skip')}
+                  </TCTextView>
+                </TouchableOpacity>
+              )}
             </View>
 
             <TCButton onPress={startNextAnimation}>

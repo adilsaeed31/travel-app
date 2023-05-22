@@ -4,11 +4,15 @@ import Text from '../TextView'
 import {TextInput, View} from 'react-native'
 import styled from 'styled-components/native'
 import {useTranslation} from 'react-i18next'
+import {useStore} from '@Store'
+import {Eye, EyeClosed} from '@Assets'
+import {TouchableOpacity} from 'react-native-gesture-handler'
 
 interface CustomInputProps {
   label: string
   schema?: any
   value?: any
+  isPassword?: boolean
   onChangeText?: (text: string) => void
 }
 
@@ -37,6 +41,8 @@ const Input = styled(TextInput)`
   font-weight: 500;
   line-height: 24px;
   height: 24px;
+  width: 85%;
+  text-align: ${() => (useStore.getState().isRTL ? 'right' : 'left')};
 `
 
 const ErrorText = styled(Text)`
@@ -45,9 +51,21 @@ const ErrorText = styled(Text)`
   padding-left: 16px;
 `
 
+const HorizontalView = styled(View)`
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+`
+
+const LinkContainer = styled(TouchableOpacity)`
+  height: 24px;
+  justify-content: center;
+`
+
 const CustomInput: FC<CustomInputProps> = ({
   label,
   value,
+  isPassword,
   schema,
   onChangeText = () => {},
 }) => {
@@ -55,6 +73,7 @@ const CustomInput: FC<CustomInputProps> = ({
   const [isFocused, setIsFocused] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
   const [inputValue, setInputValue] = useState<string>(value)
+  const [showPassword, setShowPassword] = useState<boolean>(isPassword || false)
   const {t} = useTranslation()
   const handleFocus = (): void => {
     setIsFocused(true)
@@ -62,7 +81,6 @@ const CustomInput: FC<CustomInputProps> = ({
 
   const handleBlur = (): void => {
     setIsFocused(false)
-    validateInput()
   }
 
   const validateInput = (): void => {
@@ -79,6 +97,7 @@ const CustomInput: FC<CustomInputProps> = ({
   const handleChangeText = (text: string): void => {
     onChangeText(text)
     setInputValue(text)
+    validateInput()
   }
 
   return (
@@ -87,16 +106,24 @@ const CustomInput: FC<CustomInputProps> = ({
         <InputLabel variant={TEXT_VARIANTS.label} isFocused={isFocused}>
           {label}
         </InputLabel>
-        <Input
-          ref={inputRef}
-          value={inputValue}
-          onChangeText={handleChangeText}
-          placeholder={isFocused ? '' : '-'}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-          cursorColor={'#8c8a86'}
-          selectionColor={'#8c8a86'}
-        />
+        <HorizontalView>
+          <Input
+            ref={inputRef}
+            value={inputValue}
+            onChangeText={handleChangeText}
+            placeholder={isFocused ? '' : '-'}
+            onFocus={handleFocus}
+            secureTextEntry={showPassword}
+            onBlur={handleBlur}
+            cursorColor={'#8c8a86'}
+            selectionColor={'#8c8a86'}
+          />
+          {isPassword && (
+            <LinkContainer onPress={() => setShowPassword(!showPassword)}>
+              {showPassword ? <Eye /> : <EyeClosed />}
+            </LinkContainer>
+          )}
+        </HorizontalView>
       </InputWrapper>
       {error && <ErrorText>{t(error)}</ErrorText>}
     </>

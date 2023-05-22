@@ -11,6 +11,7 @@ import styled from 'styled-components/native'
 
 import Header from './Header'
 import {Background1, Background2} from '@Assets'
+import {useStore} from '@Store'
 
 type LayoutProps = {
   isHeader?: boolean
@@ -40,6 +41,7 @@ const BackgroundImage2 = styled(Background2)`
   position: absolute;
   z-index: -1;
   elevation: -1;
+  transform: ${() => (useStore.getState().isRTL ? 'scaleX(-1)' : 'scaleX(1)')};
 `
 
 const ContentWrapper = styled(View)`
