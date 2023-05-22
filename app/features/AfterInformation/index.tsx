@@ -1,5 +1,5 @@
-import React from 'react'
-import {View, Dimensions} from 'react-native'
+import React, {useContext} from 'react'
+import {View, Dimensions, Text as TextNumber} from 'react-native'
 import {useTranslation} from 'react-i18next'
 import {
   Layout,
@@ -11,6 +11,7 @@ import {SPACER_SIZES, TEXT_VARIANTS} from '@Utils'
 import styled from 'styled-components/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {CheckWarning} from '@Assets'
+import {AppProviderProps, AppContext} from '@Context'
 
 const StyledButton = styled(Button)`
   margin-left: 32px;
@@ -32,7 +33,7 @@ const Row = styled(View)`
   justify-content: center;
 `
 
-const Bodydark = styled(Text)`
+const Bodydark = styled(Text)<{isRTL: boolean | undefined}>`
   line-height: 28px;
   text-align: center;
   color: #1c1c1c;
@@ -49,6 +50,7 @@ type Props = {
 
 const PersonalIdScreen = ({navigation}: Props) => {
   const {t} = useTranslation()
+  const {isRTL} = useContext<AppProviderProps>(AppContext)
   const onComplete = () => {
     navigation.navigate('PersonalID')
   }
@@ -62,18 +64,19 @@ const PersonalIdScreen = ({navigation}: Props) => {
         </Row>
         <Spacer horizontal={false} size={SPACER_SIZES.BASE * 14} />
 
-        <Body variant={TEXT_VARIANTS.body}>
-          {t(
-            'Your account opening application is submitted successfully & you will receive a call to confirm the account opening.',
-          )}
-        </Body>
+        <Body variant={TEXT_VARIANTS.body}>{t('onboarding:confirmCall')}</Body>
         <Spacer size={SPACER_SIZES.BASE * 2} />
-        <Bodydark variant={TEXT_VARIANTS.body}>
-          {t('Ref. # 1234-5678-9123')}
+        <Bodydark variant={TEXT_VARIANTS.body} isRTL={isRTL}>
+          <>
+            <>{t('onboarding:ref')}</>
+            <TextNumber>{' 1234-5678-9123'}</TextNumber>
+          </>
         </Bodydark>
         <ButtonContainer>
           <StyledButton onPress={onComplete}>
-            <Text variant={TEXT_VARIANTS.body}>{t('Return to Login')}</Text>
+            <Text variant={TEXT_VARIANTS.body}>
+              {t('onboarding:returnLogin')}
+            </Text>
           </StyledButton>
         </ButtonContainer>
       </Layout>

@@ -69,26 +69,26 @@ const PersonalIdScreen = ({navigation}: Props) => {
         <Spacer horizontal={false} size={SPACER_SIZES.BASE * 14} />
 
         <Heading variant={TEXT_VARIANTS.subheading}>
-          {t('Error message')}
+          {t('onboarding:errorMessage')}
         </Heading>
 
         <Spacer horizontal={false} size={SPACER_SIZES.BASE * 2} />
         <Body variant={TEXT_VARIANTS.label}>
-          {t('Sorry we couldn’t manage to get the information from Nafath')}
+          {t('onboarding:noNafathInfo')}
         </Body>
         <Spacer horizontal={false} size={SPACER_SIZES.BASE * 1} />
-        <Body variant={TEXT_VARIANTS.label}>{t('Please try again')}</Body>
+        <Body variant={TEXT_VARIANTS.label}>{t('onboarding:tryAgain')}</Body>
         <ButtonContainer>
           <StyledButton onPress={onComplete}>
             <Text variant={TEXT_VARIANTS.body}>
-              {t('Access by Nafath App')}
+              {t('onboarding:nafathByApp')}
             </Text>
           </StyledButton>
         </ButtonContainer>
         <ButtonContainerSecond>
           <StyledButton onPress={onComplete} varient="transparent">
             <Text variant={TEXT_VARIANTS.body}>
-              {t('Access by Nafath web portal')}
+              {t('onboarding:nafathByWeb')}
             </Text>
           </StyledButton>
         </ButtonContainerSecond>

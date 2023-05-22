@@ -61,6 +61,7 @@ enum STPES {
 const PersonalIdScreen = ({navigation}: Props) => {
   const {t} = useTranslation()
   const [state, setState] = useState({step: STPES.attempts})
+
   const onComplete = () => {
     if (state.step === STPES.attempts) {
       setState({...state, step: STPES.identityAttempts})
@@ -86,47 +87,43 @@ const PersonalIdScreen = ({navigation}: Props) => {
 
         {state.step === STPES.attempts && (
           <Heading variant={TEXT_VARIANTS.subheading}>
-            {t('OTP attempts failed three times')}
+            {t('onboarding:threeAttempts')}
           </Heading>
         )}
 
         {state.step === STPES.identityAttempts && (
           <Heading variant={TEXT_VARIANTS.subheading}>
-            {t('Identity verification error')}
+            {t('onboarding:identityError')}
           </Heading>
         )}
 
         {state.step === STPES.phoneAttempts && (
           <Heading variant={TEXT_VARIANTS.subheading}>
-            {t('Phone verification error')}
+            {t('onboarding:phoneError')}
           </Heading>
         )}
 
         <Spacer horizontal={false} size={SPACER_SIZES.BASE * 2} />
         {state.step === STPES.attempts && (
-          <Body variant={TEXT_VARIANTS.label}>{t('Try again later')}</Body>
+          <Body variant={TEXT_VARIANTS.label}>{t('onboarding:tryAgain')}</Body>
         )}
 
         {state.step === STPES.identityAttempts && (
           <Body variant={TEXT_VARIANTS.label}>
-            {t(
-              'The entered mobile number should be owned by you & registered under your ID / Iqama',
-            )}
+            {t('onboarding:identityAttempts')}
           </Body>
         )}
 
         {state.step === STPES.phoneAttempts && (
           <Body variant={TEXT_VARIANTS.label}>
-            {t(
-              'Registration attempts have exhausted.Please try again in the next 24 hours.',
-            )}
+            {t('onboarding:phoneAttempts')}
           </Body>
         )}
         {state.step === STPES.identityAttempts && (
           <>
             <Spacer horizontal={false} size={SPACER_SIZES.BASE * 3} />
             <Input
-              label={t('Mobile')}
+              label={t('onboarding:mobileNumber')}
               schema={MobileNumberValidator}
               onChangeText={text => {
                 console.log(text)
@@ -137,7 +134,9 @@ const PersonalIdScreen = ({navigation}: Props) => {
 
         <ButtonContainer>
           <StyledButton onPress={onComplete}>
-            <Text variant={TEXT_VARIANTS.body}>{t('Back to Login')}</Text>
+            <Text variant={TEXT_VARIANTS.body}>
+              {t('onboarding:backLogin')}
+            </Text>
           </StyledButton>
         </ButtonContainer>
       </Layout>

@@ -14,7 +14,7 @@ function TCTextView({
   variant,
   ...rest
 }: {
-  children: string
+  children: string | React.ReactElement | null
   variant?: any
   className?: string
 }) {
