@@ -20,6 +20,7 @@ const {Navigator, Screen} = createStackNavigator()
 export default function AuthNavigator() {
   return (
     <Navigator
+      initialRouteName="Auth"
       screenOptions={{
         headerShown: false,
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,

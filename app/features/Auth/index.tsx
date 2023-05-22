@@ -1,7 +1,7 @@
 /* eslint-disable no-alert */
 import React, {useContext, useState} from 'react'
 import {AppContext, AuthContext} from '@Context'
-import {SaibLogo, Bg, FaceIcon} from '@Assets'
+import {FaceIcon} from '@Assets'
 import {useTranslation} from 'react-i18next'
 import {
   TCInput as InputView,
@@ -10,9 +10,15 @@ import {
   Spacer,
   TCLinkButton,
   TCMultiLinkButton,
+  Layout,
 } from '@Components'
 import styled from 'styled-components/native'
-import {SPACER_SIZES, TEXT_VARIANTS} from '@Utils'
+import {
+  SPACER_SIZES,
+  TEXT_VARIANTS,
+  UserNameValidator,
+  passwordValidator,
+} from '@Utils'
 import {Keyboard, TouchableWithoutFeedback} from 'react-native'
 
 const AuthFeature = () => {
@@ -22,26 +28,14 @@ const AuthFeature = () => {
   const [userName, setUserName] = useState('')
   const [password, setPassword] = useState('')
 
-  const successCall = (value: string) => {
-    setInputValue(value)
-  }
-
-  const errorCall = () => {}
-
   const handleLogin = () => {
     // Perform login logic here
   }
 
   return (
-    <>
-      <Bg style={{position: 'absolute'}} />
+    <Layout>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <Container>
-          <TopContainer>
-            <SaibLogo />
-            <TCTextView variant={TEXT_VARIANTS.caption}>Ar</TCTextView>
-          </TopContainer>
-
+        <>
           <Spacer horizontal={false} size={SPACER_SIZES.XL} />
           <TCTextView variant={TEXT_VARIANTS.heading}>Login</TCTextView>
           <Spacer horizontal={false} size={SPACER_SIZES.XL} />
@@ -49,13 +43,15 @@ const AuthFeature = () => {
           <LoginForm>
             <TCInput
               label={'Username'}
-              value={userName}
+              schema={UserNameValidator}
               onChangeText={setUserName}
             />
             <Spacer horizontal={false} size={SPACER_SIZES.XL} />
             <TCInput
               label={'Password'}
               value={password}
+              isPassword
+              schema={passwordValidator}
               onChangeText={setPassword}
             />
             <Spacer horizontal={false} size={SPACER_SIZES.LG} />
@@ -88,18 +84,11 @@ const AuthFeature = () => {
               {t('auth:newToSaib')}
             </TCMultiLinkButton>
           </MultiTextWrapper>
-        </Container>
+        </>
       </TouchableWithoutFeedback>
-    </>
+    </Layout>
   )
 }
-
-const Container = styled.View`
-  flex: 1;
-  margin-top: 50px;
-  margin-left: 32px;
-  margin-right: 32px;
-`
 
 const LoginForm = styled.View`
   width: 100%;
@@ -128,11 +117,5 @@ const TCInput = styled(InputView)`
 const ButtonContainer = styled.View`
   width: 100%;
 `
-const TopContainer = styled.View`
-  width: 100%;
-  margin-top: 16px;
-  justify-content: space-between;
-  align-items: center;
-  flex-direction: row;
-`
+
 export default AuthFeature
