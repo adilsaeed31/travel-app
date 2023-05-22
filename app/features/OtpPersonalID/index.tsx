@@ -81,7 +81,7 @@ const OtpPersonalIdScreen = ({navigation}: Props) => {
     )
 
     const keyboardDidHideListener = Keyboard.addListener(
-      'keyboardWillHide',
+      'keyboardDidHide',
       () => {
         setKeyboardVisible(false)
       },
