@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useRef, useState} from 'react'
 import {AppContext, AppProviderProps} from '@Context'
-import {SaibLogo, Bg, FaceIcon} from '@Assets'
+import {FaceIcon} from '@Assets'
 import {useTranslation} from 'react-i18next'
 import {
   TCInput as InputView,
@@ -9,9 +9,15 @@ import {
   Spacer,
   TCLinkButton,
   TCMultiLinkButton,
+  Layout,
 } from '@Components'
 import styled from 'styled-components/native'
-import {SPACER_SIZES, TEXT_VARIANTS} from '@Utils'
+import {
+  SPACER_SIZES,
+  TEXT_VARIANTS,
+  UserNameValidator,
+  passwordValidator,
+} from '@Utils'
 import {
   Animated,
   Dimensions,
@@ -57,64 +63,57 @@ const AuthFeature = () => {
         opacity: splashAnim,
         transform: [...transAnim.getTranslateTransform()],
       }}>
-      <Bg className="absolute" />
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <Container>
-          <TopContainer>
-            <SaibLogo />
-            <TCTextView variant={TEXT_VARIANTS.caption}>Ar</TCTextView>
-          </TopContainer>
-
-          <Spacer horizontal={false} size={SPACER_SIZES.XL} />
-          <TCTextView variant={TEXT_VARIANTS.heading}>Login</TCTextView>
-          <Spacer horizontal={false} size={SPACER_SIZES.XL} />
-
-          <LoginForm>
-            <TCInput
-              label={'Username'}
-              value={userName}
-              onChangeText={setUserName}
-            />
+      <Layout>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <>
             <Spacer horizontal={false} size={SPACER_SIZES.XL} />
-            <TCInput
-              label={'Password'}
-              value={password}
-              onChangeText={setPassword}
-            />
+            <TCTextView variant={TEXT_VARIANTS.heading}>
+              {t('auth:buttonLogin')}
+            </TCTextView>
+            <Spacer horizontal={false} size={SPACER_SIZES.XL} />
+
+            <LoginForm>
+              <TCInput
+                label={t('auth:userName')}
+                schema={UserNameValidator}
+                onChangeText={setUserName}
+              />
+              <Spacer horizontal={false} size={SPACER_SIZES.XL} />
+              <TCInput
+                label={t('auth:password')}
+                value={password}
+                isPassword
+                schema={passwordValidator}
+                onChangeText={setPassword}
+              />
+              <Spacer horizontal={false} size={SPACER_SIZES.LG} />
+              <ViewWrapper>
+                <TCLinkButton onPress={handleLogin}>
+                  {t('auth:buttonForget')}
+                </TCLinkButton>
+              </ViewWrapper>
+            </LoginForm>
+
+            <Spacer horizontal={false} size={SPACER_SIZES.XXXL} />
+            <MultiTextWrapper>
+              <FaceIcon />
+            </MultiTextWrapper>
+
             <Spacer horizontal={false} size={SPACER_SIZES.LG} />
-            <ViewWrapper>
-              <TCLinkButton onPress={handleLogin}>
-                {t('auth:buttonForget')}
-              </TCLinkButton>
-            </ViewWrapper>
-          </LoginForm>
 
-          <Spacer horizontal={false} size={SPACER_SIZES.XXXL} />
-          <MultiTextWrapper>
-            <FaceIcon />
-          </MultiTextWrapper>
-
-          <Spacer horizontal={false} size={SPACER_SIZES.LG} />
-
-          <ButtonContainer>
-            <TCButton onPress={handleLogin}>{t('auth:buttonLogin')}</TCButton>
-          </ButtonContainer>
-          <Spacer horizontal={false} size={SPACER_SIZES.XXL} />
-          <MultiTextWrapper>
-            <TCMultiLinkButton>{t('auth:newToSaib')}</TCMultiLinkButton>
-          </MultiTextWrapper>
-        </Container>
-      </TouchableWithoutFeedback>
+            <ButtonContainer>
+              <TCButton onPress={handleLogin}>{t('auth:buttonLogin')}</TCButton>
+            </ButtonContainer>
+            <Spacer horizontal={false} size={SPACER_SIZES.XXL} />
+            <MultiTextWrapper>
+              <TCMultiLinkButton>{t('auth:newToSaib')}</TCMultiLinkButton>
+            </MultiTextWrapper>
+          </>
+        </TouchableWithoutFeedback>
+      </Layout>
     </Animated.View>
   )
 }
-
-const Container = styled.View`
-  flex: 1;
-  margin-top: 50px;
-  margin-left: 32px;
-  margin-right: 32px;
-`
 
 const LoginForm = styled.View`
   width: 100%;
@@ -143,11 +142,5 @@ const TCInput = styled(InputView)`
 const ButtonContainer = styled.View`
   width: 100%;
 `
-const TopContainer = styled.View`
-  width: 100%;
-  margin-top: 16px;
-  justify-content: space-between;
-  align-items: center;
-  flex-direction: row;
-`
+
 export default AuthFeature
