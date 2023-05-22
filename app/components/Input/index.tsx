@@ -1,6 +1,6 @@
 import {TEXT_VARIANTS} from '@Utils'
 import React, {useState, useRef, FC} from 'react'
-import {default as Text} from '../TextView'
+import Text from '../TextView'
 import {TextInput, View} from 'react-native'
 import styled from 'styled-components/native'
 import {useTranslation} from 'react-i18next'

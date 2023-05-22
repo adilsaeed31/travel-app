@@ -23,7 +23,7 @@ export const TEXT_VARIANTS = {
       font-size: 16px;
       font-weight: normal;
     `,
-  body700: `
+  bodyBold: `
   font-size: 16px;
   font-weight: 700;
 `,

@@ -533,7 +533,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "-987654321.piyushkapoor.me";
+				PRODUCT_BUNDLE_IDENTIFIER = "-87654321.piyushkapoor.me";
 				PRODUCT_NAME = travelcard;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -563,7 +563,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "-987654321.piyushkapoor.me";
+				PRODUCT_BUNDLE_IDENTIFIER = "-87654321.piyushkapoor.me";
 				PRODUCT_NAME = travelcard;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
