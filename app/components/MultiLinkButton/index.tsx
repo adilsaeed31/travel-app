@@ -40,7 +40,6 @@ const ClickableText = styled(Text)<any>`
 `
 
 const MultiLink: FC<LinkProps> = ({
-  onPress,
   textStyle,
   clickableTextStyle,
   callbacks,
@@ -58,10 +57,11 @@ const MultiLink: FC<LinkProps> = ({
       if (clickableText) {
         return (
           <TouchableOpacity
+            key={index}
             onPress={e =>
               callbacks[clickableTexts.indexOf(part)](e, clickableText)
             }>
-            <ClickableText key={index} clickableTextStyle={clickableTextStyle}>
+            <ClickableText clickableTextStyle={clickableTextStyle}>
               {part}
             </ClickableText>
           </TouchableOpacity>

@@ -36,6 +36,7 @@ const BackgroundImage1 = styled(Background1)`
   position: absolute;
   z-index: -1;
   elevation: -1;
+  transform: ${() => (useStore.getState().isRTL ? 'scaleX(-1)' : 'scaleX(1)')};
 `
 
 const BackgroundImage2 = styled(Background2)`

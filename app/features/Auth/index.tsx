@@ -1,5 +1,10 @@
 import React, {useContext, useEffect, useRef, useState} from 'react'
-import {AppContext, AppProviderProps} from '@Context'
+import {
+  AppContext,
+  AppProviderProps,
+  AuthContext,
+  AuthProviderProps,
+} from '@Context'
 import {FaceIcon} from '@Assets'
 import {useTranslation} from 'react-i18next'
 import {
@@ -25,6 +30,9 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native'
 import {StackNavigationProp} from '@react-navigation/stack'
+import {fetcher} from '@Api'
+import {useQuery} from '@tanstack/react-query'
+import {BASE_URL} from '@Utils'
 
 type Props = {
   navigation: StackNavigationProp<{
@@ -36,6 +44,7 @@ type Props = {
 const AuthFeature = ({navigation}: Props) => {
   const {t} = useTranslation()
   const {isAppReady, hasIntroSeen} = useContext<AppProviderProps>(AppContext)
+  const {Login, isError} = useContext<AuthProviderProps>(AuthContext)
   const splashAnim = useRef(new Animated.Value(0)).current
   const transAnim = useRef(
     new Animated.ValueXY({x: Dimensions.get('screen').width, y: 0}),
@@ -43,9 +52,26 @@ const AuthFeature = ({navigation}: Props) => {
 
   const [userName, setUserName] = useState('')
   const [password, setPassword] = useState('')
+  const {isFetching, data, refetch} = useQuery({
+    queryKey: ['Login', BASE_URL],
+    queryFn: () =>
+      fetcher(`${BASE_URL}/app/api/Mock/riboAuth2Token.json`, {
+        method: 'GET',
+        // body: {userName, password},
+      }),
+    refetchOnWindowFocus: false,
+    enabled: false, // disable this query from automatically running
+  })
+
+  useEffect(() => {
+    if (!isFetching && data) {
+      // alert(JSON.stringify(data))
+    }
+  }, [data, isFetching])
 
   const handleLogin = () => {
     // Perform login logic here
+    refetch()
   }
 
   useEffect(() => {
@@ -110,7 +136,9 @@ const AuthFeature = ({navigation}: Props) => {
             <Spacer horizontal={false} size={SPACER_SIZES.LG} />
 
             <ButtonContainer>
-              <TCButton onPress={handleLogin}>{t('auth:buttonLogin')}</TCButton>
+              <TCButton disabled={isFetching} onPress={handleLogin}>
+                {t('auth:buttonLogin')}
+              </TCButton>
             </ButtonContainer>
             <Spacer horizontal={false} size={SPACER_SIZES.XXL} />
             <MultiTextWrapper>

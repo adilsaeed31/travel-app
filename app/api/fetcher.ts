@@ -1,8 +1,8 @@
 export type FetcherRequestProps = {
-  method: string
-  body: any
-  headers: {}
-  token: string
+  method?: string
+  body?: any
+  headers?: {}
+  token?: string
 }
 
 export const fetcher = async (
