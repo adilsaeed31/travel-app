@@ -20,6 +20,7 @@ module.exports = {
       '@Store': `${__dirname}/app/store`,
       '@Navigations': `${__dirname}/app/navigations`,
     },
+    resolverMainFields: ['sbmodern', 'react-native', 'browser', 'main'],
   },
   transformer: {
     getTransformOptions: async () => ({

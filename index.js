@@ -1,6 +1,3 @@
-/**
- * @format
- */
 import 'react-native-gesture-handler'
 
 import {AppRegistry} from 'react-native'
@@ -8,6 +5,7 @@ import App from './App'
 import {name as appName} from './app.json'
 import i18next from 'i18next'
 import {initReactI18next} from 'react-i18next'
+
 import {translation} from '@Utils'
 
 const languageDetector = {
@@ -24,4 +22,5 @@ i18next.use(languageDetector).use(initReactI18next).init({
   debug: true,
   resources: translation,
 })
+
 AppRegistry.registerComponent(appName, () => App)

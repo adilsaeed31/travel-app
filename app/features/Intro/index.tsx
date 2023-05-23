@@ -4,6 +4,7 @@ import {
   View,
   Easing,
   TouchableOpacity,
+  AppState,
 } from 'react-native'
 import LottieView from 'lottie-react-native'
 import {useTranslation} from 'react-i18next'
@@ -28,6 +29,10 @@ const LastSlideFrame = 714
 const IntroFeature: React.FC<IntroFeatureProps> = () => {
   const {t} = useTranslation()
 
+  // Below code is for to check the if the animation rendering or not
+  const appState = useRef(AppState.currentState)
+  const [appStateVisible, setAppStateVisible] = useState(appState.current)
+
   const {setAppReady, changeLanguage, isRTL} =
     useContext<AppProviderProps>(AppContext)
 
@@ -48,7 +53,7 @@ const IntroFeature: React.FC<IntroFeatureProps> = () => {
   }
 
   const onLayoutRender = () => {
-    nextAnimRef.current?.play(0, FirstSlideFrame)
+    nextAnimRef.current!.play(0, FirstSlideFrame)
   }
 
   useEffect(() => {
@@ -66,6 +71,28 @@ const IntroFeature: React.FC<IntroFeatureProps> = () => {
     // updating the currentValue with updatedValue
     updatedValue.current = currentValue
   }, [currentValue, splashAnim, updatedValue])
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', nextAppState => {
+      appState.current = nextAppState
+
+      setAppStateVisible(appState.current)
+
+      if (appState.current === 'active') {
+        if (updatedValue.current === FirstSlideFrame) {
+          nextAnimRef.current?.play(0, FirstSlideFrame)
+        } else if (updatedValue.current === MiddleSlideFrame) {
+          nextAnimRef.current?.play(FirstSlideFrame, MiddleSlideFrame)
+        } else if (updatedValue.current >= LastSlideFrame) {
+          nextAnimRef.current?.play(MiddleSlideFrame, LastSlideFrame)
+        }
+      }
+    })
+
+    return () => {
+      subscription.remove()
+    }
+  }, [appStateVisible])
 
   return (
     <>

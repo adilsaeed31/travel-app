@@ -73,3 +73,6 @@ package-lock.json
 
 # Android APK folder
 /android/app/release/
+
+# storybook
+storybook-static
