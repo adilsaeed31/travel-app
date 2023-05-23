@@ -19,7 +19,7 @@ const SplashScreen: React.FC<SplashScreenProps> = ({navigation}) => {
 
   const gotToNextFeature = () => {
     if (!hasIntroSeen) {
-      navigation.navigate('Intro')
+      navigation.replace('Intro')
     } else {
       setAppReady?.()
     }

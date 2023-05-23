@@ -12,6 +12,7 @@ const SplashNavigator = () => {
       initialRouteName="Splash"
       screenOptions={{
         headerShown: false,
+        animationEnabled: false,
       }}>
       <Screen name="Splash" component={SplashScreen} />
       <Screen
