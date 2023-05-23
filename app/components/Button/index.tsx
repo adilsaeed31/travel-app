@@ -3,17 +3,19 @@ import {View, Text} from 'react-native'
 import {styled} from 'styled-components/native'
 import Ripple, {RippleProps} from 'react-native-material-ripple'
 
-const StyledView = styled(View)<{isRTL: boolean; varient: string}>`
+const StyledView = styled(View)<any>`
   flex-direction: row;
   justify-content: center;
   align-items: center;
   width: 100%;
   border: 1px solid
     ${props => {
+      if (props.disabled) return '#E1E1E1'
       if (props.varient == 'primary') return '#f8d03b'
       if (props.varient == 'transparent') return '#352D0F'
     }};
   background-color: ${props => {
+    if (props.disabled) return '#E1E1E1'
     if (props.varient == 'primary') return '#f8d03b'
     if (props.varient == 'transparent') return 'transpant'
   }};
@@ -41,7 +43,7 @@ const TCButton: React.FC<ButtonProps> = ({
 }) => {
   return (
     <Ripple onPress={onPress} rippleColor={RippleColor} {...rest}>
-      <StyledView isRTL={false} varient={varient}>
+      <StyledView isRTL={false} varient={varient} {...rest}>
         <Text>{children}</Text>
       </StyledView>
     </Ripple>

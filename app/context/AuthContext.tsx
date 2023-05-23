@@ -80,7 +80,6 @@ export function AuthProvider(props: AuthProviderProps) {
 
       // Setting User object to state of this context
       setUser({username, password})
-      storeUser({username, password})
     } catch (err: any) {
       setIsError(true)
       setError(err.message ?? err)
