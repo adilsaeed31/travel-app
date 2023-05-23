@@ -1,18 +1,21 @@
 import React from 'react'
 import {ComponentMeta, ComponentStory} from '@storybook/react'
 
-import {MyButton} from './Button'
+import TCButton from '../../../app/components/Button'
 
 export default {
-  title: 'components/MyButton',
-  component: MyButton,
-} as ComponentMeta<typeof MyButton>
+  title: 'components/TCButton',
+  component: TCButton,
+} as ComponentMeta<typeof TCButton>
 
-export const Basic: ComponentStory<typeof MyButton> = args => (
-  <MyButton {...args} />
+export const Basic: ComponentStory<typeof TCButton> = args => (
+  <TCButton {...args} />
 )
 
 Basic.args = {
-  text: 'Hello World',
-  color: 'purple',
+  children: 'Click Me',
+  varient: 'primary',
+  'background-color': 'primary',
+  RippleColor: 'white',
+  onPress: () => console.log('clicked'),
 } as any
