@@ -67,21 +67,19 @@ const NafaqScreen = ({navigation}: Props) => {
           <NafaaqImg source={NafaathLogo} />
         </Row>
         <Body variant={TEXT_VARIANTS.label}>
-          {t(
-            'To continue with the account opening process, please verify yourself with Nafath',
-          )}
+          {t('onboarding:redirectNafath')}
         </Body>
         <ButtonContainer>
           <StyledButton onPress={onComplete}>
             <Text variant={TEXT_VARIANTS.body}>
-              {t('Access by Nafath App')}
+              {t('onboarding:nafathByApp')}
             </Text>
           </StyledButton>
         </ButtonContainer>
         <ButtonContainerSecond>
           <StyledButton onPress={onComplete} varient="transparent">
             <Text variant={TEXT_VARIANTS.body}>
-              {t('Access by Nafath web portal')}
+              {t('onboarding:nafathByWeb')}
             </Text>
           </StyledButton>
         </ButtonContainerSecond>

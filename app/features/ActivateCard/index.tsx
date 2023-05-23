@@ -54,14 +54,14 @@ const PersonalIdScreen = ({navigation}: Props) => {
         <Spacer horizontal={false} size={SPACER_SIZES.BASE * 2} />
 
         <Body variant={TEXT_VARIANTS.body}>
-          {t(
-            'Your account opening application is submitted successfully & you will receive a call to confirm the account opening.',
-          )}
+          {t('onboarding:applicationSubmitted')}
         </Body>
 
         <ButtonContainer>
           <StyledButton onPress={onComplete}>
-            <Text variant={TEXT_VARIANTS.body}>{t('Activate Card')}</Text>
+            <Text variant={TEXT_VARIANTS.body}>
+              {t('onboarding:activeCard')}
+            </Text>
           </StyledButton>
         </ButtonContainer>
       </Layout>

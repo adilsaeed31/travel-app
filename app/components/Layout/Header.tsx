@@ -3,22 +3,21 @@ import {StatusBar, View, TouchableOpacity} from 'react-native'
 import styled from 'styled-components/native'
 import {useTranslation} from 'react-i18next'
 import {SaibLogo, ArrowLeft} from '@Assets'
-import {AppContext} from '@Context'
 import {SPACER_SIZES, TEXT_VARIANTS} from '@Utils'
 import {Spacer} from '@Components'
 import {default as Text} from '../TextView'
-import {useStore} from '@Store'
+import {AppContext, AppProviderProps} from '@Context'
 
-const Container = styled(View)`
+const Container = styled(View)<{isRTL: boolean | undefined}>`
   padding-top: 76px;
   padding-bottom: 0;
-  flex-direction: ${() => (useStore.getState().isRTL ? 'row-reverse' : 'row')};
+  flex-direction: ${props => (props.isRTL ? 'row-reverse' : 'row')};
 `
 
-const ViewSub = styled(View)`
+const ViewSub = styled(View)<{isRTL?: boolean | undefined}>`
   justify-content: space-between;
   flex: 1;
-  flex-direction: ${() => (useStore.getState().isRTL ? 'row-reverse' : 'row')};
+  flex-direction: ${props => (props.isRTL ? 'row-reverse' : 'row')};
 `
 
 const LanguageText = styled(Text)`
@@ -51,22 +50,21 @@ const TopNavigationSimpleUsageShowcase: React.FC<PropsType> = ({
   ...props
 }) => {
   const {t} = useTranslation()
-  const {changeLanguage} = useContext(AppContext)
-
+  const {changeLanguage, isRTL} = useContext<AppProviderProps>(AppContext)
   return (
-    <Container {...props}>
+    <Container {...props} isRTL={isRTL}>
       <StatusBar />
       {isBack ? (
         <TouchableOpacity onPress={onBack}>
           <ViewSub>
             <ArrowLeftIcon />
             <LanguageBackText variant={TEXT_VARIANTS.bodyBold}>
-              {t('onboarding:Back')}
+              {t('onboarding:back')}
             </LanguageBackText>
           </ViewSub>
         </TouchableOpacity>
       ) : (
-        <ViewSub>
+        <ViewSub isRTL={isRTL}>
           <SaibLogo />
           {canLanguageChange ? (
             <>

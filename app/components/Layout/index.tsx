@@ -6,6 +6,7 @@ import {
   Keyboard,
   ScrollView,
   TouchableOpacity,
+  Platform,
 } from 'react-native'
 import styled from 'styled-components/native'
 
@@ -62,7 +63,10 @@ const AppLayout: React.FC<LayoutProps> = ({
   ...rest
 }) => {
   return (
-    <KeyboardAvoidingView style={{flex: 1}} behavior="padding" enabled>
+    <KeyboardAvoidingView
+      style={{flex: 1}}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      enabled>
       <ScrollView
         scrollEventThrottle={16}
         scrollEnabled={isScrollable}

@@ -151,7 +151,7 @@ const TCButton = styled(Button)``
 const TCInput = styled(InputView)`
   width: 100%;
   margin-top: 16px;
-  height: 100;
+  height: 100px;
 `
 
 const ButtonContainer = styled.View`

@@ -81,7 +81,7 @@ const OtpPersonalIdScreen = ({navigation}: Props) => {
     )
 
     const keyboardDidHideListener = Keyboard.addListener(
-      'keyboardWillHide',
+      'keyboardDidHide',
       () => {
         setKeyboardVisible(false)
       },
@@ -104,9 +104,7 @@ const OtpPersonalIdScreen = ({navigation}: Props) => {
     <>
       <Layout>
         <Spacer horizontal={false} size={SPACER_SIZES.BASE * 3} />
-        <Text variant={TEXT_VARIANTS.heading}>
-          {t('Enter OTP') + resendCount}
-        </Text>
+        <Text variant={TEXT_VARIANTS.heading}>{t('onboarding:enterOTP')}</Text>
         <Spacer size={SPACER_SIZES.BASE * 3} />
         <OTP
           onChangeText={otp => {
@@ -134,12 +132,12 @@ const OtpPersonalIdScreen = ({navigation}: Props) => {
                   setResendCount(resendCount + 1)
                 }}>
                 <BottomText variant={TEXT_VARIANTS.body}>
-                  {t('Resend OTP')}
+                  {t('onboarding:resendOTP')}
                 </BottomText>
               </TouchableOpacity>
             ) : (
               <BottomText variant={TEXT_VARIANTS.body} disabled={true}>
-                {t('Resend OTP')}
+                {t('onboarding:resendOTP')}
               </BottomText>
             )}
           </View>
@@ -148,7 +146,9 @@ const OtpPersonalIdScreen = ({navigation}: Props) => {
           <ButtonContainer>
             <StyledButton
               onPress={() => navigation.navigate('AfterOtpPersonalId')}>
-              <Text variant={TEXT_VARIANTS.body}>{t('Continue')}</Text>
+              <Text variant={TEXT_VARIANTS.body}>
+                {t('onboarding:continue')}
+              </Text>
             </StyledButton>
           </ButtonContainer>
         )}
@@ -156,7 +156,7 @@ const OtpPersonalIdScreen = ({navigation}: Props) => {
       {isKeyboardVisible && (
         <StickyButtonContainer keyboardHeight={keyboardHeight}>
           <StickyButton>
-            <Text variant={TEXT_VARIANTS.body}>{t('Continue')}</Text>
+            <Text variant={TEXT_VARIANTS.body}>{t('onboarding:continue')}</Text>
           </StickyButton>
         </StickyButtonContainer>
       )}

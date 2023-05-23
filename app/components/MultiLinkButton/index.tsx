@@ -37,7 +37,6 @@ const ClickableText = styled(Text)<any>`
   color: #3f3d36;
   ${({clickableTextStyle}) => clickableTextStyle}
   flex-shrink: 1;
-  cursor: pointer;
 `
 
 const MultiLink: FC<LinkProps> = ({

@@ -1,5 +1,11 @@
-import React, {useEffect, useState} from 'react'
-import {TouchableOpacity, View, Keyboard, Dimensions} from 'react-native'
+import React, {useEffect, useState, useContext} from 'react'
+import {
+  TouchableOpacity,
+  View,
+  Keyboard,
+  Dimensions,
+  Platform,
+} from 'react-native'
 import {useTranslation} from 'react-i18next'
 import {
   Layout,
@@ -13,6 +19,7 @@ import {SPACER_SIZES, TEXT_VARIANTS} from '@Utils'
 import styled from 'styled-components/native'
 import {GovtIdValidator, MobileNumberValidator} from '@Utils'
 import {StackNavigationProp} from '@react-navigation/stack'
+import {AppProviderProps, AppContext} from '@Context'
 
 const StyledButton = styled(Button)`
   margin-left: 32px;
@@ -25,10 +32,18 @@ const ButtonContainer = styled(View)`
   width: ${Dimensions.get('window').width}px;
 `
 
-const DisclaimerView = styled(View)<{isKeyboardVisible: boolean}>`
+const DisclaimerView = styled(View)<{
+  isKeyboardVisible: boolean
+  isRTL?: boolean
+}>`
   position: ${props => (props.isKeyboardVisible ? 'static' : 'absolute')};
   bottom: ${props => (props.isKeyboardVisible ? '0px' : '195px')};
-  margin-horizontal: ${props => (props.isKeyboardVisible ? '0px' : '32px')};
+  margin-left: ${props =>
+    props.isKeyboardVisible || props.isRTL ? '0px' : '32px'};
+  margin-right: ${props =>
+    props.isKeyboardVisible || props.isRTL ? '0px' : '32px'};
+  right: ${props => (props.isRTL ? '32px' : '0px')};
+  left: ${props => (props.isRTL ? '32px' : '0px')};
   margin-top: 16px;
 `
 
@@ -53,8 +68,8 @@ const AgreeText = styled(Text)`
   color: rgba(63, 61, 54, 0.8);
 `
 
-const Row = styled(View)`
-  flex-direction: row;
+const Row = styled(View)<{isRTL: boolean | undefined}>`
+  flex-direction: ${({isRTL}) => (isRTL ? 'row-reverse' : 'row')};
   align-items: center;
   width: 100%;
   margin-top: 3px;
@@ -62,7 +77,8 @@ const Row = styled(View)`
 
 const StickyButtonContainer = styled.View<{keyboardHeight: Number}>`
   position: absolute;
-  bottom: ${props => props.keyboardHeight + 'px'};
+  bottom: ${props =>
+    Platform.OS == 'ios' ? props.keyboardHeight + 'px' : '0px'};
   left: 0;
   right: 0;
   align-items: center;
@@ -90,24 +106,26 @@ const RowCenter = styled.View<{isKeyboardVisible: boolean}>`
 
 const Terms = () => {
   const {t} = useTranslation()
-
+  const {isRTL} = useContext<AppProviderProps>(AppContext)
   return (
     <View>
-      <Row>
+      <Row isRTL={isRTL}>
         <TermText variant={TEXT_VARIANTS.caption}>
-          {t("I've read and accept the ")}
+          {t('onboarding:readAccept')}
         </TermText>
         <TouchableOpacity onPress={() => {}}>
           <UnderlineText variant={TEXT_VARIANTS.caption}>
-            {t('Disclaimer')}
+            {t('onboarding:disclaimer')}
           </UnderlineText>
         </TouchableOpacity>
-        <TermText variant={TEXT_VARIANTS.caption}>{t(' and ')}</TermText>
+        <TermText variant={TEXT_VARIANTS.caption}>
+          {t('onboarding:and')}
+        </TermText>
       </Row>
       <View>
         <TouchableOpacity onPress={() => {}}>
           <UnderlineText variant={TEXT_VARIANTS.caption}>
-            {t(' Terms & Conditions')}
+            {t('onboarding:termsConditions')}
           </UnderlineText>
         </TouchableOpacity>
       </View>
@@ -125,10 +143,12 @@ const AlreadyAccount = ({isKeyboardVisible}: AlreadyAccountProps) => {
   return (
     <RowCenter isKeyboardVisible={isKeyboardVisible}>
       <TermText variant={TEXT_VARIANTS.caption}>
-        {t('Already have account? ')}
+        {t('onboarding:alreadyAccount')}
       </TermText>
       <TouchableOpacity onPress={() => {}}>
-        <LoginText variant={TEXT_VARIANTS.caption}>{t('Login')}</LoginText>
+        <LoginText variant={TEXT_VARIANTS.caption}>
+          {t('onboarding:login')}
+        </LoginText>
       </TouchableOpacity>
     </RowCenter>
   )
@@ -142,7 +162,7 @@ const PersonalIdScreen = ({navigation}: Props) => {
   const {t} = useTranslation()
   const [isKeyboardVisible, setKeyboardVisible] = useState<boolean>(false)
   const [keyboardHeight, setKeyboardHeight] = useState<Number>(0)
-
+  const {isRTL} = useContext<AppProviderProps>(AppContext)
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
       'keyboardDidShow',
@@ -153,7 +173,7 @@ const PersonalIdScreen = ({navigation}: Props) => {
     )
 
     const keyboardDidHideListener = Keyboard.addListener(
-      'keyboardWillHide',
+      'keyboardDidHide',
       () => {
         setKeyboardVisible(false)
       },
@@ -173,10 +193,12 @@ const PersonalIdScreen = ({navigation}: Props) => {
     <>
       <Layout>
         <Spacer horizontal={false} size={SPACER_SIZES.BASE * 3} />
-        <Text variant={TEXT_VARIANTS.heading}>{t('Credentials')}</Text>
+        <Text variant={TEXT_VARIANTS.heading}>
+          {t('onboarding:openAccount')}
+        </Text>
         <Spacer horizontal={false} size={SPACER_SIZES.BASE * 3} />
         <Input
-          label={t('National ID / Iqama')}
+          label={t('onboarding:nationalID')}
           schema={GovtIdValidator}
           onChangeText={text => {
             console.log(text)
@@ -184,18 +206,18 @@ const PersonalIdScreen = ({navigation}: Props) => {
         />
         <Spacer horizontal={false} size={SPACER_SIZES.BASE * 4} />
         <Input
-          label={t('Mobile')}
+          label={t('onboarding:mobileNumber')}
           schema={MobileNumberValidator}
           onChangeText={text => {
             console.log(text)
           }}
         />
 
-        <DisclaimerView isKeyboardVisible={isKeyboardVisible}>
+        <DisclaimerView isKeyboardVisible={isKeyboardVisible} isRTL={isRTL}>
           <Checkbox
             label={
               <AgreeText variant={TEXT_VARIANTS.caption}>
-                {t('I agree to receive email from SAIB')}
+                {t('onboarding:agreeEmail')}
               </AgreeText>
             }
           />
@@ -205,7 +227,9 @@ const PersonalIdScreen = ({navigation}: Props) => {
         {!isKeyboardVisible && (
           <ButtonContainer>
             <StyledButton onPress={onComplete}>
-              <Text variant={TEXT_VARIANTS.body}>{t('Continue')}</Text>
+              <Text variant={TEXT_VARIANTS.body}>
+                {t('onboarding:continue')}
+              </Text>
             </StyledButton>
           </ButtonContainer>
         )}
@@ -214,7 +238,7 @@ const PersonalIdScreen = ({navigation}: Props) => {
       {isKeyboardVisible && (
         <StickyButtonContainer keyboardHeight={keyboardHeight}>
           <StickyButton>
-            <Text variant={TEXT_VARIANTS.body}>{t('Continue')}</Text>
+            <Text variant={TEXT_VARIANTS.body}>{t('onboarding:continue')}</Text>
           </StickyButton>
         </StickyButtonContainer>
       )}
