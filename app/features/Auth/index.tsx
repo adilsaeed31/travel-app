@@ -115,9 +115,11 @@ const AuthFeature = ({navigation}: Props) => {
             <Spacer horizontal={false} size={SPACER_SIZES.XXL} />
             <MultiTextWrapper>
               <TCMultiLinkButton
-                onPress={() => {
-                  navigation.navigate('PersonalID')
-                }}>
+                callbacks={[
+                  () => {
+                    navigation.navigate('PersonalID')
+                  },
+                ]}>
                 {t('auth:newToSaib')}
               </TCMultiLinkButton>
             </MultiTextWrapper>

@@ -41,7 +41,6 @@ const ClickableText = styled(Text)<any>`
 `
 
 const MultiLink: FC<LinkProps> = ({
-  onPress,
   textStyle,
   clickableTextStyle,
   callbacks,
