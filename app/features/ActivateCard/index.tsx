@@ -12,6 +12,8 @@ import styled from 'styled-components/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {TravelCard} from '@Assets'
 
+const isSmall = Dimensions.get('window').height < 750
+
 const StyledButton = styled(Button)`
   margin-left: 32px;
   margin-right: 32px;
@@ -47,7 +49,11 @@ const PersonalIdScreen = ({navigation}: Props) => {
   return (
     <>
       <Layout isHeader={false} backgroundIndex={2}>
-        <Spacer horizontal={false} size={SPACER_SIZES.BASE * 19} />
+        {isSmall ? (
+          <Spacer horizontal={false} size={SPACER_SIZES.BASE * 5} />
+        ) : (
+          <Spacer horizontal={false} size={SPACER_SIZES.BASE * 19} />
+        )}
         <Row>
           <TravelCard />
         </Row>

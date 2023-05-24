@@ -21,27 +21,32 @@ import {GovtIdValidator, MobileNumberValidator} from '@Utils'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {AppProviderProps, AppContext} from '@Context'
 
+const isSmall = Dimensions.get('window').height < 750
+
 const StyledButton = styled(Button)`
-  margin-left: 32px;
-  margin-right: 32px;
+  margin-left: ${isSmall ? '0px' : '32px'};
+  margin-right: ${isSmall ? '0px' : '32px'};
+  margin-top: ${isSmall ? '24px' : '0px'};
+  margin-bottom: ${isSmall ? '24px' : '0px'};
 `
 
 const ButtonContainer = styled(View)`
-  position: absolute;
-  bottom: 107px;
-  width: ${Dimensions.get('window').width}px;
+  position: ${isSmall ? 'static' : 'absolute'};
+  bottom: ${isSmall ? '0px' : '107px'};
+  width: ${isSmall ? '100%' : Dimensions.get('window').width + 'px'};
 `
 
 const DisclaimerView = styled(View)<{
   isKeyboardVisible: boolean
   isRTL?: boolean
 }>`
-  position: ${props => (props.isKeyboardVisible ? 'static' : 'absolute')};
-  bottom: ${props => (props.isKeyboardVisible ? '0px' : '195px')};
+  position: ${props =>
+    props.isKeyboardVisible || isSmall ? 'static' : 'absolute'};
+  bottom: ${props => (props.isKeyboardVisible || isSmall ? '0px' : '195px')};
   margin-left: ${props =>
-    props.isKeyboardVisible || props.isRTL ? '0px' : '32px'};
+    props.isKeyboardVisible || props.isRTL || isSmall ? '0px' : '32px'};
   margin-right: ${props =>
-    props.isKeyboardVisible || props.isRTL ? '0px' : '32px'};
+    props.isKeyboardVisible || props.isRTL || isSmall ? '0px' : '32px'};
   right: ${props => (props.isRTL ? '32px' : '0px')};
   left: ${props => (props.isRTL ? '32px' : '0px')};
   margin-top: 16px;

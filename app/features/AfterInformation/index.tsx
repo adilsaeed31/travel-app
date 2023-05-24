@@ -13,6 +13,8 @@ import {StackNavigationProp} from '@react-navigation/stack'
 import {CheckWarning} from '@Assets'
 import {AppProviderProps, AppContext} from '@Context'
 
+const isSmall = Dimensions.get('window').height < 750
+
 const StyledButton = styled(Button)`
   margin-left: 32px;
   margin-right: 32px;
@@ -58,11 +60,19 @@ const PersonalIdScreen = ({navigation}: Props) => {
   return (
     <>
       <Layout isHeader={false} isBackground={false}>
-        <Spacer horizontal={false} size={SPACER_SIZES.BASE * 23} />
+        {isSmall ? (
+          <Spacer horizontal={false} size={SPACER_SIZES.BASE * 10} />
+        ) : (
+          <Spacer horizontal={false} size={SPACER_SIZES.BASE * 23} />
+        )}
         <Row>
           <CheckWarningImg />
         </Row>
-        <Spacer horizontal={false} size={SPACER_SIZES.BASE * 14} />
+        {isSmall ? (
+          <Spacer horizontal={false} size={SPACER_SIZES.BASE * 4} />
+        ) : (
+          <Spacer horizontal={false} size={SPACER_SIZES.BASE * 14} />
+        )}
 
         <Body variant={TEXT_VARIANTS.body}>{t('onboarding:confirmCall')}</Body>
         <Spacer size={SPACER_SIZES.BASE * 2} />
