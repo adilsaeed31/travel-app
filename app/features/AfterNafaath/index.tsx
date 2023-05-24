@@ -12,6 +12,8 @@ import styled from 'styled-components/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {Cross} from '@Assets'
 
+const isSmall = Dimensions.get('window').height < 750
+
 const StyledButton = styled(Button)`
   margin-left: 32px;
   margin-right: 32px;
@@ -62,11 +64,19 @@ const PersonalIdScreen = ({navigation}: Props) => {
   return (
     <>
       <Layout isHeader={false} isBackground={false}>
-        <Spacer horizontal={false} size={SPACER_SIZES.BASE * 23} />
+        {isSmall ? (
+          <Spacer horizontal={false} size={SPACER_SIZES.BASE * 10} />
+        ) : (
+          <Spacer horizontal={false} size={SPACER_SIZES.BASE * 23} />
+        )}
         <Row>
           <CrossImg />
         </Row>
-        <Spacer horizontal={false} size={SPACER_SIZES.BASE * 14} />
+        {isSmall ? (
+          <Spacer horizontal={false} size={SPACER_SIZES.BASE * 4} />
+        ) : (
+          <Spacer horizontal={false} size={SPACER_SIZES.BASE * 14} />
+        )}
 
         <Heading variant={TEXT_VARIANTS.subheading}>
           {t('onboarding:errorMessage')}

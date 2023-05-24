@@ -14,6 +14,8 @@ import {StackNavigationProp} from '@react-navigation/stack'
 import {Return, Cross} from '@Assets'
 import {MobileNumberValidator} from '@Utils'
 
+const isSmall = Dimensions.get('window').height < 750
+
 const StyledButton = styled(Button)`
   margin-left: 32px;
   margin-right: 32px;
@@ -77,13 +79,22 @@ const PersonalIdScreen = ({navigation}: Props) => {
   return (
     <>
       <Layout isHeader={false} isBackground={false}>
-        <Spacer horizontal={false} size={SPACER_SIZES.BASE * 23} />
+        {isSmall ? (
+          <Spacer horizontal={false} size={SPACER_SIZES.BASE * 10} />
+        ) : (
+          <Spacer horizontal={false} size={SPACER_SIZES.BASE * 23} />
+        )}
+
         <Row>
           {(state.step === STPES.attempts ||
             state.step === STPES.phoneAttempts) && <ReturnImg />}
           {state.step === STPES.identityAttempts && <CrossImg />}
         </Row>
-        <Spacer horizontal={false} size={SPACER_SIZES.BASE * 14} />
+        {isSmall ? (
+          <Spacer horizontal={false} size={SPACER_SIZES.BASE * 4} />
+        ) : (
+          <Spacer horizontal={false} size={SPACER_SIZES.BASE * 14} />
+        )}
 
         {state.step === STPES.attempts && (
           <Heading variant={TEXT_VARIANTS.subheading}>

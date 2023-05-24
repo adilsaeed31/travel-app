@@ -48,6 +48,7 @@ export const translation = {
       applicationSubmitted:
         'Congratulations on creating your account. You will now be able to activate your Travel Card',
       activeCard: 'Activate Card',
+      resendOTP: 'Resend OTP',
     },
     auth: {
       title: 'Welcome to Travel App {{name}}',
