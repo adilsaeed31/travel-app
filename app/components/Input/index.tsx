@@ -82,6 +82,7 @@ const CustomInput: FC<CustomInputProps> = ({
   }
 
   const handleBlur = (): void => {
+    validateInput()
     setIsFocused(false)
   }
 
@@ -99,7 +100,6 @@ const CustomInput: FC<CustomInputProps> = ({
   const handleChangeText = (text: string): void => {
     onChangeText(text)
     setInputValue(text)
-    validateInput()
   }
 
   return (

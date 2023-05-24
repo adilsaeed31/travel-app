@@ -73,7 +73,7 @@ const AppLayout: React.FC<LayoutProps> = ({
         scrollEnabled={isScrollable}
         keyboardShouldPersistTaps="handled"
         onScroll={onScroll}>
-        <TouchableOpacity onPress={() => Keyboard.dismiss()} activeOpacity={1}>
+        <TouchableOpacity onPress={Keyboard.dismiss} activeOpacity={1}>
           <Container className={className} {...rest}>
             {isBackground && (
               <>

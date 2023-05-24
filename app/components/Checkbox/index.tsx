@@ -20,6 +20,7 @@ const CheckboxText = styled.Text<{isRTL?: boolean}>`
   ${props => (props.isRTL ? 'margin-right: 8px' : 'margin-left: 8px')};
   ${props => (props.isRTL ? 'text-align: right' : '')};
   color: #3f3d36;
+  margin-top: 3px;
 `
 
 const CheckBox = styled.View<CheckBoxProps>`
