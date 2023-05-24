@@ -24,8 +24,6 @@ import {AppProviderProps, AppContext} from '@Context'
 const isSmall = Dimensions.get('window').height < 750
 
 const StyledButton = styled(Button)`
-  margin-left: ${isSmall ? '0px' : '32px'};
-  margin-right: ${isSmall ? '0px' : '32px'};
   margin-top: ${isSmall ? '24px' : '0px'};
   margin-bottom: ${isSmall ? '24px' : '0px'};
 `
@@ -34,6 +32,8 @@ const ButtonContainer = styled(View)`
   position: ${isSmall ? 'static' : 'absolute'};
   bottom: ${isSmall ? '0px' : '107px'};
   width: ${isSmall ? '100%' : Dimensions.get('window').width + 'px'};
+  padding-left: ${isSmall ? '0px' : '32px'};
+  padding-right: ${isSmall ? '0px' : '32px'};
 `
 
 const DisclaimerView = styled(View)<{
@@ -98,10 +98,13 @@ const StickyButton = styled.TouchableOpacity`
   justify-content: center;
 `
 
-const RowCenter = styled.View<{isKeyboardVisible: boolean}>`
+const RowCenter = styled.View<{
+  isKeyboardVisible: boolean
+  isRTL: boolean | undefined
+}>`
   position: ${props => (props.isKeyboardVisible ? 'static' : 'absolute')};
   bottom: ${props => (props.isKeyboardVisible ? '0px' : '51px')};
-  flex-direction: row;
+  flex-direction: ${props => (props.isRTL ? 'row-reverse' : 'row')};
 
   justify-content: center;
   margin-top: ${props => (props.isKeyboardVisible ? '24px' : '0px')};
@@ -144,9 +147,9 @@ interface AlreadyAccountProps {
 
 const AlreadyAccount = ({isKeyboardVisible}: AlreadyAccountProps) => {
   const {t} = useTranslation()
-
+  const {isRTL} = useContext<AppProviderProps>(AppContext)
   return (
-    <RowCenter isKeyboardVisible={isKeyboardVisible}>
+    <RowCenter isRTL={isRTL} isKeyboardVisible={isKeyboardVisible}>
       <TermText variant={TEXT_VARIANTS.caption}>
         {t('onboarding:alreadyAccount')}
       </TermText>

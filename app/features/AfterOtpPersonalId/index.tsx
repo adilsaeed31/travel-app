@@ -16,15 +16,12 @@ import {MobileNumberValidator} from '@Utils'
 
 const isSmall = Dimensions.get('window').height < 750
 
-const StyledButton = styled(Button)`
-  margin-left: 32px;
-  margin-right: 32px;
-`
-
 const ButtonContainer = styled(View)`
   position: absolute;
   bottom: 50px;
   width: ${Dimensions.get('window').width}px;
+  padding-left: 32px;
+  padding-right: 32px;
 `
 
 const ReturnImg = styled(Return)`
@@ -144,11 +141,11 @@ const PersonalIdScreen = ({navigation}: Props) => {
         )}
 
         <ButtonContainer>
-          <StyledButton onPress={onComplete}>
+          <Button onPress={onComplete}>
             <Text variant={TEXT_VARIANTS.body}>
               {t('onboarding:backLogin')}
             </Text>
-          </StyledButton>
+          </Button>
         </ButtonContainer>
       </Layout>
     </>

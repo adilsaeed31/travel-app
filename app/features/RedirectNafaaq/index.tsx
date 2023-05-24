@@ -8,21 +8,20 @@ import styled from 'styled-components/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {NafaathLogo} from '@Assets'
 
-const StyledButton = styled(Button)`
-  margin-left: 32px;
-  margin-right: 32px;
-`
-
 const ButtonContainer = styled(View)`
   position: absolute;
   bottom: 114px;
   width: ${Dimensions.get('window').width}px;
+  padding-left: 32px;
+  padding-right: 32px;
 `
 
 const ButtonContainerSecond = styled(View)`
   position: absolute;
   bottom: 34px;
   width: ${Dimensions.get('window').width}px;
+  padding-left: 32px;
+  padding-right: 32px;
 `
 const NafaaqImg = styled(Image)`
   height: 135px;
@@ -70,18 +69,18 @@ const NafaqScreen = ({navigation}: Props) => {
           {t('onboarding:redirectNafath')}
         </Body>
         <ButtonContainer>
-          <StyledButton onPress={onComplete}>
+          <Button onPress={onComplete}>
             <Text variant={TEXT_VARIANTS.body}>
               {t('onboarding:nafathByApp')}
             </Text>
-          </StyledButton>
+          </Button>
         </ButtonContainer>
         <ButtonContainerSecond>
-          <StyledButton onPress={onComplete} varient="transparent">
+          <Button onPress={onComplete} varient="transparent">
             <Text variant={TEXT_VARIANTS.body}>
               {t('onboarding:nafathByWeb')}
             </Text>
-          </StyledButton>
+          </Button>
         </ButtonContainerSecond>
       </Layout>
     </>
