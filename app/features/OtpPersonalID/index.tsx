@@ -14,15 +14,12 @@ import {Edit} from '@Assets'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {AppProviderProps, AppContext} from '@Context'
 
-const StyledButton = styled(Button)`
-  margin-left: 32px;
-  margin-right: 32px;
-`
-
 const ButtonContainer = styled(View)`
   position: absolute;
   bottom: 34px;
   width: ${Dimensions.get('window').width}px;
+  padding-left: 32px;
+  padding-right: 32px;
 `
 
 const Row = styled(View)<{isRTL: boolean | undefined}>`
@@ -146,12 +143,11 @@ const OtpPersonalIdScreen = ({navigation}: Props) => {
         </Row>
         {!isKeyboardVisible && (
           <ButtonContainer>
-            <StyledButton
-              onPress={() => navigation.navigate('AfterOtpPersonalId')}>
+            <Button onPress={() => navigation.navigate('AfterOtpPersonalId')}>
               <Text variant={TEXT_VARIANTS.body}>
                 {t('onboarding:continue')}
               </Text>
-            </StyledButton>
+            </Button>
           </ButtonContainer>
         )}
       </Layout>
