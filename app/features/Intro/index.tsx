@@ -26,10 +26,13 @@ const FirstSlideFrame = 238
 const MiddleSlideFrame = 476
 const LastSlideFrame = 714
 
+// enter animation
+const EnterAnimation = FadeInRight.duration(1000).delay(250)
+
 const IntroFeature: React.FC<IntroFeatureProps> = () => {
   const {t} = useTranslation()
 
-  // Below code is for to check the if the animation rendering or not
+  // below code is for to check the if the animation rendering or not
   const appState = useRef(AppState.currentState)
   const [appStateVisible, setAppStateVisible] = useState(appState.current)
 
@@ -117,7 +120,7 @@ const IntroFeature: React.FC<IntroFeatureProps> = () => {
 
           {currentValue === FirstSlideFrame && (
             <Animated.View
-              entering={FadeInRight.duration(1000).delay(250)}
+              entering={EnterAnimation}
               className="flex-1 justify-end pb-20">
               <TCTextView className="text-4xl text-tc-black font-tc-primary">
                 {t('intro:future1')}
@@ -130,7 +133,7 @@ const IntroFeature: React.FC<IntroFeatureProps> = () => {
 
           {currentValue === MiddleSlideFrame && (
             <Animated.View
-              entering={FadeInRight.duration(1000).delay(250)}
+              entering={EnterAnimation}
               className="flex-1 justify-end pb-20">
               <TCTextView className="text-4xl text-tc-black font-tc-primary">
                 {t('intro:currency1')}
@@ -143,7 +146,7 @@ const IntroFeature: React.FC<IntroFeatureProps> = () => {
 
           {currentValue >= LastSlideFrame && (
             <Animated.View
-              entering={FadeInRight.duration(1000).delay(250)}
+              entering={EnterAnimation}
               className="flex-1 justify-end pb-20">
               <TCTextView className="text-4xl text-tc-black font-tc-primary">
                 {t('intro:additional1')}
@@ -166,7 +169,7 @@ const IntroFeature: React.FC<IntroFeatureProps> = () => {
               )}>
               <Animated.View
                 className={cn(flexRowLayout(isRTL), 'gap-2')}
-                entering={FadeInRight.duration(1000).delay(250)}>
+                entering={EnterAnimation}>
                 <TCDot isActive={currentValue === FirstSlideFrame} />
 
                 <TCDot isActive={currentValue === MiddleSlideFrame} />

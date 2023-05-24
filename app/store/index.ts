@@ -1,6 +1,5 @@
 import {create} from 'zustand'
 import i18n from 'i18next'
-// import {getIntro} from '@Utils'
 
 export type LanguageStore = {
   language: 'en' | 'ar'

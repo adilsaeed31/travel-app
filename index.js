@@ -19,7 +19,7 @@ const languageDetector = {
 i18next.use(languageDetector).use(initReactI18next).init({
   fallbackLng: 'en',
   compatibilityJSON: 'v3',
-  debug: true,
+  debug: false,
   resources: translation,
 })
 
