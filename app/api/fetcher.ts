@@ -34,13 +34,14 @@ export const fetcher = async (
       ...rest, // all other options for fetch method
     })
 
-    console.log('res.ok :>> ', res.ok)
+    // console.log('res.ok :>> ', res.status)
 
-    if (!res.ok) {
-      throw new Error(`${res.status} ${res.statusText}`)
-    }
+    // if (!res.ok) {
+    //   // throw new Error(`${res.status} ${res.statusText}`)
+    //   return {status:res.status}
+    // }
 
-    return await res.json()
+    return res
   } catch (err) {
     console.log('API Error :>> ', err)
     return err

@@ -19,12 +19,13 @@ import {
   UserNameValidator,
   passwordValidator,
 } from '@Utils'
-import {Animated, Dimensions} from 'react-native'
+import {Alert, Animated, Dimensions} from 'react-native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {fetcher} from '@Api'
 import {useQuery} from '@tanstack/react-query'
 import {BASE_URL} from '@Utils'
 import {useStore} from '@Store'
+import {useIsFocused} from '@react-navigation/native'
 
 type Props = {
   navigation: StackNavigationProp<{
@@ -37,13 +38,16 @@ const AuthFeature = ({navigation}: Props) => {
   const {t} = useTranslation()
   const {isAppReady, hasIntroSeen} = useContext<AppProviderProps>(AppContext)
   const splashAnim = useRef(new Animated.Value(0)).current
+  const isFocused = useIsFocused()
+
   const transAnim = useRef(
     new Animated.ValueXY({x: Dimensions.get('screen').width, y: 0}),
   ).current
   const [userName, setUserName] = useState('')
   const [password, setPassword] = useState('')
-  const [isUserNameValid, setIsUserNameValid] = useState(false)
-  const [isPasswordValid, setIsPasswordValid] = useState(false)
+  const [status, setstatus] = useState(0)
+  const [isAuthFailed, setIsAuthFailed] = useState(false)
+  const setUser = useStore((state: any) => state.setUser)
 
   const bodyParams = {
     username: userName,
@@ -59,25 +63,41 @@ const AuthFeature = ({navigation}: Props) => {
   const {isFetching, data, refetch} = useQuery({
     // eslint-disable-next-line @tanstack/query/exhaustive-deps
     queryKey: ['Login'],
-    queryFn: () =>
-      fetcher(url, {
+    queryFn: async () => {
+      let res: any = await fetcher(url, {
         method: 'POST',
         body: bodyParams,
-      }),
+      })
+      setstatus(res.status)
+
+      if (res.ok) return res.json()
+      else return res.status
+    },
     refetchOnWindowFocus: false,
+    cacheTime: 1,
     enabled: false, // disable this query from automatically running
   })
 
   useEffect(() => {
-    if (!isFetching && data) {
+    if (!isFetching && data && isFocused) {
       // alert(JSON.stringify(data))
-      if (data.type) {
-        useStore.getState().setUser(data)
+
+      if (status >= 200 && status < 300) {
+        if (data.is_otp_required) {
+          navigation.navigate('OTPAuth')
+          setstatus(0)
+        } else {
+          setUser(data)
+          setIsAuthFailed(false)
+        }
+      } else if (status > 299 && status < 400) {
         navigation.navigate('OTPAuth')
+      } else if (status > 399 && status < 500) {
+        setIsAuthFailed(true)
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, isFetching])
+  }, [data, isFetching, isFocused])
 
   const handleLogin = () => {
     // Perform login logic here
@@ -122,47 +142,65 @@ const AuthFeature = ({navigation}: Props) => {
             isValid={setIsUserNameValid}
           />
           <Spacer horizontal={false} size={SPACER_SIZES.XL} />
-          <TCInput
-            label={t('auth:password')}
-            value={password}
-            isPassword
-            schema={passwordValidator}
-            onChangeText={setPassword}
-            isValid={setIsPasswordValid}
-          />
-          <Spacer horizontal={false} size={SPACER_SIZES.LG} />
-          <ViewWrapper>
-            <TCLinkButton onPress={handleLogin}>
-              {t('auth:buttonForget')}
-            </TCLinkButton>
-          </ViewWrapper>
-        </LoginForm>
-
-        <Spacer horizontal={false} size={SPACER_SIZES.XXXL} />
-        <MultiTextWrapper>
-          <FaceIcon />
-        </MultiTextWrapper>
-
-        <Spacer horizontal={false} size={SPACER_SIZES.LG} />
-
-        <ButtonContainer>
-          <TCButton
-            disabled={!isUserNameValid || !isPasswordValid}
-            onPress={handleLogin}>
+          <TCTextView variant={TEXT_VARIANTS.heading}>
             {t('auth:buttonLogin')}
-          </TCButton>
-        </ButtonContainer>
-        <Spacer horizontal={false} size={SPACER_SIZES.XXL} />
-        <MultiTextWrapper>
-          <TCMultiLinkButton
-            callbacks={[
-              () => {
-                navigation.navigate('PersonalID')
-              },
-            ]}>
-            {t('auth:newToSaib')}
-          </TCMultiLinkButton>
-        </MultiTextWrapper>
+          </TCTextView>
+          <Spacer horizontal={false} size={SPACER_SIZES.XL} />
+
+          <LoginForm>
+            <TCInput
+              label={t('auth:userName')}
+              onChangeText={setUserName}
+              // isValid={setIsUserNameValid} //TODO
+            />
+            <Spacer horizontal={false} size={SPACER_SIZES.XL} />
+            <TCInput
+              label={t('auth:password')}
+              value={password}
+              isPassword
+              onChangeText={setPassword}
+              // isValid={setIsPasswordValid} //TODO
+            />
+            <Spacer horizontal={false} size={SPACER_SIZES.SM - 5} />
+            <ViewWrapper>
+              <TCLinkButton onPress={handleLogin}>
+                {t('auth:buttonForget')}
+              </TCLinkButton>
+            </ViewWrapper>
+          </LoginForm>
+          <Spacer horizontal={false} size={SPACER_SIZES.LG} />
+
+          {!isAuthFailed && (
+            <Spacer horizontal={false} size={SPACER_SIZES.XXXLL} />
+          )}
+          {isAuthFailed && (
+            <ForgetPassWrapper>
+              <ForgetPassLabel>{t('auth:authFailed')}</ForgetPassLabel>
+            </ForgetPassWrapper>
+          )}
+          <Spacer horizontal={false} size={SPACER_SIZES.LG} />
+
+          <MultiTextWrapper>
+            <FaceIcon />
+          </MultiTextWrapper>
+
+          <Spacer horizontal={false} size={SPACER_SIZES.SM} />
+
+          <ButtonContainer>
+            <TCButton onPress={handleLogin}>{t('auth:buttonLogin')}</TCButton>
+          </ButtonContainer>
+          <Spacer horizontal={false} size={SPACER_SIZES.LG} />
+          <MultiTextWrapper>
+            <TCMultiLinkButton
+              callbacks={[
+                () => {
+                  navigation.navigate('PersonalID')
+                },
+              ]}>
+              {t('auth:newToSaib')}
+            </TCMultiLinkButton>
+          </MultiTextWrapper>
+        </>
       </Layout>
     </Animated.View>
   )
@@ -176,6 +214,31 @@ const MultiTextWrapper = styled.View`
   width: 100%;
   align-items: center;
   justify-content: center;
+`
+
+const ForgetPassWrapper = styled.View`
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 10px;
+  gap: 10px;
+  background: #ffdede;
+  border-radius: 16px;
+`
+
+const ForgetPassLabel = styled.Text`
+  font-family: 'Co Text';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  padding: 10px;
+  line-height: 28px;
+  /* or 200% */
+
+  text-align: center;
+  letter-spacing: -0.4px;
+
+  color: #de2e2e;
 `
 
 const ViewWrapper = styled.View`
