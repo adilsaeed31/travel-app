@@ -70,6 +70,7 @@ type Props = {
   navigation: StackNavigationProp<{
     AfterOtpPersonalId: undefined
     PersonalID: undefined
+    RedirectNafaaq: undefined
   }>
 }
 
@@ -86,17 +87,40 @@ const OtpPersonalIdScreen = ({navigation}: Props) => {
   const [isButtonDisabled, setButtonDisabled] = useState(true)
   const mobileNumber = useStore((store: any) => store.onboardingMobileNumber)
   const OTPRef = useStore((store: any) => store.onboardingOTPRef)
-  //const govtId = useStore((state: any) => state.govtId)
+  const govtId = useStore((state: any) => state.govtId)
 
-  const {isLoading, data, mutate} = useMutation({
-    mutationFn: () =>
-      fetcher(BASE_URL + '/auth/otp/verify', {
+  const {
+    isLoading: isOTPLoading,
+    data: otpData,
+    mutate: verifyOtp,
+  } = useMutation({
+    mutationFn: async () => {
+      let req: any = await fetcher(BASE_URL + '/auth/otp/verify', {
         method: 'POST',
         body: {
           referenceNumber: OTPRef,
           otp: state.otp,
         },
-      }),
+      })
+      return await req.json()
+    },
+  })
+
+  const {
+    isLoading: isTahaquqLoading,
+    data: tahaquqData,
+    mutate: verifyTahaquq,
+  } = useMutation({
+    mutationFn: async () => {
+      let req: any = await fetcher(BASE_URL + '/onboarding/id/verify', {
+        method: 'POST',
+        body: {
+          id: govtId,
+          mobileNumber: mobileNumber,
+        },
+      })
+      return await req.json()
+    },
   })
 
   useEffect(() => {
@@ -150,16 +174,28 @@ const OtpPersonalIdScreen = ({navigation}: Props) => {
   }, [resendCount, navigation])
 
   const onComplete = () => {
-    mutate()
+    verifyOtp()
   }
 
-  if (isLoading) {
-    console.log('======', isLoading)
+  if (isOTPLoading || isTahaquqLoading) {
+    console.log('======', isOTPLoading || isTahaquqLoading)
   }
 
-  if (data && data.referenceNumber) {
-    console.log(data)
-    // mutateNext()
+  if (otpData && otpData.access_token && !isTahaquqLoading && !tahaquqData) {
+    // const expiresIn = otpData.expires_in
+    // const access_token = data.access_token
+    // const refresh_token = otpData.refresh_token
+    // const refresh_token_expires_in = otpData.refresh_token_expires_in
+    // const authMech = data.type
+    verifyTahaquq()
+  }
+
+  if (tahaquqData && tahaquqData.existing === false && tahaquqData.match) {
+    navigation.navigate('RedirectNafaaq')
+  } else {
+    if (tahaquqData) {
+      navigation.navigate('AfterOtpPersonalId')
+    }
   }
 
   return (
@@ -177,7 +213,7 @@ const OtpPersonalIdScreen = ({navigation}: Props) => {
           }}
           resetCount={resendCount}
         />
-        {error && <ErrorText>{error}</ErrorText>}
+        {error && state.otp && <ErrorText>{error}</ErrorText>}
         <Spacer size={SPACER_SIZES.XL} />
         <Row isRTL={isRTL}>
           <TouchableOpacity onPress={() => navigation.navigate('PersonalID')}>

@@ -194,11 +194,13 @@ const PersonalIdScreen = ({navigation}: Props) => {
   )
 
   const {isLoading, data, mutate} = useMutation({
-    mutationFn: () =>
-      fetcher(BASE_URL + '/auth/otp', {
+    mutationFn: async () => {
+      let req: any = await fetcher(BASE_URL + '/auth/otp', {
         method: 'POST',
         body: {mobileNumber: state.mobileNumber, role: 'ONBOARDING'},
-      }),
+      })
+      return req.json()
+    },
   })
 
   useEffect(() => {
@@ -254,7 +256,6 @@ const PersonalIdScreen = ({navigation}: Props) => {
   }
 
   if (data && data.referenceNumber) {
-    console.log(data)
     setOnboardingDetails(state.mobileNumber, state.govtId, data.referenceNumber)
     navigation.navigate('OtpPersonalId')
   }
