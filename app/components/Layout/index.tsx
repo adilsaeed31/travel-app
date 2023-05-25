@@ -7,12 +7,15 @@ import {
   ScrollView,
   TouchableOpacity,
   Platform,
+  StatusBar,
 } from 'react-native'
 import styled from 'styled-components/native'
+import {useSafeAreaInsets} from 'react-native-safe-area-context'
 
 import Header from './Header'
 import {Background1, Background2} from '@Assets'
 import {useStore} from '@Store'
+import BackHeader from './BackHeader'
 
 type LayoutProps = {
   isHeader?: boolean
@@ -24,11 +27,14 @@ type LayoutProps = {
   backgroundIndex?: Number
   isScrollable?: boolean
   onScroll?: () => void
+  hasBack?: boolean
 }
+
+const statusBarHeight = StatusBar.currentHeight as number
 
 const Container = styled(View)`
   flex: 1;
-  min-height: ${Dimensions.get('window').height}px;
+  min-height: ${Dimensions.get('window').height - statusBarHeight}px;
   background-color: #fff;
 `
 
@@ -48,7 +54,6 @@ const BackgroundImage2 = styled(Background2)`
 
 const ContentWrapper = styled(View)`
   flex: 1;
-  padding: 0px 32px;
 `
 
 const AppLayout: React.FC<LayoutProps> = ({
@@ -61,13 +66,16 @@ const AppLayout: React.FC<LayoutProps> = ({
   onScroll = () => {},
   onBack = () => {},
   children,
+  hasBack = false,
+
   ...rest
 }) => {
+  const insetEdges = useSafeAreaInsets()
   return (
     <KeyboardAvoidingView
-      style={{flex: 1}}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      enabled>
+      enabled
+      className="flex-1"
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <ScrollView
         scrollEventThrottle={16}
         scrollEnabled={isScrollable}
@@ -94,8 +102,18 @@ const AppLayout: React.FC<LayoutProps> = ({
                 ) : null}
               </>
             )}
-            <ContentWrapper>
+            <ContentWrapper
+              style={{
+                // do not remove this below style props below will
+                // adjust the padding/spacing on ios and android
+                paddingTop: insetEdges.top,
+                paddingBottom: insetEdges.bottom,
+                paddingLeft: insetEdges.left + 32,
+                paddingRight: insetEdges.right + 32,
+              }}>
               {isHeader && <Header isBack={isBack} onBack={onBack} />}
+              {hasBack && <BackHeader />}
+
               {children}
             </ContentWrapper>
           </Container>

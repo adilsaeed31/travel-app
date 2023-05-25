@@ -25,11 +25,11 @@ const ExistingScreen: React.FC<ExistingScreenProps> = ({
   }
 
   return (
-    <Layout isHeader={false} isBackground={false}>
-      <View className="flex-1 items-center justify-center">
+    <Layout isHeader={false} isBackground={false} isScrollable={false}>
+      <View className="flex-1 gap-6 items-center justify-center">
         <WarningIconWithShadow />
 
-        <Text className="text-2xl font-bold tc-primary text-tc-black mt-16 mb-7 text-center">
+        <Text className="text-2xl font-bold tc-primary text-tc-black text-center">
           {t('onboarding:accountExist')}
         </Text>
 
@@ -38,7 +38,7 @@ const ExistingScreen: React.FC<ExistingScreenProps> = ({
         </Text>
       </View>
 
-      <View className="flex-1 justify-end pb-12">
+      <View className="flex-1 justify-end pb-6">
         <Button onPress={backToLogin}>
           <Text className="text-base text-tc-black-btn">
             {t('onboarding:goBackToLogin')}

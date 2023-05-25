@@ -9,8 +9,7 @@ import {default as Text} from '../TextView'
 import {AppContext, AppProviderProps} from '@Context'
 
 const Container = styled(View)<{isRTL: boolean | undefined}>`
-  padding-top: 76px;
-  padding-bottom: 0;
+  padding-top: 36px;
   flex-direction: ${props => (props.isRTL ? 'row-reverse' : 'row')};
 `
 

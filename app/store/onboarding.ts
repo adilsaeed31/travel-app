@@ -2,16 +2,20 @@ import {StateCreator} from 'zustand'
 
 // below is the example to set the multiple files state and store
 export type OnBoardingStoreProps = {
-  title: string
-  setTitle: () => void
+  govtId?: string
+  onboardingMobileNumber?: string
 }
 
 const OnBoardingState: StateCreator<OnBoardingStoreProps> = set => ({
-  title: 'Travel Card OnBoarding',
-
-  setTitle: () => {
+  setOnboardingDetails: (
+    mobileNumber: string,
+    govtId: string,
+    referenceNumber: string,
+  ) => {
     set(() => ({
-      title: 'Travel Card OnBoarding',
+      onboardingMobileNumber: mobileNumber,
+      govtId: govtId,
+      onboardingOTPRef: referenceNumber,
     }))
   },
 })

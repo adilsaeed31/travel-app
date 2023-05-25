@@ -15,6 +15,7 @@ import {
   OTPActivateCard,
   ActivateCard,
   OtpVerificationScreen,
+  PersonalInformation,
 } from '@Features'
 import {ExistingScreen} from '@Screens'
 
@@ -28,6 +29,7 @@ const AuthNavigator = () => {
         headerShown: false,
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       }}>
+      <Screen name="personalInfo" component={PersonalInformation} />
       <Screen name="Auth" component={AuthFeature} />
       <Screen name="OTPAuth" component={OtpVerificationScreen} />
       <Screen name="PersonalID" component={PersonalID} />

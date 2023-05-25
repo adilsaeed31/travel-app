@@ -1,12 +1,13 @@
 import React, {lazy, Suspense, useContext} from 'react'
 import {StatusBar, ActivityIndicator, View} from 'react-native'
 import {NavigationContainer} from '@react-navigation/native'
+import {SafeAreaProvider} from 'react-native-safe-area-context'
 
 import * as eva from '@eva-design/eva'
 import {EvaIconsPack} from '@ui-kitten/eva-icons'
 import {ApplicationProvider, IconRegistry} from '@ui-kitten/components'
 
-import {AuthContext, AppContext} from '@Context'
+import {AppContext} from '@Context'
 import {useStore} from '@Store'
 
 // Importing app and auth screen based on condition with lazy
@@ -20,7 +21,7 @@ const MainNavigation = () => {
   const {mode, isAppReady} = useContext(AppContext)
 
   return (
-    <>
+    <SafeAreaProvider className="flex-1">
       <StatusBar />
 
       <NavigationContainer>
@@ -45,7 +46,7 @@ const MainNavigation = () => {
           </Suspense>
         </ApplicationProvider>
       </NavigationContainer>
-    </>
+    </SafeAreaProvider>
   )
 }
 

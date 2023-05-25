@@ -12,6 +12,7 @@ import {
   Layout,
 } from '@Components'
 import styled from 'styled-components/native'
+
 import {
   SPACER_SIZES,
   TEXT_VARIANTS,
@@ -127,7 +128,19 @@ const AuthFeature = ({navigation}: Props) => {
         transform: [...transAnim.getTranslateTransform()],
       }}>
       <Layout isScrollable={false}>
-        <>
+        <Spacer horizontal={false} size={SPACER_SIZES.XL} />
+        <TCTextView variant={TEXT_VARIANTS.heading}>
+          {t('auth:buttonLogin')}
+        </TCTextView>
+        <Spacer horizontal={false} size={SPACER_SIZES.XL} />
+
+        <LoginForm>
+          <TCInput
+            label={t('auth:userName')}
+            schema={UserNameValidator}
+            onChangeText={setUserName}
+            isValid={setIsUserNameValid}
+          />
           <Spacer horizontal={false} size={SPACER_SIZES.XL} />
           <TCTextView variant={TEXT_VARIANTS.heading}>
             {t('auth:buttonLogin')}
