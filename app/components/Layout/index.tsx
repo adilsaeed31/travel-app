@@ -13,6 +13,7 @@ import styled from 'styled-components/native'
 import Header from './Header'
 import {Background1, Background2} from '@Assets'
 import {useStore} from '@Store'
+import BackHeader from './BackHeader'
 
 type LayoutProps = {
   isHeader?: boolean
@@ -24,6 +25,7 @@ type LayoutProps = {
   backgroundIndex?: Number
   isScrollable?: boolean
   onScroll?: () => void
+  hasBack?: boolean
 }
 
 const Container = styled(View)`
@@ -61,6 +63,8 @@ const AppLayout: React.FC<LayoutProps> = ({
   onScroll = () => {},
   onBack = () => {},
   children,
+  hasBack = false,
+
   ...rest
 }) => {
   return (
@@ -96,6 +100,8 @@ const AppLayout: React.FC<LayoutProps> = ({
             )}
             <ContentWrapper>
               {isHeader && <Header isBack={isBack} onBack={onBack} />}
+              {hasBack && <BackHeader />}
+
               {children}
             </ContentWrapper>
           </Container>

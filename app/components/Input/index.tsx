@@ -1,5 +1,5 @@
 import {TEXT_VARIANTS} from '@Utils'
-import React, {useState, useRef, FC} from 'react'
+import React, {useState, useRef, FC, useEffect} from 'react'
 import Text from '../TextView'
 import {TextInput, View} from 'react-native'
 import styled from 'styled-components/native'
@@ -15,6 +15,7 @@ interface CustomInputProps {
   isPassword?: boolean
   onChangeText?: (text: string) => void
   isValid?: (valid: boolean) => void
+  errorMessage?: string
 }
 
 const InputWrapper = styled(View)<{isError: boolean; isFocused: boolean}>`
@@ -72,6 +73,7 @@ const CustomInput: FC<CustomInputProps> = ({
   schema,
   onChangeText = () => {},
   isValid = () => {},
+  errorMessage = '',
 }) => {
   const inputRef = useRef<TextInput>(null)
   const [isFocused, setIsFocused] = useState<boolean>(false)
@@ -79,6 +81,10 @@ const CustomInput: FC<CustomInputProps> = ({
   const [inputValue, setInputValue] = useState<string>(value)
   const [showPassword, setShowPassword] = useState<boolean>(isPassword || false)
   const {t} = useTranslation()
+
+  useEffect(() => {
+    errorMessage && setError(errorMessage)
+  }, [errorMessage])
   const handleFocus = (): void => {
     setIsFocused(true)
   }
