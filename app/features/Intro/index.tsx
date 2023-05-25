@@ -5,6 +5,7 @@ import {
   Easing,
   TouchableOpacity,
   AppState,
+  BackHandler,
 } from 'react-native'
 import LottieView from 'lottie-react-native'
 import {useTranslation} from 'react-i18next'
@@ -63,6 +64,12 @@ const IntroFeature: React.FC<IntroFeatureProps> = () => {
     // hiding the splash screen below
     Splash.hide()
 
+    // back handler to stop back functionality on intro
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      () => true,
+    )
+
     // added the fade opacity animation for 1 sec
     RNAnimated.timing(splashAnim, {
       toValue: 1,
@@ -73,6 +80,10 @@ const IntroFeature: React.FC<IntroFeatureProps> = () => {
 
     // updating the currentValue with updatedValue
     updatedValue.current = currentValue
+
+    return () => {
+      backHandler.remove()
+    }
   }, [currentValue, splashAnim, updatedValue])
 
   useEffect(() => {
