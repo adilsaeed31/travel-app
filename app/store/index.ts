@@ -1,11 +1,11 @@
 import {create} from 'zustand'
 
-import AppStore, {AppStoreProps} from './app'
+import AppStore, {AppStateProps} from './app'
 import OnBoardingStore, {OnBoardingStoreProps} from './onboarding'
 
-export type RootStoreProps = AppStoreProps | OnBoardingStoreProps
+export type RootStoreProps = AppStateProps & OnBoardingStoreProps
 
-export const useStore = create(set => ({
-  ...AppStore(set),
-  ...OnBoardingStore(set),
+export const useStore = create<RootStoreProps>()((...s) => ({
+  ...AppStore(...s),
+  ...OnBoardingStore(...s),
 }))

@@ -1,10 +1,12 @@
+import {StateCreator} from 'zustand'
+
 // below is the example to set the multiple files state and store
 export type OnBoardingStoreProps = {
   title: string
   setTitle: () => void
 }
 
-export default (set: Function) => ({
+const OnBoardingState: StateCreator<OnBoardingStoreProps> = set => ({
   title: 'Travel Card OnBoarding',
 
   setTitle: () => {
@@ -13,3 +15,5 @@ export default (set: Function) => ({
     }))
   },
 })
+
+export default OnBoardingState
