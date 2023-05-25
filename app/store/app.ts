@@ -1,5 +1,14 @@
 import i18n from 'i18next'
 
+// below is the example to set the multiple files state and store
+export type AppStoreProps = {
+  language: string
+  isRTL: boolean
+  hasIntroSeen: boolean
+  toggleLanguage: () => void
+  introHasBeenSeen: () => void
+}
+
 export default (set: any) => ({
   language: 'en',
   isRTL: false,

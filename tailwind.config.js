@@ -23,6 +23,7 @@ module.exports = {
           primary: '#f8d03b',
           secondary: '#3f3d36',
           black: '#131109',
+          'black-btn': '#352D0F',
         },
       },
     },

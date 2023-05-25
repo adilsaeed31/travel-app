@@ -16,6 +16,7 @@ import {
   ActivateCard,
   OtpVerificationScreen,
 } from '@Features'
+import {ExistingScreen} from '@Screens'
 
 const {Navigator, Screen} = createStackNavigator()
 
@@ -37,6 +38,7 @@ const AuthNavigator = () => {
       <Screen name="AfterInformation" component={AfterInformation} />
       <Screen name="OTPActivateCard" component={OTPActivateCard} />
       <Screen name="ActivateCard" component={ActivateCard} />
+      <Screen name="Existing" component={ExistingScreen} />
     </Navigator>
   )
 }

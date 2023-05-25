@@ -112,11 +112,13 @@ const IntroFeature: React.FC<IntroFeatureProps> = () => {
         <RNAnimated.View
           style={{opacity: splashAnim}}
           className="flex-1 p-8 ios:pt-16">
-          <TouchableOpacity className="mt-4 ios:mt-10" onPress={changeLanguage}>
-            <TCTextView className="text-right text-tc-secondary dark:text-tc-primary">
-              {t('onboarding:lang')}
-            </TCTextView>
-          </TouchableOpacity>
+          <View className="flex-1 items-end">
+            <TouchableOpacity className="p-4 ios:mt-8" onPress={changeLanguage}>
+              <TCTextView className="text-tc-secondary dark:text-tc-primary">
+                {t('onboarding:lang')}
+              </TCTextView>
+            </TouchableOpacity>
+          </View>
 
           {currentValue === FirstSlideFrame && (
             <Animated.View

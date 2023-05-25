@@ -7,6 +7,7 @@ import {
   Platform,
 } from 'react-native'
 import {useTranslation} from 'react-i18next'
+import * as yup from 'yup'
 import {
   Layout,
   TCButton as Button,
@@ -17,9 +18,16 @@ import {
 } from '@Components'
 import {SPACER_SIZES, TEXT_VARIANTS} from '@Utils'
 import styled from 'styled-components/native'
-import {GovtIdValidator, MobileNumberValidator} from '@Utils'
+import {
+  GovtIdValidator,
+  MobileNumberValidator,
+  TermsCheckvalidator,
+} from '@Utils'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {AppProviderProps, AppContext} from '@Context'
+import {fetcher} from '@Api'
+import {useMutation} from '@tanstack/react-query'
+import {BASE_URL} from '@Utils'
 
 const isSmall = Dimensions.get('window').height < 750
 
@@ -83,7 +91,7 @@ const Row = styled(View)<{isRTL: boolean | undefined}>`
 const StickyButtonContainer = styled.View<{keyboardHeight: Number}>`
   position: absolute;
   bottom: ${props =>
-    Platform.OS == 'ios' ? props.keyboardHeight + 'px' : '0px'};
+    Platform.OS === 'ios' ? props.keyboardHeight + 'px' : '0px'};
   left: 0;
   right: 0;
   align-items: center;
@@ -110,6 +118,12 @@ const RowCenter = styled.View<{
   margin-top: ${props => (props.isKeyboardVisible ? '24px' : '0px')};
   width: ${props =>
     props.isKeyboardVisible ? '100%' : Dimensions.get('window').width + 'px'};
+`
+
+const ErrorText = styled(Text)`
+  font-weight: 500;
+  color: #f54d3f;
+  padding-left: 16px;
 `
 
 const Terms = () => {
@@ -171,6 +185,40 @@ const PersonalIdScreen = ({navigation}: Props) => {
   const [isKeyboardVisible, setKeyboardVisible] = useState<boolean>(false)
   const [keyboardHeight, setKeyboardHeight] = useState<Number>(0)
   const {isRTL} = useContext<AppProviderProps>(AppContext)
+  const [state, setState] = useState<any>({})
+  const [isButtonDisabled, setButtonDisabled] = useState(true)
+  const [termsError, setTermsError] = useState<any>(false)
+
+  const {isLoading, data, mutate} = useMutation({
+    mutationFn: () =>
+      fetcher(BASE_URL + '/auth/otp', {
+        method: 'POST',
+        body: {mobileNumber: state.mobileNumber, role: 'ONBOARDING'},
+      }),
+  })
+
+  useEffect(() => {
+    try {
+      yup
+        .object({
+          govtId: GovtIdValidator,
+          mobileNumber: MobileNumberValidator,
+          isTermsCheck: TermsCheckvalidator,
+        })
+        .validateSync(state)
+
+      setButtonDisabled(false)
+    } catch (err: any) {
+      setButtonDisabled(true)
+    }
+  }, [
+    state.govtId,
+    state.mobileNumber,
+    state.isTermsCheck,
+    state.isEmailCheck,
+    state,
+  ])
+
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
       'keyboardDidShow',
@@ -194,6 +242,14 @@ const PersonalIdScreen = ({navigation}: Props) => {
   }, [])
 
   const onComplete = () => {
+    mutate()
+  }
+
+  if (isLoading) {
+    console.log('======', isLoading)
+  }
+
+  if (data && data.referenceNumber) {
     navigation.navigate('OtpPersonalId')
   }
 
@@ -209,7 +265,7 @@ const PersonalIdScreen = ({navigation}: Props) => {
           label={t('onboarding:nationalID')}
           schema={GovtIdValidator}
           onChangeText={text => {
-            console.log(text)
+            setState({...state, govtId: text})
           }}
         />
         <Spacer horizontal={false} size={SPACER_SIZES.BASE * 4} />
@@ -217,19 +273,32 @@ const PersonalIdScreen = ({navigation}: Props) => {
           label={t('onboarding:mobileNumber')}
           schema={MobileNumberValidator}
           onChangeText={text => {
-            console.log(text)
+            setState({...state, mobileNumber: text})
           }}
         />
 
         <DisclaimerView isKeyboardVisible={isKeyboardVisible} isRTL={isRTL}>
           <Checkbox
+            onChange={status => {
+              setState({...state, isEmailCheck: status})
+            }}
             label={
               <AgreeText variant={TEXT_VARIANTS.caption}>
                 {t('onboarding:agreeEmail')}
               </AgreeText>
             }
           />
-          <Checkbox label={<Terms />} />
+          <Checkbox
+            onChange={status => {
+              if (status) {
+                setTermsError(false)
+              }
+
+              setState({...state, isTermsCheck: status})
+            }}
+            label={<Terms />}
+          />
+          {termsError && <ErrorText>{termsError}</ErrorText>}
         </DisclaimerView>
 
         {!isKeyboardVisible && (
@@ -245,7 +314,7 @@ const PersonalIdScreen = ({navigation}: Props) => {
       </Layout>
       {isKeyboardVisible && (
         <StickyButtonContainer keyboardHeight={keyboardHeight}>
-          <StickyButton>
+          <StickyButton onPress={onComplete} disabled={isButtonDisabled}>
             <Text variant={TEXT_VARIANTS.body}>{t('onboarding:continue')}</Text>
           </StickyButton>
         </StickyButtonContainer>

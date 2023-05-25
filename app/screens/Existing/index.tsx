@@ -1,0 +1,52 @@
+import React from 'react'
+import {View, Text} from 'react-native'
+import {useTranslation} from 'react-i18next'
+import {StackNavigationProp} from '@react-navigation/stack'
+import styled from 'styled-components/native'
+
+import {Layout, TCButton as Button} from '@Components'
+import {WarningIcon} from '@Assets'
+
+const WarningIconWithShadow = styled(WarningIcon)`
+  box-shadow: 0px 4px 12px rgba(52, 61, 69, 0.12);
+`
+
+type ExistingScreenProps = {
+  navigation: StackNavigationProp<any>
+}
+
+const ExistingScreen: React.FC<ExistingScreenProps> = ({
+  navigation,
+}: ExistingScreenProps) => {
+  const {t} = useTranslation()
+
+  const backToLogin = () => {
+    navigation.navigate('Auth')
+  }
+
+  return (
+    <Layout isHeader={false} isBackground={false}>
+      <View className="flex-1 items-center justify-center">
+        <WarningIconWithShadow />
+
+        <Text className="text-2xl font-bold tc-primary text-tc-black mt-16 mb-7 text-center">
+          {t('onboarding:accountExist')}
+        </Text>
+
+        <Text className="tc-primary text-tc-secondary text-center">
+          {t('onboarding:saibACText')}
+        </Text>
+      </View>
+
+      <View className="flex-1 justify-end pb-12">
+        <Button onPress={backToLogin}>
+          <Text className="text-base text-tc-black-btn">
+            {t('onboarding:goBackToLogin')}
+          </Text>
+        </Button>
+      </View>
+    </Layout>
+  )
+}
+
+export default ExistingScreen

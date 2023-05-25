@@ -37,13 +37,14 @@ const CheckBox = styled.View<CheckBoxProps>`
 const Checkbox: React.FC<CheckboxProps> = ({
   label = '',
   checked = false,
-  onChange = () => {},
+  onChange = (_checked: any) => {},
 }) => {
   const [isChecked, setIsChecked] = useState<boolean>(checked)
   const {isRTL} = useContext<AppProviderProps>(AppContext)
   const handleToggle = () => {
     const newCheckedState = !isChecked
     setIsChecked(newCheckedState)
+
     onChange(newCheckedState)
   }
 
