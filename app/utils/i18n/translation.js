@@ -1,5 +1,9 @@
 export const translation = {
   en: {
+    common: {
+      back: 'Back',
+      required: 'required',
+    },
     intro: {
       next: 'Next',
       future1: 'The future of',
@@ -54,6 +58,26 @@ export const translation = {
       saibACText:
         'Please use your SAIB banking login credentials to access this application',
       goBackToLogin: 'Go back to login',
+      personalInformation: {
+        education: 'Education',
+        countryOfBirth: 'Country of Birth',
+        city: 'City',
+        additionalPerson: 'Do you want to add additional',
+        additionalPersonSecond: 'person contact information?',
+        yes: 'Yes',
+        no: 'No',
+        continue: 'Continue',
+        personalInformation: 'Personal information',
+        buldingNumber: 'Building number',
+        streetNanme: 'street name',
+        district: 'district',
+        poBox: 'po box',
+        postalCode: 'postal code',
+        phoneNumber: 'phone number',
+        addetionalContactNanme: 'addetional contact name',
+        relation: 'relation',
+        mobileNumber: 'mobile number',
+      },
     },
     auth: {
       title: 'Welcome to Travel App {{name}}',
@@ -65,6 +89,10 @@ export const translation = {
     },
   },
   ar: {
+    common: {
+      back: 'الخلف',
+      required: 'مطلوب',
+    },
     intro: {
       next: 'تالي',
       future1: 'المستقبل من',
@@ -116,6 +144,26 @@ export const translation = {
       saibACText:
         'يرجى استخدام بيانات اعتماد تسجيل الدخول الخاصة بك إلى الخدمات المصرفية الاستثمارية السعودية للوصول إلى هذا التطبيق',
       goBackToLogin: 'ارجع إلى تسجيل الدخول',
+      personalInformation: {
+        education: 'التعليم',
+        countryOfBirth: 'مكان الميلاد',
+        city: 'المدينة',
+        additionalPerson: 'هل تريد اضافة معلومات التواصل',
+        additionalPersonSecond: 'الخاصة بشخص اخر؟',
+        yes: 'نعم',
+        no: 'لا',
+        continue: 'استمرار',
+        personalInformation: 'المعلومات الشخصية',
+        buldingNumber: 'رقم المبني',
+        streetNanme: 'اسم الشارع',
+        district: 'الحي',
+        poBox: 'رقم الصندوق',
+        postalCode: 'الرقم البريدي',
+        phoneNumber: 'رقم الهاتف',
+        addetionalContactNanme: 'رقم الشخص الاضافي',
+        relation: 'القرابة',
+        mobileNumber: 'رقم الهاتف',
+      },
     },
     auth: {
       title: '{{name}} مرحبًا بك في تطبيق السفر',

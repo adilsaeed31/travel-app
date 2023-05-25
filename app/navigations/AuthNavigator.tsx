@@ -15,6 +15,7 @@ import {
   OTPActivateCard,
   ActivateCard,
   OtpVerificationScreen,
+  PersonalInformation,
 } from '@Features'
 import {ExistingScreen} from '@Screens'
 
@@ -23,11 +24,12 @@ const {Navigator, Screen} = createStackNavigator()
 const AuthNavigator = () => {
   return (
     <Navigator
-      initialRouteName="Auth"
+      initialRouteName="personalInfo "
       screenOptions={{
         headerShown: false,
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       }}>
+      <Screen name="personalInfo" component={PersonalInformation} />
       <Screen name="Auth" component={AuthFeature} />
       <Screen name="OTPAuth" component={OtpVerificationScreen} />
       <Screen name="PersonalID" component={PersonalID} />

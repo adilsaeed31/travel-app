@@ -15,6 +15,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context'
 import Header from './Header'
 import {Background1, Background2} from '@Assets'
 import {useStore} from '@Store'
+import BackHeader from './BackHeader'
 
 type LayoutProps = {
   isHeader?: boolean
@@ -26,6 +27,7 @@ type LayoutProps = {
   backgroundIndex?: Number
   isScrollable?: boolean
   onScroll?: () => void
+  hasBack?: boolean
 }
 
 const statusBarHeight = StatusBar.currentHeight as number
@@ -64,6 +66,8 @@ const AppLayout: React.FC<LayoutProps> = ({
   onScroll = () => {},
   onBack = () => {},
   children,
+  hasBack = false,
+
   ...rest
 }) => {
   const insetEdges = useSafeAreaInsets()
@@ -108,6 +112,8 @@ const AppLayout: React.FC<LayoutProps> = ({
                 paddingRight: insetEdges.right + 32,
               }}>
               {isHeader && <Header isBack={isBack} onBack={onBack} />}
+              {hasBack && <BackHeader />}
+
               {children}
             </ContentWrapper>
           </Container>
