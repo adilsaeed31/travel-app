@@ -9,7 +9,6 @@ import {
 } from 'react-native'
 import BottomSheet from 'reanimated-bottom-sheet'
 import styled from 'styled-components/native'
-import {} from '@Utils'
 import {Setting, Search} from '@Assets'
 import {TCTextView} from '@Components'
 
