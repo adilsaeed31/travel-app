@@ -12,6 +12,7 @@ import {
   Layout,
 } from '@Components'
 import styled from 'styled-components/native'
+
 import {
   SPACER_SIZES,
   TEXT_VARIANTS,
@@ -107,63 +108,61 @@ const AuthFeature = ({navigation}: Props) => {
         transform: [...transAnim.getTranslateTransform()],
       }}>
       <Layout isScrollable={false}>
-        <>
+        <Spacer horizontal={false} size={SPACER_SIZES.XL} />
+        <TCTextView variant={TEXT_VARIANTS.heading}>
+          {t('auth:buttonLogin')}
+        </TCTextView>
+        <Spacer horizontal={false} size={SPACER_SIZES.XL} />
+
+        <LoginForm>
+          <TCInput
+            label={t('auth:userName')}
+            schema={UserNameValidator}
+            onChangeText={setUserName}
+            isValid={setIsUserNameValid}
+          />
           <Spacer horizontal={false} size={SPACER_SIZES.XL} />
-          <TCTextView variant={TEXT_VARIANTS.heading}>
-            {t('auth:buttonLogin')}
-          </TCTextView>
-          <Spacer horizontal={false} size={SPACER_SIZES.XL} />
-
-          <LoginForm>
-            <TCInput
-              label={t('auth:userName')}
-              schema={UserNameValidator}
-              onChangeText={setUserName}
-              isValid={setIsUserNameValid}
-            />
-            <Spacer horizontal={false} size={SPACER_SIZES.XL} />
-            <TCInput
-              label={t('auth:password')}
-              value={password}
-              isPassword
-              schema={passwordValidator}
-              onChangeText={setPassword}
-              isValid={setIsPasswordValid}
-            />
-            <Spacer horizontal={false} size={SPACER_SIZES.LG} />
-            <ViewWrapper>
-              <TCLinkButton onPress={handleLogin}>
-                {t('auth:buttonForget')}
-              </TCLinkButton>
-            </ViewWrapper>
-          </LoginForm>
-
-          <Spacer horizontal={false} size={SPACER_SIZES.XXXL} />
-          <MultiTextWrapper>
-            <FaceIcon />
-          </MultiTextWrapper>
-
+          <TCInput
+            label={t('auth:password')}
+            value={password}
+            isPassword
+            schema={passwordValidator}
+            onChangeText={setPassword}
+            isValid={setIsPasswordValid}
+          />
           <Spacer horizontal={false} size={SPACER_SIZES.LG} />
+          <ViewWrapper>
+            <TCLinkButton onPress={handleLogin}>
+              {t('auth:buttonForget')}
+            </TCLinkButton>
+          </ViewWrapper>
+        </LoginForm>
 
-          <ButtonContainer>
-            <TCButton
-              disabled={!isUserNameValid || !isPasswordValid}
-              onPress={handleLogin}>
-              {t('auth:buttonLogin')}
-            </TCButton>
-          </ButtonContainer>
-          <Spacer horizontal={false} size={SPACER_SIZES.XXL} />
-          <MultiTextWrapper>
-            <TCMultiLinkButton
-              callbacks={[
-                () => {
-                  navigation.navigate('PersonalID')
-                },
-              ]}>
-              {t('auth:newToSaib')}
-            </TCMultiLinkButton>
-          </MultiTextWrapper>
-        </>
+        <Spacer horizontal={false} size={SPACER_SIZES.XXXL} />
+        <MultiTextWrapper>
+          <FaceIcon />
+        </MultiTextWrapper>
+
+        <Spacer horizontal={false} size={SPACER_SIZES.LG} />
+
+        <ButtonContainer>
+          <TCButton
+            disabled={!isUserNameValid || !isPasswordValid}
+            onPress={handleLogin}>
+            {t('auth:buttonLogin')}
+          </TCButton>
+        </ButtonContainer>
+        <Spacer horizontal={false} size={SPACER_SIZES.XXL} />
+        <MultiTextWrapper>
+          <TCMultiLinkButton
+            callbacks={[
+              () => {
+                navigation.navigate('PersonalID')
+              },
+            ]}>
+            {t('auth:newToSaib')}
+          </TCMultiLinkButton>
+        </MultiTextWrapper>
       </Layout>
     </Animated.View>
   )
