@@ -7,7 +7,7 @@ import styled from 'styled-components/native'
 import {Layout, TCButton as Button} from '@Components'
 import {WarningIcon} from '@Assets'
 
-const WarningIconImg = styled(WarningIcon)`
+const WarningIconWithShadow = styled(WarningIcon)`
   box-shadow: 0px 4px 12px rgba(52, 61, 69, 0.12);
 `
 
@@ -27,7 +27,7 @@ const ExistingScreen: React.FC<ExistingScreenProps> = ({
   return (
     <Layout isHeader={false} isBackground={false}>
       <View className="flex-1 items-center justify-center">
-        <WarningIconImg />
+        <WarningIconWithShadow />
 
         <Text className="text-2xl font-bold tc-primary text-tc-black mt-16 mb-7 text-center">
           {t('onboarding:accountExist')}
