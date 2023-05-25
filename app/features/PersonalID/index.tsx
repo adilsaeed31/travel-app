@@ -28,6 +28,7 @@ import {AppProviderProps, AppContext} from '@Context'
 import {fetcher} from '@Api'
 import {useMutation} from '@tanstack/react-query'
 import {BASE_URL} from '@Utils'
+import {useStore} from '@Store'
 
 const isSmall = Dimensions.get('window').height < 750
 
@@ -188,6 +189,9 @@ const PersonalIdScreen = ({navigation}: Props) => {
   const [state, setState] = useState<any>({})
   const [isButtonDisabled, setButtonDisabled] = useState(true)
   const [termsError, setTermsError] = useState<any>(false)
+  const setOnboardingDetails = useStore(
+    (store: any) => store.setOnboardingDetails,
+  )
 
   const {isLoading, data, mutate} = useMutation({
     mutationFn: () =>
@@ -250,6 +254,8 @@ const PersonalIdScreen = ({navigation}: Props) => {
   }
 
   if (data && data.referenceNumber) {
+    console.log(data)
+    setOnboardingDetails(state.mobileNumber, state.govtId, data.referenceNumber)
     navigation.navigate('OtpPersonalId')
   }
 
@@ -303,7 +309,7 @@ const PersonalIdScreen = ({navigation}: Props) => {
 
         {!isKeyboardVisible && (
           <ButtonContainer>
-            <StyledButton onPress={onComplete}>
+            <StyledButton onPress={onComplete} disabled={isButtonDisabled}>
               <Text variant={TEXT_VARIANTS.body}>
                 {t('onboarding:continue')}
               </Text>
