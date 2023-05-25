@@ -1,1 +1,2 @@
-export const BASE_URL = 'http://127.0.0.1:5500'
+export const BASE_URL =
+  'http://svs-studio-dev.apps.devsaibocp.saibnet2.saib.com'
