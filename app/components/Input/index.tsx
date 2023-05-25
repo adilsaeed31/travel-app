@@ -14,6 +14,7 @@ interface CustomInputProps {
   value?: any
   isPassword?: boolean
   onChangeText?: (text: string) => void
+  isValid?: (valid: boolean) => void
 }
 
 const InputWrapper = styled(View)<{isError: boolean; isFocused: boolean}>`
@@ -70,6 +71,7 @@ const CustomInput: FC<CustomInputProps> = ({
   isPassword,
   schema,
   onChangeText = () => {},
+  isValid = () => {},
 }) => {
   const inputRef = useRef<TextInput>(null)
   const [isFocused, setIsFocused] = useState<boolean>(false)
@@ -91,19 +93,20 @@ const CustomInput: FC<CustomInputProps> = ({
       if (schema) {
         schema.validateSync(text)
         setError(null)
+        isValid(true)
       }
     } catch (err: any) {
+      isValid(false)
       setError(err.message)
     }
   }
 
   const handleChangeText = (text: string): void => {
     if (text.length >= 3) {
-      validateInput()
+      validateInput(text)
     }
     onChangeText(text)
     setInputValue(text)
-    validateInput(text)
   }
 
   return (
