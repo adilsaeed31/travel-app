@@ -49,6 +49,11 @@ export const translation = {
         'Congratulations on creating your account. You will now be able to activate your Travel Card',
       activeCard: 'Activate Card',
       resendOTP: 'Resend OTP',
+      accountExist:
+        'The national ID you provided already exists in the system.',
+      saibACText:
+        'Please use your SAIB banking login credentials to access this application',
+      goBackToLogin: 'Go back to login',
     },
     auth: {
       title: 'Welcome to Travel App {{name}}',
@@ -107,6 +112,10 @@ export const translation = {
       applicationSubmitted:
         'تهانينا على إنشاء حسابك. ستتمكن الآن من تفعيل بطاقة السفر الخاصة بك',
       activeCard: 'تفعيل البطاقة',
+      accountExist: 'المعرّف القومي الذي قدمته موجود بالفعل في النظام.',
+      saibACText:
+        'يرجى استخدام بيانات اعتماد تسجيل الدخول الخاصة بك إلى الخدمات المصرفية الاستثمارية السعودية للوصول إلى هذا التطبيق',
+      goBackToLogin: 'ارجع إلى تسجيل الدخول',
     },
     auth: {
       title: '{{name}} مرحبًا بك في تطبيق السفر',

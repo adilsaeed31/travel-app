@@ -2,6 +2,7 @@ import React, {useContext, useEffect, useRef} from 'react'
 import {Animated, Easing} from 'react-native'
 import LottieView from 'lottie-react-native'
 import Splash from 'react-native-splash-screen'
+import {StackNavigationProp} from '@react-navigation/stack'
 
 import {splashAnimationJson} from '@Assets'
 import {AppContext, AppProviderProps} from '@Context'
@@ -9,11 +10,11 @@ import {getIntro} from '@Utils'
 import {useStore} from '@Store'
 
 type SplashScreenProps = {
-  navigation: any
+  navigation: StackNavigationProp<any>
 }
 
 const SplashScreen: React.FC<SplashScreenProps> = ({navigation}) => {
-  const {introHasBeenSeen} = useStore()
+  const introHasBeenSeen = useStore(state => state.introHasBeenSeen)
   const {hasIntroSeen, setAppReady} = useContext<AppProviderProps>(AppContext)
   const splashAnim = useRef(new Animated.Value(0)).current
 
