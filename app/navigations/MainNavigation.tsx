@@ -7,6 +7,7 @@ import {EvaIconsPack} from '@ui-kitten/eva-icons'
 import {ApplicationProvider, IconRegistry} from '@ui-kitten/components'
 
 import {AuthContext, AppContext} from '@Context'
+import {useStore} from '@Store'
 
 // Importing app and auth screen based on condition with lazy
 // to reduce the app loading size and enhance the performance
@@ -15,7 +16,7 @@ const AuthNavigator = lazy(() => import('./AuthNavigator'))
 const AppNavigator = lazy(() => import('./AppNavigator'))
 
 const MainNavigation = () => {
-  const {user} = useContext(AuthContext)
+  const user = useStore((state: any) => state.user) //useContext(AuthContext)
   const {mode, isAppReady} = useContext(AppContext)
 
   return (

@@ -11,7 +11,7 @@ const StyledView = styled(View)<any>`
   border: 1px solid
     ${props => {
       if (props.disabled) {
-        return '#f8d03b'
+        return '#E1E1E1'
       }
       if (props.varient === 'primary') {
         return '#f8d03b'
@@ -22,7 +22,7 @@ const StyledView = styled(View)<any>`
     }};
   background-color: ${props => {
     if (props.disabled) {
-      return '#f8d03b'
+      return '#E1E1E1'
     }
     if (props.varient === 'primary') {
       return '#f8d03b'

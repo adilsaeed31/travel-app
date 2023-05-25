@@ -18,12 +18,7 @@ import {
   UserNameValidator,
   passwordValidator,
 } from '@Utils'
-import {
-  Animated,
-  Dimensions,
-  Keyboard,
-  TouchableWithoutFeedback,
-} from 'react-native'
+import {Animated, Dimensions} from 'react-native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {fetcher} from '@Api'
 import {useQuery} from '@tanstack/react-query'
@@ -46,6 +41,8 @@ const AuthFeature = ({navigation}: Props) => {
   ).current
   const [userName, setUserName] = useState('')
   const [password, setPassword] = useState('')
+  const [isUserNameValid, setIsUserNameValid] = useState(false)
+  const [isPasswordValid, setIsPasswordValid] = useState(false)
 
   const bodyParams = {
     username: userName,
@@ -57,26 +54,28 @@ const AuthFeature = ({navigation}: Props) => {
     grant_type: 'password',
     version: '0.1',
   }
-
-  const networkHelper = fetcher(
-    `https://svs-studio-dev.apps.devsaibocp.saibnet2.saib.com/auth/login`,
-    {
-      method: 'POST',
-      body: bodyParams,
-    },
-  )
-
+  const url = `${BASE_URL}/auth/login`
   const {isFetching, data, refetch} = useQuery({
     // eslint-disable-next-line @tanstack/query/exhaustive-deps
     queryKey: ['Login'],
-    queryFn: () => networkHelper,
+    queryFn: () =>
+      fetcher(url, {
+        method: 'POST',
+        body: bodyParams,
+      }),
     refetchOnWindowFocus: false,
     enabled: false, // disable this query from automatically running
   })
 
   useEffect(() => {
     if (!isFetching && data) {
+      // alert(JSON.stringify(data))
+      if (data.type) {
+        useStore.getState().setUser(data)
+        navigation.navigate('OTPAuth')
+      }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, isFetching])
 
   const handleLogin = () => {
@@ -120,6 +119,7 @@ const AuthFeature = ({navigation}: Props) => {
               label={t('auth:userName')}
               schema={UserNameValidator}
               onChangeText={setUserName}
+              isValid={setIsUserNameValid}
             />
             <Spacer horizontal={false} size={SPACER_SIZES.XL} />
             <TCInput
@@ -128,6 +128,7 @@ const AuthFeature = ({navigation}: Props) => {
               isPassword
               schema={passwordValidator}
               onChangeText={setPassword}
+              isValid={setIsPasswordValid}
             />
             <Spacer horizontal={false} size={SPACER_SIZES.LG} />
             <ViewWrapper>
@@ -145,7 +146,9 @@ const AuthFeature = ({navigation}: Props) => {
           <Spacer horizontal={false} size={SPACER_SIZES.LG} />
 
           <ButtonContainer>
-            <TCButton disabled={isFetching} onPress={handleLogin}>
+            <TCButton
+              disabled={!isUserNameValid || !isPasswordValid}
+              onPress={handleLogin}>
               {t('auth:buttonLogin')}
             </TCButton>
           </ButtonContainer>
