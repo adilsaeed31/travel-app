@@ -1,10 +1,11 @@
+import {StateCreator} from 'zustand'
+
 // below is the example to set the multiple files state and store
-export type OnBoardingStoreProps = {
-  title: string
-  setTitle: () => void
+export type AuthStateProps = {
+  user: null | {}
 }
 
-export default (set: Function) => ({
+const AuthState: StateCreator<AuthStateProps> = set => ({
   user: null,
 
   setUser: (user: any) => {
@@ -13,3 +14,5 @@ export default (set: Function) => ({
     }))
   },
 })
+
+export default AuthState
