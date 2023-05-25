@@ -1,7 +1,8 @@
 import i18n from 'i18next'
+import {StateCreator} from 'zustand'
 
 // below is the example to set the multiple files state and store
-export type AppStoreProps = {
+export type AppStateProps = {
   language: string
   isRTL: boolean
   hasIntroSeen: boolean
@@ -9,7 +10,7 @@ export type AppStoreProps = {
   introHasBeenSeen: () => void
 }
 
-export default (set: any) => ({
+const AppState: StateCreator<AppStateProps> = set => ({
   language: 'en',
   isRTL: false,
   hasIntroSeen: false,
@@ -28,3 +29,5 @@ export default (set: any) => ({
     }))
   },
 })
+
+export default AppState

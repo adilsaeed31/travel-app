@@ -37,10 +37,10 @@ export const AppContext = createContext<AppProviderProps>({
  */
 
 export function AppProvider(props: AppProviderProps) {
-  const toggleLanguage = useStore(state => state.toggleLanguage)
-  const hasIntroSeen = useStore(state => state.hasIntroSeen)
-  const introHasBeenSeen = useStore(state => state.introHasBeenSeen)
   const isRTL = useStore(state => state.isRTL)
+  const hasIntroSeen = useStore(state => state.hasIntroSeen)
+  const toggleLanguage = useStore(state => state.toggleLanguage)
+  const introHasBeenSeen = useStore(state => state.introHasBeenSeen)
 
   const [language, setLanguage] = useState<string>('en')
   const [direction, setDirection] = useState<string>('ltr')
