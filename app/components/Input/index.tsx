@@ -82,14 +82,14 @@ const CustomInput: FC<CustomInputProps> = ({
   }
 
   const handleBlur = (): void => {
-    validateInput()
     setIsFocused(false)
+    validateInput(inputValue)
   }
 
-  const validateInput = (): void => {
+  const validateInput = (text: any): void => {
     try {
       if (schema) {
-        schema.validateSync(inputValue)
+        schema.validateSync(text)
         setError(null)
       }
     } catch (err: any) {
@@ -100,6 +100,7 @@ const CustomInput: FC<CustomInputProps> = ({
   const handleChangeText = (text: string): void => {
     onChangeText(text)
     setInputValue(text)
+    validateInput(text)
   }
 
   return (

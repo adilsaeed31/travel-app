@@ -4,6 +4,7 @@ export const GovtIdValidator = yup
   .string()
   .required('Please Enter a Value')
   .length(10, 'Please Enter 10 characters')
+  .matches(/^\d{10}$/, 'Please Enter Number only')
 
 export const MobileNumberValidator = yup
   .string()
@@ -28,3 +29,8 @@ export const UserNameValidator = yup
     /^(?=[a-zA-Z0-9._]{6,20}$)(?!.*[_.]{2})[^_.].*[^_.]$/,
     'Length 6-20, letters, digits, periods, underscores.',
   )
+
+export const TermsCheckvalidator = yup
+  .bool()
+  .required('Please check terms and consitions')
+  .oneOf([true], 'Please check terms and consitions')

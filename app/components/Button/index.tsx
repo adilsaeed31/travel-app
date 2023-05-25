@@ -10,20 +10,35 @@ const StyledView = styled(View)<any>`
   width: 100%;
   border: 1px solid
     ${props => {
-      if (props.disabled) return '#E1E1E1'
-      if (props.varient == 'primary') return '#f8d03b'
-      if (props.varient == 'transparent') return '#352D0F'
+      if (props.disabled) {
+        return '#f8d03b'
+      }
+      if (props.varient === 'primary') {
+        return '#f8d03b'
+      }
+      if (props.varient === 'transparent') {
+        return '#352D0F'
+      }
     }};
   background-color: ${props => {
-    if (props.disabled) return '#E1E1E1'
-    if (props.varient == 'primary') return '#f8d03b'
-    if (props.varient == 'transparent') return 'transpant'
+    if (props.disabled) {
+      return '#f8d03b'
+    }
+    if (props.varient === 'primary') {
+      return '#f8d03b'
+    }
+    if (props.varient === 'transparent') {
+      return 'transpant'
+    }
   }};
   min-height: 56px;
   border-top-left-radius: 24px;
   border-bottom-right-radius: 24px;
   border-bottom-left-radius: 0px;
   border-top-right-radius: 0px;
+  opacity: ${props => {
+    return props.disabled ? 0.7 : 1
+  }};
 `
 
 interface ButtonProps extends RippleProps {
@@ -32,6 +47,7 @@ interface ButtonProps extends RippleProps {
   onPress?: () => void
   className?: string
   varient?: string
+  disabled?: boolean
 }
 
 const TCButton: React.FC<ButtonProps> = ({
@@ -39,10 +55,18 @@ const TCButton: React.FC<ButtonProps> = ({
   onPress,
   RippleColor = 'white',
   varient = 'primary',
+  disabled = false,
   ...rest
 }) => {
-  return (
-    <Ripple onPress={onPress} rippleColor={RippleColor} {...rest}>
+  return disabled ? (
+    <StyledView isRTL={false} varient={varient} disabled={disabled} {...rest}>
+      <Text>{children}</Text>
+    </StyledView>
+  ) : (
+    <Ripple
+      onPress={disabled ? () => {} : onPress}
+      rippleColor={RippleColor}
+      {...rest}>
       <StyledView isRTL={false} varient={varient} {...rest}>
         <Text>{children}</Text>
       </StyledView>
