@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useRef, useEffect} from 'react'
 import {
   TextInput,
@@ -35,18 +36,17 @@ interface OtpInputProps {
 const otpMaxLength = 4
 
 const OtpEnter: React.FC<OtpInputProps> = ({
-  value = '',
   resetCount = 0,
   onTimerComplete = () => {},
   onChangeText = () => {},
 }) => {
-  const [otp, setOtp] = useState(value)
+  const [otp, setOtp] = useState<string>('')
 
   useEffect(() => {
     if (otp.length === 4 && onChangeText) {
       onChangeText(otp)
     }
-  }, [onChangeText, otp])
+  }, [otp])
 
   useEffect(() => {
     inputRefs.current[0].focus()
