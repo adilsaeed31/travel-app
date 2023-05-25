@@ -1,6 +1,7 @@
 export {default as ArrowLeft} from './ArrowLeft'
 export {default as Edit} from './Edit'
 export {default as Warning} from './Warning'
+export {default as WarningIcon} from './WarningIcon'
 export {default as Check} from './Check'
 export {default as CheckWarning} from './CheckWarning'
 export {default as Eye} from './Eye'
