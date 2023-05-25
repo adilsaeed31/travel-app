@@ -62,6 +62,8 @@ export const translation = {
       password: 'Password',
       buttonForget: 'Forgot Password?',
       newToSaib: 'New to SAIB? [Open Account]',
+      authFailed:
+        'Credentials you entered are incorrect. ? Check your login credentials and try again.',
     },
   },
   ar: {
@@ -124,6 +126,8 @@ export const translation = {
       password: 'كلمة المرور',
       buttonForget: 'زر نسيت',
       newToSaib: 'جديد في البنك السعودي للاستثمار؟ [حساب مفتوح]',
+      authFailed:
+        'أوراق الاعتماد التي أدخلتها غير صحيحة. ؟ تحقق من بيانات اعتماد تسجيل الدخول الخاصة بك وحاول مرة أخرى.',
     },
   },
 }

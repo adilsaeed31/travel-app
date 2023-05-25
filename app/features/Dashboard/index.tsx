@@ -9,6 +9,7 @@ const containerStyle = {
   flex: 1,
   paddingHorizontal: 20,
   paddingTop: 70,
+  justifyContent: 'center',
 }
 
 const buttonStyle = {
@@ -17,23 +18,13 @@ const buttonStyle = {
 }
 
 export default function DashboardFeature({navigation}: any) {
-  const {user} = useContext<AuthProviderProps>(AuthContext)
+  const setUser = useStore((state: any) => state.setUser)
 
   return (
     <Layout style={containerStyle}>
-      <Text style={{fontFamily: 'Co Text'}}>Dashboard Screen</Text>
-      <Text style={{fontFamily: 'Co Text'}}>
-        User Information Data: {JSON.stringify(user)}{' '}
-      </Text>
+      <Text style={{fontFamily: 'Co Text'}}>Welcome To Travel APP</Text>
 
-      <Button
-        style={buttonStyle}
-        onPress={
-          () => useStore.getState().setUser(null)
-          // navigation.navigate('Travel', {
-          //   screen: 'Home',
-          // })
-        }>
+      <Button style={buttonStyle} onPress={() => setUser(null)}>
         Back to Login
       </Button>
     </Layout>
