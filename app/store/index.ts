@@ -1,11 +1,11 @@
 import {create} from 'zustand'
 import {persist} from 'zustand/middleware'
 
-import AppStore, {AppStoreProps} from './app'
+import AppStore, {AppStateProps} from './app'
 import OnBoardingStore, {OnBoardingStoreProps} from './onboarding'
 import Auth from './Auth'
 
-export type RootStoreProps = AppStoreProps | OnBoardingStoreProps
+export type RootStoreProps = AppStateProps & OnBoardingStoreProps
 
 export const useStore = create(
   persist(
