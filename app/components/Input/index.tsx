@@ -98,6 +98,9 @@ const CustomInput: FC<CustomInputProps> = ({
   }
 
   const handleChangeText = (text: string): void => {
+    if (text.length >= 3) {
+      validateInput()
+    }
     onChangeText(text)
     setInputValue(text)
     validateInput(text)

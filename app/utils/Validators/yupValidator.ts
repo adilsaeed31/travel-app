@@ -19,15 +19,15 @@ export const passwordValidator = yup
   .required('Please Enter a Value')
   .matches(
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-    '8 characters including lowercase, uppercase, digit, and special character.',
+    'Invalid Format',
   )
 
 export const UserNameValidator = yup
   .string()
   .required('Please Enter a Value')
   .matches(
-    /^(?=[a-zA-Z0-9._]{6,20}$)(?!.*[_.]{2})[^_.].*[^_.]$/,
-    'Length 6-20, letters, digits, periods, underscores.',
+    /^(?=[a-zA-Z0-9._]{2,20}$)(?!.*[_.]{2})[^_.].*[^_.]$/,
+    'Invalid Format',
   )
 
 export const TermsCheckvalidator = yup
