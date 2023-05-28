@@ -23,7 +23,7 @@ const InputWrapper = styled(View)<{isError: boolean; isFocused: boolean}>`
   background: #f5f8f9;
   border-radius: 12px;
   margin-bottom: 8px;
-  border: 1px solid
+  border: 0.5px solid
     ${props =>
       props.isError
         ? '#F54D3F'
