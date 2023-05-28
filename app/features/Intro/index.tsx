@@ -95,122 +95,109 @@ const IntroFeature: React.FC = () => {
   }, [appStateVisible])
 
   return (
-    <>
-      <View className="absolute left-0 right-0 bottom-0 top-0">
-        <LottieView
-          loop={false}
-          autoPlay={false}
-          resizeMode="cover"
-          ref={nextAnimRef}
-          source={introAnimation}
-          onLayout={onLayoutRender}
-        />
+    <View className="flex-1">
+      <LottieView
+        loop={false}
+        autoPlay={false}
+        ref={nextAnimRef}
+        resizeMode="cover"
+        source={introAnimation}
+        onLayout={onLayoutRender}
+      />
 
-        <View className="flex-1 p-8 ios:pt-20">
-          <View
+      <View className="flex-1 p-8 ios:pt-20">
+        <View
+          className={cn(flexRowLayout(isRTL), 'justify-between items-center')}>
+          <Animated.View entering={EnterAnimationBounceInUp}>
+            <SaibLogo />
+          </Animated.View>
+
+          <Animated.View entering={EnterAnimationRight}>
+            <TouchableOpacity
+              className="p-4 justify-center items-center"
+              onPress={changeLanguage}>
+              <TCTextView className="text-tc-secondary font-tc-bold">
+                {t('onboarding:lang')}
+              </TCTextView>
+            </TouchableOpacity>
+          </Animated.View>
+        </View>
+
+        {currentValue === FirstSlideFrame && (
+          <Animated.View
+            entering={EnterAnimationRight}
+            className="flex-1 justify-end pb-20">
+            <TCTextView className="text-4xl text-tc-black">
+              {t('intro:future1')}
+            </TCTextView>
+            <TCTextView className="text-4xl text-tc-black font-tc-bold">
+              {t('intro:future2')}
+            </TCTextView>
+          </Animated.View>
+        )}
+
+        {currentValue === MiddleSlideFrame && (
+          <Animated.View
+            entering={EnterAnimationRight}
+            className="flex-1 justify-end pb-20">
+            <TCTextView className="text-4xl text-tc-black">
+              {t('intro:currency1')}
+            </TCTextView>
+            <TCTextView className="text-4xl text-tc-black font-tc-bold">
+              {t('intro:currency2')}
+            </TCTextView>
+          </Animated.View>
+        )}
+
+        {currentValue >= LastSlideFrame && (
+          <Animated.View
+            entering={EnterAnimationRight}
+            className="flex-1 justify-end pb-20">
+            <TCTextView className="text-4xl text-tc-black">
+              {t('intro:additional1')}
+            </TCTextView>
+            <TCTextView className="text-4xl text-tc-black font-tc-bold">
+              {t('intro:additional2')}
+            </TCTextView>
+          </Animated.View>
+        )}
+
+        <View
+          className={cn(flexRowLayout(isRTL), 'items-center justify-between')}>
+          <Animated.View
+            entering={EnterAnimationLeft}
             className={cn(
               flexRowLayout(isRTL),
-              'justify-between items-center',
+              'gap-2 items-center justify-center',
             )}>
-            <Animated.View entering={EnterAnimationBounceInUp}>
-              <SaibLogo />
-            </Animated.View>
+            <View className={cn(flexRowLayout(isRTL), 'gap-2')}>
+              <TCDot isActive={currentValue === FirstSlideFrame} />
 
-            <Animated.View entering={EnterAnimationRight}>
-              <TouchableOpacity
-                className="p-4 justify-center items-center"
-                onPress={changeLanguage}>
-                <TCTextView className="text-tc-secondary">
-                  {t('onboarding:lang')}
+              <TCDot isActive={currentValue === MiddleSlideFrame} />
+
+              <TCDot isActive={currentValue >= LastSlideFrame} />
+            </View>
+
+            {currentValue !== LastSlideFrame && (
+              <TouchableOpacity onPress={setAppReady}>
+                <TCTextView
+                  className={cn(m2(isRTL), 'text-base text-tc-secondary')}>
+                  {t('intro:skip')}
                 </TCTextView>
               </TouchableOpacity>
-            </Animated.View>
-          </View>
+            )}
+          </Animated.View>
 
-          {currentValue === FirstSlideFrame && (
-            <Animated.View
-              entering={EnterAnimationRight}
-              className="flex-1 justify-end pb-20">
-              <TCTextView className="text-4xl text-tc-black">
-                {t('intro:future1')}
-              </TCTextView>
-              <TCTextView className="text-4xl text-tc-black font-tc-bold">
-                {t('intro:future2')}
-              </TCTextView>
-            </Animated.View>
-          )}
-
-          {currentValue === MiddleSlideFrame && (
-            <Animated.View
-              entering={EnterAnimationRight}
-              className="flex-1 justify-end pb-20">
-              <TCTextView className="text-4xl text-tc-black">
-                {t('intro:currency1')}
-              </TCTextView>
-              <TCTextView className="text-4xl text-tc-black font-tc-bold">
-                {t('intro:currency2')}
-              </TCTextView>
-            </Animated.View>
-          )}
-
-          {currentValue >= LastSlideFrame && (
-            <Animated.View
-              entering={EnterAnimationRight}
-              className="flex-1 justify-end pb-20">
-              <TCTextView className="text-4xl text-tc-black">
-                {t('intro:additional1')}
-              </TCTextView>
-              <TCTextView className="text-4xl text-tc-black font-tc-bold">
-                {t('intro:additional2')}
-              </TCTextView>
-            </Animated.View>
-          )}
-
-          <View
-            className={cn(
-              flexRowLayout(isRTL),
-              'items-center justify-between',
-            )}>
-            <Animated.View
-              entering={EnterAnimationLeft}
-              className={cn(
-                flexRowLayout(isRTL),
-                'gap-2 items-center justify-center',
-              )}>
-              <View className={cn(flexRowLayout(isRTL), 'gap-2')}>
-                <TCDot isActive={currentValue === FirstSlideFrame} />
-
-                <TCDot isActive={currentValue === MiddleSlideFrame} />
-
-                <TCDot isActive={currentValue >= LastSlideFrame} />
-              </View>
-
-              {currentValue !== LastSlideFrame && (
-                <TouchableOpacity onPress={setAppReady}>
-                  <TCTextView
-                    className={cn(
-                      m2(isRTL),
-                      'text-base text-tc-secondary font-tc-bold font-bold',
-                    )}>
-                    {t('intro:skip')}
-                  </TCTextView>
-                </TouchableOpacity>
-              )}
-            </Animated.View>
-
-            <Animated.View entering={EnterAnimationRight}>
-              <TCButton
-                onPress={startNextAnimation}
-                className="font-tc-bold font-bold">
-                {currentValue >= LastSlideFrame
-                  ? (t('auth:buttonLogin') as string)
-                  : (t('intro:next') as string)}
-              </TCButton>
-            </Animated.View>
-          </View>
+          <Animated.View entering={EnterAnimationRight}>
+            <TCButton onPress={startNextAnimation} className="font-tc-bold">
+              {currentValue >= LastSlideFrame
+                ? (t('auth:buttonLogin') as string)
+                : (t('intro:next') as string)}
+            </TCButton>
+          </Animated.View>
         </View>
       </View>
-    </>
+    </View>
   )
 }
 
