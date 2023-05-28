@@ -4,12 +4,16 @@ import {Layout, Text, Button} from '@ui-kitten/components'
 
 import {AuthContext, AuthProviderProps} from '@Context'
 import {useStore} from '@Store'
+import {View} from 'react-native'
+import {Bg} from '@Assets'
+import {TCTextView} from '@Components'
 
 const containerStyle = {
   flex: 1,
   paddingHorizontal: 20,
   paddingTop: 70,
   justifyContent: 'center',
+  alginItems: 'center',
 }
 
 const buttonStyle = {
@@ -22,8 +26,8 @@ export default function DashboardFeature({navigation}: any) {
 
   return (
     <Layout style={containerStyle}>
-      <Text style={{fontFamily: 'Co Text'}}>Welcome To Travel APP</Text>
-
+      <Bg className="absolute" />
+      <TCTextView style={{alignSelf:'center'}}>Dashboard Under Development </TCTextView>
       <Button style={buttonStyle} onPress={() => setUser(null)}>
         Back to Login
       </Button>

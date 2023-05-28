@@ -17,6 +17,7 @@ module.exports = {
           '.jsx',
           '.js',
           '.json',
+          '.cer',
         ],
         alias: {
           '@App': './app',
