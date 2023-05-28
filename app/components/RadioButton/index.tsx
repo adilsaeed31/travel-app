@@ -43,10 +43,10 @@ const RadioButton = ({onPress, selected, children}: IRadioBUtton) => {
   const {isRTL} = useContext<AppProviderProps>(AppContext)
   return (
     <RadioWrapperStyle isRTL={!!isRTL}>
-      <BtnToogle isSelected={selected} onPress={onPress}>
+      <BtnToogle isSelected={selected} disabled={selected} onPress={onPress}>
         {selected ? <RadioButtonIcon /> : null}
       </BtnToogle>
-      <TouchableOpacity onPress={onPress}>
+      <TouchableOpacity disabled={selected} onPress={onPress}>
         <RadioLabel isSelected={selected} isRTL={!!isRTL}>
           {children}
         </RadioLabel>
