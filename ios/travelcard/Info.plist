@@ -42,15 +42,12 @@
 	<key>LSApplicationCategoryType</key>
 	<string></string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>UIAppFonts</key>
 	<array>
-		<string>cotext.otf</string>
-		<string>cotext_bold.otf</string>
-		<string>cotext_light.otf</string>
-		<string>cotext.ttf</string>
-		<string>cotext_bold.ttf</string>
-		<string>cotext_light.ttf</string>
+		<string>Co Text Bold.otf</string>
+		<string>Co Text Light.otf</string>
+		<string>Co Text.otf</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
