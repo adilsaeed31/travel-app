@@ -12,11 +12,11 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		21D40BDEB7AC42849D5E4DE1 /* Co Text Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 5226C14F3BE14E26AAAABB09 /* Co Text Light.otf */; };
+		60F7A334FBA046C9AAB1E411 /* Co Text Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 02015F28F08A4D82ACB1DC52 /* Co Text Bold.otf */; };
+		6E86DE629CF348E29EBFDEF0 /* Co Text.otf in Resources */ = {isa = PBXBuildFile; fileRef = FCAB6B6455B44099BB5CD7ED /* Co Text.otf */; };
 		7699B88040F8A987B510C191 /* libPods-travelcard-travelcardTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-travelcard-travelcardTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		60F7A334FBA046C9AAB1E411 /* Co Text Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 02015F28F08A4D82ACB1DC52 /* Co Text Bold.otf */; };
-		21D40BDEB7AC42849D5E4DE1 /* Co Text Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 5226C14F3BE14E26AAAABB09 /* Co Text Light.otf */; };
-		6E86DE629CF348E29EBFDEF0 /* Co Text.otf in Resources */ = {isa = PBXBuildFile; fileRef = FCAB6B6455B44099BB5CD7ED /* Co Text.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -33,6 +33,7 @@
 		00E356EE1AD99517003FC87E /* travelcardTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = travelcardTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* travelcardTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = travelcardTests.m; sourceTree = "<group>"; };
+		02015F28F08A4D82ACB1DC52 /* Co Text Bold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Co Text Bold.otf"; path = "../app/assets/fonts/Co Text Bold.otf"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* travelcard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = travelcard.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = travelcard/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = travelcard/AppDelegate.mm; sourceTree = "<group>"; };
@@ -41,15 +42,14 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = travelcard/main.m; sourceTree = "<group>"; };
 		19F6CBCC0A4E27FBF8BF4A61 /* libPods-travelcard-travelcardTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-travelcard-travelcardTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B4392A12AC88292D35C810B /* Pods-travelcard.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-travelcard.debug.xcconfig"; path = "Target Support Files/Pods-travelcard/Pods-travelcard.debug.xcconfig"; sourceTree = "<group>"; };
+		5226C14F3BE14E26AAAABB09 /* Co Text Light.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Co Text Light.otf"; path = "../app/assets/fonts/Co Text Light.otf"; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-travelcard.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-travelcard.release.xcconfig"; path = "Target Support Files/Pods-travelcard/Pods-travelcard.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-travelcard-travelcardTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-travelcard-travelcardTests.debug.xcconfig"; path = "Target Support Files/Pods-travelcard-travelcardTests/Pods-travelcard-travelcardTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-travelcard.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-travelcard.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = travelcard/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-travelcard-travelcardTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-travelcard-travelcardTests.release.xcconfig"; path = "Target Support Files/Pods-travelcard-travelcardTests/Pods-travelcard-travelcardTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		02015F28F08A4D82ACB1DC52 /* Co Text Bold.otf */ = {isa = PBXFileReference; name = "Co Text Bold.otf"; path = "../app/assets/fonts/Co Text Bold.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		5226C14F3BE14E26AAAABB09 /* Co Text Light.otf */ = {isa = PBXFileReference; name = "Co Text Light.otf"; path = "../app/assets/fonts/Co Text Light.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		FCAB6B6455B44099BB5CD7ED /* Co Text.otf */ = {isa = PBXFileReference; name = "Co Text.otf"; path = "../app/assets/fonts/Co Text.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		FCAB6B6455B44099BB5CD7ED /* Co Text.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Co Text.otf"; path = "../app/assets/fonts/Co Text.otf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */

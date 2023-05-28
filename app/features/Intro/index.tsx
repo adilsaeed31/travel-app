@@ -190,7 +190,7 @@ const IntroFeature: React.FC = () => {
                   <TCTextView
                     className={cn(
                       m2(isRTL),
-                      'text-base text-tc-secondary font-tc-bold',
+                      'text-base text-tc-secondary font-tc-bold font-bold',
                     )}>
                     {t('intro:skip')}
                   </TCTextView>
@@ -199,7 +199,9 @@ const IntroFeature: React.FC = () => {
             </Animated.View>
 
             <Animated.View entering={EnterAnimationRight}>
-              <TCButton onPress={startNextAnimation} className="font-tc-bold">
+              <TCButton
+                onPress={startNextAnimation}
+                className="font-tc-bold font-bold">
                 {currentValue >= LastSlideFrame
                   ? (t('auth:buttonLogin') as string)
                   : (t('intro:next') as string)}

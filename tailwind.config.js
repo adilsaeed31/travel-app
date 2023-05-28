@@ -7,7 +7,7 @@ module.exports = {
       fontFamily: {
         'tc-light': ['Co Text Light'],
         'tc-regular': ['Co Text'],
-        'tc-bold': ['Co Text'],
+        'tc-bold': ['Co Text Bold'],
       },
       bg: {
         tc: {
