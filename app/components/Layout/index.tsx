@@ -11,6 +11,7 @@ import {
 } from 'react-native'
 import styled from 'styled-components/native'
 import {useSafeAreaInsets} from 'react-native-safe-area-context'
+import {ActivityIndicator} from 'react-native'
 
 import Header from './Header'
 import {Background1, Background2} from '@Assets'
@@ -26,6 +27,7 @@ type LayoutProps = {
   className?: string
   backgroundIndex?: Number
   isScrollable?: boolean
+  isLoading?: boolean
   onScroll?: () => void
   hasBack?: boolean
 }
@@ -56,6 +58,20 @@ const ContentWrapper = styled(View)`
   flex: 1;
 `
 
+const Loader = styled(View)`
+  flex: 1;
+  background-color: rgba(0, 0, 0, 0.3);
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+
 const AppLayout: React.FC<LayoutProps> = ({
   isHeader = true,
   isBack = false,
@@ -63,6 +79,7 @@ const AppLayout: React.FC<LayoutProps> = ({
   isBackground = true,
   className = '',
   isScrollable = true,
+  isLoading = false,
   onScroll = () => {},
   onBack = () => {},
   children,
@@ -83,6 +100,11 @@ const AppLayout: React.FC<LayoutProps> = ({
         onScroll={onScroll}>
         <TouchableOpacity onPress={Keyboard.dismiss} activeOpacity={1}>
           <Container className={className} {...rest}>
+            {isLoading ? (
+              <Loader>
+                <ActivityIndicator size="large" color="#F8D03B" />
+              </Loader>
+            ) : null}
             {isBackground && (
               <>
                 {backgroundIndex === 1 ? (

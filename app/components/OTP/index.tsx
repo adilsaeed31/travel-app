@@ -36,11 +36,12 @@ interface OtpInputProps {
 const otpMaxLength = 4
 
 const OtpEnter: React.FC<OtpInputProps> = ({
+  value = '',
   resetCount = 0,
   onTimerComplete = () => {},
   onChangeText = () => {},
 }) => {
-  const [otp, setOtp] = useState<string>('')
+  const [otp, setOtp] = useState<string>(value)
 
   useEffect(() => {
     if (otp.length === 4 && onChangeText) {
@@ -55,6 +56,7 @@ const OtpEnter: React.FC<OtpInputProps> = ({
   const inputRefs = useRef<TextInput[]>([])
 
   const handleTextChange = (index: number, text: string) => {
+    console.log(text)
     let newOtp = otp.slice(0, index) + text + otp.slice(index)
     setOtp(newOtp)
 
@@ -101,7 +103,7 @@ const OtpEnter: React.FC<OtpInputProps> = ({
         ))}
       </OtpContainer>
       <Timer
-        seconds={10}
+        seconds={120}
         onTimerComplete={onTimerComplete}
         resetCount={resetCount}
       />

@@ -158,9 +158,13 @@ const Terms = () => {
 
 interface AlreadyAccountProps {
   isKeyboardVisible: boolean
+  navigation: StackNavigationProp<{OtpPersonalId: undefined; Auth: undefined}>
 }
 
-const AlreadyAccount = ({isKeyboardVisible}: AlreadyAccountProps) => {
+const AlreadyAccount = ({
+  isKeyboardVisible,
+  navigation,
+}: AlreadyAccountProps) => {
   const {t} = useTranslation()
   const {isRTL} = useContext<AppProviderProps>(AppContext)
   return (
@@ -168,7 +172,10 @@ const AlreadyAccount = ({isKeyboardVisible}: AlreadyAccountProps) => {
       <TermText variant={TEXT_VARIANTS.caption}>
         {t('onboarding:alreadyAccount')}
       </TermText>
-      <TouchableOpacity onPress={() => {}}>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate('Auth')
+        }}>
         <LoginText variant={TEXT_VARIANTS.caption}>
           {t('onboarding:login')}
         </LoginText>
@@ -178,7 +185,7 @@ const AlreadyAccount = ({isKeyboardVisible}: AlreadyAccountProps) => {
 }
 
 type Props = {
-  navigation: StackNavigationProp<{OtpPersonalId: undefined}>
+  navigation: StackNavigationProp<{OtpPersonalId: undefined; Auth: undefined}>
 }
 
 const PersonalIdScreen = ({navigation}: Props) => {
@@ -186,7 +193,10 @@ const PersonalIdScreen = ({navigation}: Props) => {
   const [isKeyboardVisible, setKeyboardVisible] = useState<boolean>(false)
   const [keyboardHeight, setKeyboardHeight] = useState<Number>(0)
   const {isRTL} = useContext<AppProviderProps>(AppContext)
-  const [state, setState] = useState<any>({})
+  const [state, setState] = useState<any>({
+    // mobileNumber: '0567113534',
+    // govtId: '2545312932',
+  })
   const [isButtonDisabled, setButtonDisabled] = useState(true)
   const [termsError, setTermsError] = useState<any>(false)
   const setOnboardingDetails = useStore(
@@ -251,10 +261,6 @@ const PersonalIdScreen = ({navigation}: Props) => {
     mutate()
   }
 
-  if (isLoading) {
-    console.log('======', isLoading)
-  }
-
   if (data && data.referenceNumber) {
     setOnboardingDetails(state.mobileNumber, state.govtId, data.referenceNumber)
     navigation.navigate('OtpPersonalId')
@@ -262,7 +268,7 @@ const PersonalIdScreen = ({navigation}: Props) => {
 
   return (
     <>
-      <Layout>
+      <Layout isLoading={isLoading}>
         <Spacer horizontal={false} size={SPACER_SIZES.BASE * 3} />
         <Text variant={TEXT_VARIANTS.heading}>
           {t('onboarding:openAccount')}
@@ -274,6 +280,7 @@ const PersonalIdScreen = ({navigation}: Props) => {
           onChangeText={text => {
             setState({...state, govtId: text})
           }}
+          value={state.govtId}
         />
         <Spacer horizontal={false} size={SPACER_SIZES.BASE * 4} />
         <Input
@@ -282,6 +289,7 @@ const PersonalIdScreen = ({navigation}: Props) => {
           onChangeText={text => {
             setState({...state, mobileNumber: text})
           }}
+          value={state.mobileNumber}
         />
 
         <DisclaimerView isKeyboardVisible={isKeyboardVisible} isRTL={isRTL}>
@@ -317,7 +325,10 @@ const PersonalIdScreen = ({navigation}: Props) => {
             </StyledButton>
           </ButtonContainer>
         )}
-        <AlreadyAccount isKeyboardVisible={isKeyboardVisible} />
+        <AlreadyAccount
+          isKeyboardVisible={isKeyboardVisible}
+          navigation={navigation}
+        />
       </Layout>
       {isKeyboardVisible && (
         <StickyButtonContainer keyboardHeight={keyboardHeight}>
