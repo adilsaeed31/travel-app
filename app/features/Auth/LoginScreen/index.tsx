@@ -157,9 +157,6 @@ const AuthFeature = ({navigation}: Props) => {
           </LoginForm>
           <Spacer horizontal={false} size={SPACER_SIZES.LG} />
 
-          {!isAuthFailed && (
-            <Spacer horizontal={false} size={SPACER_SIZES.XXXLL} />
-          )}
           {isAuthFailed && (
             <ForgetPassWrapper>
               <ForgetPassLabel>{t('auth:authFailed')}</ForgetPassLabel>

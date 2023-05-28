@@ -12,15 +12,12 @@ interface LinkProps extends TouchableOpacityProps {
 }
 
 const LinkText = styled(Text)<any>`
-  width: 129px;
-  height: 24px;
   font-family: 'Co Text';
   font-weight: 300;
   font-size: 15px;
   line-height: 24px;
   /* identical to box height, or 160% */
 
-  display: flex;
   align-items: center;
   text-align: right;
   letter-spacing: -0.4px;
