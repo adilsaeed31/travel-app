@@ -9,14 +9,13 @@ import {
   Dimensions,
 } from 'react-native'
 import {useTranslation} from 'react-i18next'
-import {TCInput} from '@Components'
 import {
   Layout,
   TCButton as Button,
   TCTextView as Text,
-  BottomSheet,
   RadioButton,
-  DropDownButton,
+  DropDown,
+  TCInput,
 } from '@Components'
 import {
   TEXT_VARIANTS,
@@ -45,14 +44,15 @@ const FormValues = {
   relation: '',
   mobileNumber: '',
 }
+
 function PrsonalInformation() {
   const [showAdditionalInformation, setShowAdditionalInformation] =
     React.useState(false)
-  const [currentOpendIndx, setCurrentOpenedInx] = React.useState(0)
+  const [currentOpendIndx, setCurrentOpenedInx] = React.useState(-1)
   const [sheetOpen, setSheetOpen] = React.useState(false)
   const {isRTL} = useContext<AppProviderProps>(AppContext)
   const {t} = useTranslation()
-  const [searchVaue, setSearchValue] = useState('')
+  const [searchVaue, setSearchValue] = useState('') // TODO
   const [values, setValues] = useState<{
     city: string | null
     education: string | null
@@ -80,28 +80,26 @@ function PrsonalInformation() {
   const sheetData = React.useMemo(
     () => [
       {
-        title: t('personalInformation:education'),
-        subtitle: t('personalInformation:education'),
         data: isRTL ? EducationalistAr : Educationalist,
       },
       {
-        title: t('personalInformation:countryOfBirth'),
-        subtitle: t('personalInformation:countryOfBirth'),
         data: isRTL
           ? CounryListAr.map(c => c.name)
           : CounryListEN.map(c => c.name),
       },
       {
-        title: t('personalInformation:city'),
-        subtitle: t('personalInformation:city'),
         data: SaudiCities.map(c => c[isRTL ? 'name_ar' : 'name_en']),
       },
     ],
     [isRTL],
   )
+
   const SearchResult = searchVaue
-    ? sheetData[currentOpendIndx].data.filter(word => word.includes(searchVaue))
-    : sheetData[currentOpendIndx].data
+    ? sheetData[currentOpendIndx]?.data?.filter(word =>
+        word?.includes(searchVaue),
+      )
+    : sheetData[currentOpendIndx]?.data
+
   const ToggleSheet = (indx: number) => {
     setSheetOpen(!sheetOpen)
     setCurrentOpenedInx(indx)
@@ -127,9 +125,10 @@ function PrsonalInformation() {
             keyExtractor={(_item, i) => String(i)}
             renderItem={({item, index}) => (
               <ClickableItem
-                hasBorder={SearchResult.map(c => c.name).length - 1 !== index}
+                hasBorder={SearchResult.length - 1 !== index}
                 onPress={() => {
                   setSheetOpen(false)
+                  setCurrentOpenedInx(-1)
                   let newValue = {...values}
                   newValue[
                     currentOpendIndx == 0
@@ -177,46 +176,47 @@ function PrsonalInformation() {
   }
   return (
     <>
-      <BottomSheet
-        onItemSelect={(_item: string) => {
-          setSheetOpen(false)
-        }}
-        hasSearch
-        searchValue={searchVaue}
-        onSearchChange={e => setSearchValue(e)}
-        renderConten={<RenderSearchListContent />}
-        isOpen={sheetOpen}
-        onBackDropPressed={() => setSheetOpen(false)}
-        onCloseEnd={() => setSheetOpen(false)}
-        title={sheetData[currentOpendIndx].title}
-        subTitle={sheetData[currentOpendIndx].subtitle}
-        data={sheetData[currentOpendIndx].data}
-      />
       <Layout hasBack isHeader={false} isBackground={true}>
         <SafeAreaWrapper>
           <FormWrapper isRTL={!!isRTL}>
             <Header isRTL={!!isRTL}>
-              {t('personalInformation:personalInformation')}
+              {t('onboarding:personalInformation:personalInformation')}
             </Header>
-            <DropDownButton
-              label={t('personalInformation:education') || ''}
+            <DropDown
+              label={t('onboarding:personalInformation:education') || ''}
               toogleClick={() => ToggleSheet(0)}
               value={values.education}
               error={errors.education}
+              isOpen={currentOpendIndx == 0}
+              title={t('onboarding:personalInformation:education')}
+              subTitle={t('onboarding:personalInformation:education')}
+              renderConten={<RenderSearchListContent />}
+              onSheetClose={() => setCurrentOpenedInx(-1)}
+              hasSearch
+              onSearchChange={search => setSearchValue(search)}
             />
             <Spacer />
-            <DropDownButton
+            <DropDown
               toogleClick={() => {
                 ToggleSheet(1)
                 setValues({...values, city: null})
               }}
-              label={t('personalInformation:countryOfBirth') || ''}
+              label={t('onboarding:personalInformation:countryOfBirth') || ''}
               value={values.countryOfBirth}
               error={errors.countryOfBirth}
+              title={t('onboarding:personalInformation:countryOfBirth')}
+              subTitle={
+                t('onboarding:personalInformation:countryOfBirth') || ''
+              }
+              isOpen={currentOpendIndx == 1}
+              renderConten={<RenderSearchListContent />}
+              onSheetClose={() => setCurrentOpenedInx(-1)}
+              hasSearch
+              onSearchChange={search => setSearchValue(search)}
             />
             <Spacer />
             {IsSaudi ? (
-              <DropDownButton
+              <DropDown
                 disabled={!values.countryOfBirth}
                 toogleClick={() => {
                   if (!values.countryOfBirth) {
@@ -224,9 +224,16 @@ function PrsonalInformation() {
                   }
                   ToggleSheet(2)
                 }}
-                label={t('personalInformation:city') || ''}
+                label={t('onboarding:personalInformation:city') || ''}
                 value={values.city}
                 error={errors.city}
+                title={t('onboarding:personalInformation:city')}
+                subTitle={t('onboarding:personalInformation:city')}
+                isOpen={currentOpendIndx == 2}
+                renderConten={<RenderSearchListContent />}
+                onSheetClose={() => setCurrentOpenedInx(-1)}
+                hasSearch
+                onSearchChange={search => setSearchValue(search)}
               />
             ) : (
               <LoginForm>
@@ -235,7 +242,7 @@ function PrsonalInformation() {
                   onChangeText={val =>
                     val && setValues({...values, buldingNumber: val})
                   }
-                  label={t('personalInformation:buldingNumber')}
+                  label={t('onboarding:personalInformation:buldingNumber')}
                   errorMessage={errors.buldingNumber}
                 />
                 <InputSpacer />
@@ -244,7 +251,7 @@ function PrsonalInformation() {
                   onChangeText={val =>
                     val && setValues({...values, streetNanme: val})
                   }
-                  label={t('personalInformation:streetNanme')}
+                  label={t('onboarding:personalInformation:streetNanme')}
                   errorMessage={errors.streetNanme}
                 />
                 <InputSpacer />
@@ -253,7 +260,7 @@ function PrsonalInformation() {
                   onChangeText={val =>
                     val && setValues({...values, district: val})
                   }
-                  label={t('personalInformation:district')}
+                  label={t('onboarding:personalInformation:district')}
                   errorMessage={errors.district}
                 />
                 <InputSpacer />
@@ -262,7 +269,7 @@ function PrsonalInformation() {
                   onChangeText={val =>
                     val && setValues({...values, poBox: val})
                   }
-                  label={t('personalInformation:poBox')}
+                  label={t('onboarding:personalInformation:poBox')}
                   errorMessage={errors.poBox}
                 />
                 <InputSpacer />
@@ -271,14 +278,14 @@ function PrsonalInformation() {
                   onChangeText={val =>
                     val && setValues({...values, postalCode: val})
                   }
-                  label={t('personalInformation:postalCode')}
+                  label={t('onboarding:personalInformation:postalCode')}
                   errorMessage={errors.postalCode}
                 />
                 <InputSpacer />
                 <TCInput
                   value={values.city}
                   onChangeText={val => val && setValues({...values, city: val})}
-                  label={t('personalInformation:city')}
+                  label={t('onboarding:personalInformation:city')}
                   errorMessage={errors.city}
                 />
                 <InputSpacer />
@@ -287,7 +294,7 @@ function PrsonalInformation() {
                   onChangeText={val =>
                     val && setValues({...values, phoneNumber: val})
                   }
-                  label={t('personalInformation:phoneNumber')}
+                  label={t('onboarding:personalInformation:phoneNumber')}
                   errorMessage={errors.phoneNumber}
                 />
                 <InputSpacer />
@@ -295,10 +302,10 @@ function PrsonalInformation() {
             )}
             <Spacer />
             <AdditionalInformation>
-              {t('personalInformation:additionalPerson')}
+              {t('onboarding:personalInformation:additionalPerson')}
             </AdditionalInformation>
             <AdditionalInformation>
-              {t('personalInformation:additionalPersonSecond')}
+              {t('onboarding:personalInformation:additionalPersonSecond')}
             </AdditionalInformation>
             <Spacer />
             <RadioWrapper isRTL={!!isRTL}>
@@ -307,14 +314,14 @@ function PrsonalInformation() {
                 onPress={() =>
                   setShowAdditionalInformation(!showAdditionalInformation)
                 }>
-                {t('personalInformation:no')}
+                {t('onboarding:personalInformation:no')}
               </RadioButton>
               <RadioButton
                 selected={showAdditionalInformation}
                 onPress={() =>
                   setShowAdditionalInformation(!showAdditionalInformation)
                 }>
-                {t('personalInformation:yes')}
+                {t('onboarding:personalInformation:yes')}
               </RadioButton>
             </RadioWrapper>
             <Spacer />
@@ -325,7 +332,9 @@ function PrsonalInformation() {
                   onChangeText={val =>
                     val && setValues({...values, contactName: val})
                   }
-                  label={t('personalInformation:addetionalContactNanme')}
+                  label={t(
+                    'onboarding:personalInformation:addetionalContactNanme',
+                  )}
                   errorMessage={errors.contactName}
                 />
                 <Spacer />
@@ -334,7 +343,7 @@ function PrsonalInformation() {
                   onChangeText={val =>
                     val && setValues({...values, relation: val})
                   }
-                  label={t('personalInformation:relation')}
+                  label={t('onboarding:personalInformation:relation')}
                   errorMessage={errors.relation}
                 />
                 <Spacer />
@@ -343,7 +352,7 @@ function PrsonalInformation() {
                   onChangeText={val =>
                     val && setValues({...values, phoneNumber: val})
                   }
-                  label={t('personalInformation:mobileNumber')}
+                  label={t('onboarding:personalInformation:mobileNumber')}
                   errorMessage={errors.phoneNumber}
                 />
                 <Spacer />
@@ -352,7 +361,7 @@ function PrsonalInformation() {
           </FormWrapper>
           <StyledButton onPress={HandleContinuePressed}>
             <Text variant={TEXT_VARIANTS.body700}>
-              {t('personalInformation:continue')}
+              {t('onboarding:personalInformation:continue')}
             </Text>
           </StyledButton>
         </SafeAreaWrapper>

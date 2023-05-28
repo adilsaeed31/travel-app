@@ -10,8 +10,5 @@ export {default as Spacer} from './Spacer'
 export {default as TCCheckbox} from './Checkbox'
 export {default as TCOTP} from './OTP'
 export {default as TCDot} from './Dot'
-
-export {default as BottomSheet} from './BottomSheet'
-
 export {default as RadioButton} from './RadioButton'
-export {default as DropDownButton} from './DropDownButton'
+export {default as DropDown} from './DropDown'
