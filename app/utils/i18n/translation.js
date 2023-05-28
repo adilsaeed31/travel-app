@@ -58,6 +58,9 @@ export const translation = {
       saibACText:
         'Please use your SAIB banking login credentials to access this application',
       goBackToLogin: 'Go back to login',
+      selectCode:
+        'Please log in to Nafath application and select the code corresponding to this code and click Continue on this page',
+      authCode: 'Authentication code',
       personalInformation: {
         education: 'Education',
         countryOfBirth: 'Country of Birth',
@@ -146,6 +149,9 @@ export const translation = {
       saibACText:
         'يرجى استخدام بيانات اعتماد تسجيل الدخول الخاصة بك إلى الخدمات المصرفية الاستثمارية السعودية للوصول إلى هذا التطبيق',
       goBackToLogin: 'ارجع إلى تسجيل الدخول',
+      selectCode:
+        'يرجى تسجيل الدخول إلى تطبيق Nafath وتحديد الرمز المقابل لهذا الرمز والنقر فوق متابعة في هذه الصفحة',
+      authCode: 'رمز الدخول',
       personalInformation: {
         education: 'التعليم',
         countryOfBirth: 'مكان الميلاد',

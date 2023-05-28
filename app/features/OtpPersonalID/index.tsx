@@ -93,6 +93,7 @@ const OtpPersonalIdScreen = ({navigation}: Props) => {
     isLoading: isOTPLoading,
     data: otpData,
     mutate: verifyOtp,
+    reset: resetOTP,
   } = useMutation({
     mutationFn: async () => {
       let req: any = await fetcher(BASE_URL + '/auth/otp/verify', {
@@ -110,6 +111,7 @@ const OtpPersonalIdScreen = ({navigation}: Props) => {
     isLoading: isTahaquqLoading,
     data: tahaquqData,
     mutate: verifyTahaquq,
+    reset: resetTahaquq,
   } = useMutation({
     mutationFn: async () => {
       let req: any = await fetcher(BASE_URL + '/onboarding/id/verify', {
@@ -177,10 +179,6 @@ const OtpPersonalIdScreen = ({navigation}: Props) => {
     verifyOtp()
   }
 
-  if (isOTPLoading || isTahaquqLoading) {
-    console.log('======', isOTPLoading || isTahaquqLoading)
-  }
-
   if (otpData && otpData.access_token && !isTahaquqLoading && !tahaquqData) {
     // const expiresIn = otpData.expires_in
     // const access_token = data.access_token
@@ -190,17 +188,21 @@ const OtpPersonalIdScreen = ({navigation}: Props) => {
     verifyTahaquq()
   }
 
-  if (tahaquqData && tahaquqData.existing === false && tahaquqData.match) {
+  if (state.otp && tahaquqData && tahaquqData.match) {
+    resetOTP()
+    resetTahaquq()
     navigation.navigate('RedirectNafaaq')
-  } else {
-    if (tahaquqData) {
-      navigation.navigate('AfterOtpPersonalId')
-    }
+  }
+
+  if (state.otp && tahaquqData && !tahaquqData.match) {
+    resetOTP()
+    resetTahaquq()
+    navigation.navigate('AfterOtpPersonalId')
   }
 
   return (
     <>
-      <Layout>
+      <Layout isLoading={isOTPLoading || isTahaquqLoading}>
         <Spacer horizontal={false} size={SPACER_SIZES.BASE * 3} />
         <Text variant={TEXT_VARIANTS.heading}>{t('onboarding:enterOTP')}</Text>
         <Spacer size={SPACER_SIZES.BASE * 3} />

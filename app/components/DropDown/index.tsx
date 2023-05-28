@@ -11,7 +11,7 @@ import styled from 'styled-components/native'
 import {AppContext, AppProviderProps} from '@Context'
 import {Forward} from '@Assets'
 import {TEXT_VARIANTS} from '@Utils'
-import {TCTextView} from '@Components'
+import TCTextView from '../TextView'
 import BottomSheet from 'reanimated-bottom-sheet'
 import {Setting, Search} from '@Assets'
 

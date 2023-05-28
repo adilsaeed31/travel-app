@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, Dimensions} from 'react-native'
+import {View, Dimensions, Linking, Platform} from 'react-native'
 import {useTranslation} from 'react-i18next'
 import {
   Layout,
@@ -56,8 +56,18 @@ type Props = {
 
 const PersonalIdScreen = ({navigation}: Props) => {
   const {t} = useTranslation()
-  const onComplete = () => {
-    navigation.navigate('AfterInformation')
+
+  const onRedirectApp = () => {
+    let URL =
+      Platform.OS == 'ios'
+        ? 'nafath://request'
+        : 'saf.sa.gov.nic.myid://request'
+
+    Linking.openURL(URL)
+  }
+
+  const onRedirectWeb = () => {
+    Linking.openURL('https://www.iam.gov.sa/authservice//userauthservice')
   }
 
   return (
@@ -88,14 +98,14 @@ const PersonalIdScreen = ({navigation}: Props) => {
         <Spacer horizontal={false} size={SPACER_SIZES.BASE * 1} />
         <Body variant={TEXT_VARIANTS.label}>{t('onboarding:tryAgain')}</Body>
         <ButtonContainer>
-          <Button onPress={onComplete}>
+          <Button onPress={onRedirectApp}>
             <Text variant={TEXT_VARIANTS.body}>
               {t('onboarding:nafathByApp')}
             </Text>
           </Button>
         </ButtonContainer>
         <ButtonContainerSecond>
-          <Button onPress={onComplete} varient="transparent">
+          <Button onPress={onRedirectWeb} varient="transparent">
             <Text variant={TEXT_VARIANTS.body}>
               {t('onboarding:nafathByWeb')}
             </Text>
