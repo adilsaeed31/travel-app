@@ -15,11 +15,7 @@ const SplashNavigator = () => {
         animationEnabled: false,
       }}>
       <Screen name="Splash" component={SplashScreen} />
-      <Screen
-        name="Intro"
-        options={{animationEnabled: false}}
-        component={IntroFeature}
-      />
+      <Screen name="Intro" component={IntroFeature} />
     </Navigator>
   )
 }

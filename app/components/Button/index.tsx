@@ -1,7 +1,9 @@
 import React from 'react'
-import {View, Text} from 'react-native'
+import {View} from 'react-native'
 import {styled} from 'styled-components/native'
 import Ripple, {RippleProps} from 'react-native-material-ripple'
+
+import Text from '../TextView'
 
 const StyledView = styled(View)<any>`
   flex-direction: row;
