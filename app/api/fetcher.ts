@@ -1,4 +1,4 @@
-import SSLPinning, {fetch} from 'react-native-ssl-pinning'
+import {fetch} from 'react-native-ssl-pinning'
 
 export type FetcherRequestProps = {
   method?: string
@@ -6,7 +6,6 @@ export type FetcherRequestProps = {
   headers?: {}
   token?: string
 }
-const sslcert = `qtyMan4AoYCBBQA64slXPrFvG5SWJqWM2f67dgy5zis=`
 
 export const fetcher = async (
   url: string,
