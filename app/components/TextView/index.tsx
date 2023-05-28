@@ -1,12 +1,12 @@
 import React from 'react'
-import {Text} from '@ui-kitten/components'
+import {Text} from 'react-native'
 import {styled} from 'styled-components/native'
 import {useStore} from '@Store'
 
-const StyledTextView = styled(Text)<any>`
+const StyledTextView = styled(Text)<{isRTL: boolean; variant: string}>`
   text-align: ${({isRTL}) => (isRTL ? 'right' : 'left')};
   font-family: 'Co Text';
-  ${props => props.variant}
+  ${({variant}) => variant};
 `
 
 function TCTextView({

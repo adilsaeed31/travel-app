@@ -12,26 +12,26 @@ interface IRadioBUtton {
 
 const RadioLabel = styled(Text)<{isRTL: boolean; isSelected: boolean}>`
   color: ${props => (props.isSelected ? Colors.back : Colors.Armadillo)};
-  font-size: ${props => (props.isSelected ? '16' : '16')};
-  margin-left: ${props => (props.isRTL ? '0' : '12')};
-  margin-right: ${props => (props.isRTL ? '12' : '0')};
+  font-size: ${props => (props.isSelected ? '16' : '16')}px;
+  margin-left: ${props => (props.isRTL ? '0' : '12')}px;
+  margin-right: ${props => (props.isRTL ? '12' : '0')}px;
   font-weight: 400;
 `
 const RadioWrapperStyle = styled(View)<{isRTL: boolean}>`
   flex-direction: ${props => (props.isRTL ? 'row-reverse' : 'row')};
   align-items: center;
-  margin-bottom: 5;
-  margin-right: 20;
+  margin-bottom: 5px;
+  margin-right: 20px;
 `
 const RadioButtonIcon = styled(View)`
-  height: 16;
-  width: 16;
+  height: 16px;
+  width: 16px;
   border-radius: 8px;
   background-color: ${Colors.Supernova};
 `
 const BtnToogle = styled(TouchableOpacity)<{isSelected: boolean}>`
-  height: 24;
-  width: 24;
+  height: 24px;
+  width: 24px;
   background-color: ${Colors.Alabaster};
   border-width: 2px;
   border-radius: 12px;

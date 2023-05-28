@@ -5,7 +5,9 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        'tc-primary': ["'Co Text'"],
+        'tc-light': ['Co Text Light'],
+        'tc-regular': ['Co Text'],
+        'tc-bold': ['Co Text Bold'],
       },
       bg: {
         tc: {

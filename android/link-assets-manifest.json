@@ -2,28 +2,16 @@
   "migIndex": 1,
   "data": [
     {
-      "path": "app/assets/fonts/cotext.otf",
-      "sha1": "d683e77b945ddf0acdb7c2dda59c3d6a25969f3b"
-    },
-    {
-      "path": "app/assets/fonts/cotext.ttf",
-      "sha1": "636c8729b11a6f514f739179565896b7758df5bd"
-    },
-    {
-      "path": "app/assets/fonts/cotext_bold.otf",
+      "path": "app/assets/fonts/Co Text Bold.otf",
       "sha1": "32ff903e8701e9a72300618b09aa576b1f663ab3"
     },
     {
-      "path": "app/assets/fonts/cotext_bold.ttf",
-      "sha1": "86d8868959515b2661e4b7280dd4888cdf4ce8ec"
-    },
-    {
-      "path": "app/assets/fonts/cotext_light.otf",
+      "path": "app/assets/fonts/Co Text Light.otf",
       "sha1": "3b5dde18d4b3e168b32b0869eb0459f02f7b5994"
     },
     {
-      "path": "app/assets/fonts/cotext_light.ttf",
-      "sha1": "133ff21f1c79847ede480b878cd4e4b5d967c86d"
+      "path": "app/assets/fonts/Co Text.otf",
+      "sha1": "d683e77b945ddf0acdb7c2dda59c3d6a25969f3b"
     }
   ]
 }
