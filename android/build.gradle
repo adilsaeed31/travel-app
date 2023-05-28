@@ -11,27 +11,29 @@ buildscript {
         ndkVersion = "23.1.7779620"
     }
     repositories {
-       google {
-          url "https://nexus-dev.saibnet2.saib.com/repository/google-maven/"
-          credentials {
-            username System.getenv("MAVEN_USER")
-            password System.getenv("MAVEN_PASS")
-          }
-        }
-        maven {
-          url "https://nexus-dev.saibnet2.saib.com/repository/maven-public/"
-          credentials {
-            username System.getenv("MAVEN_USER")
-            password System.getenv("MAVEN_PASS")
-          }
-        }
-        mavenCentral {
-          url "https://nexus-dev.saibnet2.saib.com/repository/maven-central/"
-          credentials {
-            username System.getenv("MAVEN_USER")
-            password System.getenv("MAVEN_PASS")
-          }
-        }
+      google()
+      maven()
+      //  google {
+      //     url "https://nexus-dev.saibnet2.saib.com/repository/google-maven/"
+      //     credentials {
+      //       username System.getenv("MAVEN_USER")
+      //       password System.getenv("MAVEN_PASS")
+      //     }
+      //   }
+      //   maven {
+      //     url "https://nexus-dev.saibnet2.saib.com/repository/maven-public/"
+      //     credentials {
+      //       username System.getenv("MAVEN_USER")
+      //       password System.getenv("MAVEN_PASS")
+      //     }
+      //   }
+      //   mavenCentral {
+      //     url "https://nexus-dev.saibnet2.saib.com/repository/maven-central/"
+      //     credentials {
+      //       username System.getenv("MAVEN_USER")
+      //       password System.getenv("MAVEN_PASS")
+      //     }
+      //   }
     }
     dependencies {
         classpath("com.android.tools.build:gradle:7.3.1")

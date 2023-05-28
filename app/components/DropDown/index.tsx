@@ -74,8 +74,8 @@ interface IDropDownProps {
   error: string
   isOpen?: boolean
   disabled?: boolean
-  title: string
-  subTitle: string
+  title?: string
+  subTitle?: string
   renderConten: React.ReactNode
   hasSearch?: boolean
   searchValue?: string
@@ -116,13 +116,12 @@ export default function DropDown({
             <InputWrapper>
               <Search />
               <InputView
+                selectionColor={'black'}
                 value={searchValue}
                 onChangeText={(e: React.SetStateAction<string>) => {
                   onSearchChange(e)
                 }}
               />
-
-              <Setting />
             </InputWrapper>
           )}
           {renderConten}
@@ -226,4 +225,6 @@ const InputWrapper = styled(View)`
 `
 const InputView = styled(TextInput)`
   flex: 1;
+  padding-right: 5px;
+  padding-left: 5px;
 `

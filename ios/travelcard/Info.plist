@@ -34,14 +34,21 @@
 				<true/>
 			</dict>
 		</dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
 	</dict>
+	<key>LSApplicationCategoryType</key>
+	<string></string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>UIAppFonts</key>
 	<array>
-		<string>CoText-Bold.otf</string>
-		<string>CoText-Light.otf</string>
-		<string>CoText.otf</string>
+		<string>cotext.otf</string>
+		<string>cotext_bold.otf</string>
+		<string>cotext_light.otf</string>
+		<string>cotext.ttf</string>
+		<string>cotext_bold.ttf</string>
+		<string>cotext_light.ttf</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
@@ -57,14 +64,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>UIAppFonts</key>
-	<array>
-		<string>cotext.otf</string>
-		<string>cotext_bold.otf</string>
-		<string>cotext_light.otf</string>
-		<string>cotext.ttf</string>
-		<string>cotext_bold.ttf</string>
-		<string>cotext_light.ttf</string>
-	</array>
 </dict>
 </plist>
