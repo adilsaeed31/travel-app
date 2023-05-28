@@ -94,7 +94,6 @@ const OtpAuthScreen = ({navigation}: Props) => {
 
   useEffect(() => {
     if (resendCount > 2) {
-      navigation.navigate('ashboard')
     }
     setResendAvailable(false)
   }, [resendCount, navigation])
@@ -116,7 +115,7 @@ const OtpAuthScreen = ({navigation}: Props) => {
         />
         <Spacer size={SPACER_SIZES.XL} />
         <Row isRTL={isRTL}>
-          <TouchableOpacity onPress={() => navigation.navigate('PersonalID')}>
+          <TouchableOpacity>
             <Row isRTL={isRTL}>
               <EditIcon />
               <BottomText variant={TEXT_VARIANTS.body}>

@@ -1,5 +1,6 @@
 import React, {useContext, useEffect, useRef, useState} from 'react'
 import {AppContext, AppProviderProps} from '@Context'
+import {View} from 'react-native'
 import {FaceIcon} from '@Assets'
 import {useTranslation} from 'react-i18next'
 import {
@@ -126,54 +127,39 @@ const AuthFeature = ({navigation}: Props) => {
         opacity: splashAnim,
         transform: [...transAnim.getTranslateTransform()],
       }}>
-      <Layout isScrollable={false}>
-        <>
-          <Spacer horizontal={false} size={SPACER_SIZES.XL} />
-          <TCTextView variant={TEXT_VARIANTS.heading}>
-            {t('auth:buttonLogin')}
-          </TCTextView>
-          <Spacer horizontal={false} size={SPACER_SIZES.XL} />
+      <Layout>
+        <Spacer horizontal={false} size={SPACER_SIZES.BASE} />
+        <TCTextView style={{flex: 0.5}} variant={TEXT_VARIANTS.heading}>
+          {t('auth:buttonLogin')}
+        </TCTextView>
+        <LoginForm>
+          <TCInput label={t('auth:userName')} onChangeText={setUserName} />
+          <TCInput
+            label={t('auth:password')}
+            value={password}
+            isPassword
+            onChangeText={setPassword}
+          />
+        </LoginForm>
+        <ViewWrapper>
+          <TCLinkButton onPress={handleLogin}>
+            {t('auth:buttonForget')}
+          </TCLinkButton>
+        </ViewWrapper>
+        {isAuthFailed && (
+          <ForgetPassWrapper>
+            <ForgetPassLabel>{t('auth:authFailed')}</ForgetPassLabel>
+          </ForgetPassWrapper>
+        )}
 
-          <LoginForm>
-            <TCInput
-              label={t('auth:userName')}
-              onChangeText={setUserName}
-              // isValid={setIsUserNameValid} //TODO
-            />
-            <Spacer horizontal={false} size={SPACER_SIZES.XL} />
-            <TCInput
-              label={t('auth:password')}
-              value={password}
-              isPassword
-              onChangeText={setPassword}
-              // isValid={setIsPasswordValid} //TODO
-            />
-            <Spacer horizontal={false} size={SPACER_SIZES.SM - 5} />
-            <ViewWrapper>
-              <TCLinkButton onPress={handleLogin}>
-                {t('auth:buttonForget')}
-              </TCLinkButton>
-            </ViewWrapper>
-          </LoginForm>
-          <Spacer horizontal={false} size={SPACER_SIZES.LG} />
+        <MultiTextWrapper>
+          <FaceIcon />
+        </MultiTextWrapper>
 
-          {isAuthFailed && (
-            <ForgetPassWrapper>
-              <ForgetPassLabel>{t('auth:authFailed')}</ForgetPassLabel>
-            </ForgetPassWrapper>
-          )}
-          <Spacer horizontal={false} size={SPACER_SIZES.LG} />
-
-          <MultiTextWrapper>
-            <FaceIcon />
-          </MultiTextWrapper>
-
-          <Spacer horizontal={false} size={SPACER_SIZES.SM} />
-
+        <BottomView>
           <ButtonContainer>
             <TCButton onPress={handleLogin}>{t('auth:buttonLogin')}</TCButton>
           </ButtonContainer>
-          <Spacer horizontal={false} size={SPACER_SIZES.LG} />
           <MultiTextWrapper>
             <TCMultiLinkButton
               callbacks={[
@@ -184,7 +170,7 @@ const AuthFeature = ({navigation}: Props) => {
               {t('auth:newToSaib')}
             </TCMultiLinkButton>
           </MultiTextWrapper>
-        </>
+        </BottomView>
       </Layout>
     </Animated.View>
   )
@@ -192,22 +178,24 @@ const AuthFeature = ({navigation}: Props) => {
 
 const LoginForm = styled.View`
   width: 100%;
+  flex: 1;
+  justify-content: space-around;
 `
 
 const MultiTextWrapper = styled.View`
   width: 100%;
   align-items: center;
   justify-content: center;
+  flex: 1;
 `
 
 const ForgetPassWrapper = styled.View`
   flex-direction: row;
   justify-content: center;
   align-items: flex-start;
-  padding: 10px;
-  gap: 10px;
   background: #ffdede;
   border-radius: 16px;
+  flex: 0.5;
 `
 
 const ForgetPassLabel = styled.Text`
@@ -215,8 +203,9 @@ const ForgetPassLabel = styled.Text`
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
-  padding: 10px;
   line-height: 28px;
+  align-self: center;
+  max-width: 90%;
   /* or 200% */
 
   text-align: center;
@@ -229,18 +218,24 @@ const ViewWrapper = styled.View`
   width: 100%;
   justify-content: flex-end;
   flex-direction: row;
+  flex: 1;
 `
 
 const TCButton = styled(Button)``
 
 const TCInput = styled(InputView)`
   width: 100%;
-  margin-top: 16px;
-  height: 100px;
+  flex: 1;
 `
 
 const ButtonContainer = styled.View`
   width: 100%;
+  flex: 1;
+  justify-content: center;
 `
-
+const BottomView = styled.View`
+  width: 100%;
+  flex: 1;
+  justify-content: space-around;
+`
 export default AuthFeature
