@@ -61,6 +61,8 @@ export const translation = {
       selectCode:
         'Please log in to Nafath application and select the code corresponding to this code and click Continue on this page',
       authCode: 'Authentication code',
+      verificationThroughNafath:
+        'Account verification through Nafath application',
       personalInformation: {
         education: 'Education',
         countryOfBirth: 'Country of Birth',
@@ -152,6 +154,7 @@ export const translation = {
       selectCode:
         'يرجى تسجيل الدخول إلى تطبيق Nafath وتحديد الرمز المقابل لهذا الرمز والنقر فوق متابعة في هذه الصفحة',
       authCode: 'رمز الدخول',
+      verificationThroughNafath: 'التحقق من الحساب من خلال تطبيق Nafath',
       personalInformation: {
         education: 'التعليم',
         countryOfBirth: 'مكان الميلاد',

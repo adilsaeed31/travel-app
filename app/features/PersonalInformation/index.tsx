@@ -404,7 +404,7 @@ const RadioWrapper = styled(View)<{isRTL: boolean}>`
 const SafeAreaWrapper = styled(SafeAreaView)`
   flex: 1;
   justify-content: space-between;
-  margin-bottom: ${Dimensions.get('window').height / 7};
+  margin-bottom: ${Dimensions.get('window').height / 7}px;
 `
 const FormWrapper = styled(SafeAreaView)<{isRTL: boolean}>`
   align-items: ${props => (props.isRTL ? 'flex-end' : 'flex-start')};

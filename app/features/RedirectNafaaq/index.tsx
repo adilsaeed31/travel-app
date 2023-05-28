@@ -83,24 +83,26 @@ const NafaqScreen = ({navigation}: Props) => {
 
   const onRedirectApp = () => {
     let URL =
-      Platform.OS == 'ios'
+      Platform.OS === 'ios'
         ? 'nafath://request'
         : 'saf.sa.gov.nic.myid://request'
 
     Linking.openURL(URL)
-    setLoader(true)
+    setLoader(false)
     setShowDone(true)
+    setShowNumber(false)
   }
 
   const onRedirectWeb = () => {
     let URL =
-      Platform.OS == 'ios'
+      Platform.OS === 'ios'
         ? 'nafath://request'
         : 'saf.sa.gov.nic.myid://request'
 
     Linking.openURL(URL)
-    setLoader(true)
+    setLoader(false)
     setShowDone(true)
+    setShowNumber(false)
   }
 
   useEffect(() => {
@@ -176,7 +178,10 @@ const NafaqScreen = ({navigation}: Props) => {
           <ButtonContainer>
             <Button
               onPress={() => {
-                navigation.navigate('personalInfo')
+                setLoader(true)
+                setTimeout(() => {
+                  navigation.navigate('personalInfo')
+                }, 2000)
               }}>
               <Text variant={TEXT_VARIANTS.body}>
                 {t('onboarding:continue')}
