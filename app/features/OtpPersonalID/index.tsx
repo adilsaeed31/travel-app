@@ -51,11 +51,6 @@ const StickyButtonContainer = styled.View<{keyboardHeight: Number}>`
   right: 0;
   align-items: center;
 `
-const ErrorText = styled(Text)`
-  font-weight: 500;
-  color: #f54d3f;
-  padding-left: 16px;
-`
 
 const StickyButton = styled.TouchableOpacity`
   background-color: #f8d03b;
