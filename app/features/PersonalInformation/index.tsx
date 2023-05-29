@@ -25,11 +25,24 @@ import {
   CounryListAr,
   CounryListEN,
   SaudiCities,
-  SPACER_SIZES,
 } from '@Utils'
 import styled from 'styled-components/native'
 
 import {AppContext, AppProviderProps} from '@Context'
+type IFormTYpe = {
+  city: string | null
+  education: string | null
+  countryOfBirth: string | null
+  buldingNumber: string | null
+  streetNanme: string | null
+  district: string | null
+  poBox: string | null
+  postalCode: string | null
+  phoneNumber: string | null
+  contactName: string | null
+  relation: string | null
+  mobileNumber: string | null
+}
 
 const FormValues = {
   education: '',
@@ -46,7 +59,7 @@ const FormValues = {
   mobileNumber: '',
 }
 
-function PrsonalInformation() {
+function FinacialInformation() {
   const [showAdditionalInformation, setShowAdditionalInformation] =
     React.useState(false)
   const [currentOpendIndx, setCurrentOpenedInx] = React.useState(-1)
@@ -54,20 +67,7 @@ function PrsonalInformation() {
   const {isRTL} = useContext<AppProviderProps>(AppContext)
   const {t} = useTranslation()
   const [searchVaue, setSearchValue] = useState('') // TODO
-  const [values, setValues] = useState<{
-    city: string | null
-    education: string | null
-    countryOfBirth: string | null
-    buldingNumber: string | null
-    streetNanme: string | null
-    district: string | null
-    poBox: string | null
-    postalCode: string | null
-    phoneNumber: string | null
-    contactName: string | null
-    relation: string | null
-    mobileNumber: string | null
-  }>({
+  const [values, setValues] = useState<IFormTYpe>({
     ...FormValues,
   })
   const [errors, setErrors] = useState({
@@ -179,45 +179,25 @@ function PrsonalInformation() {
     <>
       <Layout isBack={true} isHeader={true} isBackground={true}>
         <SafeAreaWrapper>
-          <FormWrapper isRTL={!!isRTL}>
-            <Spacer />
-            <Header isRTL={!!isRTL}>
-              {t('onboarding:personalInformation:personalInformation')}
-            </Header>
-            <DropDown
-              label={t('onboarding:personalInformation:education') || ''}
-              toogleClick={() => ToggleSheet(0)}
-              value={values.education}
-              error={errors.education}
-              isOpen={currentOpendIndx == 0}
-              title={t('onboarding:personalInformation:education')}
-              subTitle={t('onboarding:personalInformation:education')}
-              renderConten={<RenderSearchListContent />}
-              onSheetClose={() => setCurrentOpenedInx(-1)}
-              hasSearch
-              onSearchChange={search => setSearchValue(search)}
-            />
-            <Spacer />
-            <DropDown
-              toogleClick={() => {
-                ToggleSheet(1)
-                setValues({...values, city: null})
-              }}
-              label={t('onboarding:personalInformation:countryOfBirth') || ''}
-              value={values.countryOfBirth}
-              error={errors.countryOfBirth}
-              title={t('onboarding:personalInformation:countryOfBirth')}
-              subTitle={
-                t('onboarding:personalInformation:countryOfBirth') || ''
-              }
-              isOpen={currentOpendIndx == 1}
-              renderConten={<RenderSearchListContent />}
-              onSheetClose={() => setCurrentOpenedInx(-1)}
-              hasSearch
-              onSearchChange={search => setSearchValue(search)}
-            />
-            <Spacer />
-            {IsSaudi ? (
+          <ScrollerView>
+            <FormWrapper isRTL={!!isRTL}>
+              <Header isRTL={!!isRTL}>
+                {t('onboarding:personalInformation:personalInformation')}
+              </Header>
+              <DropDown
+                label={t('onboarding:personalInformation:education') || ''}
+                toogleClick={() => ToggleSheet(0)}
+                value={values.education}
+                error={errors.education}
+                isOpen={currentOpendIndx == 0}
+                title={t('onboarding:personalInformation:education')}
+                subTitle={t('onboarding:personalInformation:education')}
+                renderConten={<RenderSearchListContent />}
+                onSheetClose={() => setCurrentOpenedInx(-1)}
+                hasSearch
+                onSearchChange={search => setSearchValue(search)}
+              />
+              <Spacer />
               <DropDown
                 toogleClick={() => {
                   ToggleSheet(1)
@@ -395,7 +375,7 @@ function PrsonalInformation() {
   )
 }
 
-export default PrsonalInformation
+export default FinacialInformation
 
 const InputSpacer = styled(View)`
   margin-bottom: 12px;
