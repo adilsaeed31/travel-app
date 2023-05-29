@@ -273,10 +273,6 @@ const PersonalIdScreen = ({navigation}: Props) => {
   if (data && data.referenceNumber) {
     setOnboardingDetails(state.mobileNumber, state.govtId, data.referenceNumber)
     reset()
-    setState({
-      mobileNumber: '',
-      govtId: '',
-    })
     navigation.push('OtpPersonalId')
   }
 
