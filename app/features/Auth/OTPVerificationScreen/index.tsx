@@ -177,7 +177,8 @@ const OtpAuthScreen = (props, {navigation}: Props) => {
   }, [resendCount, navigation])
 
   const onComplete = () => {
-    verifyOtp()
+    // verifyOtp()
+    setUser(props.route.params.user)
   }
   if (otpData && otpData.access_token) {
     // const expiresIn = otpData.expires_in

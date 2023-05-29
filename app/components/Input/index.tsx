@@ -11,6 +11,7 @@ import {TouchableOpacity} from 'react-native-gesture-handler'
 interface CustomInputProps {
   label: string
   schema?: any
+  maxLength?: number
   value?: any
   isPassword?: boolean
   onChangeText?: (text: string) => void
@@ -72,6 +73,7 @@ const CustomInput: FC<CustomInputProps> = ({
   value,
   isPassword,
   schema,
+  maxLength = 32,
   onChangeText = () => {},
   isValid = () => {},
   errorMessage = '',
@@ -126,6 +128,7 @@ const CustomInput: FC<CustomInputProps> = ({
         </InputLabel>
         <HorizontalView>
           <Input
+            maxLength={maxLength}
             ref={inputRef}
             value={inputValue}
             onChangeText={handleChangeText}
