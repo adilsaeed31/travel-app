@@ -129,10 +129,11 @@ const NafaqScreen = ({navigation}: Props) => {
     <>
       <Layout
         isBack={true}
-        isLoading={loader}
-        onBack={() => {
-          navigation.push('PersonalID')
-        }}>
+        // isLoading={loader}
+        // onBack={() => {
+        //   navigation.push('PersonalID')
+        // }}
+      >
         <Row>
           <NafaaqImg source={NafaathLogo} />
         </Row>
@@ -179,9 +180,7 @@ const NafaqScreen = ({navigation}: Props) => {
             <Button
               onPress={() => {
                 setLoader(true)
-                setTimeout(() => {
-                  navigation.navigate('personalInfo')
-                }, 2000)
+                navigation.navigate('personalInfo')
               }}>
               <Text variant={TEXT_VARIANTS.body}>
                 {t('onboarding:continue')}

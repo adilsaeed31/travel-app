@@ -33,7 +33,7 @@ const DropDownInput = styled(Pressable)<{
   border-color: ${props => (props.hasError ? 'red' : 'rgba(60, 60, 60, 0.4)')};
   flex-direction: ${props => (props.isRTL ? 'row-reverse' : 'row')};
   justify-content: space-between;
-  background: ${props => (props.disabled ? '#E1E1E1' : '#fcfcfc')};
+  background: ${props => (props.disabled ? '#fcfcfc' : '#fcfcfc')};
 `
 const ArrowIconWrapper = styled(View)<{isRTL: boolean}>`
   justify-content: center;
