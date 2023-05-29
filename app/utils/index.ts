@@ -12,3 +12,5 @@ export * from './colors'
 export * from './countryListAr'
 export * from './CounryListEn'
 export * from './saudiCities'
+
+export * from './dimensions'
