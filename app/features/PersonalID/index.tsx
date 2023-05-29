@@ -98,9 +98,9 @@ const StickyButtonContainer = styled.View<{keyboardHeight: Number}>`
   align-items: center;
 `
 
-const StickyButton = styled.TouchableOpacity`
-  background-color: #f8d03b;
-  border: 1px solid #f8d03b;
+const StickyButton = styled.TouchableOpacity<{isDisabled?: boolean}>`
+  background-color: ${props => (props.isDisabled ? '#E1E1E1' : '#f8d03b')};
+  border: 1px solid ${props => (props.isDisabled ? '#E1E1E1' : '#f8d03b')};
   width: 100%;
   min-height: 56px;
   align-items: center;
