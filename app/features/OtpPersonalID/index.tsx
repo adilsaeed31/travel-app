@@ -100,7 +100,7 @@ const OtpPersonalIdScreen = ({navigation}: Props) => {
   const {t} = useTranslation()
   const [isKeyboardVisible, setKeyboardVisible] = useState<boolean>(false)
   const [keyboardHeight, setKeyboardHeight] = useState<Number>(0)
-  const [resendCount, setResendCount] = useState<number>(0)
+  const [resendCount, setResendCount] = useState<number>(1)
   const [resendAvailable, setResendAvailable] = useState<boolean>(false)
   const {isRTL} = useContext<AppProviderProps>(AppContext)
   const [state, setState] = useState<any>({})
@@ -111,7 +111,7 @@ const OtpPersonalIdScreen = ({navigation}: Props) => {
   const mobileNumber = useStore((store: any) => store.onboardingMobileNumber)
   const OTPRef = useStore((store: any) => store.onboardingOTPRef)
   const govtId = useStore((state: any) => state.govtId)
-
+  const [otpRefN, setOTPRef] = useState<any>(OTPRef)
   const {
     isLoading: isOTPLoading,
     data: otpData,
@@ -122,7 +122,7 @@ const OtpPersonalIdScreen = ({navigation}: Props) => {
       let req: any = await fetcher(BASE_URL + '/auth/otp/verify', {
         method: 'POST',
         body: {
-          referenceNumber: OTPRef,
+          referenceNumber: otpRefN,
           otp: state.otp,
         },
       })
@@ -199,9 +199,11 @@ const OtpPersonalIdScreen = ({navigation}: Props) => {
   }, [])
 
   useEffect(() => {
-    if (resendCount > 2) {
+    if (resendCount === 4) {
       navigation.navigate('AfterOtpPersonalId')
     }
+    setStatusError('')
+    resendOTP()
     setResendAvailable(false)
   }, [resendCount, navigation])
 
@@ -235,16 +237,52 @@ const OtpPersonalIdScreen = ({navigation}: Props) => {
   }
 
   useEffect(() => {
+    if (status === 409) {
+      setStatusError('Exiting OTP already Exist, Please wait for a minute')
+      return
+    }
+
     if (status === 403) {
       setStatusError('OTP Expired')
-    } else if (status > 399 && status < 500) {
+      return
+    }
+
+    if (status > 399 && status < 500) {
       setStatusError('Invalid OTP')
+      return
     }
   }, [status])
 
+  const {
+    isLoading: isResend,
+    data: resendData,
+    mutate: resendOTP,
+  } = useMutation({
+    mutationFn: async () => {
+      let req: any = await fetcher(BASE_URL + '/auth/otp', {
+        method: 'POST',
+        body: {mobileNumber: mobileNumber, role: 'ONBOARDING'},
+      })
+
+      setStatus(req.status)
+
+      if (req.status < 400) {
+        return req.json()
+      } else {
+        return req.status
+      }
+    },
+  })
+
+  useEffect(() => {
+    if (resendData && resendData.referenceNumber) {
+      setOTPRef(resendData.referenceNumber)
+    }
+  }, [resendData])
+
   return (
     <>
-      <Layout isLoading={isOTPLoading || isTahaquqLoading}>
+      <Layout isLoading={isOTPLoading || isTahaquqLoading || isResend}>
         <Spacer horizontal={false} size={SPACER_SIZES.BASE * 3} />
         <Text variant={TEXT_VARIANTS.heading}>{t('onboarding:enterOTP')}</Text>
         <Spacer size={SPACER_SIZES.BASE * 3} />
@@ -285,8 +323,7 @@ const OtpPersonalIdScreen = ({navigation}: Props) => {
             )}
           </View>
         </Row>
-
-        {statusError ? (
+        {statusError && state.otp ? (
           <ErrorWrapper>
             <ErrorLabel>{statusError}</ErrorLabel>
           </ErrorWrapper>

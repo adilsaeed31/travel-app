@@ -62,15 +62,17 @@ const PersonalIdScreen = ({navigation}: Props) => {
   const [state, setState] = useState({step: STPES.attempts})
 
   const onComplete = () => {
-    if (state.step === STPES.attempts) {
-      setState({...state, step: STPES.identityAttempts})
-    }
-    if (state.step === STPES.identityAttempts) {
-      setState({...state, step: STPES.phoneAttempts})
-    }
-    if (state.step === STPES.phoneAttempts) {
-      navigation.navigate('RedirectNafaaq')
-    }
+    navigation.navigate('RedirectNafaaq')
+    return
+    // if (state.step === STPES.attempts) {
+    //   setState({...state, step: STPES.identityAttempts})
+    // }
+    // if (state.step === STPES.identityAttempts) {
+    //   setState({...state, step: STPES.phoneAttempts})
+    // }
+    // if (state.step === STPES.phoneAttempts) {
+    //   navigation.navigate('RedirectNafaaq')
+    // }
   }
 
   return (
