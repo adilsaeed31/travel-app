@@ -52,9 +52,9 @@ const StickyButtonContainer = styled.View<{keyboardHeight: Number}>`
   align-items: center;
 `
 
-const StickyButton = styled.TouchableOpacity`
-  background-color: #f8d03b;
-  border: 1px solid #f8d03b;
+const StickyButton = styled.TouchableOpacity<{isDisabled?: boolean}>`
+  background-color: ${props => (props.isDisabled ? '#E1E1E1' : '#f8d03b')};
+  border: 1px solid ${props => (props.isDisabled ? '#E1E1E1' : '#f8d03b')};
   width: 100%;
   min-height: 56px;
   align-items: center;
@@ -178,7 +178,7 @@ const OtpPersonalIdScreen = ({navigation}: Props) => {
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
-      'keyboardDidShow',
+      'keyboardWillShow',
       e => {
         setKeyboardVisible(true)
         setKeyboardHeight(e.endCoordinates.height)
@@ -186,7 +186,7 @@ const OtpPersonalIdScreen = ({navigation}: Props) => {
     )
 
     const keyboardDidHideListener = Keyboard.addListener(
-      'keyboardDidHide',
+      'keyboardWillHide',
       () => {
         setKeyboardVisible(false)
       },

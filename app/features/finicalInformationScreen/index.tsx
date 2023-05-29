@@ -1,5 +1,3 @@
-import React from 'reac'
-
 import {View, Text} from 'react-native'
 
 const FinacailInformationScreen = () => {

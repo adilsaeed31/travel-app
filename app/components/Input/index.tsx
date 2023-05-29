@@ -11,9 +11,9 @@ import {TouchableOpacity} from 'react-native-gesture-handler'
 interface CustomInputProps {
   label: string
   schema?: any
-  maxLength?: number
   value?: any
   isPassword?: boolean
+  maxLength: number
   onChangeText?: (text: string) => void
   isValid?: (valid: boolean) => void
   errorMessage?: string
