@@ -261,11 +261,6 @@ const OtpPersonalIdScreen = ({navigation}: Props) => {
 
       setStatus(req.status)
 
-      if (status === 409) {
-        setStatusError('Exiting OTP already Exist, Please wait for a minute')
-        return
-      }
-
       if (req.status < 400) {
         return req.json()
       } else {
