@@ -12,8 +12,10 @@ import {queryClient} from '@Api'
 
 import {MainNavigation} from '@Navigations'
 import {AuthProvider, AppProvider} from '@Context'
+import {clearStorage} from '@Utils'
 
 function App(): React.JSX.Element {
+  clearStorage()
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>

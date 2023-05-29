@@ -356,7 +356,7 @@ const PersonalIdScreen = ({navigation}: Props) => {
       </Layout>
       {isKeyboardVisible && (
         <StickyButtonContainer keyboardHeight={keyboardHeight}>
-          <StickyButton onPress={onComplete} disabled={isButtonDisabled}>
+          <StickyButton onPress={onComplete} isDisabled={isButtonDisabled}>
             <Text variant={TEXT_VARIANTS.body}>{t('onboarding:continue')}</Text>
           </StickyButton>
         </StickyButtonContainer>
