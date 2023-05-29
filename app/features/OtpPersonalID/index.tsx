@@ -178,7 +178,7 @@ const OtpPersonalIdScreen = ({navigation}: Props) => {
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
-      'keyboardDidShow',
+      'keyboardWillShow',
       e => {
         setKeyboardVisible(true)
         setKeyboardHeight(e.endCoordinates.height)
@@ -186,7 +186,7 @@ const OtpPersonalIdScreen = ({navigation}: Props) => {
     )
 
     const keyboardDidHideListener = Keyboard.addListener(
-      'keyboardDidHide',
+      'keyboardWillHide',
       () => {
         setKeyboardVisible(false)
       },

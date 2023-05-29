@@ -246,7 +246,7 @@ const PersonalIdScreen = ({navigation}: Props) => {
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
-      'keyboardDidShow',
+      'keyboardWillShow',
       e => {
         setKeyboardVisible(true)
         setKeyboardHeight(e.endCoordinates.height)
@@ -254,7 +254,7 @@ const PersonalIdScreen = ({navigation}: Props) => {
     )
 
     const keyboardDidHideListener = Keyboard.addListener(
-      'keyboardDidHide',
+      'keyboardWillHide',
       () => {
         setKeyboardVisible(false)
       },
