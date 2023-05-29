@@ -70,7 +70,7 @@ const AuthFeature = ({navigation}: Props) => {
       })
       setstatus(res.status)
 
-      if (res.ok) return res.json()
+      if (res.status >= 200 && res.status < 300) return res.json()
       else return res.status
     },
     refetchOnWindowFocus: false,
@@ -80,11 +80,11 @@ const AuthFeature = ({navigation}: Props) => {
 
   useEffect(() => {
     if (!isFetching && data && isFocused) {
-      // alert(JSON.stringify(data))
-
       if (status >= 200 && status < 300) {
         if (data.is_otp_required) {
-          navigation.navigate('OTPAuth')
+          navigation.navigate('OTPAuth', {
+            user: data,
+          })
           setstatus(0)
         } else {
           setUser(data)
@@ -127,7 +127,7 @@ const AuthFeature = ({navigation}: Props) => {
         opacity: splashAnim,
         transform: [...transAnim.getTranslateTransform()],
       }}>
-      <Layout>
+      <Layout isLoading={isFetching}>
         <Spacer horizontal={false} size={SPACER_SIZES.BASE} />
         <TCTextView style={{flex: 0.5}} variant={TEXT_VARIANTS.heading}>
           {t('auth:buttonLogin')}
@@ -195,6 +195,7 @@ const ForgetPassWrapper = styled.View`
   align-items: flex-start;
   background: #ffdede;
   border-radius: 16px;
+  padding: 2%;
   flex: 0.5;
 `
 
@@ -205,12 +206,9 @@ const ForgetPassLabel = styled.Text`
   font-size: 14px;
   line-height: 28px;
   align-self: center;
-  max-width: 90%;
   /* or 200% */
 
   text-align: center;
-  letter-spacing: -0.4px;
-
   color: #de2e2e;
 `
 

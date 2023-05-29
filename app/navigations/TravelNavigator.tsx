@@ -1,8 +1,7 @@
 import React from 'react'
 import {createStackNavigator} from '@react-navigation/stack'
 
-import {Text} from 'react-native'
-import {Button} from '@ui-kitten/components'
+import {TCButton as Button, TCTextView as Text} from '@Components'
 
 const {Navigator, Screen} = createStackNavigator()
 

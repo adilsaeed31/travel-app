@@ -1,5 +1,4 @@
-import React, {useContext, useEffect, useRef} from 'react'
-import {Animated, Easing} from 'react-native'
+import React, {useContext, useEffect} from 'react'
 import LottieView from 'lottie-react-native'
 import Splash from 'react-native-splash-screen'
 import {StackNavigationProp} from '@react-navigation/stack'
@@ -16,7 +15,6 @@ type SplashScreenProps = {
 const SplashScreen: React.FC<SplashScreenProps> = ({navigation}) => {
   const introHasBeenSeen = useStore(state => state.introHasBeenSeen)
   const {hasIntroSeen, setAppReady} = useContext<AppProviderProps>(AppContext)
-  const splashAnim = useRef(new Animated.Value(0)).current
 
   const gotToNextFeature = () => {
     if (!hasIntroSeen) {
@@ -38,27 +36,17 @@ const SplashScreen: React.FC<SplashScreenProps> = ({navigation}) => {
 
     // hiding the splash screen below
     Splash.hide()
-
-    // Added the fade opacity animation for 1 sec
-    Animated.timing(splashAnim, {
-      toValue: 1,
-      duration: 500,
-      easing: Easing.elastic(1),
-      useNativeDriver: true,
-    }).start()
-  }, [introHasBeenSeen, splashAnim])
+  }, [introHasBeenSeen])
 
   return (
-    <Animated.View style={{opacity: splashAnim}} className="flex-1">
-      <LottieView
-        autoPlay
-        loop={false}
-        resizeMode="cover"
-        source={splashAnimationJson}
-        // changing the next animation with state
-        onAnimationFinish={() => gotToNextFeature()}
-      />
-    </Animated.View>
+    <LottieView
+      autoPlay
+      loop={false}
+      resizeMode="cover"
+      source={splashAnimationJson}
+      // changing the next animation with state
+      onAnimationFinish={gotToNextFeature}
+    />
   )
 }
 
