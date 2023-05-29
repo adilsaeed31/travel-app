@@ -240,10 +240,13 @@ const OtpPersonalIdScreen = ({navigation}: Props) => {
   }
 
   useEffect(() => {
-    if (status > 399 && status < 500) {
+    if (status === 403) {
+      setStatusError('OTP Expired')
+    } else if (status > 399 && status < 500) {
       setStatusError('Invalid OTP')
     }
   }, [status])
+
   return (
     <>
       <Layout isLoading={isOTPLoading || isTahaquqLoading}>
@@ -251,6 +254,7 @@ const OtpPersonalIdScreen = ({navigation}: Props) => {
         <Text variant={TEXT_VARIANTS.heading}>{t('onboarding:enterOTP')}</Text>
         <Spacer size={SPACER_SIZES.BASE * 3} />
         <OTP
+          value={state.otp}
           onChangeText={otp => {
             setState({...state, otp: otp})
           }}
