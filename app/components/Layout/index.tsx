@@ -134,7 +134,6 @@ const AppLayout: React.FC<LayoutProps> = ({
                 paddingRight: insetEdges.right + 32,
               }}>
               {isHeader && <Header isBack={isBack} onBack={onBack} />}
-              {hasBack && <BackHeader />}
 
               {children}
             </ContentWrapper>

@@ -129,11 +129,10 @@ const NafaqScreen = ({navigation}: Props) => {
     <>
       <Layout
         isBack={true}
-        // isLoading={loader}
-        // onBack={() => {
-        //   navigation.push('PersonalID')
-        // }}
-      >
+        isLoading={loader}
+        onBack={() => {
+          navigation.push('PersonalID')
+        }}>
         <Row>
           <NafaaqImg source={NafaathLogo} />
         </Row>
