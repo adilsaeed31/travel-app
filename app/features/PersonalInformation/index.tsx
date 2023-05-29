@@ -25,6 +25,7 @@ import {
   CounryListAr,
   CounryListEN,
   SaudiCities,
+  SPACER_SIZES,
 } from '@Utils'
 import styled from 'styled-components/native'
 
@@ -176,9 +177,10 @@ function PrsonalInformation() {
   }
   return (
     <>
-      <Layout hasBack isHeader={false} isBackground={true}>
+      <Layout isBack={true} isHeader={true} isBackground={true}>
         <SafeAreaWrapper>
           <FormWrapper isRTL={!!isRTL}>
+            <Spacer />
             <Header isRTL={!!isRTL}>
               {t('onboarding:personalInformation:personalInformation')}
             </Header>
