@@ -285,6 +285,7 @@ const PersonalIdScreen = ({navigation}: Props) => {
           onChangeText={text => {
             setState({...state, govtId: text})
           }}
+          maxLength={12}
           value={state.govtId}
         />
         <Spacer horizontal={false} size={SPACER_SIZES.BASE * 4} />
@@ -294,6 +295,7 @@ const PersonalIdScreen = ({navigation}: Props) => {
           onChangeText={text => {
             setState({...state, mobileNumber: text})
           }}
+          maxLength={12}
           value={state.mobileNumber}
         />
 

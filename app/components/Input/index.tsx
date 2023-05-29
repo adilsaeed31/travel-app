@@ -15,6 +15,7 @@ interface CustomInputProps {
   isPassword?: boolean
   onChangeText?: (text: string) => void
   isValid?: (valid: boolean) => void
+  maxLength?: number
   errorMessage?: string
 }
 
@@ -74,6 +75,8 @@ const CustomInput: FC<CustomInputProps> = ({
   onChangeText = () => {},
   isValid = () => {},
   errorMessage = '',
+  maxLength = undefined,
+  ...rest
 }) => {
   const inputRef = useRef<TextInput>(null)
   const [isFocused, setIsFocused] = useState<boolean>(false)
@@ -132,6 +135,8 @@ const CustomInput: FC<CustomInputProps> = ({
             onBlur={handleBlur}
             cursorColor={'#8c8a86'}
             selectionColor={'#8c8a86'}
+            maxLength={maxLength}
+            {...rest}
           />
           {isPassword && (
             <LinkContainer onPress={() => setShowPassword(!showPassword)}>
