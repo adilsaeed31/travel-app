@@ -203,7 +203,7 @@ const PersonalIdScreen = ({navigation}: Props) => {
     (store: any) => store.setOnboardingDetails,
   )
 
-  const {isLoading, data, mutate} = useMutation({
+  const {isLoading, data, mutate, reset} = useMutation({
     mutationFn: async () => {
       let req: any = await fetcher(BASE_URL + '/auth/otp', {
         method: 'POST',
@@ -263,6 +263,11 @@ const PersonalIdScreen = ({navigation}: Props) => {
 
   if (data && data.referenceNumber) {
     setOnboardingDetails(state.mobileNumber, state.govtId, data.referenceNumber)
+    reset()
+    setState({
+      mobileNumber: '',
+      govtId: '',
+    })
     navigation.navigate('OtpPersonalId')
   }
 
@@ -280,6 +285,7 @@ const PersonalIdScreen = ({navigation}: Props) => {
           onChangeText={text => {
             setState({...state, govtId: text})
           }}
+          maxLength={12}
           value={state.govtId}
         />
         <Spacer horizontal={false} size={SPACER_SIZES.BASE * 4} />
@@ -289,6 +295,7 @@ const PersonalIdScreen = ({navigation}: Props) => {
           onChangeText={text => {
             setState({...state, mobileNumber: text})
           }}
+          maxLength={12}
           value={state.mobileNumber}
         />
 

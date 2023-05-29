@@ -179,9 +179,7 @@ const NafaqScreen = ({navigation}: Props) => {
             <Button
               onPress={() => {
                 setLoader(true)
-                setTimeout(() => {
-                  navigation.navigate('personalInfo')
-                }, 2000)
+                navigation.navigate('personalInfo')
               }}>
               <Text variant={TEXT_VARIANTS.body}>
                 {t('onboarding:continue')}
