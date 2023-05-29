@@ -1,5 +1,5 @@
 import React from 'react'
-import {Text} from 'react-native'
+import {TCTextView as Text} from '@Components'
 
 export default () => (
   <>
