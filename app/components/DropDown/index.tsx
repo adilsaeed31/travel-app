@@ -13,7 +13,7 @@ import {Forward} from '@Assets'
 import {TEXT_VARIANTS} from '@Utils'
 import TCTextView from '../TextView'
 import BottomSheet from 'reanimated-bottom-sheet'
-import {Setting, Search} from '@Assets'
+import {Search} from '@Assets'
 
 const DropDownInput = styled(Pressable)<{
   isRTL: boolean
@@ -74,8 +74,8 @@ interface IDropDownProps {
   error: string
   isOpen?: boolean
   disabled?: boolean
-  title?: string
-  subTitle?: string
+  title?: string | null
+  subTitle?: string | null
   renderConten: React.ReactNode
   hasSearch?: boolean
   searchValue?: string
@@ -92,8 +92,8 @@ export default function DropDown({
   error = '',
   disabled = false,
   isOpen = false,
-  title,
-  subTitle,
+  title = '',
+  subTitle = '',
   renderConten,
   hasSearch,
   searchValue,
@@ -158,7 +158,7 @@ export default function DropDown({
         <LabelValueWrapper hasValue={!!value}>
           <Label>{label}</Label>
           {value && (
-            <Value varient={TEXT_VARIANTS.caption} isRTL={!!isRTL}>
+            <Value variant={TEXT_VARIANTS.caption} isRTL={!!isRTL}>
               {value}
             </Value>
           )}
