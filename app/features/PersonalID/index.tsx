@@ -271,19 +271,18 @@ const PersonalIdScreen = ({navigation}: Props) => {
   }
 
   if (data && data.referenceNumber) {
-    console.log(data)
     setOnboardingDetails(state.mobileNumber, state.govtId, data.referenceNumber)
     reset()
     setState({
       mobileNumber: '',
       govtId: '',
     })
-    navigation.navigate('OtpPersonalId')
+    navigation.push('OtpPersonalId')
   }
 
   useEffect(() => {
     if (status > 409) {
-      setStatusError('Exiting OTP already Exist, Please wait for two minutes')
+      setStatusError('Exiting OTP already Exist, Please wait for a minute')
     } else if (status > 399 && status < 500) {
       setStatusError('Some Error Occurred. Please try after some time')
     } else {
