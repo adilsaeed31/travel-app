@@ -9,8 +9,9 @@ import Animated, {
 import Splash from 'react-native-splash-screen'
 import {useTranslation} from 'react-i18next'
 import cn from 'classnames'
+import {useSafeAreaInsets} from 'react-native-safe-area-context'
 
-import {flexRowLayout, m2} from '@Utils'
+import {flexRowLayout, m2, vw, vh} from '@Utils'
 import {introAnimation, SaibLogo} from '@Assets'
 import {AppContext, AppProviderProps} from '@Context'
 import {TCButton, TCTextView, TCDot} from '@Components'
@@ -27,6 +28,7 @@ const EnterAnimationBounceInUp = BounceInUp.duration(1000).delay(50)
 
 const IntroFeature: React.FC = () => {
   const {t} = useTranslation()
+  const insetEdges = useSafeAreaInsets()
 
   // below code is for to check the if the animation rendering or not
   const appState = useRef(AppState.currentState)
@@ -95,7 +97,16 @@ const IntroFeature: React.FC = () => {
   }, [appStateVisible])
 
   return (
-    <View className="flex-1">
+    <View
+      className="flex-1"
+      style={{
+        // do not remove this below style props below will
+        // adjust the padding/spacing on ios and android
+        paddingTop: vh(insetEdges.top),
+        paddingLeft: vw(insetEdges.left),
+        paddingRight: vw(insetEdges.right),
+        paddingBottom: vh(insetEdges.bottom),
+      }}>
       <LottieView
         loop={false}
         autoPlay={false}
@@ -105,7 +116,7 @@ const IntroFeature: React.FC = () => {
         onLayout={onLayoutRender}
       />
 
-      <View className="flex-1 p-8 ios:pt-20">
+      <View className="flex-1 p-8">
         <View
           className={cn(flexRowLayout(isRTL), 'justify-between items-center')}>
           <Animated.View entering={EnterAnimationBounceInUp}>
