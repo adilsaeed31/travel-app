@@ -202,7 +202,7 @@ const OtpPersonalIdScreen = ({navigation}: Props) => {
     if (resendCount === 4) {
       navigation.navigate('AfterOtpPersonalId')
     }
-    setStatusError('')
+
     resendOTP()
     setResendAvailable(false)
   }, [resendCount, navigation])
@@ -237,8 +237,12 @@ const OtpPersonalIdScreen = ({navigation}: Props) => {
   }
 
   useEffect(() => {
+    console.log(status, '++++++++++++++++++++++++++')
     if (status === 403) {
       setStatusError('OTP Expired')
+      return
+    }
+    if (status === 409) {
       return
     }
 
@@ -318,6 +322,7 @@ const OtpPersonalIdScreen = ({navigation}: Props) => {
             )}
           </View>
         </Row>
+
         {statusError && state.otp ? (
           <ErrorWrapper>
             <ErrorLabel>{statusError}</ErrorLabel>
