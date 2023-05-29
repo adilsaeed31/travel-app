@@ -197,8 +197,10 @@ const PersonalIdScreen = ({navigation}: Props) => {
     // mobileNumber: '0567113534',
     // govtId: '2545312932',
   })
+  const [status, setStatus] = useState<any>('')
   const [isButtonDisabled, setButtonDisabled] = useState(true)
   const [termsError, setTermsError] = useState<any>(false)
+  const [statusError, setStatusError] = useState<any>(false)
   const setOnboardingDetails = useStore(
     (store: any) => store.setOnboardingDetails,
   )
@@ -209,7 +211,14 @@ const PersonalIdScreen = ({navigation}: Props) => {
         method: 'POST',
         body: {mobileNumber: state.mobileNumber, role: 'ONBOARDING'},
       })
-      return req.json()
+
+      setStatus(req.status)
+
+      if (req.status < 400) {
+        return req.json()
+      } else {
+        return req.status
+      }
     },
   })
 
@@ -262,6 +271,7 @@ const PersonalIdScreen = ({navigation}: Props) => {
   }
 
   if (data && data.referenceNumber) {
+    console.log(data)
     setOnboardingDetails(state.mobileNumber, state.govtId, data.referenceNumber)
     reset()
     setState({
@@ -270,6 +280,15 @@ const PersonalIdScreen = ({navigation}: Props) => {
     })
     navigation.navigate('OtpPersonalId')
   }
+
+  useEffect(() => {
+    if (status > 409) {
+      setStatusError('Exiting OTP already Exist, Please wait for two minutes')
+    } else if (status > 399 && status < 500) {
+      setStatusError('Some Error Occurred. Please try after some time')
+    } else {
+    }
+  }, [status])
 
   return (
     <>
@@ -298,7 +317,7 @@ const PersonalIdScreen = ({navigation}: Props) => {
           maxLength={12}
           value={state.mobileNumber}
         />
-
+        {statusError && <ErrorText>{statusError}</ErrorText>}
         <DisclaimerView isKeyboardVisible={isKeyboardVisible} isRTL={isRTL}>
           <Checkbox
             onChange={status => {

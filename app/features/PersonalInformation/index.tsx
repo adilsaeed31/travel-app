@@ -25,6 +25,7 @@ import {
   CounryListAr,
   CounryListEN,
   SaudiCities,
+  SPACER_SIZES,
 } from '@Utils'
 import styled from 'styled-components/native'
 
@@ -178,25 +179,45 @@ function PrsonalInformation() {
     <>
       <Layout isBack={true} isHeader={true} isBackground={true}>
         <SafeAreaWrapper>
-          <ScrollerView>
-            <FormWrapper isRTL={!!isRTL}>
-              <Header isRTL={!!isRTL}>
-                {t('onboarding:personalInformation:personalInformation')}
-              </Header>
-              <DropDown
-                label={t('onboarding:personalInformation:education') || ''}
-                toogleClick={() => ToggleSheet(0)}
-                value={values.education}
-                error={errors.education}
-                isOpen={currentOpendIndx == 0}
-                title={t('onboarding:personalInformation:education')}
-                subTitle={t('onboarding:personalInformation:education')}
-                renderConten={<RenderSearchListContent />}
-                onSheetClose={() => setCurrentOpenedInx(-1)}
-                hasSearch
-                onSearchChange={search => setSearchValue(search)}
-              />
-              <Spacer />
+          <FormWrapper isRTL={!!isRTL}>
+            <Spacer />
+            <Header isRTL={!!isRTL}>
+              {t('onboarding:personalInformation:personalInformation')}
+            </Header>
+            <DropDown
+              label={t('onboarding:personalInformation:education') || ''}
+              toogleClick={() => ToggleSheet(0)}
+              value={values.education}
+              error={errors.education}
+              isOpen={currentOpendIndx == 0}
+              title={t('onboarding:personalInformation:education')}
+              subTitle={t('onboarding:personalInformation:education')}
+              renderConten={<RenderSearchListContent />}
+              onSheetClose={() => setCurrentOpenedInx(-1)}
+              hasSearch
+              onSearchChange={search => setSearchValue(search)}
+            />
+            <Spacer />
+            <DropDown
+              toogleClick={() => {
+                ToggleSheet(1)
+                setValues({...values, city: null})
+              }}
+              label={t('onboarding:personalInformation:countryOfBirth') || ''}
+              value={values.countryOfBirth}
+              error={errors.countryOfBirth}
+              title={t('onboarding:personalInformation:countryOfBirth')}
+              subTitle={
+                t('onboarding:personalInformation:countryOfBirth') || ''
+              }
+              isOpen={currentOpendIndx == 1}
+              renderConten={<RenderSearchListContent />}
+              onSheetClose={() => setCurrentOpenedInx(-1)}
+              hasSearch
+              onSearchChange={search => setSearchValue(search)}
+            />
+            <Spacer />
+            {IsSaudi ? (
               <DropDown
                 toogleClick={() => {
                   ToggleSheet(1)

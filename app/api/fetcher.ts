@@ -1,7 +1,7 @@
 import {fetch} from 'react-native-ssl-pinning'
 
 export type FetcherRequestProps = {
-  method?: string
+  method?: 'GET' | 'DELETE' | 'POST' | 'PUT' | undefined
   body?: any
   headers?: {}
   token?: string

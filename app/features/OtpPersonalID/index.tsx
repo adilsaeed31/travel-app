@@ -66,6 +66,33 @@ const StickyButton = styled.TouchableOpacity`
   justify-content: center;
 `
 
+const ErrorWrapper = styled.View`
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  background: #ffdede;
+  border-radius: 16px;
+  min-height: 60px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+`
+
+const ErrorLabel = styled.Text`
+  font-family: 'Co Text';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 28px;
+  align-self: center;
+  max-width: 90%;
+  /* or 200% */
+
+  text-align: center;
+  letter-spacing: -0.4px;
+
+  color: #de2e2e;
+`
+
 type Props = {
   navigation: StackNavigationProp<{
     AfterOtpPersonalId: undefined
@@ -83,7 +110,8 @@ const OtpPersonalIdScreen = ({navigation}: Props) => {
   const {isRTL} = useContext<AppProviderProps>(AppContext)
   const [state, setState] = useState<any>({})
   const [error, setError] = useState<string>('')
-
+  const [statusError, setStatusError] = useState<any>(false)
+  const [status, setStatus] = useState<any>('')
   const [isButtonDisabled, setButtonDisabled] = useState(true)
   const mobileNumber = useStore((store: any) => store.onboardingMobileNumber)
   const OTPRef = useStore((store: any) => store.onboardingOTPRef)
@@ -103,7 +131,14 @@ const OtpPersonalIdScreen = ({navigation}: Props) => {
           otp: state.otp,
         },
       })
-      return await req.json()
+
+      setStatus(req.status)
+
+      if (req.status < 400) {
+        return req.json()
+      } else {
+        return req.status
+      }
     },
   })
 
@@ -176,7 +211,11 @@ const OtpPersonalIdScreen = ({navigation}: Props) => {
   }, [resendCount, navigation])
 
   const onComplete = () => {
-    verifyOtp()
+    if (state.otp.length === 4) {
+      verifyOtp()
+    } else {
+      setError('Please Enter OTP')
+    }
   }
 
   if (otpData && otpData.access_token && !isTahaquqLoading && !tahaquqData) {
@@ -200,6 +239,11 @@ const OtpPersonalIdScreen = ({navigation}: Props) => {
     navigation.navigate('AfterOtpPersonalId')
   }
 
+  useEffect(() => {
+    if (status > 399 && status < 500) {
+      setStatusError('Invalid OTP')
+    }
+  }, [status])
   return (
     <>
       <Layout isLoading={isOTPLoading || isTahaquqLoading}>
@@ -215,8 +259,7 @@ const OtpPersonalIdScreen = ({navigation}: Props) => {
           }}
           resetCount={resendCount}
         />
-        {error && state.otp && <ErrorText>{error}</ErrorText>}
-        <Spacer size={SPACER_SIZES.XL} />
+        <Spacer size={SPACER_SIZES.BASE * 2} />
         <Row isRTL={isRTL}>
           <TouchableOpacity onPress={() => navigation.navigate('PersonalID')}>
             <Row isRTL={isRTL}>
@@ -243,6 +286,19 @@ const OtpPersonalIdScreen = ({navigation}: Props) => {
             )}
           </View>
         </Row>
+
+        {statusError ? (
+          <ErrorWrapper>
+            <ErrorLabel>{statusError}</ErrorLabel>
+          </ErrorWrapper>
+        ) : null}
+
+        {error && state.otp ? (
+          <ErrorWrapper>
+            <ErrorLabel>{error}</ErrorLabel>
+          </ErrorWrapper>
+        ) : null}
+
         {!isKeyboardVisible && (
           <ButtonContainer>
             <Button onPress={onComplete} disabled={isButtonDisabled}>
