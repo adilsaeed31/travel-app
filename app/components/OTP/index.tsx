@@ -103,7 +103,7 @@ const OtpEnter: React.FC<OtpInputProps> = ({
         ))}
       </OtpContainer>
       <Timer
-        seconds={120}
+        seconds={60}
         onTimerComplete={onTimerComplete}
         resetCount={resetCount}
       />

@@ -283,9 +283,11 @@ const PersonalIdScreen = ({navigation}: Props) => {
   useEffect(() => {
     if (status > 409) {
       setStatusError('Exiting OTP already Exist, Please wait for a minute')
-    } else if (status > 399 && status < 500) {
+      return
+    }
+    if (status > 399 && status < 500) {
       setStatusError('Some Error Occurred. Please try after some time')
-    } else {
+      return
     }
   }, [status])
 
