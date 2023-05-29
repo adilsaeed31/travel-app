@@ -24,7 +24,7 @@ const {Navigator, Screen} = createStackNavigator()
 const AuthNavigator = () => {
   return (
     <Navigator
-      initialRouteName="personalInfo"
+      initialRouteName="Auth"
       screenOptions={{
         headerShown: false,
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
