@@ -13,9 +13,11 @@ import styled from 'styled-components/native'
 import {useSafeAreaInsets} from 'react-native-safe-area-context'
 import {ActivityIndicator} from 'react-native'
 
-import Header from './Header'
 import {Background1, Background2} from '@Assets'
 import {useStore} from '@Store'
+import {vh, vw} from '@Utils'
+
+import Header from './Header'
 
 type LayoutProps = {
   isHeader?: boolean
@@ -125,10 +127,10 @@ const AppLayout: React.FC<LayoutProps> = ({
               style={{
                 // do not remove this below style props below will
                 // adjust the padding/spacing on ios and android
-                paddingTop: insetEdges.top,
-                paddingBottom: insetEdges.bottom,
-                paddingLeft: insetEdges.left + 32,
-                paddingRight: insetEdges.right + 32,
+                paddingTop: vh(insetEdges.top),
+                paddingLeft: vw(insetEdges.left),
+                paddingRight: vw(insetEdges.right),
+                paddingBottom: vh(insetEdges.bottom),
               }}>
               {isHeader && <Header isBack={isBack} onBack={onBack} />}
 

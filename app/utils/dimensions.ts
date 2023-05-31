@@ -3,10 +3,10 @@ import {Dimensions, PixelRatio} from 'react-native'
 const screenWidth = Dimensions.get('window').width
 const screenHeight = Dimensions.get('window').height
 
-export const DesignHeight = 812
 export const DesignWidth = 375
+export const DesignHeight = 812
 
-// It is based on the screen width of your design layouts e.g Height 600 x Width 375
+// It is based on the screen width of your design layouts e.g Height 812 x Width 375
 const scale = screenWidth / 375
 
 export function normalize(size: number) {
@@ -18,7 +18,7 @@ export const vw = (width: number) => {
   const percent = (width / DesignWidth) * 100
   const elemWidth = parseFloat(`${percent}%`)
   // Use PixelRatio.roundToNearestPixel method in order to round the layout
-  // size (dp) to the nearest one that correspons to an integer number of pixels.
+  // size (dp) to the nearest one that corresponds to an integer number of pixels.
   return PixelRatio.roundToNearestPixel((screenWidth * elemWidth) / 100)
 }
 
@@ -28,6 +28,6 @@ export const vh = (height: number) => {
   const elemHeight = parseFloat(`${percent}%`)
 
   // Use PixelRatio.roundToNearestPixel method in order to round the layout
-  // size (dp) to the nearest one that correspons to an integer number of pixels.
+  // size (dp) to the nearest one that corresponds to an integer number of pixels.
   return PixelRatio.roundToNearestPixel((screenHeight * elemHeight) / 100)
 }
