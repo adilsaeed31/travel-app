@@ -49,15 +49,14 @@ const Checkbox: React.FC<CheckboxProps> = ({
   }
 
   return (
-    <TouchableWithoutFeedback
-      onPress={handleToggle}
-      accessibilityRole="checkbox"
-      accessibilityState={{checked: isChecked}}>
-      <CheckboxContainer isRTL={isRTL}>
+    <CheckboxContainer isRTL={isRTL}>
+      <TouchableWithoutFeedback onPress={handleToggle}>
         <CheckBox checked={isChecked}>{isChecked && <Check />}</CheckBox>
+      </TouchableWithoutFeedback>
+      <TouchableWithoutFeedback onPress={handleToggle}>
         <CheckboxText isRTL={isRTL}>{label}</CheckboxText>
-      </CheckboxContainer>
-    </TouchableWithoutFeedback>
+      </TouchableWithoutFeedback>
+    </CheckboxContainer>
   )
 }
 
