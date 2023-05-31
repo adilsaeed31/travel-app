@@ -1,19 +1,21 @@
-import React, {useContext, useEffect} from 'react'
+import React, {useContext, useState} from 'react'
 import {
   View,
   Pressable,
   Dimensions,
   TextInput,
-  Modal,
-  TouchableWithoutFeedback,
+  FlatList,
+  TouchableOpacity,
 } from 'react-native'
 import styled from 'styled-components/native'
 import {AppContext, AppProviderProps} from '@Context'
 import {Forward} from '@Assets'
 import {TEXT_VARIANTS} from '@Utils'
 import TCTextView from '../TextView'
-import BottomSheet from 'reanimated-bottom-sheet'
 import {Search} from '@Assets'
+import Modal from 'react-native-modal'
+import {TCTextView as Text} from '@Components'
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 
 const DropDownInput = styled(Pressable)<{
   isRTL: boolean
@@ -28,12 +30,12 @@ const DropDownInput = styled(Pressable)<{
   border-radius: 12px;
   justify-content: center;
   padding: 12px 16px;
-  border: 1px solid
+  border: 0.5px solid
     ${props => (props.hasError ? '#F54D3F' : 'rgba(60, 60, 60, 0.4)')};
   border-color: ${props => (props.hasError ? 'red' : 'rgba(60, 60, 60, 0.4)')};
   flex-direction: ${props => (props.isRTL ? 'row-reverse' : 'row')};
   justify-content: space-between;
-  background: ${props => (props.disabled ? '#fcfcfc' : '#fcfcfc')};
+  background: ${props => (props.disabled ? '#f5f8f9' : '#f5f8f9')};
 `
 const ArrowIconWrapper = styled(View)<{isRTL: boolean}>`
   justify-content: center;
@@ -41,8 +43,7 @@ const ArrowIconWrapper = styled(View)<{isRTL: boolean}>`
   transform: ${props => (!props.isRTL ? 'rotate(360deg)' : 'rotate(180deg)')};
 `
 const Label = styled(TCTextView)`
-  color: #98a4a6;
-  opacity: 0.5;
+  color: #8c8a86;
   font-weight: 400;
   font-size: 13px;
   font-weight: 400;
@@ -68,6 +69,7 @@ const LabelValueWrapper = styled(View)<{hasValue: boolean}>`
   justify-content: ${props => (props.hasValue ? 'center' : 'center')};
 `
 interface IDropDownProps {
+  data: string[]
   label: string
   toogleClick: () => void
   value: string | null
@@ -76,16 +78,14 @@ interface IDropDownProps {
   disabled?: boolean
   title?: string | null
   subTitle?: string | null
-  renderConten: React.ReactNode
   hasSearch?: boolean
-  searchValue?: string
-  onSearchChange?: (e: React.SetStateAction<string>) => void
   onSheetClose: () => void
+  onItemSelected: (item: string) => void
 }
-const SheetFirstSnap = Dimensions.get('window').height / 1.8
-const SheetSecondSnap = Dimensions.get('window').height / 1.8
+const SheetHeight = Dimensions.get('window').height / 2
 
 export default function DropDown({
+  data = [],
   label = '',
   toogleClick,
   value,
@@ -94,17 +94,15 @@ export default function DropDown({
   isOpen = false,
   title = '',
   subTitle = '',
-  renderConten,
   hasSearch,
-  searchValue,
-  onSearchChange = () => {},
   onSheetClose,
+  onItemSelected,
 }: IDropDownProps) {
   const {isRTL} = useContext<AppProviderProps>(AppContext)
-  const sheetRef = React.useRef(null)
-  useEffect(() => {
-    sheetRef?.current?.snapTo(isOpen ? 1 : 3)
-  }, [isOpen])
+  const [searchVaue, setSearchValue] = useState('')
+  const SearchResult = searchVaue
+    ? data?.filter(word => word?.includes(searchVaue))
+    : data
   const renderContent = () => {
     return (
       <SheetContentWrapper>
@@ -117,14 +115,32 @@ export default function DropDown({
               <Search />
               <InputView
                 selectionColor={'black'}
-                value={searchValue}
+                value={searchVaue}
                 onChangeText={(e: React.SetStateAction<string>) => {
-                  onSearchChange(e)
+                  setSearchValue(e)
                 }}
               />
             </InputWrapper>
           )}
-          {renderConten}
+          <View style={{height: Dimensions.get('window').height / 3}}>
+            <FlatList
+              keyboardShouldPersistTaps="always"
+              data={SearchResult}
+              keyExtractor={(_item, i) => String(i)}
+              renderItem={({item, index}) => (
+                <ClickableItem
+                  hasBorder={SearchResult.length - 1 !== index}
+                  onPress={() => {
+                    onItemSelected(item)
+                    setSearchValue('')
+                    onSheetClose()
+                  }}
+                  key={index}>
+                  <ClickableItemText isRTL={!!isRTL}>{item}</ClickableItemText>
+                </ClickableItem>
+              )}
+            />
+          </View>
         </OneFlexView>
       </SheetContentWrapper>
     )
@@ -132,29 +148,30 @@ export default function DropDown({
 
   return (
     <>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={isOpen}
-        onRequestClose={() => {}}>
-        <TouchableWithoutFeedback onPress={onSheetClose}>
-          <Backdrop />
-        </TouchableWithoutFeedback>
-        <BottomSheet
-          enabledGestureInteraction
-          ref={sheetRef}
-          snapPoints={[SheetFirstSnap, SheetSecondSnap, 0]}
-          borderRadius={10}
-          renderContent={renderContent}
-          onCloseEnd={onSheetClose}
-        />
-      </Modal>
+      <KeyboardAwareScrollView keyboardShouldPersistTaps="never">
+        <Modal
+          onSwipeComplete={({swipingDirection}) =>
+            swipingDirection == 'down' && onSheetClose()
+          }
+          swipeDirection="down"
+          animationIn="fadeInUpBig"
+          animationOut="fadeOutDownBig"
+          onBackdropPress={onSheetClose}
+          avoidKeyboard={true}
+          style={{margin: 0}}
+          isVisible={isOpen}>
+          <ModalWrapper>{renderContent()}</ModalWrapper>
+        </Modal>
+      </KeyboardAwareScrollView>
 
       <DropDownInput
         disabled={disabled}
         hasError={!!error?.length}
         isRTL={!!isRTL}
-        onPress={toogleClick}>
+        onPress={() => {
+          setSearchValue('')
+          toogleClick()
+        }}>
         <LabelValueWrapper hasValue={!!value}>
           <Label>{label}</Label>
           {value && (
@@ -197,17 +214,12 @@ const ToNotch = styled(View)`
   border-radius: 100px;
 `
 
-const Backdrop = styled(View)`
-  background-color: gray;
-  flex: 1;
-  width: 100%;
-  height: 100%;
-  opacity: 0.8;
-`
 const SheetContentWrapper = styled(View)`
   background-color: white;
   padding: 16px;
-  height: ${SheetFirstSnap};
+  height: ${SheetHeight};
+  border-top-right-radius: 20px;
+  border-top-left-radius: 20px;
 `
 const OneFlexView = styled(View)`
   flex: 1;
@@ -227,4 +239,25 @@ const InputView = styled(TextInput)`
   flex: 1;
   padding-right: 5px;
   padding-left: 5px;
+`
+const ModalWrapper = styled(View)`
+  position: absolute;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 1000;
+`
+const ClickableItem = styled(TouchableOpacity)<{hasBorder: boolean}>`
+  border-bottom-width: ${props => (props.hasBorder ? '1px' : '0px')};
+  border-bottom-color: #e6e6e6;
+  height: 40px;
+  margin-top: 2px;
+  justify-content: center;
+`
+const ClickableItemText = styled(Text)<{isRTL: boolean}>`
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 20px;
+  color: #1e1e1c;
+  text-align: ${props => (props.isRTL ? 'right' : 'left')};
 `

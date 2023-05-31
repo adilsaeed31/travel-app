@@ -448,7 +448,7 @@ PODS:
     - React-Core
   - RNDateTimePicker (7.1.0):
     - React-Core
-  - RNGestureHandler (1.10.3):
+  - RNGestureHandler (2.10.1):
     - React-Core
   - RNReanimated (2.17.0):
     - DoubleConversion
@@ -733,7 +733,7 @@ SPEC CHECKSUMS:
   ReactCommon: dbfbe2f7f3c5ce4ce44f43f2fd0d5950d1eb67c5
   RNCAsyncStorage: b90b71f45b8b97be43bc4284e71a6af48ac9f547
   RNDateTimePicker: 7ecd54a97fc3749f38c3c89a171f6cbd52f3c142
-  RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
+  RNGestureHandler: 42ec7c28dd02d540ed6c9159c57a98ff016492dc
   RNReanimated: f186e85d9f28c9383d05ca39e11dd194f59093ec
   RNScreens: 218801c16a2782546d30bd2026bb625c0302d70f
   RNSslPinning: 373fddf38420bec9c591376f3e4a24df1051b39a
