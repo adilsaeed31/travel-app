@@ -128,8 +128,8 @@ const AppLayout: React.FC<LayoutProps> = ({
                 // do not remove this below style props below will
                 // adjust the padding/spacing on ios and android
                 paddingTop: vh(insetEdges.top),
-                paddingLeft: vw(insetEdges.left),
-                paddingRight: vw(insetEdges.right),
+                paddingLeft: vw(insetEdges.left) + vw(32),
+                paddingRight: vw(insetEdges.right) + vw(32),
                 paddingBottom: vh(insetEdges.bottom),
               }}>
               {isHeader && <Header isBack={isBack} onBack={onBack} />}

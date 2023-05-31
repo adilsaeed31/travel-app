@@ -4,6 +4,7 @@ import LottieView from 'lottie-react-native'
 import Animated, {
   FadeInLeft,
   FadeInRight,
+  FadeInDown,
   BounceInUp,
 } from 'react-native-reanimated'
 import Splash from 'react-native-splash-screen'
@@ -22,6 +23,7 @@ const MiddleSlideFrame = 476
 const LastSlideFrame = 714
 
 // enter animation
+const EnterAnimationDown = FadeInDown.duration(1000).delay(50)
 const EnterAnimationRight = FadeInRight.duration(1000).delay(50)
 const EnterAnimationLeft = FadeInLeft.duration(1000).delay(50)
 const EnterAnimationBounceInUp = BounceInUp.duration(1000).delay(50)
@@ -118,7 +120,10 @@ const IntroFeature: React.FC = () => {
 
       <View className="flex-1 p-8">
         <View
-          className={cn(flexRowLayout(isRTL), 'justify-between items-center')}>
+          className={cn(
+            flexRowLayout(isRTL),
+            'flex-1 justify-between items-start',
+          )}>
           <Animated.View entering={EnterAnimationBounceInUp}>
             <SaibLogo />
           </Animated.View>
@@ -135,42 +140,45 @@ const IntroFeature: React.FC = () => {
         </View>
 
         {currentValue === FirstSlideFrame && (
-          <Animated.View
-            entering={EnterAnimationRight}
-            className="flex-1 justify-end pb-20">
-            <TCTextView className="text-4xl text-tc-black">
-              {t('intro:future1')}
-            </TCTextView>
-            <TCTextView className="text-4xl text-tc-black font-tc-bold">
-              {t('intro:future2')}
-            </TCTextView>
-          </Animated.View>
+          <View className="flex-1 justify-center items-center pb-10">
+            <Animated.View entering={EnterAnimationDown}>
+              <TCTextView className="text-3xl text-tc-black">
+                {t('intro:future1')}
+              </TCTextView>
+
+              <TCTextView className="text-3xl text-tc-black font-tc-bold">
+                {t('intro:future2')}
+              </TCTextView>
+            </Animated.View>
+          </View>
         )}
 
         {currentValue === MiddleSlideFrame && (
-          <Animated.View
-            entering={EnterAnimationRight}
-            className="flex-1 justify-end pb-20">
-            <TCTextView className="text-4xl text-tc-black">
-              {t('intro:currency1')}
-            </TCTextView>
-            <TCTextView className="text-4xl text-tc-black font-tc-bold">
-              {t('intro:currency2')}
-            </TCTextView>
-          </Animated.View>
+          <View className="flex-1 justify-center items-center pb-10">
+            <Animated.View entering={EnterAnimationDown}>
+              <TCTextView className="text-3xl text-tc-black">
+                {t('intro:currency1')}
+              </TCTextView>
+
+              <TCTextView className="text-3xl text-tc-black font-tc-bold">
+                {t('intro:currency2')}
+              </TCTextView>
+            </Animated.View>
+          </View>
         )}
 
         {currentValue >= LastSlideFrame && (
-          <Animated.View
-            entering={EnterAnimationRight}
-            className="flex-1 justify-end pb-20">
-            <TCTextView className="text-4xl text-tc-black">
-              {t('intro:additional1')}
-            </TCTextView>
-            <TCTextView className="text-4xl text-tc-black font-tc-bold">
-              {t('intro:additional2')}
-            </TCTextView>
-          </Animated.View>
+          <View className="flex-1 justify-center items-center pb-10">
+            <Animated.View entering={EnterAnimationDown}>
+              <TCTextView className="text-3xl text-tc-black">
+                {t('intro:additional1')}
+              </TCTextView>
+
+              <TCTextView className="text-3xl text-tc-black font-tc-bold">
+                {t('intro:additional2')}
+              </TCTextView>
+            </Animated.View>
+          </View>
         )}
 
         <View
