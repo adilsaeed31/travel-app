@@ -1,13 +1,8 @@
 /* eslint-disable eqeqeq */
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, {useContext, useState} from 'react'
-import {
-  View,
-  SafeAreaView,
-  TouchableOpacity,
-  FlatList,
-  Dimensions,
-} from 'react-native'
+
+import React, {useContext, useState, useMemo} from 'react'
+import {View, SafeAreaView} from 'react-native'
+
 import {useTranslation} from 'react-i18next'
 import {
   Layout,
@@ -27,7 +22,16 @@ import {
   SaudiCities,
 } from '@Utils'
 import styled from 'styled-components/native'
-
+import {
+  MobileNumberValidator,
+  BuildingNumberValidator,
+  StreetNameValidator,
+  districtValidator,
+  PostalCodeValidator,
+  CityValidator,
+  ContactName,
+  relationValidaor,
+} from './validators'
 import {AppContext, AppProviderProps} from '@Context'
 type IFormTYpe = {
   city: string | null
@@ -59,52 +63,28 @@ const FormValues = {
   mobileNumber: '',
 }
 
-function FinacialInformation() {
+function PersonalInformation() {
   const [showAdditionalInformation, setShowAdditionalInformation] =
-    React.useState(false)
-  const [currentOpendIndx, setCurrentOpenedInx] = React.useState(-1)
-  const [sheetOpen, setSheetOpen] = React.useState(false)
+    useState(false)
+  const [currentOpendIndx, setCurrentOpenedInx] = useState(-1)
   const {isRTL} = useContext<AppProviderProps>(AppContext)
   const {t} = useTranslation()
-  const [searchVaue, setSearchValue] = useState('') // TODO
   const [values, setValues] = useState<IFormTYpe>({
     ...FormValues,
   })
   const [errors, setErrors] = useState({
     ...FormValues,
   })
-  const IsSaudi =
-    values.countryOfBirth === 'Saudi Arabia' ||
-    !values.countryOfBirth ||
-    values.countryOfBirth == 'المملكة العربية السعودية'
-
-  const sheetData = React.useMemo(
-    () => [
-      {
-        data: isRTL ? EducationalistAr : Educationalist,
-      },
-      {
-        data: isRTL
-          ? CounryListAr.map(c => c.name)
-          : CounryListEN.map(c => c.name),
-      },
-      {
-        data: SaudiCities.map(c => c[isRTL ? 'name_ar' : 'name_en']),
-      },
-    ],
-    [isRTL],
-  )
-
-  const SearchResult = searchVaue
-    ? sheetData[currentOpendIndx]?.data?.filter(word =>
-        word?.includes(searchVaue),
-      )
-    : sheetData[currentOpendIndx]?.data
+  const IsSaudi = useMemo(() => {
+    return (
+      values?.countryOfBirth === 'Saudi Arabia' ||
+      values?.countryOfBirth == 'المملكة العربية السعودية' ||
+      !values?.countryOfBirth
+    )
+  }, [values.countryOfBirth])
 
   const ToggleSheet = (indx: number) => {
-    setSheetOpen(!sheetOpen)
     setCurrentOpenedInx(indx)
-    setSearchValue('')
     let err = errors
     if (indx == 0) {
       err.education = ''
@@ -117,38 +97,38 @@ function FinacialInformation() {
     }
     setErrors(err)
   }
-  const RenderSearchListContent = () =>
-    React.useMemo(
-      () => (
-        <View>
-          <FlatList
-            data={SearchResult}
-            keyExtractor={(_item, i) => String(i)}
-            renderItem={({item, index}) => (
-              <ClickableItem
-                hasBorder={SearchResult.length - 1 !== index}
-                onPress={() => {
-                  setSheetOpen(false)
-                  setCurrentOpenedInx(-1)
-                  let newValue = {...values}
-                  newValue[
-                    currentOpendIndx == 0
-                      ? 'education'
-                      : currentOpendIndx == 1
-                      ? 'countryOfBirth'
-                      : 'city'
-                  ] = item
-                  setValues(newValue)
-                }}
-                key={index}>
-                <ClickableItemText isRTL={!!isRTL}>{item}</ClickableItemText>
-              </ClickableItem>
-            )}
-          />
-        </View>
-      ),
-      [searchVaue, SearchResult],
-    )
+  const isFormValid = useMemo(() => {
+    let isValid = false
+    if (
+      values.education &&
+      values.countryOfBirth &&
+      values.city &&
+      !showAdditionalInformation
+    ) {
+      isValid = true
+    }
+    if (
+      !IsSaudi &&
+      values.buldingNumber &&
+      values.streetNanme &&
+      values.district &&
+      values.poBox &&
+      values.postalCode &&
+      values.city &&
+      values.phoneNumber
+    ) {
+      isValid = true
+    }
+    if (showAdditionalInformation) {
+      if (!isValid) {
+        return
+      }
+      !values.contactName || !values.relation || !values.phoneNumber
+        ? (isValid = false)
+        : (isValid = true)
+    }
+    return isValid
+  }, [values, IsSaudi, showAdditionalInformation])
   const HandleContinuePressed = () => {
     let err = {...errors}
     if (!values.city) {
@@ -178,27 +158,33 @@ function FinacialInformation() {
   return (
     <>
       <Layout isBack={true} isHeader={true} isBackground={true}>
-        <SafeAreaWrapper>
-          <ScrollerView>
+        <ScrollerView>
+          <SafeAreaWrapper>
             <FormWrapper isRTL={!!isRTL}>
+              <Spacer />
               <Header isRTL={!!isRTL}>
                 {t('onboarding:personalInformation:personalInformation')}
               </Header>
               <DropDown
+                data={isRTL ? EducationalistAr : Educationalist}
                 label={t('onboarding:personalInformation:education') || ''}
                 toogleClick={() => ToggleSheet(0)}
+                onItemSelected={education => setValues({...values, education})}
                 value={values.education}
                 error={errors.education}
                 isOpen={currentOpendIndx == 0}
                 title={t('onboarding:personalInformation:education')}
                 subTitle={t('onboarding:personalInformation:education')}
-                renderConten={<RenderSearchListContent />}
                 onSheetClose={() => setCurrentOpenedInx(-1)}
                 hasSearch
-                onSearchChange={search => setSearchValue(search)}
               />
               <Spacer />
               <DropDown
+                data={
+                  isRTL
+                    ? CounryListAr.map(c => c.name)
+                    : CounryListEN.map(c => c.name)
+                }
                 toogleClick={() => {
                   ToggleSheet(1)
                   setValues({...values, city: null})
@@ -211,14 +197,16 @@ function FinacialInformation() {
                   t('onboarding:personalInformation:countryOfBirth') || ''
                 }
                 isOpen={currentOpendIndx == 1}
-                renderConten={<RenderSearchListContent />}
                 onSheetClose={() => setCurrentOpenedInx(-1)}
                 hasSearch
-                onSearchChange={search => setSearchValue(search)}
+                onItemSelected={countryOfBirth =>
+                  setValues({...values, countryOfBirth})
+                }
               />
               <Spacer />
               {IsSaudi ? (
                 <DropDown
+                  data={SaudiCities.map(c => c[isRTL ? 'name_ar' : 'name_en'])}
                   disabled={!values.countryOfBirth}
                   toogleClick={() => {
                     if (!values.countryOfBirth) {
@@ -232,10 +220,9 @@ function FinacialInformation() {
                   title={t('onboarding:personalInformation:city')}
                   subTitle={t('onboarding:personalInformation:city')}
                   isOpen={currentOpendIndx == 2}
-                  renderConten={<RenderSearchListContent />}
                   onSheetClose={() => setCurrentOpenedInx(-1)}
                   hasSearch
-                  onSearchChange={search => setSearchValue(search)}
+                  onItemSelected={city => setValues({...values, city})}
                 />
               ) : (
                 <LoginForm>
@@ -246,6 +233,10 @@ function FinacialInformation() {
                     }
                     label={t('onboarding:personalInformation:buldingNumber')}
                     errorMessage={errors.buldingNumber}
+                    keyboardType="number-pad"
+                    returnKeyType="done"
+                    maxLength={10}
+                    schema={BuildingNumberValidator}
                   />
                   <InputSpacer />
                   <TCInput
@@ -255,6 +246,9 @@ function FinacialInformation() {
                     }
                     label={t('onboarding:personalInformation:streetNanme')}
                     errorMessage={errors.streetNanme}
+                    returnKeyType="done"
+                    maxLength={10}
+                    schema={StreetNameValidator}
                   />
                   <InputSpacer />
                   <TCInput
@@ -264,6 +258,9 @@ function FinacialInformation() {
                     }
                     label={t('onboarding:personalInformation:district')}
                     errorMessage={errors.district}
+                    returnKeyType="done"
+                    maxLength={10}
+                    schema={districtValidator}
                   />
                   <InputSpacer />
                   <TCInput
@@ -273,6 +270,8 @@ function FinacialInformation() {
                     }
                     label={t('onboarding:personalInformation:poBox')}
                     errorMessage={errors.poBox}
+                    returnKeyType="done"
+                    maxLength={10}
                   />
                   <InputSpacer />
                   <TCInput
@@ -282,6 +281,10 @@ function FinacialInformation() {
                     }
                     label={t('onboarding:personalInformation:postalCode')}
                     errorMessage={errors.postalCode}
+                    keyboardType="number-pad"
+                    returnKeyType="done"
+                    maxLength={10}
+                    schema={PostalCodeValidator}
                   />
                   <InputSpacer />
                   <TCInput
@@ -291,6 +294,9 @@ function FinacialInformation() {
                     }
                     label={t('onboarding:personalInformation:city')}
                     errorMessage={errors.city}
+                    returnKeyType="done"
+                    maxLength={10}
+                    schema={CityValidator}
                   />
                   <InputSpacer />
                   <TCInput
@@ -299,7 +305,10 @@ function FinacialInformation() {
                       val && setValues({...values, phoneNumber: val})
                     }
                     label={t('onboarding:personalInformation:phoneNumber')}
-                    errorMessage={errors.phoneNumber}
+                    schema={MobileNumberValidator}
+                    keyboardType="number-pad"
+                    returnKeyType="done"
+                    maxLength={10}
                   />
                   <InputSpacer />
                 </LoginForm>
@@ -340,6 +349,9 @@ function FinacialInformation() {
                       'onboarding:personalInformation:addetionalContactNanme',
                     )}
                     errorMessage={errors.contactName}
+                    returnKeyType="done"
+                    maxLength={10}
+                    schema={ContactName}
                   />
                   <Spacer />
                   <TCInput
@@ -349,6 +361,9 @@ function FinacialInformation() {
                     }
                     label={t('onboarding:personalInformation:relation')}
                     errorMessage={errors.relation}
+                    returnKeyType="done"
+                    maxLength={10}
+                    schema={relationValidaor}
                   />
                   <Spacer />
                   <TCInput
@@ -358,24 +373,28 @@ function FinacialInformation() {
                     }
                     label={t('onboarding:personalInformation:mobileNumber')}
                     errorMessage={errors.phoneNumber}
+                    schema={MobileNumberValidator}
+                    returnKeyType="done"
                   />
                   <Spacer />
                 </LoginForm>
               )}
             </FormWrapper>
-            <StyledButton onPress={HandleContinuePressed}>
+            <StyledButton
+              disabled={!isFormValid}
+              onPress={HandleContinuePressed}>
               <Text variant={TEXT_VARIANTS.body700}>
                 {t('onboarding:personalInformation:continue')}
               </Text>
             </StyledButton>
-          </ScrollerView>
-        </SafeAreaWrapper>
+          </SafeAreaWrapper>
+        </ScrollerView>
       </Layout>
     </>
   )
 }
 
-export default FinacialInformation
+export default PersonalInformation
 
 const InputSpacer = styled(View)`
   margin-bottom: 12px;
@@ -410,31 +429,14 @@ const RadioWrapper = styled(View)<{isRTL: boolean}>`
 const SafeAreaWrapper = styled(SafeAreaView)`
   flex: 1;
   justify-content: space-between;
-  margin-bottom: ${Dimensions.get('window').height / 7}px;
 `
 const FormWrapper = styled(SafeAreaView)<{isRTL: boolean}>`
   align-items: ${props => (props.isRTL ? 'flex-end' : 'flex-start')};
-`
-
-const ClickableItem = styled(TouchableOpacity)<{hasBorder: boolean}>`
-  border-bottom-width: ${props => (props.hasBorder ? '1px' : '0px')};
-  border-bottom-color: #e6e6e6;
-  height: 40px;
-  margin-top: 2px;
-  justify-content: center;
-`
-const ClickableItemText = styled(Text)<{isRTL: boolean}>`
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 20px;
-  color: #1e1e1c;
-  text-align: ${props => (props.isRTL ? 'right' : 'left')};
+  flex: 1;
 `
 
 const LoginForm = styled.View`
   width: 100%;
   margin-top: 10px;
 `
-const ScrollerView = styled.ScrollView`
-  height: ${Dimensions.get('window').height * 1.4}px;
-`
+const ScrollerView = styled.ScrollView``
