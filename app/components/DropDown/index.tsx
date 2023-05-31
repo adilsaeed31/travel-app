@@ -6,68 +6,16 @@ import {
   TextInput,
   FlatList,
   TouchableOpacity,
+  StyleSheet,
 } from 'react-native'
+import Modal from 'react-native-modal'
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import styled from 'styled-components/native'
 import {AppContext, AppProviderProps} from '@Context'
-import {Forward} from '@Assets'
+import {Forward, Search} from '@Assets'
 import {TEXT_VARIANTS} from '@Utils'
 import TCTextView from '../TextView'
-import {Search} from '@Assets'
-import Modal from 'react-native-modal'
-import {TCTextView as Text} from '@Components'
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 
-const DropDownInput = styled(Pressable)<{
-  isRTL: boolean
-  hasError: boolean
-  disabled: boolean
-}>`
-  height: 70px;
-  width: 100%;
-  margin-right: 32px;
-  margin-left: 32px;
-  align-self: center;
-  border-radius: 12px;
-  justify-content: center;
-  padding: 12px 16px;
-  border: 0.5px solid
-    ${props => (props.hasError ? '#F54D3F' : 'rgba(60, 60, 60, 0.4)')};
-  border-color: ${props => (props.hasError ? 'red' : 'rgba(60, 60, 60, 0.4)')};
-  flex-direction: ${props => (props.isRTL ? 'row-reverse' : 'row')};
-  justify-content: space-between;
-  background: ${props => (props.disabled ? '#f5f8f9' : '#f5f8f9')};
-`
-const ArrowIconWrapper = styled(View)<{isRTL: boolean}>`
-  justify-content: center;
-  transform: rotate(180deg);
-  transform: ${props => (!props.isRTL ? 'rotate(360deg)' : 'rotate(180deg)')};
-`
-const Label = styled(TCTextView)`
-  color: #8c8a86;
-  font-weight: 400;
-  font-size: 13px;
-  font-weight: 400;
-  line-height: 18px;
-`
-const Value = styled(TCTextView)<{isRTL: boolean}>`
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 24px;
-  text-align: ${props => (props.isRTL ? 'right' : 'left')};
-  color: #333333;
-`
-const ErrorText = styled(TCTextView)`
-  color: #f85e5e;
-  font-weight: 400;
-  font-size: 14px;
-  margin-top: 5px;
-  margin-left: 5px;
-  margin-right: 5px;
-`
-const LabelValueWrapper = styled(View)<{hasValue: boolean}>`
-  justify-content: ${props => (props.hasValue ? 'center' : 'center')};
-`
 interface IDropDownProps {
   data: string[]
   label: string
@@ -101,7 +49,9 @@ export default function DropDown({
   const {isRTL} = useContext<AppProviderProps>(AppContext)
   const [searchVaue, setSearchValue] = useState('')
   const SearchResult = searchVaue
-    ? data?.filter(word => word?.includes(searchVaue))
+    ? data?.filter(word =>
+        String(word).toLowerCase().includes(String(searchVaue).toLowerCase()),
+      )
     : data
   const renderContent = () => {
     return (
@@ -151,20 +101,20 @@ export default function DropDown({
       <KeyboardAwareScrollView keyboardShouldPersistTaps="never">
         <Modal
           onSwipeComplete={({swipingDirection}) =>
-            swipingDirection == 'down' && onSheetClose()
+            swipingDirection === 'down' && onSheetClose()
           }
           swipeDirection="down"
           animationIn="fadeInUpBig"
           animationOut="fadeOutDownBig"
           onBackdropPress={onSheetClose}
           avoidKeyboard={true}
-          style={{margin: 0}}
+          style={Styles.noMargin}
           isVisible={isOpen}>
           <ModalWrapper>{renderContent()}</ModalWrapper>
         </Modal>
       </KeyboardAwareScrollView>
 
-      <DropDownInput
+      <ConfirmButton
         disabled={disabled}
         hasError={!!error?.length}
         isRTL={!!isRTL}
@@ -183,11 +133,17 @@ export default function DropDown({
         <ArrowIconWrapper isRTL={!!isRTL}>
           <Forward />
         </ArrowIconWrapper>
-      </DropDownInput>
+      </ConfirmButton>
       {error?.length ? <ErrorText>{error}</ErrorText> : null}
     </>
   )
 }
+
+const Styles = StyleSheet.create({
+  noMargin: {
+    margin: 0,
+  },
+})
 
 const Title = styled(TCTextView)<{isRTL: boolean}>`
   font-weight: 700;
@@ -254,10 +210,62 @@ const ClickableItem = styled(TouchableOpacity)<{hasBorder: boolean}>`
   margin-top: 2px;
   justify-content: center;
 `
-const ClickableItemText = styled(Text)<{isRTL: boolean}>`
+const ClickableItemText = styled(TCTextView)<{isRTL: boolean}>`
   font-weight: 400;
   font-size: 16px;
   line-height: 20px;
   color: #1e1e1c;
   text-align: ${props => (props.isRTL ? 'right' : 'left')};
+`
+
+const ConfirmButton = styled(Pressable)<{
+  isRTL: boolean
+  hasError: boolean
+  disabled: boolean
+}>`
+  height: 70px;
+  width: 100%;
+  margin-right: 32px;
+  margin-left: 32px;
+  align-self: center;
+  border-radius: 12px;
+  justify-content: center;
+  padding: 12px 16px;
+  border: 0.5px solid
+    ${props => (props.hasError ? '#F54D3F' : 'rgba(60, 60, 60, 0.4)')};
+  border-color: ${props => (props.hasError ? 'red' : 'rgba(60, 60, 60, 0.4)')};
+  flex-direction: ${props => (props.isRTL ? 'row-reverse' : 'row')};
+  justify-content: space-between;
+  background: ${props => (props.disabled ? '#f5f8f9' : '#f5f8f9')};
+`
+const ArrowIconWrapper = styled(View)<{isRTL: boolean}>`
+  justify-content: center;
+  transform: rotate(180deg);
+  transform: ${props => (!props.isRTL ? 'rotate(360deg)' : 'rotate(180deg)')};
+`
+const Label = styled(TCTextView)`
+  color: #8c8a86;
+  font-weight: 400;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 18px;
+`
+const Value = styled(TCTextView)<{isRTL: boolean}>`
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  text-align: ${props => (props.isRTL ? 'right' : 'left')};
+  color: #333333;
+`
+const ErrorText = styled(TCTextView)`
+  color: #f85e5e;
+  font-weight: 400;
+  font-size: 14px;
+  margin-top: 5px;
+  margin-left: 5px;
+  margin-right: 5px;
+`
+const LabelValueWrapper = styled(View)<{hasValue: boolean}>`
+  justify-content: ${props => (props.hasValue ? 'center' : 'center')};
 `

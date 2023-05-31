@@ -26,7 +26,6 @@ import {
   BASE_URL,
   SPACER_SIZES,
   TEXT_VARIANTS,
-  Colors,
 } from '@Utils'
 import {AppProviderProps, AppContext} from '@Context'
 import {fetcher} from '@Api'
@@ -184,12 +183,12 @@ const PersonalIdScreen = ({navigation}: Props) => {
   useEffect(() => {
     if (status === 409) {
       setStatusError('OTP already Exist, Please wait for a minute')
-      return
+      return () => {}
     }
 
     if (status > 399 && status < 500) {
       setStatusError('Some Error Occurred. Please try after some time')
-      return
+      return () => {}
     }
   }, [status])
 
@@ -223,8 +222,8 @@ const PersonalIdScreen = ({navigation}: Props) => {
         {statusError && <ErrorText>{statusError}</ErrorText>}
         <DisclaimerView isKeyboardVisible={isKeyboardVisible} isRTL={isRTL}>
           <Checkbox
-            onChange={status => {
-              setState({...state, isEmailCheck: status})
+            onChange={newStatus => {
+              setState({...state, isEmailCheck: newStatus})
             }}
             label={
               <AgreeText variant={TEXT_VARIANTS.label}>
@@ -233,12 +232,12 @@ const PersonalIdScreen = ({navigation}: Props) => {
             }
           />
           <Checkbox
-            onChange={status => {
-              if (status) {
+            onChange={newStatus => {
+              if (newStatus) {
                 setTermsError(false)
               }
 
-              setState({...state, isTermsCheck: status})
+              setState({...state, isTermsCheck: newStatus})
             }}
             label={<Terms />}
           />
@@ -263,7 +262,9 @@ const PersonalIdScreen = ({navigation}: Props) => {
         <StickyButtonContainer keyboardHeight={keyboardHeight}>
           <StickyButton
             onPress={() => {
-              if (!isButtonDisabled) onComplete()
+              if (!isButtonDisabled) {
+                onComplete()
+              }
             }}
             isDisabled={isButtonDisabled}
             activeOpacity={isButtonDisabled ? 1 : 0.5}>

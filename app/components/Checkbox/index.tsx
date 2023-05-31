@@ -1,5 +1,5 @@
 import React, {useState, useContext} from 'react'
-import {TouchableWithoutFeedback} from 'react-native'
+import {TouchableOpacity} from 'react-native'
 import styled from 'styled-components/native'
 import {Check} from '@Assets'
 import {AppProviderProps, AppContext} from '@Context'
@@ -50,12 +50,12 @@ const Checkbox: React.FC<CheckboxProps> = ({
 
   return (
     <CheckboxContainer isRTL={isRTL}>
-      <TouchableWithoutFeedback onPress={handleToggle}>
+      <TouchableOpacity activeOpacity={1} onPress={handleToggle}>
         <CheckBox checked={isChecked}>{isChecked && <Check />}</CheckBox>
-      </TouchableWithoutFeedback>
-      <TouchableWithoutFeedback onPress={handleToggle}>
+      </TouchableOpacity>
+      <TouchableOpacity activeOpacity={1} onPress={handleToggle}>
         <CheckboxText isRTL={isRTL}>{label}</CheckboxText>
-      </TouchableWithoutFeedback>
+      </TouchableOpacity>
     </CheckboxContainer>
   )
 }
