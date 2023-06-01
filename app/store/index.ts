@@ -18,7 +18,7 @@ export const useStore = create<RootStoreProps>()(
       ...OnBoardingStore(...s),
     }),
     {
-      name: 'food-storage', // name of the item in the storage (must be unique)
+      name: 'tc-storage', // name of the item in the storage (must be unique)
       storage: createJSONStorage(() => EncryptedStorage), // (optional) by default, 'localStorage' is used
     },
   ),

@@ -45,6 +45,9 @@ export function AppProvider(props: AppProviderProps) {
   const [language, setLanguage] = useState<string>('en')
   const [direction, setDirection] = useState<string>('ltr')
   const [mode, setMode] = useState<ColorSchemeName>(useColorScheme())
+  // here we can get the user information if the app is background
+  // to move app to active screen always instead of splash/intro
+  // use dynamic func in useState and replace the false with func
   const [isAppReady, setIsAppReady] = useState<boolean>(false)
 
   // changing the dark and light mode here
@@ -60,8 +63,8 @@ export function AppProvider(props: AppProviderProps) {
   // setting app isready here
   const setAppReady = () => {
     setIsAppReady(true)
-    setIntro()
-    introHasBeenSeen()
+    // setIntro()
+    // introHasBeenSeen()
   }
 
   return (

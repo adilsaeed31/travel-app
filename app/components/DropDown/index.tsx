@@ -8,14 +8,14 @@ import {
   TouchableOpacity,
 } from 'react-native'
 import styled from 'styled-components/native'
-import {AppContext, AppProviderProps} from '@Context'
-import {Forward} from '@Assets'
-import {TEXT_VARIANTS} from '@Utils'
-import TCTextView from '../TextView'
-import {Search} from '@Assets'
 import Modal from 'react-native-modal'
-import {TCTextView as Text} from '@Components'
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
+
+import {AppContext, AppProviderProps} from '@Context'
+import {Forward, Search} from '@Assets'
+import {TEXT_VARIANTS} from '@Utils'
+
+import TCTextView from '../TextView'
 
 const DropDownInput = styled(Pressable)<{
   isRTL: boolean
@@ -254,7 +254,7 @@ const ClickableItem = styled(TouchableOpacity)<{hasBorder: boolean}>`
   margin-top: 2px;
   justify-content: center;
 `
-const ClickableItemText = styled(Text)<{isRTL: boolean}>`
+const ClickableItemText = styled(TCTextView)<{isRTL: boolean}>`
   font-weight: 400;
   font-size: 16px;
   line-height: 20px;
