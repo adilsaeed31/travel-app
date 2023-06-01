@@ -6,7 +6,6 @@ const SvgBackground2 = props => (
     width={375}
     height={812}
     fill="none"
-    viewBox="0 0 375 812"
     {...props}>
     <G clipPath="url(#Background2_svg__a)">
       <Path fill="#fff" d="M0 0h375v812H0z" />

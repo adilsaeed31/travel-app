@@ -42,6 +42,7 @@ const Container = styled(View)`
 
 const BackgroundImage1 = styled(Background1)`
   position: absolute;
+  bottom: 0;
   z-index: -1;
   elevation: -1;
   transform: ${() => (useStore.getState().isRTL ? 'scaleX(-1)' : 'scaleX(1)')};
@@ -107,11 +108,7 @@ const AppLayout: React.FC<LayoutProps> = ({
             {isBackground && (
               <>
                 {backgroundIndex === 1 ? (
-                  <BackgroundImage1
-                    preserveAspectRatio="none"
-                    width="100%"
-                    height="100%"
-                  />
+                  <BackgroundImage1 preserveAspectRatio="none" width="100%" />
                 ) : null}
 
                 {backgroundIndex === 2 ? (

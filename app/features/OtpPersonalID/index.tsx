@@ -237,7 +237,6 @@ const OtpPersonalIdScreen = ({navigation}: Props) => {
   }
 
   useEffect(() => {
-    console.log(status, '++++++++++++++++++++++++++')
     if (status === 403) {
       setStatusError('OTP Expired')
       return
