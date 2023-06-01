@@ -1,9 +1,13 @@
-import React from 'react'
+import React, {memo} from 'react'
 import {Text} from 'react-native'
 import {styled} from 'styled-components/native'
 import {useStore} from '@Store'
 
-const StyledTextView = styled(Text)<{isRTL: boolean; variant: string}>`
+const StyledTextView = styled(Text)<{
+  style?: string
+  isRTL: boolean
+  variant: string
+}>`
   text-align: ${({isRTL}) => (isRTL ? 'right' : 'left')};
   font-family: 'Co Text';
   ${({variant}) => variant};
@@ -12,20 +16,23 @@ const StyledTextView = styled(Text)<{isRTL: boolean; variant: string}>`
 function TCTextView({
   children,
   variant,
+  style,
   ...rest
 }: {
   children: string | React.ReactElement | null
   variant?: any
   className?: string
+  style?: string
 }) {
   return (
     <StyledTextView
-      {...rest}
+      style={style}
       variant={variant}
-      isRTL={useStore.getState().isRTL}>
+      isRTL={useStore.getState().isRTL}
+      {...rest}>
       {children}
     </StyledTextView>
   )
 }
 
-export default TCTextView
+export default memo(TCTextView)

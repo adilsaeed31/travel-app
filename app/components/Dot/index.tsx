@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {memo} from 'react'
 import {View} from 'react-native'
 
 const TCDot: React.FC<{isActive?: boolean}> = ({isActive}) => {
@@ -16,4 +16,4 @@ const TCDot: React.FC<{isActive?: boolean}> = ({isActive}) => {
   )
 }
 
-export default TCDot
+export default memo(TCDot)

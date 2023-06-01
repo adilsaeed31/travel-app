@@ -3,10 +3,10 @@ import LottieView from 'lottie-react-native'
 import Splash from 'react-native-splash-screen'
 import {StackNavigationProp} from '@react-navigation/stack'
 
-import {splashAnimationJson} from '@Assets'
-import {AppContext, AppProviderProps} from '@Context'
 import {getIntro} from '@Utils'
 import {useStore} from '@Store'
+import {splashAnimationJson} from '@Assets'
+import {AppContext, AppProviderProps} from '@Context'
 
 type SplashScreenProps = {
   navigation: StackNavigationProp<any>
@@ -18,9 +18,10 @@ const SplashScreen: React.FC<SplashScreenProps> = ({navigation}) => {
 
   const gotToNextFeature = () => {
     if (!hasIntroSeen) {
-      navigation.push('Intro')
+      navigation.replace('Intro')
     } else {
       setAppReady?.()
+      navigation.replace('Auth')
     }
   }
 
@@ -36,7 +37,7 @@ const SplashScreen: React.FC<SplashScreenProps> = ({navigation}) => {
 
     // hiding the splash screen below
     Splash.hide()
-  }, [introHasBeenSeen])
+  }, [hasIntroSeen, introHasBeenSeen])
 
   return (
     <LottieView

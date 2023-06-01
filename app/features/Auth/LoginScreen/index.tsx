@@ -1,10 +1,7 @@
-import React, {useContext, useEffect, useRef, useState} from 'react'
-import {AppContext, AppProviderProps} from '@Context'
+import React, {useEffect, useState} from 'react'
 import {View} from 'react-native'
 import {FaceIcon} from '@Assets'
 import {useTranslation} from 'react-i18next'
-import NetInfo from '@react-native-community/netinfo'
-import {onlineManager} from '@tanstack/react-query'
 
 import {
   TCInput as InputView,
@@ -17,7 +14,7 @@ import {
 } from '@Components'
 import styled from 'styled-components/native'
 import {SPACER_SIZES, TEXT_VARIANTS} from '@Utils'
-import {Animated, Dimensions, Keyboard} from 'react-native'
+import {Dimensions, Keyboard} from 'react-native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {fetcher} from '@Api'
 import {useQuery} from '@tanstack/react-query'
@@ -29,18 +26,17 @@ type Props = {
   navigation: StackNavigationProp<{
     AfterOtpPersonalId: undefined
     PersonalID: undefined
+    Existing: undefined
+    OTPAuth?: {
+      user: undefined
+    }
   }>
 }
 
 const AuthFeature = ({navigation}: Props) => {
   const {t} = useTranslation()
-  const {isAppReady, hasIntroSeen} = useContext<AppProviderProps>(AppContext)
-  const splashAnim = useRef(new Animated.Value(0)).current
   const isFocused = useIsFocused()
 
-  const transAnim = useRef(
-    new Animated.ValueXY({x: Dimensions.get('screen').width, y: 0}),
-  ).current
   const [userName, setUserName] = useState('')
   const [password, setPassword] = useState('')
   const [isKeyboardVisible, setKeyboardVisible] = useState<boolean>(false)
@@ -61,8 +57,7 @@ const AuthFeature = ({navigation}: Props) => {
   }
   const url = `${BASE_URL}/auth/login`
   const {isFetching, data, refetch} = useQuery({
-    // eslint-disable-next-line @tanstack/query/exhaustive-deps
-    queryKey: ['Login'],
+    queryKey: ['Login', url, bodyParams],
     queryFn: async () => {
       let res: any = await fetcher(url, {
         method: 'POST',
@@ -76,7 +71,6 @@ const AuthFeature = ({navigation}: Props) => {
         setstatus(400)
         return res.status
       } catch (e) {
-        console.log(e, 'nera warala')
         return 500 // something went wrong
       }
     },
@@ -101,32 +95,17 @@ const AuthFeature = ({navigation}: Props) => {
         setIsAuthFailed(true)
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, isFetching, isFocused])
+  }, [data, isFetching, isFocused, navigation, setUser, status])
 
   const handleLogin = () => {
+    setUser({})
+
     // Perform login logic here
     refetch()
     if (Keyboard) {
       Keyboard.dismiss()
     }
   }
-
-  useEffect(() => {
-    // Added the fade opacity animation for 1 sec
-    Animated.parallel([
-      Animated.timing(splashAnim, {
-        toValue: 1,
-        duration: 250,
-        useNativeDriver: true,
-      }),
-      Animated.timing(transAnim, {
-        toValue: {x: 0, y: 0},
-        duration: 500,
-        useNativeDriver: true,
-      }),
-    ]).start()
-  }, [splashAnim, transAnim, isAppReady, hasIntroSeen])
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
@@ -152,61 +131,57 @@ const AuthFeature = ({navigation}: Props) => {
 
   return (
     <>
-      <Animated.View
-        className="flex-1"
-        style={{
-          opacity: splashAnim,
-          transform: [...transAnim.getTranslateTransform()],
-        }}>
-        <Layout isScrollable={false} isLoading={isFetching}>
-          <Spacer horizontal={false} size={SPACER_SIZES.BASE} />
-          <TCTextView style={{flex: 0.5}} variant={TEXT_VARIANTS.heading}>
-            {t('auth:buttonLogin')}
-          </TCTextView>
-          <LoginForm>
-            <TCInput
-              maxLength={20}
-              label={t('auth:userName')}
-              onChangeText={setUserName}
-            />
-            <TCInput
-              label={t('auth:password')}
-              value={password}
-              isPassword
-              onChangeText={setPassword}
-            />
-          </LoginForm>
-          <ViewWrapper>
-            <TCLinkButton onPress={() => {}}>
-              {t('auth:buttonForget')}
-            </TCLinkButton>
-          </ViewWrapper>
-          {isAuthFailed && (
-            <ForgetPassWrapper>
-              <ForgetPassLabel>{t('auth:authFailed')}</ForgetPassLabel>
-            </ForgetPassWrapper>
-          )}
+      <Layout isScrollable={false} isLoading={isFetching}>
+        <Spacer horizontal={false} size={SPACER_SIZES.BASE} />
+        <TCTextView
+          className="text-tc-black pt-8"
+          variant={TEXT_VARIANTS.heading}>
+          {t('auth:buttonLogin')}
+        </TCTextView>
+        <LoginForm>
+          <TCInput
+            maxLength={20}
+            label={t('auth:userName')}
+            onChangeText={setUserName}
+          />
+          <TCInput
+            isPassword
+            value={password}
+            label={t('auth:password')}
+            onChangeText={setPassword}
+          />
+        </LoginForm>
+        <ViewWrapper>
+          <TCLinkButton onPress={() => navigation.navigate('Existing')}>
+            {t('auth:buttonForget')}
+          </TCLinkButton>
+        </ViewWrapper>
+        {isAuthFailed && (
+          <ForgetPassWrapper>
+            <ForgetPassLabel>{t('auth:authFailed')}</ForgetPassLabel>
+          </ForgetPassWrapper>
+        )}
 
+        <MultiTextWrapper>
+          <FaceIcon />
+        </MultiTextWrapper>
+        <BottomView>
+          <ButtonContainer>
+            <TCButton onPress={handleLogin}>{t('auth:buttonLogin')}</TCButton>
+          </ButtonContainer>
           <MultiTextWrapper>
-            <FaceIcon />
+            <TCMultiLinkButton
+              callbacks={[
+                () => {
+                  navigation.navigate('PersonalID')
+                },
+              ]}>
+              {t('auth:newToSaib')}
+            </TCMultiLinkButton>
           </MultiTextWrapper>
-          <BottomView>
-            <ButtonContainer>
-              <TCButton onPress={handleLogin}>{t('auth:buttonLogin')}</TCButton>
-            </ButtonContainer>
-            <MultiTextWrapper>
-              <TCMultiLinkButton
-                callbacks={[
-                  () => {
-                    navigation.navigate('PersonalID')
-                  },
-                ]}>
-                {t('auth:newToSaib')}
-              </TCMultiLinkButton>
-            </MultiTextWrapper>
-          </BottomView>
-        </Layout>
-      </Animated.View>
+        </BottomView>
+      </Layout>
+
       {isKeyboardVisible && (
         <ButtonKeyboardUp keyboardHeight={keyboardHeight}>
           <TCButton onPress={handleLogin}>{t('auth:buttonLogin')}</TCButton>
@@ -216,7 +191,7 @@ const AuthFeature = ({navigation}: Props) => {
   )
 }
 
-const ButtonKeyboardUp = styled(View)<any>`
+const ButtonKeyboardUp = styled(View)<{keyboardHeight: number}>`
   position: absolute;
   background: #f8d03b;
   bottom: ${({keyboardHeight}) => keyboardHeight};

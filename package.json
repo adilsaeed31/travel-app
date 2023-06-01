@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "svgr": "svgr  --native  --out-dir app/assets/icons -- app/assets/svgicons",
-    "svgri": "svgr  --native  --out-dir app/assets/illustrations -- app/assets/svgillustrations",
+    "svgr": "svgr --native --out-dir app/assets/icons -- app/assets/svgicons",
+    "svgri": "svgr --native --out-dir app/assets/illustrations -- app/assets/svgillustrations",
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "lint": "eslint .",

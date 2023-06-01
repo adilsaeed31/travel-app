@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState, useContext} from 'react'
-import {View, TouchableOpacity, AppState, BackHandler} from 'react-native'
+import {View, TouchableOpacity, BackHandler} from 'react-native'
 import LottieView from 'lottie-react-native'
 import Animated, {
   FadeInLeft,
@@ -7,15 +7,16 @@ import Animated, {
   FadeInDown,
   BounceInUp,
 } from 'react-native-reanimated'
-import Splash from 'react-native-splash-screen'
 import {useTranslation} from 'react-i18next'
 import cn from 'classnames'
+import {StackNavigationProp} from '@react-navigation/stack'
 import {useSafeAreaInsets} from 'react-native-safe-area-context'
 
 import {flexRowLayout, m2, vw, vh} from '@Utils'
 import {introAnimation, SaibLogo} from '@Assets'
 import {AppContext, AppProviderProps} from '@Context'
 import {TCButton, TCTextView, TCDot} from '@Components'
+import {useAppState} from '@Hooks'
 
 // each slide frame of intro animation
 const FirstSlideFrame = 238
@@ -28,15 +29,14 @@ const EnterAnimationRight = FadeInRight.duration(1000).delay(50)
 const EnterAnimationLeft = FadeInLeft.duration(1000).delay(50)
 const EnterAnimationBounceInUp = BounceInUp.duration(1000).delay(50)
 
-const IntroFeature: React.FC = () => {
+const IntroFeature: React.FC<{
+  navigation: StackNavigationProp<{Auth: undefined}>
+}> = ({navigation}) => {
   const {t} = useTranslation()
+  const {appStateVisible} = useAppState()
   const insetEdges = useSafeAreaInsets()
 
-  // below code is for to check the if the animation rendering or not
-  const appState = useRef(AppState.currentState)
-  const [appStateVisible, setAppStateVisible] = useState(appState.current)
-
-  const {setAppReady, changeLanguage, isRTL} =
+  const {isAppReady, setAppReady, hasIntroSeen, changeLanguage, isRTL} =
     useContext<AppProviderProps>(AppContext)
 
   const [currentValue, setCurrentValue] = useState<number>(FirstSlideFrame)
@@ -59,8 +59,17 @@ const IntroFeature: React.FC = () => {
   }
 
   useEffect(() => {
-    // hiding the splash screen below
-    Splash.hide()
+    // below code is for to check the if the animation
+    // rendering or not on the app background|inactive
+    if (appStateVisible === 'active') {
+      if (updatedValue.current === FirstSlideFrame) {
+        nextAnimRef.current?.play(0, FirstSlideFrame)
+      } else if (updatedValue.current === MiddleSlideFrame) {
+        nextAnimRef.current?.play(FirstSlideFrame, MiddleSlideFrame)
+      } else if (updatedValue.current >= LastSlideFrame) {
+        nextAnimRef.current?.play(MiddleSlideFrame, LastSlideFrame)
+      }
+    }
 
     // back handler to stop back functionality on intro
     const backHandler = BackHandler.addEventListener(
@@ -71,32 +80,22 @@ const IntroFeature: React.FC = () => {
     // updating the currentValue with updatedValue
     updatedValue.current = currentValue
 
+    // navigation to login if app is ready
+    if (isAppReady || hasIntroSeen) {
+      navigation.navigate('Auth')
+    }
+
     return () => {
       backHandler.remove()
     }
-  }, [currentValue, updatedValue])
-
-  useEffect(() => {
-    const subscription = AppState.addEventListener('change', nextAppState => {
-      appState.current = nextAppState
-
-      setAppStateVisible(appState.current)
-
-      if (appState.current === 'active') {
-        if (updatedValue.current === FirstSlideFrame) {
-          nextAnimRef.current?.play(0, FirstSlideFrame)
-        } else if (updatedValue.current === MiddleSlideFrame) {
-          nextAnimRef.current?.play(FirstSlideFrame, MiddleSlideFrame)
-        } else if (updatedValue.current >= LastSlideFrame) {
-          nextAnimRef.current?.play(MiddleSlideFrame, LastSlideFrame)
-        }
-      }
-    })
-
-    return () => {
-      subscription.remove()
-    }
-  }, [appStateVisible])
+  }, [
+    isAppReady,
+    navigation,
+    updatedValue,
+    currentValue,
+    hasIntroSeen,
+    appStateVisible,
+  ])
 
   return (
     <View
@@ -142,11 +141,11 @@ const IntroFeature: React.FC = () => {
         {currentValue === FirstSlideFrame && (
           <View className="flex-1 justify-center items-center pb-10">
             <Animated.View entering={EnterAnimationDown}>
-              <TCTextView className="text-3xl text-tc-black">
+              <TCTextView className="text-3xl text-tc-black text-center">
                 {t('intro:future1')}
               </TCTextView>
 
-              <TCTextView className="text-3xl text-tc-black font-tc-bold">
+              <TCTextView className="text-3xl text-tc-black font-tc-bold text-center">
                 {t('intro:future2')}
               </TCTextView>
             </Animated.View>
@@ -156,11 +155,11 @@ const IntroFeature: React.FC = () => {
         {currentValue === MiddleSlideFrame && (
           <View className="flex-1 justify-center items-center pb-10">
             <Animated.View entering={EnterAnimationDown}>
-              <TCTextView className="text-3xl text-tc-black">
+              <TCTextView className="text-3xl text-tc-black text-center">
                 {t('intro:currency1')}
               </TCTextView>
 
-              <TCTextView className="text-3xl text-tc-black font-tc-bold">
+              <TCTextView className="text-3xl text-tc-black font-tc-bold text-center">
                 {t('intro:currency2')}
               </TCTextView>
             </Animated.View>
@@ -170,11 +169,11 @@ const IntroFeature: React.FC = () => {
         {currentValue >= LastSlideFrame && (
           <View className="flex-1 justify-center items-center pb-10">
             <Animated.View entering={EnterAnimationDown}>
-              <TCTextView className="text-3xl text-tc-black">
+              <TCTextView className="text-3xl text-tc-black text-center">
                 {t('intro:additional1')}
               </TCTextView>
 
-              <TCTextView className="text-3xl text-tc-black font-tc-bold">
+              <TCTextView className="text-3xl text-tc-black font-tc-bold text-center">
                 {t('intro:additional2')}
               </TCTextView>
             </Animated.View>
