@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useState, useContext} from 'react'
 import {
   TouchableOpacity,
@@ -62,7 +63,7 @@ const Terms = () => {
 
 interface AlreadyAccountProps {
   isKeyboardVisible: boolean
-  navigation: StackNavigationProp<{OtpPersonalId: undefined; Auth: undefined}>
+  navigation: StackNavigationProp<any>
 }
 
 const AlreadyAccount = ({
@@ -89,22 +90,17 @@ const AlreadyAccount = ({
 }
 
 type Props = {
-  navigation: StackNavigationProp<{OtpPersonalId: undefined; Auth: undefined}>
+  navigation: StackNavigationProp<any>
 }
 
 const PersonalIdScreen = ({navigation}: Props) => {
   const {t} = useTranslation()
-  const [isKeyboardVisible, setKeyboardVisible] = useState<boolean>(false)
-  const [keyboardHeight, setKeyboardHeight] = useState<Number>(0)
   const {isRTL} = useContext<AppProviderProps>(AppContext)
-  const [state, setState] = useState<any>({
-    // mobileNumber: '0567113534',
-    // govtId: '2545312932',
-  })
-  const [status, setStatus] = useState<any>('')
-  const [isButtonDisabled, setButtonDisabled] = useState(true)
+  const [state, setState] = useState<any>({})
+  const [keyboardHeight, setKeyboardHeight] = useState<Number>(0)
   const [termsError, setTermsError] = useState<any>(false)
   const [statusError, setStatusError] = useState<any>(false)
+  const [isButtonDisabled, setButtonDisabled] = useState(true)
   const setOnboardingDetails = useStore(
     (store: any) => store.setOnboardingDetails,
   )
@@ -113,16 +109,14 @@ const PersonalIdScreen = ({navigation}: Props) => {
     mutationFn: async () => {
       let req: any = await fetcher(BASE_URL + '/auth/otp', {
         method: 'POST',
-        body: {mobileNumber: state.mobileNumber, role: 'ONBOARDING'},
+        body: {
+          mobile_number: state.mobileNumber,
+          identity_number: state.govtId,
+          role: 'ONBOARDING',
+        },
       })
-
-      setStatus(req.status)
-
-      if (req.status < 400) {
-        return req.json()
-      } else {
-        return req.status
-      }
+      let res = await req.json()
+      return res
     },
   })
 
@@ -152,7 +146,6 @@ const PersonalIdScreen = ({navigation}: Props) => {
     const keyboardDidShowListener = Keyboard.addListener(
       'keyboardWillShow',
       e => {
-        setKeyboardVisible(true)
         setKeyboardHeight(e.endCoordinates.height)
       },
     )
@@ -160,7 +153,7 @@ const PersonalIdScreen = ({navigation}: Props) => {
     const keyboardDidHideListener = Keyboard.addListener(
       'keyboardWillHide',
       () => {
-        setKeyboardVisible(false)
+        setKeyboardHeight(0)
       },
     )
 
@@ -174,23 +167,35 @@ const PersonalIdScreen = ({navigation}: Props) => {
     mutate()
   }
 
-  if (data && data.referenceNumber) {
-    setOnboardingDetails(state.mobileNumber, state.govtId, data.referenceNumber)
-    reset()
-    navigation.push('OtpPersonalId')
-  }
-
   useEffect(() => {
-    if (status === 409) {
-      setStatusError('OTP already Exist, Please wait for a minute')
-      return () => {}
+    if (data?.reference_number) {
+      setOnboardingDetails(
+        state.mobileNumber,
+        state.govtId,
+        data.reference_number,
+      )
+      reset()
+      navigation.push('OtpPersonalId')
+    } else {
+      const status = data?.status
+      switch (true) {
+        case status === 409:
+          setStatusError('OTP already Exist, Please wait for a minute')
+          break
+        case status === 509:
+          navigation.navigate('AfterOtpPersonalId', {
+            status: 'error',
+            case: 'Bandwidth Limit Exceeded',
+          })
+          break
+        case status > 399 && status <= 500:
+          setStatusError('Some Error Occurred. Please try after some time')
+          break
+        default:
+          setStatusError('')
+      }
     }
-
-    if (status > 399 && status < 500) {
-      setStatusError('Some Error Occurred. Please try after some time')
-      return () => {}
-    }
-  }, [status])
+  }, [data])
 
   return (
     <>
@@ -220,7 +225,7 @@ const PersonalIdScreen = ({navigation}: Props) => {
           value={state.mobileNumber}
         />
         {statusError && <ErrorText>{statusError}</ErrorText>}
-        <DisclaimerView isKeyboardVisible={isKeyboardVisible} isRTL={isRTL}>
+        <DisclaimerView isKeyboardVisible={!!keyboardHeight} isRTL={isRTL}>
           <Checkbox
             onChange={newStatus => {
               setState({...state, isEmailCheck: newStatus})
@@ -244,7 +249,7 @@ const PersonalIdScreen = ({navigation}: Props) => {
           {termsError && <ErrorText>{termsError}</ErrorText>}
         </DisclaimerView>
 
-        {!isKeyboardVisible && (
+        {!keyboardHeight && (
           <ButtonContainer>
             <StyledButton onPress={onComplete} disabled={isButtonDisabled}>
               <Text variant={TEXT_VARIANTS.body}>
@@ -254,11 +259,11 @@ const PersonalIdScreen = ({navigation}: Props) => {
           </ButtonContainer>
         )}
         <AlreadyAccount
-          isKeyboardVisible={isKeyboardVisible}
+          isKeyboardVisible={!!keyboardHeight}
           navigation={navigation}
         />
       </Layout>
-      {isKeyboardVisible && (
+      {!!keyboardHeight && (
         <StickyButtonContainer keyboardHeight={keyboardHeight}>
           <StickyButton
             onPress={() => {

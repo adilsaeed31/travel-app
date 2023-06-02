@@ -29,6 +29,7 @@ const OtpInput = styled(TextInput)`
 interface OtpInputProps {
   value?: string
   resetCount?: number
+  finishTimer?: number
   onChangeText?: (otp: string) => void
   onTimerComplete?: () => void
 }
@@ -38,6 +39,7 @@ const otpMaxLength = 4
 const OtpEnter: React.FC<OtpInputProps> = ({
   value = '',
   resetCount = 0,
+  finishTimer = 0,
   onTimerComplete = () => {},
   onChangeText = () => {},
 }) => {
@@ -50,13 +52,16 @@ const OtpEnter: React.FC<OtpInputProps> = ({
   }, [otp])
 
   useEffect(() => {
+    setOtp(value)
+  }, [value])
+
+  useEffect(() => {
     inputRefs.current[0].focus()
   }, [])
 
   const inputRefs = useRef<TextInput[]>([])
 
   const handleTextChange = (index: number, text: string) => {
-    console.log(text)
     let newOtp = otp.slice(0, index) + text + otp.slice(index)
     setOtp(newOtp)
 
@@ -83,6 +88,10 @@ const OtpEnter: React.FC<OtpInputProps> = ({
     }
   }
 
+  useEffect(() => {
+    setOtp('')
+  }, [resetCount])
+
   return (
     <>
       <OtpContainer>
@@ -106,6 +115,7 @@ const OtpEnter: React.FC<OtpInputProps> = ({
         seconds={60}
         onTimerComplete={onTimerComplete}
         resetCount={resetCount}
+        finishTimer={finishTimer}
       />
     </>
   )

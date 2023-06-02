@@ -28,12 +28,14 @@ const TimerText = styled(Text)`
 interface TimerProps {
   seconds: number
   resetCount: number
+  finishTimer: number
   onTimerComplete?: () => void
 }
 
 const Timer: React.FC<TimerProps> = ({
   seconds,
   resetCount = 0,
+  finishTimer = 0,
   onTimerComplete = () => {},
 }) => {
   const [time, setTime] = useState(seconds)
@@ -41,6 +43,12 @@ const Timer: React.FC<TimerProps> = ({
   useEffect(() => {
     setTime(seconds)
   }, [resetCount])
+
+  useEffect(() => {
+    if (resetCount > 1) {
+      setTime(0)
+    }
+  }, [finishTimer])
 
   useEffect(() => {
     let interval: any

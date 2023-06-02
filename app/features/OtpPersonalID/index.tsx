@@ -1,7 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useState, useContext} from 'react'
+import * as yup from 'yup'
 import {View, Keyboard, Dimensions, TouchableOpacity} from 'react-native'
 import {useTranslation} from 'react-i18next'
+import styled from 'styled-components/native'
+import {useMutation} from '@tanstack/react-query'
+import {StackNavigationProp} from '@react-navigation/stack'
 import {
   Layout,
   TCButton as Button,
@@ -9,16 +13,342 @@ import {
   TCOTP as OTP,
   Spacer,
 } from '@Components'
-import {SPACER_SIZES, TEXT_VARIANTS} from '@Utils'
-import styled from 'styled-components/native'
-import {Edit} from '@Assets'
-import {StackNavigationProp} from '@react-navigation/stack'
+import {SPACER_SIZES, TEXT_VARIANTS, BASE_URL, setItem} from '@Utils'
 import {AppProviderProps, AppContext} from '@Context'
-import * as yup from 'yup'
 import {fetcher} from '@Api'
-import {useMutation} from '@tanstack/react-query'
-import {BASE_URL} from '@Utils'
+import {Edit} from '@Assets'
 import {useStore} from '@Store'
+import {useFocusEffect} from '@react-navigation/native'
+
+type Props = {
+  navigation: StackNavigationProp<any>
+  route: any
+}
+
+const OtpPersonalIdScreen = ({navigation, route}: Props) => {
+  const {t} = useTranslation()
+
+  const {isRTL} = useContext<AppProviderProps>(AppContext)
+  const [state, setState] = useState<any>({})
+
+  const [error, setError] = useState<string>('')
+  const [statusError, setStatusError] = useState<any>(false)
+  const [resendCount, setResendCount] = useState<number>(1)
+  const [finishTimer, setFinishTimer] = useState<number>(1)
+  const [keyboardHeight, setKeyboardHeight] = useState<Number>(0)
+  const [isButtonDisabled, setButtonDisabled] = useState(true)
+  const [resendAvailable, setResendAvailable] = useState<boolean>(false)
+  const [invalidAttempts, setInvalidAttempts] = useState<number>(0)
+  const mobileNumber = useStore((store: any) => store.onboardingMobileNumber)
+  const OTPRef = useStore((store: any) => store.onboardingOTPRef)
+  const govtId = useStore((store: any) => store.govtId)
+
+  const [otpRefN, setOTPRef] = useState<any>(OTPRef)
+
+  useFocusEffect(() => {
+    const data = route.params
+    if (
+      data?.historyPage === 'AfterOTPPersonalID' &&
+      data?.otpRef !== otpRefN
+    ) {
+      setInvalidAttempts(0)
+      setResendAvailable(false)
+      setResendCount(resendCount + 1)
+      setOTPRef(data.otpRef)
+      setState({...state, otp: ''})
+    }
+  })
+
+  const {
+    isLoading: isOTPLoading,
+    data: otpData,
+    mutate: verifyOtp,
+  } = useMutation({
+    mutationFn: async () => {
+      let req: any = await fetcher(BASE_URL + '/auth/otp/verify', {
+        method: 'POST',
+        body: {
+          reference_number: otpRefN,
+          otp: state.otp,
+        },
+      })
+      let res = await req.json()
+      return res
+    },
+  })
+
+  const {
+    isLoading: isTahaquqLoading,
+    data: tahaquqData,
+    mutate: verifyTahaquq,
+    reset: resetTahaquq,
+  } = useMutation({
+    mutationFn: async () => {
+      let req: any = await fetcher(BASE_URL + '/onboarding/id/verify', {
+        method: 'POST',
+        body: {
+          mobile_number: mobileNumber,
+          identity_number: govtId,
+        },
+        token: otpData.access_token,
+      })
+      let res = await req.json()
+      return res
+    },
+  })
+
+  const {
+    isLoading: isResend,
+    data: resendData,
+    mutate: resendOTP,
+    reset: resetOTP,
+  } = useMutation({
+    mutationFn: async () => {
+      let req: any = await fetcher(BASE_URL + '/auth/otp', {
+        method: 'POST',
+        body: {
+          mobile_number: mobileNumber,
+          identity_number: govtId,
+          role: 'ONBOARDING',
+        },
+      })
+
+      let res = await req.json()
+      return res
+    },
+  })
+
+  useEffect(() => {
+    if (String(state.otp).length > 0) {
+      try {
+        yup
+          .object({
+            otp: yup
+              .string()
+              .required('Please Enter OTP')
+              .length(4, 'Please Enter OTP'),
+          })
+          .validateSync(state)
+
+        setButtonDisabled(false)
+        setError('')
+      } catch (err: any) {
+        setError(err.message)
+        setButtonDisabled(true)
+      }
+    }
+  }, [state.otp])
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardWillShow',
+      e => {
+        setKeyboardHeight(e.endCoordinates.height)
+      },
+    )
+
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardWillHide',
+      () => {
+        setKeyboardHeight(0)
+      },
+    )
+
+    return () => {
+      keyboardDidShowListener.remove()
+      keyboardDidHideListener.remove()
+    }
+  }, [])
+
+  useEffect(() => {
+    if (otpData && otpData.access_token) {
+      setItem('journeySecrets', JSON.stringify(otpData))
+      verifyTahaquq()
+    } else {
+      const status = otpData?.status
+      switch (true) {
+        case status === 409:
+          setStatusError('OTP already Exist, Please wait for a minute')
+          break
+        case status === 403:
+          setStatusError('OTP Expired, Please try again')
+          setResendAvailable(true)
+          setFinishTimer(finishTimer + 1)
+          break
+        case status === 509:
+          navigation.navigate('AfterOtpPersonalId', {
+            status: 'error',
+            case: 'Bandwidth Limit Exceeded',
+          })
+          break
+        case status > 399 && status <= 500:
+          if (invalidAttempts < 2) {
+            setStatusError('Invalid Otp. Please try Again')
+            setInvalidAttempts(invalidAttempts + 1)
+          } else {
+            navigation.navigate('AfterOtpPersonalId', {
+              status: 'error',
+              case: 'Invalid Attempts',
+            })
+          }
+          break
+        default:
+          setStatusError('')
+      }
+    }
+  }, [otpData])
+
+  useEffect(() => {
+    if (tahaquqData && tahaquqData.status < 400) {
+      if (state.otp && tahaquqData && tahaquqData.existing) {
+        navigation.navigate('AfterPersonExisting')
+        return
+      }
+      if (state.otp && tahaquqData && tahaquqData.match) {
+        resetOTP()
+        resetTahaquq()
+        navigation.navigate('RedirectNafaaq')
+        return
+      }
+      if (state.otp && tahaquqData && !tahaquqData.match) {
+        navigation.navigate('AfterOtpPersonalId', {
+          status: 'error',
+          case: 'Invalid Identity',
+        })
+        return
+      }
+    } else {
+      const status = tahaquqData?.status
+      switch (true) {
+        case status === 403:
+          setStatusError('OTP Expired, Please try again')
+          break
+        case status === 409:
+          setStatusError('OTP already Exist, Please wait for a minute')
+          break
+        case status > 399 && status <= 500:
+          navigation.navigate('RedirectNafaaq')
+
+          setStatusError('Some Error Occurred. Please try After Some Time')
+          break
+        default:
+          setStatusError('')
+      }
+    }
+  }, [tahaquqData])
+
+  useEffect(() => {
+    setStatusError('')
+    setResendAvailable(false)
+  }, [resendCount])
+
+  useEffect(() => {
+    if (resendData && resendData.reference_number) {
+      setOTPRef(resendData.reference_number)
+    } else {
+      const status = resendData?.status
+      switch (true) {
+        case status === 509:
+          navigation.navigate('AfterOtpPersonalId', {
+            status: 'error',
+            case: 'Bandwidth Limit Exceeded',
+          })
+          break
+        case status > 399 && status <= 500:
+          setStatusError('Something went wrong. Please try after some time')
+          break
+        default:
+          setStatusError('')
+      }
+    }
+  }, [resendData])
+
+  const onComplete = () => {
+    if (state.otp.length === 4) {
+      verifyOtp()
+    } else {
+      setError('Please Enter OTP')
+    }
+  }
+
+  return (
+    <>
+      <Layout isLoading={isOTPLoading || isTahaquqLoading || isResend}>
+        <Spacer horizontal={false} size={SPACER_SIZES.BASE * 3} />
+        <Text variant={TEXT_VARIANTS.heading}>{t('onboarding:enterOTP')}</Text>
+        <Spacer size={SPACER_SIZES.BASE * 3} />
+        <OTP
+          value={state.otp}
+          onChangeText={otp => {
+            setState({...state, otp: otp})
+          }}
+          onTimerComplete={() => {
+            setResendAvailable(true)
+          }}
+          resetCount={resendCount}
+          finishTimer={finishTimer}
+        />
+        <Spacer size={SPACER_SIZES.BASE * 2} />
+        <Row isRTL={isRTL}>
+          <TouchableOpacity onPress={() => navigation.navigate('PersonalID')}>
+            <Row isRTL={isRTL}>
+              <EditIcon />
+              <BottomText variant={TEXT_VARIANTS.body}>
+                {mobileNumber}
+              </BottomText>
+            </Row>
+          </TouchableOpacity>
+          <View>
+            {resendAvailable ? (
+              <TouchableOpacity
+                onPress={() => {
+                  resendOTP()
+                  setResendCount(resendCount + 1)
+                }}>
+                <BottomText variant={TEXT_VARIANTS.body}>
+                  {t('onboarding:resendOTP')}
+                </BottomText>
+              </TouchableOpacity>
+            ) : (
+              <BottomText variant={TEXT_VARIANTS.body} disabled={true}>
+                {t('onboarding:resendOTP')}
+              </BottomText>
+            )}
+          </View>
+        </Row>
+
+        {statusError && state.otp ? (
+          <ErrorWrapper>
+            <ErrorLabel>{statusError}</ErrorLabel>
+          </ErrorWrapper>
+        ) : null}
+
+        {error && state.otp ? (
+          <ErrorWrapper>
+            <ErrorLabel>{error}</ErrorLabel>
+          </ErrorWrapper>
+        ) : null}
+
+        {!keyboardHeight && (
+          <ButtonContainer>
+            <Button onPress={onComplete} disabled={isButtonDisabled}>
+              <Text variant={TEXT_VARIANTS.body}>
+                {t('onboarding:continue')}
+              </Text>
+            </Button>
+          </ButtonContainer>
+        )}
+      </Layout>
+      {!!keyboardHeight && (
+        <StickyButtonContainer keyboardHeight={keyboardHeight}>
+          <StickyButton onPress={onComplete} disabled={isButtonDisabled}>
+            <Text variant={TEXT_VARIANTS.body}>{t('onboarding:continue')}</Text>
+          </StickyButton>
+        </StickyButtonContainer>
+      )}
+    </>
+  )
+}
 
 const ButtonContainer = styled(View)`
   position: absolute;
@@ -87,272 +417,5 @@ const ErrorLabel = styled.Text`
 
   color: #de2e2e;
 `
-
-type Props = {
-  navigation: StackNavigationProp<{
-    AfterOtpPersonalId: undefined
-    PersonalID: undefined
-    RedirectNafaaq: undefined
-  }>
-}
-
-const OtpPersonalIdScreen = ({navigation}: Props) => {
-  const {t} = useTranslation()
-  const [isKeyboardVisible, setKeyboardVisible] = useState<boolean>(false)
-  const [keyboardHeight, setKeyboardHeight] = useState<Number>(0)
-  const [resendCount, setResendCount] = useState<number>(1)
-  const [resendAvailable, setResendAvailable] = useState<boolean>(false)
-  const {isRTL} = useContext<AppProviderProps>(AppContext)
-  const [state, setState] = useState<any>({})
-  const [error, setError] = useState<string>('')
-  const [statusError, setStatusError] = useState<any>(false)
-  const [status, setStatus] = useState<any>('')
-  const [isButtonDisabled, setButtonDisabled] = useState(true)
-  const mobileNumber = useStore((store: any) => store.onboardingMobileNumber)
-  const OTPRef = useStore((store: any) => store.onboardingOTPRef)
-  const govtId = useStore((state: any) => state.govtId)
-  const [otpRefN, setOTPRef] = useState<any>(OTPRef)
-  const {
-    isLoading: isOTPLoading,
-    data: otpData,
-    mutate: verifyOtp,
-    reset: resetOTP,
-  } = useMutation({
-    mutationFn: async () => {
-      let req: any = await fetcher(BASE_URL + '/auth/otp/verify', {
-        method: 'POST',
-        body: {
-          referenceNumber: otpRefN,
-          otp: state.otp,
-        },
-      })
-
-      setStatus(req.status)
-
-      if (req.status < 400) {
-        return req.json()
-      } else {
-        return req.status
-      }
-    },
-  })
-
-  const {
-    isLoading: isTahaquqLoading,
-    data: tahaquqData,
-    mutate: verifyTahaquq,
-    reset: resetTahaquq,
-  } = useMutation({
-    mutationFn: async () => {
-      let req: any = await fetcher(BASE_URL + '/onboarding/id/verify', {
-        method: 'POST',
-        body: {
-          id: govtId,
-          mobileNumber: mobileNumber,
-        },
-      })
-      return await req.json()
-    },
-  })
-
-  useEffect(() => {
-    if (String(state.otp).length > 0) {
-      try {
-        yup
-          .object({
-            otp: yup
-              .string()
-              .required('Please Enter OTP')
-              .length(4, 'Please Enter OTP'),
-          })
-          .validateSync(state)
-
-        setButtonDisabled(false)
-        setError('')
-      } catch (err: any) {
-        setError(err.message)
-        setButtonDisabled(true)
-      }
-    }
-  }, [state.otp])
-
-  useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener(
-      'keyboardWillShow',
-      e => {
-        setKeyboardVisible(true)
-        setKeyboardHeight(e.endCoordinates.height)
-      },
-    )
-
-    const keyboardDidHideListener = Keyboard.addListener(
-      'keyboardWillHide',
-      () => {
-        setKeyboardVisible(false)
-      },
-    )
-
-    return () => {
-      keyboardDidShowListener.remove()
-      keyboardDidHideListener.remove()
-    }
-  }, [])
-
-  useEffect(() => {
-    if (resendCount === 4) {
-      navigation.navigate('AfterOtpPersonalId')
-    }
-
-    resendOTP()
-    setResendAvailable(false)
-  }, [resendCount, navigation])
-
-  const onComplete = () => {
-    if (state.otp.length === 4) {
-      verifyOtp()
-    } else {
-      setError('Please Enter OTP')
-    }
-  }
-
-  if (otpData && otpData.access_token && !isTahaquqLoading && !tahaquqData) {
-    // const expiresIn = otpData.expires_in
-    // const access_token = data.access_token
-    // const refresh_token = otpData.refresh_token
-    // const refresh_token_expires_in = otpData.refresh_token_expires_in
-    // const authMech = data.type
-    verifyTahaquq()
-  }
-
-  if (state.otp && tahaquqData && tahaquqData.match) {
-    resetOTP()
-    resetTahaquq()
-    navigation.navigate('RedirectNafaaq')
-  }
-
-  if (state.otp && tahaquqData && !tahaquqData.match) {
-    resetOTP()
-    resetTahaquq()
-    navigation.navigate('AfterOtpPersonalId')
-  }
-
-  useEffect(() => {
-    if (status === 403) {
-      setStatusError('OTP Expired')
-      return
-    }
-    if (status === 409) {
-      return
-    }
-
-    if (status > 399 && status < 500) {
-      setStatusError('Invalid OTP')
-      return
-    }
-  }, [status])
-
-  const {
-    isLoading: isResend,
-    data: resendData,
-    mutate: resendOTP,
-  } = useMutation({
-    mutationFn: async () => {
-      let req: any = await fetcher(BASE_URL + '/auth/otp', {
-        method: 'POST',
-        body: {mobileNumber: mobileNumber, role: 'ONBOARDING'},
-      })
-
-      setStatus(req.status)
-
-      if (req.status < 400) {
-        return req.json()
-      } else {
-        return req.status
-      }
-    },
-  })
-
-  useEffect(() => {
-    if (resendData && resendData.referenceNumber) {
-      setOTPRef(resendData.referenceNumber)
-    }
-  }, [resendData])
-
-  return (
-    <>
-      <Layout isLoading={isOTPLoading || isTahaquqLoading || isResend}>
-        <Spacer horizontal={false} size={SPACER_SIZES.BASE * 3} />
-        <Text variant={TEXT_VARIANTS.heading}>{t('onboarding:enterOTP')}</Text>
-        <Spacer size={SPACER_SIZES.BASE * 3} />
-        <OTP
-          value={state.otp}
-          onChangeText={otp => {
-            setState({...state, otp: otp})
-          }}
-          onTimerComplete={() => {
-            setResendAvailable(true)
-          }}
-          resetCount={resendCount}
-        />
-        <Spacer size={SPACER_SIZES.BASE * 2} />
-        <Row isRTL={isRTL}>
-          <TouchableOpacity onPress={() => navigation.navigate('PersonalID')}>
-            <Row isRTL={isRTL}>
-              <EditIcon />
-              <BottomText variant={TEXT_VARIANTS.body}>
-                {mobileNumber}
-              </BottomText>
-            </Row>
-          </TouchableOpacity>
-          <View>
-            {resendAvailable ? (
-              <TouchableOpacity
-                onPress={() => {
-                  setResendCount(resendCount + 1)
-                }}>
-                <BottomText variant={TEXT_VARIANTS.body}>
-                  {t('onboarding:resendOTP')}
-                </BottomText>
-              </TouchableOpacity>
-            ) : (
-              <BottomText variant={TEXT_VARIANTS.body} disabled={true}>
-                {t('onboarding:resendOTP')}
-              </BottomText>
-            )}
-          </View>
-        </Row>
-
-        {statusError && state.otp ? (
-          <ErrorWrapper>
-            <ErrorLabel>{statusError}</ErrorLabel>
-          </ErrorWrapper>
-        ) : null}
-
-        {error && state.otp ? (
-          <ErrorWrapper>
-            <ErrorLabel>{error}</ErrorLabel>
-          </ErrorWrapper>
-        ) : null}
-
-        {!isKeyboardVisible && (
-          <ButtonContainer>
-            <Button onPress={onComplete} disabled={isButtonDisabled}>
-              <Text variant={TEXT_VARIANTS.body}>
-                {t('onboarding:continue')}
-              </Text>
-            </Button>
-          </ButtonContainer>
-        )}
-      </Layout>
-      {isKeyboardVisible && (
-        <StickyButtonContainer keyboardHeight={keyboardHeight}>
-          <StickyButton onPress={onComplete} disabled={isButtonDisabled}>
-            <Text variant={TEXT_VARIANTS.body}>{t('onboarding:continue')}</Text>
-          </StickyButton>
-        </StickyButtonContainer>
-      )}
-    </>
-  )
-}
 
 export default OtpPersonalIdScreen

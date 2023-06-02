@@ -13,7 +13,7 @@ interface CustomInputProps {
   schema?: any
   value?: any
   isPassword?: boolean
-  maxLength: number
+  maxLength?: number
   onChangeText?: (text: string) => void
   isValid?: (valid: boolean) => void
   errorMessage?: string

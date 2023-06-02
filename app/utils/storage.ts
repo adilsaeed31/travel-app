@@ -87,6 +87,22 @@ const getIntro = async () => {
   }
 }
 
+const setItem = async (keyV: string, data: string) => {
+  try {
+    await EncryptedStorage.setItem(keyV, data)
+  } catch (error) {
+    console.log('Error storing the data', error)
+  }
+}
+
+const getItem = async (keyV: string) => {
+  try {
+    return await EncryptedStorage.getItem(keyV)
+  } catch (error) {
+    console.log('Error getting the data', error)
+  }
+}
+
 export {
   getEnv,
   setEnv,
@@ -98,4 +114,6 @@ export {
   clearStorage,
   getIntro,
   setIntro,
+  setItem,
+  getItem,
 }
