@@ -5,9 +5,9 @@ import {StackNavigationProp} from '@react-navigation/stack'
 import styled from 'styled-components/native'
 
 import {Layout, TCButton as Button} from '@Components'
-import {WarningIcon} from '@Assets'
+import {WarnIcon} from '@Assets'
 
-const WarningIconWithShadow = styled(WarningIcon)`
+const WarningIconWithShadow = styled(WarnIcon)`
   box-shadow: 0px 4px 12px rgba(52, 61, 69, 0.12);
 `
 

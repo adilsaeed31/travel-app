@@ -17,8 +17,8 @@ import {
   OtpVerificationScreen,
   PersonalInformation,
   AfterPersonExisting,
+  IntroFeature,
 } from '@Features'
-
 import {SplashScreen} from '@Screens'
 
 const {Navigator, Screen} = createStackNavigator()
@@ -33,6 +33,11 @@ const AuthNavigator = () => {
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       }}>
       <Screen name="Splash" component={SplashScreen} />
+      <Screen
+        name="Intro"
+        component={IntroFeature}
+        options={{animationEnabled: false}}
+      />
       <Screen name="Auth" component={AuthFeature} />
       <Screen name="OTPAuth" component={OtpVerificationScreen} />
       <Screen name="PersonalID" component={PersonalID} />
