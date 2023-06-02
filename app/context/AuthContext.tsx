@@ -1,13 +1,7 @@
-import React, {
-  useRef,
-  useState,
-  useEffect,
-  createContext,
-  ReactNode,
-} from 'react'
-import {AppState} from 'react-native'
+import React, {useState, useEffect, createContext, ReactNode} from 'react'
 
-import {storeToken, storeUser, restoreUser, clearStorage} from '@Utils'
+import {storeToken, restoreUser, clearStorage} from '@Utils'
+import {useAppState} from '@Hooks'
 
 export type AuthProviderProps = {
   children?: ReactNode
@@ -35,31 +29,18 @@ export const AuthContext = createContext<AuthProviderProps>({
  */
 
 export function AuthProvider(props: AuthProviderProps) {
+  const {appStateVisible} = useAppState()
   const [isLoading, setIsLoading] = useState(false)
   const [isError, setIsError] = useState(false)
   const [error, setError] = useState<any>(null)
   const [user, setUser] = useState<{} | null>(null)
 
-  // Below code is for to check the if the token is still not expired after focus
-  const appState = useRef(AppState.currentState)
-  const [appStateVisible, setAppStateVisible] = useState(appState.current)
-
   useEffect(() => {
-    const subscription = AppState.addEventListener('change', nextAppState => {
-      appState.current = nextAppState
+    console.log('AppState', appStateVisible)
 
-      setAppStateVisible(appState.current)
-
-      console.log('AppState', appState.current)
-
-      if (appState.current === 'active') {
-        //restore user here
-        restoreUser(setUser)
-      }
-    })
-
-    return () => {
-      subscription.remove()
+    if (appStateVisible === 'active') {
+      //restore user here
+      restoreUser(setUser)
     }
   }, [appStateVisible])
 

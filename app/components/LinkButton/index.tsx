@@ -29,7 +29,6 @@ const LinkText = styled(Text)<any>`
 `
 
 const LinkContainer = styled(TouchableOpacity)`
-  width: 129px;
   height: 24px;
 `
 

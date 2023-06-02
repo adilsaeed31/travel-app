@@ -1,14 +1,10 @@
-import React, {useContext} from 'react'
+import React from 'react'
 
-// import {Layout, Text, Button} from '@ui-kitten/components'
-
-import {AuthContext, AuthProviderProps} from '@Context'
 import {useStore} from '@Store'
 import {View} from 'react-native'
-import {Bg} from '@Assets'
 import {Layout, TCButton, TCTextView} from '@Components'
 
-export default function DashboardFeature({navigation}: any) {
+export default function DashboardFeature() {
   const setUser = useStore((state: any) => state.setUser)
 
   return (
