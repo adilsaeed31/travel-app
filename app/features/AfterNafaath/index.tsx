@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, Dimensions, Linking, Platform} from 'react-native'
+import {View, Dimensions} from 'react-native'
 import {useTranslation} from 'react-i18next'
 import {
   Layout,
@@ -51,23 +51,26 @@ const ButtonContainerSecond = styled(View)`
 `
 
 type Props = {
-  navigation: StackNavigationProp<{AfterInformation: undefined}>
+  navigation: StackNavigationProp<any>
 }
 
 const PersonalIdScreen = ({navigation}: Props) => {
   const {t} = useTranslation()
 
   const onRedirectApp = () => {
-    let URL =
-      Platform.OS == 'ios'
-        ? 'nafath://request'
-        : 'saf.sa.gov.nic.myid://request'
-
-    Linking.openURL(URL)
+    navigation.navigate('RedirectNafaaq', {
+      historyPage: 'AfterNafaath',
+      type: 'app',
+      redirectRef: Math.floor(Math.random() * 10000000),
+    })
   }
 
   const onRedirectWeb = () => {
-    Linking.openURL('https://www.iam.gov.sa/authservice//userauthservice')
+    navigation.navigate('RedirectNafaaq', {
+      historyPage: 'AfterNafaath',
+      type: 'web',
+      redirectRef: Math.floor(Math.random() * 10000000),
+    })
   }
 
   return (

@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react-hooks/rules-of-hooks */
 
 import React, {useEffect, useState} from 'react'
 import {View, Dimensions, Image, Platform, Linking} from 'react-native'
@@ -16,26 +17,65 @@ import {StackNavigationProp} from '@react-navigation/stack'
 import {NafaathLogo} from '@Assets'
 import {useStore} from '@Store'
 import {fetcher} from '@Api'
-import {State} from 'react-native-gesture-handler'
+import {useFocusEffect} from '@react-navigation/native'
 
 type Props = {
-  navigation: StackNavigationProp<{
-    AfterNafaath: undefined
-    PersonalID: undefined
-    personalInfo: undefined
-  }>
+  navigation: StackNavigationProp<any>
+  route: any
 }
 
-const NafaqScreen = ({navigation}: Props) => {
+const NafaqScreen = ({navigation, route}: Props) => {
   const {t} = useTranslation()
   const [showDone, setShowDone] = useState<boolean>(false)
   const [state, setState] = useState<any>({})
   const govtId = useStore((store: any) => store.govtId)
 
+  useFocusEffect(() => {
+    const data = route.params
+
+    console.log(state.redirectRef, data?.redirectRef)
+    if (
+      data?.historyPage === 'AfterNafaath' &&
+      data?.type === 'app' &&
+      state.redirectRef !== data.redirectRef
+    ) {
+      setState({
+        startTime: Date.now(),
+        redirectRef: data.redirectRef,
+      })
+      nafathPush()
+      setTimeout(() => {
+        let URL =
+          Platform.OS === 'ios'
+            ? 'nafath://request'
+            : 'saf.sa.gov.nic.myid://request'
+
+        Linking.openURL(URL)
+      }, 1000)
+    }
+
+    if (
+      data?.historyPage === 'AfterNafaath' &&
+      data?.type === 'web' &&
+      state.redirectRef !== data.redirectRef
+    ) {
+      setState({
+        startTime: Date.now(),
+        redirectRef: data.redirectRef,
+      })
+      nafathPush()
+      setTimeout(() => {
+        let URL = 'https://my.nafath.sa/login'
+        Linking.openURL(URL)
+      }, 1000)
+    }
+  })
+
   const {
     isLoading: isNafadLoading,
     data: nafathPushData,
     mutate: nafathPush,
+    reset: nafathPushReset,
   } = useMutation({
     mutationFn: async () => {
       let journeySecrets
@@ -55,7 +95,11 @@ const NafaqScreen = ({navigation}: Props) => {
     },
   })
 
-  const {data: nafathPullData, mutate: nafathPull} = useMutation({
+  const {
+    data: nafathPullData,
+    mutate: nafathPull,
+    reset: nafathPullReset,
+  } = useMutation({
     mutationFn: async () => {
       let journeySecrets
       let journeySecretsData = await getItem('journeySecrets')
@@ -77,23 +121,34 @@ const NafaqScreen = ({navigation}: Props) => {
   })
 
   useEffect(() => {
+    console.log(
+      '257842365784365746111111111',
+      nafathPushData,
+      nafathPushData?.transaction_id,
+      nafathPushData?.random_number,
+    )
     if (nafathPushData?.transaction_id && nafathPushData?.random_number) {
       setState({
-        ...State,
+        ...state,
         transectionID: nafathPushData?.transaction_id,
         randomVal: nafathPushData?.random_number,
       })
       nafathPull()
     }
-  }, [nafathPushData])
+  }, [nafathPushData, nafathPushData?.transaction_id])
 
   useEffect(() => {
     if (nafathPullData?.status < 400) {
       setShowDone(true)
     } else {
+      if (state.startTime && Date.now() - state.startTime > 10000) {
+        nafathPushReset()
+        nafathPullReset()
+        return navigation.navigate('AfterNafaath')
+      }
       setTimeout(() => {
         nafathPull()
-      }, 10000)
+      }, 15000)
     }
   }, [nafathPullData])
 
@@ -107,15 +162,12 @@ const NafaqScreen = ({navigation}: Props) => {
   }
 
   const onRedirectWeb = () => {
-    let URL =
-      Platform.OS === 'ios'
-        ? 'nafath://request'
-        : 'saf.sa.gov.nic.myid://request'
-
+    let URL = 'https://my.nafath.sa/login'
     Linking.openURL(URL)
   }
 
   useEffect(() => {
+    setState({...state, startTime: Date.now()})
     nafathPush()
   }, [])
 
