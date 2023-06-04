@@ -10,7 +10,7 @@ export const DesignHeight = 812
 const scale = screenWidth / 375
 
 export function normalize(size: number) {
-  return PixelRatio.roundToNearestPixel(size * scale)
+  return Math.round(PixelRatio.roundToNearestPixel(size * scale))
 }
 
 export const vw = (width: number) => {
@@ -19,7 +19,9 @@ export const vw = (width: number) => {
   const elemWidth = parseFloat(`${percent}%`)
   // Use PixelRatio.roundToNearestPixel method in order to round the layout
   // size (dp) to the nearest one that corresponds to an integer number of pixels.
-  return PixelRatio.roundToNearestPixel((screenWidth * elemWidth) / 100)
+  return Math.round(
+    PixelRatio.roundToNearestPixel((screenWidth * elemWidth) / 100),
+  )
 }
 
 export const vh = (height: number) => {
@@ -29,5 +31,7 @@ export const vh = (height: number) => {
 
   // Use PixelRatio.roundToNearestPixel method in order to round the layout
   // size (dp) to the nearest one that corresponds to an integer number of pixels.
-  return PixelRatio.roundToNearestPixel((screenHeight * elemHeight) / 100)
+  return Math.round(
+    PixelRatio.roundToNearestPixel((screenHeight * elemHeight) / 100),
+  )
 }

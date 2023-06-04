@@ -1,5 +1,6 @@
 export {default as ArrowLeft} from './ArrowLeft'
 export {default as Edit} from './Edit'
+export {default as ProfileIcon} from './ProfileIcon'
 export {default as Warning} from './Warning'
 export {default as Back} from './Back'
 export {default as Check} from './Check'

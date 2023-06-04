@@ -12,10 +12,12 @@ module.exports = {
       bg: {
         tc: {
           primary: '#ffc800',
+          tab: '#d2d5d7',
         },
       },
       fontSize: {
         'tc-title': 24,
+        'tc-ios-base': 13,
       },
       fontWeight: {
         'tc-normal': '100',
@@ -26,6 +28,7 @@ module.exports = {
           secondary: '#3f3d36',
           black: '#131109',
           'black-btn': '#352D0F',
+          'tab-text': '#343D45',
         },
       },
     },

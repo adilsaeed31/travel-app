@@ -12,10 +12,10 @@ const AppNavigator = () => (
   <Navigator>
     <Screen
       name="Dashboard"
-      component={DashboardFeature}
       options={{
         headerShown: false,
       }}
+      component={DashboardFeature}
     />
 
     <Screen name="Travel" component={TravelNavigator} />

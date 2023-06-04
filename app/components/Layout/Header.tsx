@@ -1,4 +1,4 @@
-import React, {useContext} from 'react'
+import React from 'react'
 import {StatusBar, View, TouchableOpacity} from 'react-native'
 import styled from 'styled-components/native'
 import {useTranslation} from 'react-i18next'
@@ -6,7 +6,7 @@ import {SaibLogo, ArrowLeft} from '@Assets'
 import {SPACER_SIZES, TEXT_VARIANTS} from '@Utils'
 import {Spacer} from '@Components'
 import {default as Text} from '../TextView'
-import {AppContext, AppProviderProps} from '@Context'
+import {useStore} from '@Store'
 
 const Container = styled(View)<{isRTL: boolean | undefined}>`
   padding-top: 36px;
@@ -49,7 +49,9 @@ const TopNavigationSimpleUsageShowcase: React.FC<PropsType> = ({
   ...props
 }) => {
   const {t} = useTranslation()
-  const {changeLanguage, isRTL} = useContext<AppProviderProps>(AppContext)
+  const isRTL = useStore(state => state.isRTL)
+  const toggleLanguage = useStore(state => state.toggleLanguage)
+
   return (
     <Container {...props} isRTL={isRTL}>
       <StatusBar />
@@ -67,7 +69,7 @@ const TopNavigationSimpleUsageShowcase: React.FC<PropsType> = ({
           <SaibLogo />
           {canLanguageChange ? (
             <>
-              <TouchableOpacity onPress={changeLanguage}>
+              <TouchableOpacity onPress={toggleLanguage}>
                 <Spacer size={SPACER_SIZES.MM} />
                 <LanguageText variant={TEXT_VARIANTS.bodyBold}>
                   {t('onboarding:lang')}

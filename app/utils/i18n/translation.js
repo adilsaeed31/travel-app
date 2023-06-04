@@ -94,6 +94,10 @@ export const translation = {
       authFailed:
         'Credentials you entered are incorrect. Check your login credentials and try again.',
     },
+    Dashboard: {
+      tabTitle: 'Travel Card',
+      tabTitle2: 'Account',
+    },
   },
   ar: {
     common: {
@@ -185,6 +189,9 @@ export const translation = {
       newToSaib: 'جديد في البنك السعودي للاستثمار؟ [حساب مفتوح]',
       authFailed:
         'أوراق الاعتماد التي أدخلتها غير صحيحة.  تحقق من بيانات اعتماد تسجيل الدخول الخاصة بك وحاول مرة أخرى.',
+    },
+    Dashboard: {
+      tabTitle: 'بطاقة سفر',
     },
   },
 }
