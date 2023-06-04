@@ -1,0 +1,23 @@
+{
+  "additional_contact": null,
+  "birth_city": " Ccccccc",
+  "birth_country": {
+    "code": "CI",
+    "name_ar": "ساحل العاج",
+    "name_en": "IVORY COAST"
+  },
+  "education": {
+    "level_code": "DIPL",
+    "level_name_ar": "دراسة ثانوية-دبلوم",
+    "level_name_en": "Secondary school (Diploma level)"
+  },
+  "offshore_address": {
+    "building_number": "44",
+    "city": " Ccccccc",
+    "contact_number": "",
+    "country": "IVORY COAST",
+    "district": "Ccccc",
+    "postal_code": "333333",
+    "street": "Cccc"
+  }
+}

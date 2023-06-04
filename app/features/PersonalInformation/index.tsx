@@ -1,7 +1,8 @@
 /* eslint-disable eqeqeq */
 
-import React, {useContext, useState, useMemo} from 'react'
+import React, {useContext, useState, useMemo, useEffect} from 'react'
 import {View, SafeAreaView} from 'react-native'
+import {fetcher} from '@Api'
 
 import {useTranslation} from 'react-i18next'
 import {
@@ -12,15 +13,10 @@ import {
   DropDown,
   TCInput,
 } from '@Components'
-import {
-  TEXT_VARIANTS,
-  Educationalist,
-  Colors,
-  EducationalistAr,
-  CounryListAr,
-  CounryListEN,
-  SaudiCities,
-} from '@Utils'
+import {TEXT_VARIANTS, Colors, BASE_URL, getItem} from '@Utils'
+import {useMutation} from '@tanstack/react-query'
+import {countriesList, SaudiList, educationList} from './masterData'
+
 import styled from 'styled-components/native'
 import {
   MobileNumberValidator,
@@ -47,7 +43,65 @@ type IFormTYpe = {
   relation: string | null
   mobileNumber: string | null
 }
+const MapFormValues = (
+  values: IFormTYpe,
+  IsSaudi: boolean,
+  showAdditionalInformation: boolean,
+  isRTL: boolean | undefined,
+) => {
+  let educationOb = educationList.find(
+    e => e.levelNameEn == values.education || e.levelNameAr == values.education,
+  )
+  let birthCountryOb = countriesList.find(
+    e => e.nameAr == values.countryOfBirth || e.nameEn == values.countryOfBirth,
+  )
+  let birthCity = SaudiList.find(c =>
+    isRTL ? c.nameAr == values.city : c.nameEn == values.city,
+  )
+  let education = {
+    level_code: educationOb?.levelCode,
+    level_name_en: educationOb?.levelNameEn,
+    level_name_ar: educationOb?.levelNameAr,
+  }
+  let birth_country = {
+    code: birthCountryOb?.code,
+    name_en: birthCountryOb?.nameEn,
+    name_ar: birthCountryOb?.nameAr,
+  }
+  let birth_city = !IsSaudi
+    ? null
+    : {
+        code: birthCity?.code,
+        name_en: birthCity?.nameEn,
+        name_ar: birthCity?.nameAr,
+      }
+  let offshore_address = IsSaudi
+    ? null
+    : {
+        building_number: values.buldingNumber,
+        street: values.streetNanme,
+        district: values.district,
+        postal_code: values.postalCode,
+        city: values.city,
+        contact_number: values.contactName,
+        country: values.countryOfBirth,
+      }
+  let additional_contact = !showAdditionalInformation
+    ? null
+    : {
+        name: values.contactName,
+        relation: values.relation,
+        contact_number: values.mobileNumber,
+      }
 
+  return {
+    education,
+    birth_country,
+    birth_city,
+    offshore_address,
+    additional_contact,
+  }
+}
 const FormValues = {
   education: '',
   countryOfBirth: '',
@@ -76,11 +130,14 @@ function PersonalInformation() {
     ...FormValues,
   })
   const IsSaudi = useMemo(() => {
-    return (
-      values?.countryOfBirth === 'Saudi Arabia' ||
-      values?.countryOfBirth == 'المملكة العربية السعودية' ||
-      !values?.countryOfBirth
+    const current = countriesList.findIndex(
+      country =>
+        country.nameAr == values?.countryOfBirth ||
+        country.nameEn == values?.countryOfBirth,
     )
+    const isSaudiSelected =
+      current == -1 ? false : countriesList[current].code == 'SA'
+    return isSaudiSelected || !values?.countryOfBirth
   }, [values.countryOfBirth])
 
   const ToggleSheet = (indx: number) => {
@@ -99,12 +156,7 @@ function PersonalInformation() {
   }
   const isFormValid = useMemo(() => {
     let isValid = false
-    if (
-      values.education &&
-      values.countryOfBirth &&
-      values.city &&
-      !showAdditionalInformation
-    ) {
+    if (values.education && values.countryOfBirth && values.city) {
       isValid = true
     }
     if (
@@ -123,41 +175,70 @@ function PersonalInformation() {
       if (!isValid) {
         return
       }
-      !values.contactName || !values.relation || !values.phoneNumber
+      !values.contactName || !values.relation || !values.mobileNumber
         ? (isValid = false)
         : (isValid = true)
     }
     return isValid
   }, [values, IsSaudi, showAdditionalInformation])
+
+  const {isLoading, data, mutate, reset} = useMutation({
+    mutationFn: async () => {
+      let journeySecrets
+      let journeySecretsData = await getItem('journeySecrets')
+      if (journeySecretsData) {
+        journeySecrets = JSON.parse(journeySecretsData)
+      }
+      console.log('journeySecrets.access_token,', journeySecrets.access_token)
+      let req: any = await fetcher(BASE_URL + '/onboarding/personal', {
+        method: 'POST',
+        body: MapFormValues(values, IsSaudi, showAdditionalInformation, isRTL),
+        token: journeySecrets.access_token,
+      })
+      let res = await req.json()
+      return res
+    },
+  })
+  useEffect(() => {
+    console.log('response-------------------')
+    console.log(data)
+    console.log('response-------------------')
+  }, [data])
   const HandleContinuePressed = () => {
-    let err = {...errors}
-    if (!values.city) {
-      err.city = t('common:required')
-    }
-    if (!values.countryOfBirth) {
-      err.countryOfBirth = t('common:required')
-    }
-    if (!values.education) {
-      err.education = t('common:required')
-    }
-    if (!IsSaudi) {
-      err.buldingNumber = !values.buldingNumber ? t('common:required') : ''
-      err.streetNanme = !values.streetNanme ? t('common:required') : ''
-      err.district = !values.district ? t('common:required') : ''
-      err.poBox = !values.poBox ? t('common:required') : ''
-      err.postalCode = !values.postalCode ? t('common:required') : ''
-      err.phoneNumber = !values.phoneNumber ? '' : t('common:required')
-    }
-    if (showAdditionalInformation) {
-      err.contactName = !values.contactName ? t('common:required') : ''
-      err.relation = !values.relation ? t('common:required') : ''
-      err.phoneNumber = !values.phoneNumber ? t('common:required') : ''
-    }
-    setErrors(err)
+    mutate()
+    // let err = {...errors}
+    // if (!values.city) {
+    //   err.city = t('common:required')
+    // }
+    // if (!values.countryOfBirth) {
+    //   err.countryOfBirth = t('common:required')
+    // }
+    // if (!values.education) {
+    //   err.education = t('common:required')
+    // }
+    // if (!IsSaudi) {
+    //   err.buldingNumber = !values.buldingNumber ? t('common:required') : ''
+    //   err.streetNanme = !values.streetNanme ? t('common:required') : ''
+    //   err.district = !values.district ? t('common:required') : ''
+    //   err.poBox = !values.poBox ? t('common:required') : ''
+    //   err.postalCode = !values.postalCode ? t('common:required') : ''
+    //   err.phoneNumber = !values.phoneNumber ? '' : t('common:required')
+    // }
+    // if (showAdditionalInformation) {
+    //   err.contactName = !values.contactName ? t('common:required') : ''
+    //   err.relation = !values.relation ? t('common:required') : ''
+    //   err.phoneNumber = !values.phoneNumber ? t('common:required') : ''
+    // }
+    // setErrors(err)
   }
+
   return (
     <>
-      <Layout isBack={true} isHeader={true} isBackground={true}>
+      <Layout
+        isBack={true}
+        isHeader={true}
+        isLoading={isLoading}
+        isBackground={true}>
         <ScrollerView>
           <SafeAreaWrapper>
             <FormWrapper isRTL={!!isRTL}>
@@ -166,7 +247,9 @@ function PersonalInformation() {
                 {t('onboarding:personalInformation:personalInformation')}
               </Header>
               <DropDown
-                data={isRTL ? EducationalistAr : Educationalist}
+                data={educationList.map(c =>
+                  isRTL ? c.levelNameAr : c.levelNameEn,
+                )}
                 label={t('onboarding:personalInformation:education') || ''}
                 toogleClick={() => ToggleSheet(0)}
                 onItemSelected={education => setValues({...values, education})}
@@ -180,11 +263,7 @@ function PersonalInformation() {
               />
               <Spacer />
               <DropDown
-                data={
-                  isRTL
-                    ? CounryListAr.map(c => c.name)
-                    : CounryListEN.map(c => c.name)
-                }
+                data={countriesList.map(c => (isRTL ? c.nameAr : c.nameEn))}
                 toogleClick={() => {
                   ToggleSheet(1)
                   setValues({...values, city: null})
@@ -206,7 +285,7 @@ function PersonalInformation() {
               <Spacer />
               {IsSaudi ? (
                 <DropDown
-                  data={SaudiCities.map(c => c[isRTL ? 'name_ar' : 'name_en'])}
+                  data={SaudiList.map(c => (isRTL ? c.nameAr : c.nameEn))}
                   disabled={!values.countryOfBirth}
                   toogleClick={() => {
                     if (!values.countryOfBirth) {
@@ -305,7 +384,6 @@ function PersonalInformation() {
                       val && setValues({...values, phoneNumber: val})
                     }
                     label={t('onboarding:personalInformation:phoneNumber')}
-                    schema={MobileNumberValidator}
                     keyboardType="number-pad"
                     returnKeyType="done"
                     maxLength={10}
@@ -343,7 +421,7 @@ function PersonalInformation() {
                   <TCInput
                     value={values.contactName}
                     onChangeText={val =>
-                      val && setValues({...values, contactName: val})
+                      setValues({...values, contactName: val})
                     }
                     label={t(
                       'onboarding:personalInformation:addetionalContactNanme',
@@ -356,9 +434,7 @@ function PersonalInformation() {
                   <Spacer />
                   <TCInput
                     value={values.relation}
-                    onChangeText={val =>
-                      val && setValues({...values, relation: val})
-                    }
+                    onChangeText={val => setValues({...values, relation: val})}
                     label={t('onboarding:personalInformation:relation')}
                     errorMessage={errors.relation}
                     returnKeyType="done"
@@ -367,12 +443,12 @@ function PersonalInformation() {
                   />
                   <Spacer />
                   <TCInput
-                    value={values.phoneNumber}
+                    value={values.mobileNumber}
                     onChangeText={val =>
-                      val && setValues({...values, phoneNumber: val})
+                      setValues({...values, mobileNumber: val})
                     }
                     label={t('onboarding:personalInformation:mobileNumber')}
-                    errorMessage={errors.phoneNumber}
+                    errorMessage={errors.mobileNumber}
                     schema={MobileNumberValidator}
                     returnKeyType="done"
                   />
@@ -380,9 +456,7 @@ function PersonalInformation() {
                 </LoginForm>
               )}
             </FormWrapper>
-            <StyledButton
-              disabled={!isFormValid}
-              onPress={HandleContinuePressed}>
+            <StyledButton disabled={!isFormValid} onPress={mutate}>
               <Text variant={TEXT_VARIANTS.body700}>
                 {t('onboarding:personalInformation:continue')}
               </Text>
