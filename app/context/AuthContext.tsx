@@ -57,7 +57,7 @@ export function AuthProvider(props: AuthProviderProps) {
       setIsLoading(true)
 
       // set a user call here and store token and other info
-      storeToken('adil')
+      // storeToken('adil')
 
       // Setting User object to state of this context
       setUser({username, password})

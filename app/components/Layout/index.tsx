@@ -7,7 +7,6 @@ import {
   ScrollView,
   TouchableOpacity,
   Platform,
-  StatusBar,
 } from 'react-native'
 import styled from 'styled-components/native'
 import {useSafeAreaInsets} from 'react-native-safe-area-context'
@@ -32,11 +31,9 @@ type LayoutProps = {
   onScroll?: () => void
 }
 
-const statusBarHeight = StatusBar.currentHeight as number
-
 const Container = styled(View)`
   flex: 1;
-  min-height: ${Dimensions.get('window').height - statusBarHeight}px;
+  min-height: ${Dimensions.get('window').height}px;
   background-color: #fff;
 `
 
