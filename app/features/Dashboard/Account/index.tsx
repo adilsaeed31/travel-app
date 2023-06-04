@@ -1,11 +1,13 @@
 import React from 'react'
-import {View, Text} from 'react-native'
+import {ScrollView} from 'react-native'
+
+import {TCTextView} from '@Components'
 
 const AccountScreen = () => {
   return (
-    <View>
-      <Text>Account Screen</Text>
-    </View>
+    <ScrollView>
+      <TCTextView className="text-base">Account Screen</TCTextView>
+    </ScrollView>
   )
 }
 

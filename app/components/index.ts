@@ -12,3 +12,4 @@ export {default as DropDown} from './DropDown'
 
 // Screen and feature components in one line import
 export * from './Intro'
+export * from './Dashboard'

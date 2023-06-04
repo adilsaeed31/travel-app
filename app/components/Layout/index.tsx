@@ -29,6 +29,7 @@ type LayoutProps = {
   isScrollable?: boolean
   isLoading?: boolean
   onScroll?: () => void
+  isDashboardLayout?: boolean
 }
 
 const Container = styled(View)`
@@ -81,10 +82,27 @@ const AppLayout: React.FC<LayoutProps> = ({
   onScroll = () => {},
   onBack = () => {},
   children,
-
+  isDashboardLayout = false,
   ...rest
 }) => {
   const insetEdges = useSafeAreaInsets()
+
+  // below is the flag to return the dashboard layout without
+  // scrollview and keyboard avoidingview and others flag
+  if (isDashboardLayout) {
+    return (
+      <View
+        className="flex-1"
+        style={{
+          // do not remove this below style props below will
+          // adjust the padding/spacing on ios and android
+          paddingTop: vh(insetEdges.top),
+        }}>
+        {children}
+      </View>
+    )
+  }
+
   return (
     <KeyboardAvoidingView
       enabled

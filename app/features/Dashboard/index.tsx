@@ -3,7 +3,10 @@ import {View} from 'react-native'
 
 import {useStore} from '@Store'
 import {AuthContext, AuthProviderProps} from '@Context'
-import {Layout, TCButton, TCTextView} from '@Components'
+import {Layout as AppLayout, TCButton, TabBar} from '@Components'
+
+import TravelCard from './TravelCard'
+import Account from './Account'
 
 export default function DashboardFeature() {
   const setUser = useStore((state: any) => state.setUser)
@@ -17,13 +20,12 @@ export default function DashboardFeature() {
   }
 
   return (
-    <Layout className="flex-1 justify-center">
-      <View className="flex-1 justify-end items-center">
-        <TCTextView>Dashboard Under Development</TCTextView>
+    <AppLayout isDashboardLayout>
+      <TabBar left={<TravelCard />} right={<Account />} />
+
+      <View>
+        <TCButton onPress={onLogout} children={'Logout'} />
       </View>
-      <View className="flex-1 justify-end mb-20">
-        <TCButton onPress={onLogout}>Back to Login</TCButton>
-      </View>
-    </Layout>
+    </AppLayout>
   )
 }

@@ -1,4 +1,4 @@
-import React, {lazy, Suspense, useContext} from 'react'
+import React, {lazy, Suspense} from 'react'
 import {StatusBar, ActivityIndicator, View} from 'react-native'
 import {NavigationContainer} from '@react-navigation/native'
 import {SafeAreaProvider} from 'react-native-safe-area-context'
@@ -21,7 +21,7 @@ const MainNavigation = () => {
   const isAppReady = useStore((state: any) => state.isAppReady)
 
   return (
-    <SafeAreaProvider className="flex-1">
+    <SafeAreaProvider className="flex-1 bg-white">
       <StatusBar />
 
       <NavigationContainer>

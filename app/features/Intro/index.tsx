@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState, useContext} from 'react'
-import {View, TouchableOpacity, BackHandler} from 'react-native'
+import {View, BackHandler} from 'react-native'
 import LottieView from 'lottie-react-native'
 import Animated, {
   FadeInLeft,
@@ -28,7 +28,7 @@ const EnterAnimationLeft = FadeInLeft.duration(1000).delay(50)
 const EnterAnimationBounceInUp = BounceInUp.duration(1000).delay(50)
 
 const IntroFeature: React.FC<{
-  navigation: StackNavigationProp<{}>
+  navigation: StackNavigationProp<{Auth?: undefined}>
 }> = ({navigation}) => {
   const {t} = useTranslation()
   const {appStateVisible} = useAppState()
@@ -77,6 +77,11 @@ const IntroFeature: React.FC<{
 
     // updating the currentValue with updatedValue
     updatedValue.current = currentValue
+
+    // navigation to login if app is ready
+    if (isAppReady || hasIntroSeen) {
+      navigation.navigate('Auth')
+    }
 
     return () => {
       backHandler.remove()

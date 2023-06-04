@@ -1,11 +1,13 @@
 import React from 'react'
-import {View, Text} from 'react-native'
+import {ScrollView} from 'react-native'
+
+import {TCTextView} from '@Components'
 
 const TravelCardScreen = () => {
   return (
-    <View>
-      <Text>Travel Card Screen</Text>
-    </View>
+    <ScrollView>
+      <TCTextView className="text-base">Travel Card Screen</TCTextView>
+    </ScrollView>
   )
 }
 
