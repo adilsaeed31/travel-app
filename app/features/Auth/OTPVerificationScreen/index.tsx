@@ -104,8 +104,6 @@ const OtpAuthScreen = (props, {navigation}: Props) => {
           otp: state.otp,
         },
       })
-      alert('should be verified')
-      console.log('verify otp result', req.json())
       return await req.json()
     },
   })

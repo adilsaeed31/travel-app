@@ -169,9 +169,6 @@ const NafaqScreen = ({navigation, route}: Props) => {
   useEffect(() => {
     setState({...state, startTime: Date.now()})
     nafathPush()
-    setTimeout(() => {
-      navigation.navigate('personalInfo')
-    }, 200)
   }, [])
 
   return (
