@@ -36,7 +36,7 @@ const MainNavigation = () => {
             }>
             {!isAppReady ? (
               <SplashNavigator />
-            ) : !user ? (
+            ) : user ? (
               <Animated.View className="flex-1" entering={SlideInRight}>
                 <AppNavigator />
               </Animated.View>
