@@ -1,14 +1,18 @@
-import React from 'react'
+import React, {memo} from 'react'
 import {ScrollView} from 'react-native'
 
-import {TCTextView} from '@Components'
+import {UserTravelCard} from '@Components'
 
-const TravelCardScreen = () => {
+type TravelCardScreenProps = {
+  data?: object
+}
+
+const TravelCardScreen: React.FC<TravelCardScreenProps> = () => {
   return (
     <ScrollView>
-      <TCTextView className="text-base">Travel Card Screen</TCTextView>
+      <UserTravelCard />
     </ScrollView>
   )
 }
 
-export default TravelCardScreen
+export default memo(TravelCardScreen)

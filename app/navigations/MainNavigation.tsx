@@ -1,14 +1,16 @@
 import React, {lazy, Suspense} from 'react'
-import {StatusBar, ActivityIndicator, View} from 'react-native'
 import {NavigationContainer} from '@react-navigation/native'
-import {SafeAreaProvider} from 'react-native-safe-area-context'
 import Animated, {SlideInRight} from 'react-native-reanimated'
+import {StatusBar, ActivityIndicator, View} from 'react-native'
+import {SafeAreaProvider} from 'react-native-safe-area-context'
 
 import * as eva from '@eva-design/eva'
 import {EvaIconsPack} from '@ui-kitten/eva-icons'
 import {ApplicationProvider, IconRegistry} from '@ui-kitten/components'
 
 import {useStore} from '@Store'
+
+import {default as customMapping} from '../utils/theme.json'
 
 // Importing app and auth screen based on condition with lazy
 // to reduce the app loading size and enhance the performance
@@ -17,8 +19,8 @@ const AuthNavigator = lazy(() => import('./AuthNavigator'))
 const AppNavigator = lazy(() => import('./AppNavigator'))
 
 const MainNavigation = () => {
-  const user = useStore((state: any) => state.user)
-  const isAppReady = useStore((state: any) => state.isAppReady)
+  const user = useStore(state => state.user)
+  const isAppReady = useStore(state => state.isAppReady)
 
   return (
     <SafeAreaProvider className="flex-1 bg-white">
@@ -27,7 +29,10 @@ const MainNavigation = () => {
       <NavigationContainer>
         <IconRegistry icons={EvaIconsPack} />
 
-        <ApplicationProvider {...eva} theme={eva.light}>
+        <ApplicationProvider
+          {...eva}
+          theme={eva.light}
+          customMapping={customMapping as any}>
           <Suspense
             fallback={
               <View className="flex-1 items-center justify-center">
