@@ -6,14 +6,17 @@ export type AppStateProps = {
   language: string
   isRTL: boolean
   hasIntroSeen: boolean
+  isAppReady: boolean
   toggleLanguage: () => void
   introHasBeenSeen: () => void
+  setAppHasReady: () => void
 }
 
 const AppState: StateCreator<AppStateProps> = set => ({
   language: 'en',
   isRTL: false,
   hasIntroSeen: false,
+  isAppReady: false,
   toggleLanguage: () => {
     i18n.changeLanguage(i18n.language === 'ar' ? 'en' : 'ar')
 
@@ -23,10 +26,18 @@ const AppState: StateCreator<AppStateProps> = set => ({
     }))
   },
 
-  introHasBeenSeen: () => {
+  setAppHasReady: () => set(() => ({isAppReady: true})),
+
+  introHasBeenSeen: () =>
     set(() => ({
       hasIntroSeen: true,
-    }))
+    })),
+
+  reset: () => {
+    set({
+      hasIntroSeen: false,
+      isAppReady: false,
+    })
   },
 })
 

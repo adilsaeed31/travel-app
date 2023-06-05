@@ -9,14 +9,14 @@ const buttonStyle = {
   marginTop: 20,
 }
 
-const TravelScreen = ({navigation}: any) => (
+const LoyaltyScreen = ({navigation}: any) => (
   <>
-    <Text>Travel App Screen</Text>
+    <Text>Loyalty App Screen</Text>
 
     <Button
       style={buttonStyle}
       onPress={() =>
-        navigation.navigate('Travel', {
+        navigation.navigate('Loyalty', {
           screen: 'One',
         })
       }>
@@ -26,7 +26,7 @@ const TravelScreen = ({navigation}: any) => (
     <Button
       style={buttonStyle}
       onPress={() =>
-        navigation.navigate('Travel', {
+        navigation.navigate('Loyalty', {
           screen: 'Two',
         })
       }>
@@ -35,14 +35,14 @@ const TravelScreen = ({navigation}: any) => (
   </>
 )
 
-const TravelScreen1 = ({navigation}: any) => (
+const LoyaltyScreen1 = ({navigation}: any) => (
   <>
-    <Text>Travel App Screen1</Text>
+    <Text>Loyalty App Screen1</Text>
 
     <Button
       style={buttonStyle}
       onPress={() =>
-        navigation.navigate('Travel', {
+        navigation.navigate('Loyalty', {
           screen: 'Home',
         })
       }>
@@ -52,7 +52,7 @@ const TravelScreen1 = ({navigation}: any) => (
     <Button
       style={buttonStyle}
       onPress={() =>
-        navigation.navigate('Travel', {
+        navigation.navigate('Loyalty', {
           screen: 'Two',
         })
       }>
@@ -61,14 +61,14 @@ const TravelScreen1 = ({navigation}: any) => (
   </>
 )
 
-const TravelScreen2 = ({navigation}: any) => (
+const LoyaltyScreen2 = ({navigation}: any) => (
   <>
-    <Text>Travel App Screen2</Text>
+    <Text>Loyalty App Screen2</Text>
 
     <Button
       style={buttonStyle}
       onPress={() =>
-        navigation.navigate('Travel', {
+        navigation.navigate('Loyalty', {
           screen: 'Home',
         })
       }>
@@ -78,7 +78,7 @@ const TravelScreen2 = ({navigation}: any) => (
     <Button
       style={buttonStyle}
       onPress={() =>
-        navigation.navigate('Travel', {
+        navigation.navigate('Loyalty', {
           screen: 'One',
         })
       }>
@@ -89,9 +89,9 @@ const TravelScreen2 = ({navigation}: any) => (
 
 const HomeNavigator = () => (
   <Navigator screenOptions={{headerShown: false}}>
-    <Screen name="Home" component={TravelScreen} />
-    <Screen name="One" component={TravelScreen1} />
-    <Screen name="Two" component={TravelScreen2} />
+    <Screen name="Home" component={LoyaltyScreen} />
+    <Screen name="One" component={LoyaltyScreen1} />
+    <Screen name="Two" component={LoyaltyScreen2} />
   </Navigator>
 )
 

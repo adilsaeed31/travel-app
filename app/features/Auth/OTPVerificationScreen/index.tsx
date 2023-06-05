@@ -122,6 +122,7 @@ const OtpAuthScreen = (props, {navigation}: Props) => {
           mobileNumber: mobileNumber,
         },
       })
+
       return await req.json()
     },
   })
