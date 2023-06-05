@@ -1,9 +1,8 @@
 import React, {useContext} from 'react'
-import {View} from 'react-native'
 
 import {useStore} from '@Store'
 import {AuthContext, AuthProviderProps} from '@Context'
-import {Layout as AppLayout, TCButton, TabBar} from '@Components'
+import {Layout as AppLayout, TabBar} from '@Components'
 
 import TravelCard from './TravelCard'
 import Account from './Account'
@@ -21,11 +20,7 @@ export default function DashboardFeature() {
 
   return (
     <AppLayout isDashboardLayout>
-      <TabBar left={<TravelCard />} right={<Account />} />
-
-      <View>
-        <TCButton onPress={onLogout} children={'Logout'} />
-      </View>
+      <TabBar left={<TravelCard />} right={<Account />} onLogout={onLogout} />
     </AppLayout>
   )
 }

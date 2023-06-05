@@ -13,6 +13,7 @@ type TabBarProps = {
   right: React.JSX.Element
   selectedIndex?: number
   onSelect?: Dispatch<SetStateAction<number>>
+  onLogout?: () => void
 }
 
 const indicatorStyle = {
@@ -38,7 +39,7 @@ const useTabBarState = (initialState = 0): Partial<TabBarProps> => {
   return {selectedIndex, onSelect: setSelectedIndex}
 }
 
-export const TCTabBar: React.FC<TabBarProps> = ({left, right}) => {
+export const TCTabBar: React.FC<TabBarProps> = ({left, right, onLogout}) => {
   const isRTL = useStore(state => state.isRTL)
   const {selectedIndex, onSelect} = useTabBarState()
 
@@ -48,7 +49,7 @@ export const TCTabBar: React.FC<TabBarProps> = ({left, right}) => {
         className={cn(flexRowLayout(isRTL), 'justify-between items-center')}>
         <View className="flex-1 w-24 self-stretch" />
 
-        <View className="px-7 rounded-3xl" style={TabWrapperViewStyle}>
+        <View className="px-7 rounded-2xl" style={TabWrapperViewStyle}>
           <TabBar
             onSelect={onSelect}
             selectedIndex={selectedIndex}
@@ -59,13 +60,16 @@ export const TCTabBar: React.FC<TabBarProps> = ({left, right}) => {
         </View>
 
         <View className="flex-1 px-4 items-end">
-          <TouchableOpacity>
+          <TouchableOpacity onPress={onLogout}>
             <ProfileIcon />
           </TouchableOpacity>
         </View>
       </View>
 
-      <ViewPager selectedIndex={selectedIndex} onSelect={onSelect}>
+      <ViewPager
+        selectedIndex={selectedIndex}
+        onSelect={onSelect}
+        swipeEnabled={false}>
         <View>{left}</View>
         <View>{right}</View>
       </ViewPager>
