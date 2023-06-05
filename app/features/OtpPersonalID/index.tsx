@@ -34,6 +34,8 @@ const OtpPersonalIdScreen = ({navigation, route}: Props) => {
   const [error, setError] = useState<string>('')
   const [statusError, setStatusError] = useState<any>(false)
   const [resendCount, setResendCount] = useState<number>(1)
+  const [tahaquqFailCount, setTahaquqFailCount] = useState<number>(0)
+
   const [finishTimer, setFinishTimer] = useState<number>(1)
   const [keyboardHeight, setKeyboardHeight] = useState<Number>(0)
   const [isButtonDisabled, setButtonDisabled] = useState(true)
@@ -42,6 +44,11 @@ const OtpPersonalIdScreen = ({navigation, route}: Props) => {
   const mobileNumber = useStore((store: any) => store.onboardingMobileNumber)
   const OTPRef = useStore((store: any) => store.onboardingOTPRef)
   const govtId = useStore((store: any) => store.govtId)
+  const setOnboardingProgress = useStore(
+    (store: any) => store.setOnboardingProgress,
+  )
+
+  const onBoardingProgress = useStore((store: any) => store.onBoardingProgress)
 
   const [otpRefN, setOTPRef] = useState<any>(OTPRef)
 
@@ -88,10 +95,12 @@ const OtpPersonalIdScreen = ({navigation, route}: Props) => {
         method: 'POST',
         body: {
           mobile_number: mobileNumber,
-          identity_number: govtId,
+          id: govtId,
         },
-        token: otpData.access_token,
+        token:
+          'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2NDdkOTcwNWQ1Y2NiZDQ1OWJjZDliOWEiLCJzdWIiOiIwNDM1NDM1MzQ1Iiwicm9sZXMiOlsiT05CT0FSRElORyJdLCJpc3MiOiJjb20uc2FpYi52ZW50dXJlcy5hdXRoIiwiYXVkIjoiY29tLnNhaWIudmVudHVyZXMuYXV0aCIsImV4cCI6MjQ4NTk1NTg3MSwiaWRlbnRpdHkiOiIyNTQ1MzEyOTMyIiwicGhvbmVfbnVtYmVyIjoiMDU2NzExMzUzNCJ9.CcktJQUa1JFMeVaoK8Hd7PMLyP-NnLSW-OTOpxFEltxoH_09UBicyfpB-2D_CgSrjEh-uSuKszdAnxVLbq7gyA',
       })
+      // TODO :  need to remove static token with otpData.access_token
       let res = await req.json()
       return res
     },
@@ -119,7 +128,9 @@ const OtpPersonalIdScreen = ({navigation, route}: Props) => {
   })
 
   useEffect(() => {
-    if (String(state.otp).length > 0) {
+    setStatusError('')
+    setError('')
+    if (String(state.otp).length === 4) {
       try {
         yup
           .object({
@@ -162,6 +173,10 @@ const OtpPersonalIdScreen = ({navigation, route}: Props) => {
 
   useEffect(() => {
     if (otpData && otpData.access_token) {
+      // TODO : to remove
+      otpData.access_token =
+        'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2NDdkOTcwNWQ1Y2NiZDQ1OWJjZDliOWEiLCJzdWIiOiIwNDM1NDM1MzQ1Iiwicm9sZXMiOlsiT05CT0FSRElORyJdLCJpc3MiOiJjb20uc2FpYi52ZW50dXJlcy5hdXRoIiwiYXVkIjoiY29tLnNhaWIudmVudHVyZXMuYXV0aCIsImV4cCI6MjQ4NTk1NTg3MSwiaWRlbnRpdHkiOiIyNTQ1MzEyOTMyIiwicGhvbmVfbnVtYmVyIjoiMDU2NzExMzUzNCJ9.CcktJQUa1JFMeVaoK8Hd7PMLyP-NnLSW-OTOpxFEltxoH_09UBicyfpB-2D_CgSrjEh-uSuKszdAnxVLbq7gyA'
+      // =========
       setItem('journeySecrets', JSON.stringify(otpData))
       verifyTahaquq()
     } else {
@@ -199,23 +214,37 @@ const OtpPersonalIdScreen = ({navigation, route}: Props) => {
   }, [otpData])
 
   useEffect(() => {
-    if (tahaquqData && tahaquqData.status < 400) {
-      if (state.otp && tahaquqData && tahaquqData.existing) {
+    if (
+      tahaquqData &&
+      tahaquqData instanceof Object &&
+      tahaquqData.hasOwnProperty('match')
+    ) {
+      if (state.otp && tahaquqData && tahaquqData.existing === true) {
         navigation.navigate('AfterPersonExisting')
         return
       }
-      if (state.otp && tahaquqData && tahaquqData.match) {
+      if (state.otp && tahaquqData && tahaquqData.match === true) {
         resetOTP()
         resetTahaquq()
+        setOnboardingProgress({...onBoardingProgress, isOTPVerified: true})
         navigation.navigate('RedirectNafaaq')
         return
       }
-      if (state.otp && tahaquqData && !tahaquqData.match) {
-        navigation.navigate('AfterOtpPersonalId', {
-          status: 'error',
-          case: 'Invalid Identity',
-        })
-        return
+      if (state.otp && tahaquqData && tahaquqData.match === false) {
+        if (tahaquqFailCount < 1) {
+          setTahaquqFailCount(tahaquqFailCount + 1)
+          navigation.navigate('AfterOtpPersonalId', {
+            status: 'error',
+            case: 'Invalid Identity',
+          })
+          return
+        } else {
+          navigation.navigate('AfterOtpPersonalId', {
+            status: 'error',
+            case: 'Bandwidth Limit Exceeded',
+          })
+          return
+        }
       }
     } else {
       const status = tahaquqData?.status
@@ -227,8 +256,6 @@ const OtpPersonalIdScreen = ({navigation, route}: Props) => {
           setStatusError('OTP already Exist, Please wait for a minute')
           break
         case status > 399 && status <= 500:
-          navigation.navigate('RedirectNafaaq')
-
           setStatusError('Some Error Occurred. Please try After Some Time')
           break
         default:
@@ -303,6 +330,8 @@ const OtpPersonalIdScreen = ({navigation, route}: Props) => {
               <TouchableOpacity
                 onPress={() => {
                   resendOTP()
+                  setInvalidAttempts(0)
+                  setResendAvailable(false)
                   setResendCount(resendCount + 1)
                 }}>
                 <BottomText variant={TEXT_VARIANTS.body}>
@@ -331,7 +360,9 @@ const OtpPersonalIdScreen = ({navigation, route}: Props) => {
 
         {!keyboardHeight && (
           <ButtonContainer>
-            <Button onPress={onComplete} disabled={isButtonDisabled}>
+            <Button
+              onPress={onComplete}
+              disabled={isButtonDisabled || state.otp.length < 4}>
               <Text variant={TEXT_VARIANTS.body}>
                 {t('onboarding:continue')}
               </Text>
@@ -341,7 +372,9 @@ const OtpPersonalIdScreen = ({navigation, route}: Props) => {
       </Layout>
       {!!keyboardHeight && (
         <StickyButtonContainer keyboardHeight={keyboardHeight}>
-          <StickyButton onPress={onComplete} disabled={isButtonDisabled}>
+          <StickyButton
+            onPress={onComplete}
+            disabled={isButtonDisabled || state.otp.length < 4}>
             <Text variant={TEXT_VARIANTS.body}>{t('onboarding:continue')}</Text>
           </StickyButton>
         </StickyButtonContainer>

@@ -24,16 +24,23 @@ type Props = {
   route: any
 }
 
+const isSmall = Dimensions.get('window').height < 750
+
 const NafaqScreen = ({navigation, route}: Props) => {
   const {t} = useTranslation()
-  const [showDone, setShowDone] = useState<boolean>(false)
   const [state, setState] = useState<any>({})
   const govtId = useStore((store: any) => store.govtId)
+  const [statusError, setStatusError] = useState<any>(false)
+
+  const setOnboardingProgress = useStore(
+    (store: any) => store.setOnboardingProgress,
+  )
+
+  const onBoardingProgress = useStore((store: any) => store.onBoardingProgress)
 
   useFocusEffect(() => {
     const data = route.params
 
-    console.log(state.redirectRef, data?.redirectRef)
     if (
       data?.historyPage === 'AfterNafaath' &&
       data?.type === 'app' &&
@@ -91,6 +98,7 @@ const NafaqScreen = ({navigation, route}: Props) => {
         token: journeySecrets.access_token,
       })
       let res = await req.json()
+
       return res
     },
   })
@@ -116,39 +124,81 @@ const NafaqScreen = ({navigation, route}: Props) => {
         token: journeySecrets.access_token,
       })
       let res = await req.json()
+
       return res
     },
   })
 
   useEffect(() => {
-    console.log(
-      '257842365784365746111111111',
-      nafathPushData,
-      nafathPushData?.transaction_id,
-      nafathPushData?.random_number,
-    )
     if (nafathPushData?.transaction_id && nafathPushData?.random_number) {
       setState({
         ...state,
         transectionID: nafathPushData?.transaction_id,
         randomVal: nafathPushData?.random_number,
       })
-      nafathPull()
+      setTimeout(() => {
+        nafathPull()
+      }, 5000)
+    } else {
+      const status = nafathPushData?.status
+      switch (true) {
+        case status === 409:
+          setStatusError('OTP already Exist, Please wait for a minute')
+          break
+        case status === 502:
+          setStatusError(
+            'Could not connect with nafaath system, please try after some time',
+          )
+          break
+      }
     }
   }, [nafathPushData, nafathPushData?.transaction_id])
 
   useEffect(() => {
-    if (nafathPullData?.status < 400) {
-      setShowDone(true)
+    let timer: any = null
+
+    if (nafathPullData?.kyc_status && nafathPullData.kyc_status === 'SUCCESS') {
+      if (nafathPullData?.key_details?.edit_name_required) {
+        setOnboardingProgress(true, true, nafathPullData?.key_details)
+      } else {
+        setOnboardingProgress({
+          ...onBoardingProgress,
+          isOTPVerified: true,
+          isNafathVerified: true,
+          kycData: nafathPullData?.key_details,
+        })
+        setOnboardingProgress(true, true, nafathPullData?.key_details)
+        navigation.navigate('personalInfo')
+      }
     } else {
-      if (state.startTime && Date.now() - state.startTime > 10000) {
+      if (state.startTime && Date.now() - state.startTime > 90000) {
+        nafathPushReset()
+        nafathPullReset()
+        return navigation.navigate('AfterNafaath')
+      } else if (
+        nafathPullData?.kyc_status &&
+        nafathPullData.kyc_status === 'PENDING'
+      ) {
+        timer = setTimeout(() => {
+          nafathPull()
+        }, 15000)
+      } else if (
+        nafathPullData?.kyc_status &&
+        nafathPullData.kyc_status === 'FAIL'
+      ) {
         nafathPushReset()
         nafathPullReset()
         return navigation.navigate('AfterNafaath')
       }
-      setTimeout(() => {
+      timer = setTimeout(() => {
         nafathPull()
       }, 15000)
+    }
+
+    return () => {
+      if (timer) {
+        clearTimeout(timer)
+      }
     }
   }, [nafathPullData])
 
@@ -166,6 +216,12 @@ const NafaqScreen = ({navigation, route}: Props) => {
     Linking.openURL(URL)
   }
 
+  const onRetry = () => {
+    setStatusError(false)
+    setState({...state, startTime: Date.now()})
+    nafathPush()
+  }
+
   useEffect(() => {
     setState({...state, startTime: Date.now()})
     nafathPush()
@@ -173,20 +229,36 @@ const NafaqScreen = ({navigation, route}: Props) => {
 
   return (
     <>
-      <Layout isLoading={isNafadLoading}>
+      <Layout isLoading={isNafadLoading} isHeader={false}>
         <Row>
           <NafaaqImg source={NafaathLogo} />
         </Row>
         {!state.transectionID || !state.randomVal ? (
-          <Body variant={TEXT_VARIANTS.label}>
-            {t('onboarding:redirectNafath')}
-          </Body>
+          <>
+            <Body variant={TEXT_VARIANTS.label}>
+              {t('onboarding:redirectNafath')}
+            </Body>
+            {statusError && (
+              <>
+                <Spacer size={SPACER_SIZES.BASE * 2} />
+                <ErrorText>{statusError}</ErrorText>
+
+                <ButtonContainer>
+                  <Button onPress={onRetry}>
+                    <Text variant={TEXT_VARIANTS.body}>
+                      {t('onboarding:retry')}
+                    </Text>
+                  </Button>
+                </ButtonContainer>
+              </>
+            )}
+          </>
         ) : (
           <>
             <CenterHeading variant={TEXT_VARIANTS.subheading}>
               {t('onboarding:verificationThroughNafath')}
             </CenterHeading>
-            <Spacer size={SPACER_SIZES.BASE * 4} />
+            <Spacer size={SPACER_SIZES.BASE * (isSmall ? 1 : 4)} />
             <Body variant={TEXT_VARIANTS.label}>
               {t('onboarding:authCode')}
             </Body>
@@ -215,18 +287,6 @@ const NafaqScreen = ({navigation, route}: Props) => {
             </ButtonContainerSecond>
           </>
         )}
-        {showDone ? (
-          <ButtonContainer>
-            <Button
-              onPress={() => {
-                navigation.navigate('personalInfo')
-              }}>
-              <Text variant={TEXT_VARIANTS.body}>
-                {t('onboarding:continue')}
-              </Text>
-            </Button>
-          </ButtonContainer>
-        ) : null}
       </Layout>
     </>
   )
@@ -250,8 +310,8 @@ const ButtonContainerSecond = styled(View)`
 const NafaaqImg = styled(Image)`
   height: 135px;
   width: 135px;
-  margin-top: 90px;
-  margin-bottom: 34px;
+  margin-top: ${isSmall ? 30 : 90}px;
+  margin-bottom: ${isSmall ? 10 : 34}px;
 `
 
 const Row = styled(View)`
@@ -284,6 +344,12 @@ const Circle = styled(View)`
   font-weight: bold;
   justify-content: center;
   align-items: center;
+`
+const ErrorText = styled(Text)`
+  font-weight: 500;
+  color: #f54d3f;
+  padding-left: 16px;
+  text-align: center;
 `
 
 export default NafaqScreen

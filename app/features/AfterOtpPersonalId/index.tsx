@@ -180,7 +180,7 @@ const AfterOtpPersonalIDScreen = ({navigation, route}: Props) => {
             state.step === STPES.phoneAttempts) && <ReturnImg />}
           {state.step === STPES.identityAttempts && <CrossImg />}
         </Row>
-        {isSmall ? (
+        {isSmall || state.step === STPES.identityAttempts ? (
           <Spacer horizontal={false} size={SPACER_SIZES.BASE * 4} />
         ) : (
           <Spacer horizontal={false} size={SPACER_SIZES.BASE * 14} />
