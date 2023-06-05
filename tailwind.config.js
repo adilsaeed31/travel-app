@@ -27,6 +27,8 @@ module.exports = {
           'bg-primary': '#ffc800',
           tab: '#d2d5d7',
           card: '#f5f5f5',
+          'bottom-tab': '#fcfcfa',
+          'bottom-tab-text': '#393939',
         },
       },
     },

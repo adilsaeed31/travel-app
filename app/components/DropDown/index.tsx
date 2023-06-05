@@ -14,7 +14,6 @@ import {TEXT_VARIANTS} from '@Utils'
 import TCTextView from '../TextView'
 import {Search} from '@Assets'
 import Modal from 'react-native-modal'
-import {TCTextView as Text} from '@Components'
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 
 const DropDownInput = styled(Pressable)<{
@@ -254,7 +253,7 @@ const ClickableItem = styled(TouchableOpacity)<{hasBorder: boolean}>`
   margin-top: 2px;
   justify-content: center;
 `
-const ClickableItemText = styled(Text)<{isRTL: boolean}>`
+const ClickableItemText = styled(TCTextView)<{isRTL: boolean}>`
   font-weight: 400;
   font-size: 16px;
   line-height: 20px;

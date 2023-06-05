@@ -42,11 +42,15 @@ const MainNavigation = () => {
             {!isAppReady ? (
               <SplashNavigator />
             ) : user ? (
-              <Animated.View className="flex-1" entering={SlideInRight}>
+              <Animated.View
+                className="flex-1"
+                entering={SlideInRight.delay(50)}>
                 <AppNavigator />
               </Animated.View>
             ) : (
-              <Animated.View className="flex-1" entering={SlideInRight}>
+              <Animated.View
+                className="flex-1"
+                entering={SlideInRight.delay(50)}>
                 <AuthNavigator />
               </Animated.View>
             )}

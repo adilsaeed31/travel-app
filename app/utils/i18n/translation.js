@@ -3,6 +3,9 @@ export const translation = {
     common: {
       back: 'Back',
       required: 'required',
+      home: 'Home',
+      loyalty: 'Loyalty',
+      menu: 'Menu',
     },
     intro: {
       next: 'Next',
@@ -98,11 +101,17 @@ export const translation = {
       tabTitle: 'Travel Card',
       tabTitle2: 'Account',
     },
+    TravelCard: {
+      currentCodeEuro: '{{amount}} EUR',
+    },
   },
   ar: {
     common: {
       back: 'الخلف',
       required: 'مطلوب',
+      home: 'بيت',
+      loyalty: 'الولاء',
+      menu: 'قائمة طعام',
     },
     intro: {
       next: 'تالي',
@@ -192,6 +201,9 @@ export const translation = {
     },
     Dashboard: {
       tabTitle: 'بطاقة سفر',
+    },
+    TravelCard: {
+      currentCodeEuro: 'يورو {{amount}}',
     },
   },
 }
