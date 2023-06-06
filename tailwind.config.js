@@ -29,6 +29,7 @@ module.exports = {
           card: '#f5f5f5',
           'bottom-tab': '#fcfcfa',
           'bottom-tab-text': '#393939',
+          'quick-text': '#464E56',
         },
       },
     },

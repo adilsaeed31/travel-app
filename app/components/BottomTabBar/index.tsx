@@ -20,10 +20,8 @@ const BottomTabBar: React.FC<BottomTabBarProps> = props => {
   const reset = useStore(state => state.reset)
   const navigation = useNavigation<any>()
 
-  console.log(props, 'props')
-
   return (
-    <Animated.View entering={ZoomInDown.duration(1000).delay(50)}>
+    <Animated.View entering={ZoomInDown.duration(1000).delay(200)}>
       <View
         {...props}
         style={styles.barStyle}

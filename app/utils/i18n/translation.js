@@ -103,6 +103,11 @@ export const translation = {
     },
     TravelCard: {
       currentCodeEuro: '{{amount}} EUR',
+      load: 'Load',
+      unload: 'Unload',
+      currency: 'Currency',
+      manage: 'Manage',
+      quickLoad: 'Quick Load',
     },
   },
   ar: {
@@ -204,6 +209,11 @@ export const translation = {
     },
     TravelCard: {
       currentCodeEuro: 'يورو {{amount}}',
+      load: 'حمولة',
+      unload: 'التفريغ',
+      currency: 'عملة',
+      manage: 'يدير',
+      quickLoad: 'تحميل سريع',
     },
   },
 }

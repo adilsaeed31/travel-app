@@ -1,5 +1,5 @@
 import React from 'react'
-import {Image, View} from 'react-native'
+import {Image, View, TouchableOpacity} from 'react-native'
 import cn from 'classnames'
 import {useTranslation} from 'react-i18next'
 
@@ -24,7 +24,10 @@ const CurrencyRow = () => {
           {t('TravelCard:currentCodeEuro', {amount: '.34'})}
         </TCTextView>
       </View>
-      <DownArrow />
+
+      <TouchableOpacity>
+        <DownArrow />
+      </TouchableOpacity>
     </View>
   )
 }
