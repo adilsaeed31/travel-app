@@ -16,7 +16,7 @@ const SubView = styled.View`
 const MainWrapper = styled.View`
   height: 100%;
 `
-// TODO build ui for accounts
+// TODO build ui for accounts section
 const AccountScreen = () => {
   // alert(JSON.stringify(DeviceInfo.getBaseOsSync()))
 
