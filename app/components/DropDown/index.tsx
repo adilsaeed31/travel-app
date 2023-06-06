@@ -6,14 +6,15 @@ import {
   TextInput,
   FlatList,
   TouchableOpacity,
+  StyleSheet,
 } from 'react-native'
 import styled from 'styled-components/native'
 import {AppContext, AppProviderProps} from '@Context'
 import {Forward} from '@Assets'
 import {TEXT_VARIANTS} from '@Utils'
-import TCTextView from '../TextView'
 import {Search} from '@Assets'
 import Modal from 'react-native-modal'
+import Text from '../TextView'
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 
 const DropDownInput = styled(Pressable)<{
@@ -41,14 +42,14 @@ const ArrowIconWrapper = styled(View)<{isRTL: boolean}>`
   transform: rotate(180deg);
   transform: ${props => (!props.isRTL ? 'rotate(360deg)' : 'rotate(180deg)')};
 `
-const Label = styled(TCTextView)`
+const Label = styled(Text)`
   color: #8c8a86;
   font-weight: 400;
   font-size: 13px;
   font-weight: 400;
   line-height: 18px;
 `
-const Value = styled(TCTextView)<{isRTL: boolean}>`
+const Value = styled(Text)<{isRTL: boolean}>`
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
@@ -56,7 +57,7 @@ const Value = styled(TCTextView)<{isRTL: boolean}>`
   text-align: ${props => (props.isRTL ? 'right' : 'left')};
   color: #333333;
 `
-const ErrorText = styled(TCTextView)`
+const ErrorText = styled(Text)`
   color: #f85e5e;
   font-weight: 400;
   font-size: 14px;
@@ -150,14 +151,14 @@ export default function DropDown({
       <KeyboardAwareScrollView keyboardShouldPersistTaps="always">
         <Modal
           onSwipeComplete={({swipingDirection}) =>
-            swipingDirection == 'down' && onSheetClose()
+            swipingDirection === 'down' && onSheetClose()
           }
           swipeDirection="down"
           animationIn="fadeInUpBig"
           animationOut="fadeOutDownBig"
           onBackdropPress={onSheetClose}
           avoidKeyboard={true}
-          style={{margin: 0}}
+          style={styles.noMargin}
           isVisible={isOpen}>
           <ModalWrapper>{renderContent()}</ModalWrapper>
         </Modal>
@@ -188,14 +189,14 @@ export default function DropDown({
   )
 }
 
-const Title = styled(TCTextView)<{isRTL: boolean}>`
+const Title = styled(Text)<{isRTL: boolean}>`
   font-weight: 700;
   font-size: 20px;
   line-height: 28px;
   text-align: ${props => (props.isRTL ? 'right' : 'left')};
   margin-top: 24px;
 `
-const Subtitle = styled(TCTextView)<{isRTL: boolean}>`
+const Subtitle = styled(Text)<{isRTL: boolean}>`
   font-weight: 400;
   font-size: 12px;
   line-height: 21px;
@@ -253,10 +254,13 @@ const ClickableItem = styled(TouchableOpacity)<{hasBorder: boolean}>`
   margin-top: 2px;
   justify-content: center;
 `
-const ClickableItemText = styled(TCTextView)<{isRTL: boolean}>`
+const ClickableItemText = styled(Text)<{isRTL: boolean}>`
   font-weight: 400;
   font-size: 16px;
   line-height: 20px;
   color: #1e1e1c;
   text-align: ${props => (props.isRTL ? 'right' : 'left')};
 `
+const styles = StyleSheet.create({
+  noMargin: {margin: 0},
+})

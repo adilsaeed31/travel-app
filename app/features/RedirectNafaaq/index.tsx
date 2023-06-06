@@ -156,9 +156,9 @@ const NafaqScreen = ({navigation, route}: Props) => {
 
   useEffect(() => {
     let timer: any = null
-
+    console.log(nafathPullData, '++++++++++++++++++++++++')
     if (nafathPullData?.kyc_status && nafathPullData.kyc_status === 'SUCCESS') {
-      if (nafathPullData?.key_details?.edit_name_required) {
+      if (nafathPullData?.name_mismatch) {
         setOnboardingProgress(true, true, nafathPullData?.key_details)
       } else {
         setOnboardingProgress({
