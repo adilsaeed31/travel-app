@@ -980,6 +980,7 @@ function FinacialInformationScreen() {
     setTimeout(() => {
       setPostingFincail(false)
     }, 1000)
+    navigation.navigate('login')
   }
   const ToggleSheet = (indx: number) => {
     setCurrentOpenedInx(indx)
@@ -1062,9 +1063,7 @@ function FinacialInformationScreen() {
       return res
     },
   })
-  useEffect(() => {
-    mutate()
-  }, [])
+
   const HandleContinuePressed = () => {}
   const RenderCurrentForm = () => {
     let CurrentFormView = null
