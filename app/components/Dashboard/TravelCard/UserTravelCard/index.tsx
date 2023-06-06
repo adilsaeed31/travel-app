@@ -4,9 +4,11 @@ import Carousel from 'react-native-snap-carousel'
 import cn from 'classnames'
 
 import {useStore} from '@Store'
-import {AddNewCard, CurrencyRow, IntroDot} from '@Components'
 import {flexRowLayout, screenWidth} from '@Utils'
 import {TravelCardSvg, TravelCardSvgBlack} from '@Assets'
+
+import {default as AddNewCard} from '../AddNewCard'
+import {default as TCDot} from '../../../Intro/Dot'
 
 const data = ['card1', 'card2', 'AddNew']
 
@@ -44,17 +46,11 @@ const UserTravelCard = () => {
         <View className={cn(flexRowLayout(isRTL))}>
           {data?.map((item, index) => {
             return (
-              <IntroDot
-                key={index}
-                isActive={currentItem === index}
-                hasRounded
-              />
+              <TCDot key={index} isActive={currentItem === index} hasRounded />
             )
           })}
         </View>
       </View>
-
-      <CurrencyRow />
     </View>
   )
 }

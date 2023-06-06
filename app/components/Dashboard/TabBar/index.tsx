@@ -2,6 +2,7 @@ import React, {useState, memo, Dispatch, SetStateAction} from 'react'
 import {View, TouchableOpacity} from 'react-native'
 import {Tab, TabBar, ViewPager} from '@ui-kitten/components'
 import cn from 'classnames'
+import Animated, {SlideInRight} from 'react-native-reanimated'
 
 import {useStore} from '@Store'
 import {ProfileIcon} from '@Assets'
@@ -59,11 +60,13 @@ export const TCTabBar: React.FC<TabBarProps> = ({left, right}) => {
           </TabBar>
         </View>
 
-        <View className={cn('flex-1', 'px-4 items-end')}>
+        <Animated.View
+          entering={SlideInRight.duration(1000).delay(200)}
+          className={cn('flex-1', 'px-4 items-end')}>
           <TouchableOpacity onPress={toggleLanguage}>
             <ProfileIcon />
           </TouchableOpacity>
-        </View>
+        </Animated.View>
       </View>
 
       <ViewPager
