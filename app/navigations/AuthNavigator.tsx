@@ -23,7 +23,7 @@ import {
   LegalInfoOther,
   CreateUser,
 } from '@Features'
-import {ExistingScreen} from '@Screens'
+import {ExistingScreen, WIPScreen} from '@Screens'
 
 const {Navigator, Screen} = createStackNavigator()
 
@@ -54,6 +54,7 @@ const AuthNavigator = () => {
       <Screen name="FinicalInformation" component={FinicalInformation} />
       <Screen name="Existing" component={ExistingScreen} />
       <Screen name="CreateUser" component={CreateUser} />
+      <Screen name="WIP" component={WIPScreen} />
     </Navigator>
   )
 }

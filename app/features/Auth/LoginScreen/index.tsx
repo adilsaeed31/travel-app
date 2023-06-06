@@ -130,7 +130,6 @@ const AuthFeature = ({navigation}: Props) => {
     }
   }, [])
 
-
   return (
     <>
       <Layout isScrollable={false} isLoading={isFetching}>
@@ -154,7 +153,7 @@ const AuthFeature = ({navigation}: Props) => {
           />
         </LoginForm>
         <ViewWrapper>
-          <TCLinkButton onPress={() => navigation.navigate('Existing')}>
+          <TCLinkButton onPress={() => navigation.navigate('WIP')}>
             {t('auth:buttonForget')}
           </TCLinkButton>
         </ViewWrapper>
