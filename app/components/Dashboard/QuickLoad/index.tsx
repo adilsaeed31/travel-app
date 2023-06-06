@@ -12,7 +12,7 @@ const QuickLoad: React.FC<{
     <TouchableOpacity
       // style={[styles.container, {transform: [{scale: 0.8}]}]}
       style={styles.container}
-      className="w-24 py-3 rounded-2xl justify-between items-center"
+      className="px-4 py-3 mr-2 rounded-2xl"
       onPress={onPress}>
       <TCTextView className="text-tc-ios-base text-tc-quick-text">
         {name}
