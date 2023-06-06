@@ -282,8 +282,7 @@ const PersonalIdScreen = ({navigation}: Props) => {
 }
 
 const StyledButton = styled(Button)`
-  margin-top: ${isSmall ? '24px' : '0px'};
-  margin-bottom: ${isSmall ? '24px' : '0px'};
+  margin: 0px;
 `
 
 const ButtonContainer = styled(View)`
@@ -304,7 +303,7 @@ const DisclaimerView = styled(View)<{
   margin-left: ${props =>
     props.isKeyboardVisible || props.isRTL || isSmall ? '0px' : '32px'};
   margin-right: ${props =>
-    props.isKeyboardVisible || props.isRTL || isSmall ? '0px' : '32px'};
+    props.isKeyboardVisible || props.isRTL || isSmall ? '32px' : '0px'};
   right: ${props => (props.isRTL ? '32px' : '0px')};
   left: ${props => (props.isRTL ? '32px' : '0px')};
   margin-top: 16px;

@@ -17,6 +17,7 @@ import {
   OtpVerificationScreen,
   PersonalInformation,
   AfterPersonExisting,
+  NameVerification,
 } from '@Features'
 import {ExistingScreen} from '@Screens'
 
@@ -38,6 +39,7 @@ const AuthNavigator = () => {
       <Screen name="AfterOtpPersonalId" component={AfterOtpPersonalId} />
       <Screen name="RedirectNafaaq" component={RedirectNafaaq} />
       <Screen name="AfterNafaath" component={AfterNafaath} />
+      <Screen name="NameVerification" component={NameVerification} />
       <Screen name="personalInfo" component={PersonalInformation} />
       <Screen name="AfterInformation" component={AfterInformation} />
       <Screen name="OTPActivateCard" component={OTPActivateCard} />

@@ -21,6 +21,7 @@ const SplashScreen: React.FC<SplashScreenProps> = ({navigation}) => {
       navigation.replace('Intro')
     } else {
       setAppReady?.()
+      navigation.replace('Auth')
     }
   }
 

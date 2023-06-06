@@ -4,6 +4,7 @@ import {StateCreator} from 'zustand'
 export type OnBoardingStoreProps = {
   govtId?: string
   onboardingMobileNumber?: string
+  onBoardingProgress?: any
 }
 
 const OnBoardingState: StateCreator<OnBoardingStoreProps> = set => ({
@@ -16,6 +17,11 @@ const OnBoardingState: StateCreator<OnBoardingStoreProps> = set => ({
       onboardingMobileNumber: mobileNumber,
       govtId: govtId,
       onboardingOTPRef: referenceNumber,
+    }))
+  },
+  setOnboardingProgress: (rest: any) => {
+    set(() => ({
+      onBoardingProgress: {...rest},
     }))
   },
 })
