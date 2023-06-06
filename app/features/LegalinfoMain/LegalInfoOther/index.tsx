@@ -1,5 +1,3 @@
-/* eslint-disable eqeqeq */
-
 import React, {useContext, useState, useMemo} from 'react'
 import {View, SafeAreaView} from 'react-native'
 import {useTranslation} from 'react-i18next'
@@ -15,7 +13,7 @@ import {
 import {TEXT_VARIANTS, Colors, SPACER_SIZES} from '@Utils'
 import {StackNavigationProp} from '@react-navigation/stack'
 import styled from 'styled-components/native'
-import {pepList, specialNeedList} from './masterData'
+import {pepList, specialNeedList} from '../masterData'
 
 import {AppContext, AppProviderProps} from '@Context'
 type IFormTYpe = {
@@ -23,13 +21,17 @@ type IFormTYpe = {
   pepEnabled: boolean
   pepValue?: string
   specialNeed: boolean
+  visaKSA: boolean
   specialNeedValue?: string
 }
 
 const FormValues = {
-  notKsaResidents: false,
-  pepEnabled: false,
-  specialNeed: false,
+  notKsaResidents: undefined,
+  pepEnabled: undefined,
+  pepValue: undefined,
+  specialNeed: undefined,
+  visaKSA: undefined,
+  specialNeedValue: undefined,
 }
 
 type Props = {
@@ -37,7 +39,7 @@ type Props = {
   route: any
 }
 
-function LegalInformation({navigation}: Props) {
+function LegalInfoOther({navigation}: Props) {
   const [currentOpendIndx, setCurrentOpenedInx] = useState(-1)
   const {isRTL} = useContext<AppProviderProps>(AppContext)
   const {t} = useTranslation()
@@ -50,38 +52,22 @@ function LegalInformation({navigation}: Props) {
   const [isLoader, setIsLoader] = useState<boolean>(false)
 
   const isFormValid = useMemo(() => {
-    let isValid = true
-
-    if (values.pepEnabled) {
-      if (values.pepValue) {
-        return true
-      } else {
-        return false
-      }
-    }
-
-    if (values.specialNeed) {
-      if (values.specialNeedValue) {
-        if (values.specialNeedValue == 'other') {
-          return false
-        } else {
-          return true
-        }
-      } else {
-        return false
-      }
-    }
-
-    return isValid
+    const {notKsaResidents, pepEnabled, specialNeed, visaKSA} = values
+    return (
+      notKsaResidents !== undefined &&
+      pepEnabled !== undefined &&
+      specialNeed !== undefined &&
+      visaKSA !== undefined
+    )
   }, [values])
 
   const ToggleSheet = (indx: number) => {
     setCurrentOpenedInx(indx)
     let err = errors
-    if (indx == 0) {
+    if (indx === 0) {
       err.pepValue = ''
     }
-    if (indx == 1) {
+    if (indx === 1) {
       err.specialNeedValue = ''
     }
 
@@ -93,10 +79,10 @@ function LegalInformation({navigation}: Props) {
     setIsLoader(true)
     setTimeout(() => {
       setIsLoader(false)
-      if (values.notKsaResidents) navigation.navigate('LegalInfoOther')
-      else navigation.navigate('CreateUser') // TODO pass this to LegalInfoOther screen
+      navigation.navigate('CreateUser')
     }, 2000)
   }
+
   return (
     <>
       <Layout
@@ -112,28 +98,26 @@ function LegalInformation({navigation}: Props) {
             <Header isRTL={!!isRTL}>{t('Legal Requirements')}</Header>
 
             <AdditionalInformation>
-              {t(
-                'Do you have residency / citizenship / immigrant visa in any country other than KSA?',
-              )}
+              {t('Are you a US Person?')}
             </AdditionalInformation>
             <Spacer size={SPACER_SIZES.BASE * 1.5} />
             <RadioWrapper isRTL={!!isRTL}>
               <RadioButton
-                selected={!values.notKsaResidents}
+                selected={values.notKsaResidents === false}
                 onPress={() =>
                   setValues({
                     ...values,
-                    notKsaResidents: !values.notKsaResidents,
+                    notKsaResidents: false,
                   })
                 }>
                 {t('No')}
               </RadioButton>
               <RadioButton
-                selected={values.notKsaResidents}
+                selected={values.notKsaResidents === true}
                 onPress={() =>
                   setValues({
                     ...values,
-                    notKsaResidents: !values.notKsaResidents,
+                    notKsaResidents: true,
                   })
                 }>
                 {t('Yes')}
@@ -141,52 +125,33 @@ function LegalInformation({navigation}: Props) {
             </RadioWrapper>
             <Spacer size={SPACER_SIZES.BASE * 6} />
             <AdditionalInformation>
-              {t('Are you a PEP or REP?')}
+              {t(
+                'Are you are Tax resident of any country or countries outside from KSA? (No, I confirm that KSA is my sole residency for tax purposes)',
+              )}
             </AdditionalInformation>
             <Spacer size={SPACER_SIZES.BASE * 1.5} />
             <RadioWrapper isRTL={!!isRTL}>
               <RadioButton
-                selected={!values.pepEnabled}
+                selected={values.pepEnabled === false}
                 onPress={() =>
                   setValues({
                     ...values,
-                    pepEnabled: !values.pepEnabled,
+                    pepEnabled: false,
                   })
                 }>
                 {t('No')}
               </RadioButton>
               <RadioButton
-                selected={values.pepEnabled}
+                selected={values.pepEnabled === true}
                 onPress={() =>
                   setValues({
                     ...values,
-                    pepEnabled: !values.pepEnabled,
+                    pepEnabled: true,
                   })
                 }>
                 {t('Yes')}
               </RadioButton>
             </RadioWrapper>
-            {values.pepEnabled ? (
-              <>
-                <Spacer size={SPACER_SIZES.BASE * 2} />
-                <DropDown
-                  data={pepList.map(c =>
-                    isRTL ? c.levelNameAr : c.levelNameEn,
-                  )}
-                  label={t('Select') || ''}
-                  toogleClick={() => ToggleSheet(0)}
-                  onItemSelected={(val: any) =>
-                    setValues({...values, pepValue: val})
-                  }
-                  value={values.pepValue}
-                  error={errors.pepValue}
-                  isOpen={currentOpendIndx == 0}
-                  title={t('Are you a PEP or REP?')}
-                  onSheetClose={() => setCurrentOpenedInx(-1)}
-                  hasSearch={false}
-                />
-              </>
-            ) : null}
             <Spacer size={SPACER_SIZES.BASE * 6} />
             <AdditionalInformation>
               {t('Do you have special needs?')}
@@ -194,67 +159,76 @@ function LegalInformation({navigation}: Props) {
             <Spacer size={SPACER_SIZES.BASE * 1.5} />
             <RadioWrapper isRTL={!!isRTL}>
               <RadioButton
-                selected={!values.specialNeed}
+                selected={values.specialNeed === false}
                 onPress={() =>
                   setValues({
                     ...values,
-                    specialNeed: !values.specialNeed,
+                    specialNeed: false,
                   })
                 }>
                 {t('No')}
               </RadioButton>
               <RadioButton
-                selected={values.specialNeed}
+                selected={values.specialNeed === true}
                 onPress={() =>
                   setValues({
                     ...values,
-                    specialNeed: !values.specialNeed,
+                    specialNeed: true,
                   })
                 }>
                 {t('Yes')}
               </RadioButton>
             </RadioWrapper>
-            {values.specialNeed ? (
-              <>
-                <Spacer size={SPACER_SIZES.BASE * 2} />
-                <DropDown
-                  data={specialNeedList.map(c =>
-                    isRTL ? c.levelNameAr : c.levelNameEn,
-                  )}
-                  label={t('Select') || ''}
-                  toogleClick={() => ToggleSheet(1)}
-                  onItemSelected={val =>
-                    setValues({...values, specialNeedValue: val})
-                  }
-                  value={values.specialNeedValue}
-                  error={errors.specialNeedValue}
-                  isOpen={currentOpendIndx == 1}
-                  title={t('Do you have special needs?')}
-                  onSheetClose={() => setCurrentOpenedInx(-1)}
-                  hasSearch={false}
-                />
-
-                {values.specialNeedValue == 'other' && (
-                  <>
-                    <Spacer size={SPACER_SIZES.BASE * 1} />
-                    <Input label={'Disability'} />
-                  </>
-                )}
-              </>
-            ) : null}
+            <Spacer size={SPACER_SIZES.BASE * 6} />
+            <AdditionalInformation>
+              {t(
+                'Do you have an immigrant visa or permanent resident status in a country other than KSA?',
+              )}
+            </AdditionalInformation>
+            <Spacer size={SPACER_SIZES.BASE * 1.5} />
+            <RadioWrapper isRTL={!!isRTL}>
+              <RadioButton
+                selected={values.visaKSA === false}
+                onPress={() =>
+                  setValues({
+                    ...values,
+                    visaKSA: false,
+                  })
+                }>
+                {t('No')}
+              </RadioButton>
+              <RadioButton
+                selected={values.visaKSA === true}
+                onPress={() =>
+                  setValues({
+                    ...values,
+                    visaKSA: true,
+                  })
+                }>
+                {t('Yes')}
+              </RadioButton>
+            </RadioWrapper>
           </View>
-          <StyledButton disabled={!isFormValid} onPress={onComplete}>
-            <Text variant={TEXT_VARIANTS.body}>
-              {t('onboarding:personalInformation:continue')}
-            </Text>
-          </StyledButton>
+          {isFormValid ? (
+            <StyledButton onPress={onComplete}>
+              <Text variant={TEXT_VARIANTS.body}>
+                {t('onboarding:personalInformation:continue')}
+              </Text>
+            </StyledButton>
+          ) : (
+            <StyledButton disabled>
+              <Text variant={TEXT_VARIANTS.body}>
+                {t('onboarding:personalInformation:continue')}
+              </Text>
+            </StyledButton>
+          )}
         </SafeAreaWrapper>
       </Layout>
     </>
   )
 }
 
-export default LegalInformation
+export default LegalInfoOther
 
 const Header = styled(Text)<{isRTL: boolean}>`
   font-size: 28px;
@@ -265,6 +239,7 @@ const Header = styled(Text)<{isRTL: boolean}>`
   margin-top: 24px;
   margin-bottom: 32px;
 `
+
 const AdditionalInformation = styled(Text)`
   font-size: 17px;
   line-height: 22px;
@@ -277,9 +252,11 @@ const StyledButton = styled(Button)`
   width: 100%;
   align-self: center;
 `
+
 const RadioWrapper = styled(View)<{isRTL: boolean}>`
   flex-direction: row;
 `
+
 const SafeAreaWrapper = styled(SafeAreaView)`
   flex: 1;
   justify-content: space-between;
