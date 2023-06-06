@@ -72,8 +72,8 @@ interface IDropDownProps {
   data: string[]
   label: string
   toogleClick: () => void
-  value: string | null
-  error: string
+  value: string | null | undefined
+  error: string | null | undefined
   isOpen?: boolean
   disabled?: boolean
   title?: string | null
