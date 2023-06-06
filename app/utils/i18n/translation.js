@@ -132,6 +132,7 @@ export const translation = {
       currency: 'Currency',
       manage: 'Manage',
       quickLoad: 'Quick Load',
+      addNew: 'Add New Card',
     },
   },
   ar: {
@@ -261,6 +262,7 @@ export const translation = {
       currency: 'عملة',
       manage: 'يدير',
       quickLoad: 'تحميل سريع',
+      addNew: 'إضافة بطاقة جديدة',
     },
   },
 }

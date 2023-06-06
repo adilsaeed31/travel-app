@@ -41,7 +41,7 @@ const useTabBarState = (initialState = 0): Partial<TabBarProps> => {
 
 export const TCTabBar: React.FC<TabBarProps> = ({left, right}) => {
   const isRTL = useStore(state => state.isRTL)
-  const {selectedIndex, onSelect} = useTabBarState()
+  const {selectedIndex, onSelect} = useTabBarState(0)
   const toggleLanguage = useStore(state => state.toggleLanguage)
 
   return (
@@ -70,9 +70,9 @@ export const TCTabBar: React.FC<TabBarProps> = ({left, right}) => {
       </View>
 
       <ViewPager
-        selectedIndex={selectedIndex}
+        swipeEnabled={false}
         onSelect={onSelect}
-        swipeEnabled={false}>
+        selectedIndex={selectedIndex}>
         <View>{left}</View>
         <View>{right}</View>
       </ViewPager>
