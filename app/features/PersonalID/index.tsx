@@ -144,14 +144,14 @@ const PersonalIdScreen = ({navigation}: Props) => {
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
-      'keyboardWillShow',
+      Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow',
       e => {
         setKeyboardHeight(e.endCoordinates.height)
       },
     )
 
     const keyboardDidHideListener = Keyboard.addListener(
-      'keyboardWillHide',
+      Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide',
       () => {
         setKeyboardHeight(0)
       },
@@ -310,7 +310,8 @@ const DisclaimerView = styled(View)<{
 `
 
 const UnderlineText = styled(Text)`
-  text-decoration-line: underline;
+  text-decoration: underline;
+  text-decoration-color: rgba(63, 61, 54, 0.8);
   color: rgba(63, 61, 54, 0.8);
   line-height: 16px;
 `
