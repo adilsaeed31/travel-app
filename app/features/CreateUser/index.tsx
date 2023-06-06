@@ -6,10 +6,11 @@ import styled from 'styled-components/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {Formik} from 'formik'
 import * as Yup from 'yup'
-
-import {Colors} from '@Utils'
+import {useMutation} from '@tanstack/react-query'
+import {Colors, BASE_URL} from '@Utils'
 import {useStore} from '@Store'
 import {Layout, TCInput, TCButton, TCTextView, PassRules} from '@Components'
+import {fetcher} from '@Api'
 
 type CreateUserProps = {
   navigation: StackNavigationProp<{}>
@@ -39,7 +40,7 @@ const CreateUserSchema = Yup.object().shape({
 const CreateUser: React.FC<CreateUserProps> = ({navigation}) => {
   const {t} = useTranslation()
   const isRTL = useStore(state => state.isRTL)
-  const [isLoader, setLoader] = useState(false)
+
   const setUser = useStore((state: any) => state.setUser)
   const [state, setState] = useState<any>({
     passwordOne: false,
@@ -55,9 +56,31 @@ const CreateUser: React.FC<CreateUserProps> = ({navigation}) => {
     confirmPassword: '',
   }
 
+  const {
+    isLoading: isLoading,
+    data: uData,
+    mutate,
+    reset,
+  } = useMutation({
+    mutationFn: async () => {
+      let req: any = await fetcher(BASE_URL + '/onboarding/register', {
+        method: 'POST',
+        body: {
+          username: state.values.userName,
+          password: state.values.password,
+        },
+      })
+      let res = await req.json()
+      return res
+    },
+  })
+
   useEffect(() => {
-    console.log(state.values)
-  }, [state.values])
+    if (state.values.userName && state.values.password) {
+      reset()
+      setUser({})
+    }
+  }, [uData])
 
   return (
     <>
@@ -65,7 +88,7 @@ const CreateUser: React.FC<CreateUserProps> = ({navigation}) => {
         isBack={true}
         onBack={() => navigation.goBack()}
         isHeader={true}
-        isLoading={isLoader}
+        isLoading={isLoading}
         isBackground={true}>
         <View className="flex-1 justify-content">
           <Header isRTL={!!isRTL}>
@@ -77,11 +100,8 @@ const CreateUser: React.FC<CreateUserProps> = ({navigation}) => {
             initialValues={initialValues}
             validationSchema={CreateUserSchema}
             onSubmit={(values: any) => {
-              setLoader(true)
-              setTimeout(() => {
-                setLoader(false)
-                setUser(values)
-              }, 1000)
+              setState({...state, values: values})
+              mutate()
             }}>
             {({
               values,

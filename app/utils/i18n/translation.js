@@ -30,7 +30,7 @@ export const translation = {
       disclaimer: 'Disclaimer',
       termsConditions: 'Terms & Conditions',
       alreadyAccount: 'Already have account?',
-      login: ' Log in',
+      login: ' Login',
       enterOTP: 'Enter OTP',
       backLogin: 'Back to Login',
       threeAttempts: 'OTP attempts failed three times',
