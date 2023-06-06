@@ -1,7 +1,7 @@
 /* eslint-disable eqeqeq */
 
 import React, {useContext, useState, useMemo, useEffect} from 'react'
-import {View, SafeAreaView, ScrollView, Dimensions} from 'react-native'
+import {View, SafeAreaView, ScrollView, Dimensions, Alert} from 'react-native'
 import {fetcher} from '@Api'
 import {useNavigation} from '@react-navigation/native'
 import Splash from 'react-native-splash-screen'
@@ -30,6 +30,8 @@ import {
   ContactName,
   relationValidaor,
 } from './validators'
+const fakeToke =
+  'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2NDdkOTcwNWQ1Y2NiZDQ1OWJjZDliOWEiLCJzdWIiOiIwNDM1NDM1MzQ1Iiwicm9sZXMiOlsiT05CT0FSRElORyJdLCJpc3MiOiJjb20uc2FpYi52ZW50dXJlcy5hdXRoIiwiYXVkIjoiY29tLnNhaWIudmVudHVyZXMuYXV0aCIsImV4cCI6MjQ4NTk1NTg3MSwiaWRlbnRpdHkiOiIyNTQ1MzEyOTMyIiwicGhvbmVfbnVtYmVyIjoiMDU2NzExMzUzNCJ9.CcktJQUa1JFMeVaoK8Hd7PMLyP-NnLSW-OTOpxFEltxoH_09UBicyfpB-2D_CgSrjEh-uSuKszdAnxVLbq7gyA'
 import {AppContext, AppProviderProps} from '@Context'
 type IFormTYpe = {
   city: string | null
@@ -146,6 +148,7 @@ function PersonalInformation() {
     useState(false)
   const [currentOpendIndx, setCurrentOpenedInx] = useState(-1)
   const {isRTL} = useContext<AppProviderProps>(AppContext)
+  const [formLoading, setFormLoading] = useState(false)
   const {t} = useTranslation()
   const [values, setValues] = useState<IFormTYpe>({
     ...FormValues,
@@ -214,6 +217,7 @@ function PersonalInformation() {
       if (journeySecretsData) {
         journeySecrets = JSON.parse(journeySecretsData)
       }
+      console.log('ourneySecrets.access_token,', journeySecrets.access_token)
       let req: any = await fetcher(BASE_URL + '/onboarding/personal', {
         method: 'POST',
         body: MapFormValues(values, IsSaudi, showAdditionalInformation, isRTL),
@@ -226,7 +230,7 @@ function PersonalInformation() {
   const {
     isLoading: isGetDataLoading,
     data: PersonalInformationData,
-    mutate: mutatePersonalInformation,
+    mutate: GetPersonalInformationData,
     reset: restGetPersonalInformation,
   } = useMutation({
     mutationFn: async () => {
@@ -244,9 +248,20 @@ function PersonalInformation() {
     },
   })
   useEffect(() => {
-    // navigation.push('FinicalInformation')
-    console.log('PersonalInformationData', PersonalInformationData)
+    if (PersonalInformationData) {
+      MapApiToState(values, PersonalInformationData, isRTL)
+    }
   }, [PersonalInformationData])
+  useEffect(() => {
+    //  GetPersonalInformationData()
+  }, [])
+  useEffect(() => {
+    if (data?.PersonalInformationData) {
+      navigation.push('FinicalInformation')
+    } else {
+      data && Alert.alert('some thing went wrong')
+    }
+  }, [data])
 
   const RenderCHeckbox = React.useMemo(
     () => (
@@ -269,6 +284,13 @@ function PersonalInformation() {
     ),
     [showAdditionalInformation],
   )
+  const handlePostPersonalInformation = () => {
+    setFormLoading(true)
+    setTimeout(() => {
+      setFormLoading(false)
+      navigation.navigate('FinicalInformation')
+    }, 300)
+  }
   return (
     <ScrollView
       keyboardShouldPersistTaps="always"
@@ -278,7 +300,7 @@ function PersonalInformation() {
         isBack={true}
         onBack={() => navigation.goBack()}
         isHeader={true}
-        isLoading={isLoading || isGetDataLoading}
+        isLoading={formLoading || isLoading || isGetDataLoading}
         isBackground={true}>
         <SafeAreaWrapper>
           <View isRTL={!!isRTL}>
@@ -462,7 +484,9 @@ function PersonalInformation() {
               </LoginForm>
             )}
           </View>
-          <StyledButton disabled={!isFormValid} onPress={mutate}>
+          <StyledButton
+            disabled={!isFormValid}
+            onPress={handlePostPersonalInformation}>
             <Text variant={TEXT_VARIANTS.body700}>
               {t('onboarding:personalInformation:continue')}
             </Text>

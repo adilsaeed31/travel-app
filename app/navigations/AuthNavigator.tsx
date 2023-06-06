@@ -17,6 +17,7 @@ import {
   OtpVerificationScreen,
   PersonalInformation,
   AfterPersonExisting,
+  IntroFeature,
   FinicalInformation,
   NameVerification,
   LegalinfoMain,
@@ -28,7 +29,7 @@ const {Navigator, Screen} = createStackNavigator()
 const AuthNavigator = () => {
   return (
     <Navigator
-      initialRouteName="Auth"
+      initialRouteName="personalInfo"
       screenOptions={{
         headerShown: false,
         gestureEnabled: false,
