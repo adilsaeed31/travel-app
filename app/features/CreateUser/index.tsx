@@ -60,6 +60,7 @@ const CreateUser: React.FC<CreateUserProps> = ({navigation}) => {
     isLoading: isLoading,
     data: uData,
     mutate,
+    reset,
   } = useMutation({
     mutationFn: async () => {
       let req: any = await fetcher(BASE_URL + '/onboarding/register', {
@@ -75,7 +76,10 @@ const CreateUser: React.FC<CreateUserProps> = ({navigation}) => {
   })
 
   useEffect(() => {
-    setUser({})
+    if (state.values.userName && state.values.password) {
+      reset()
+      setUser({})
+    }
   }, [uData])
 
   return (
