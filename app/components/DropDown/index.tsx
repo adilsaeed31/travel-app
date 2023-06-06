@@ -6,6 +6,7 @@ import {
   TextInput,
   FlatList,
   TouchableOpacity,
+  StyleSheet,
 } from 'react-native'
 import styled from 'styled-components/native'
 import {AppContext, AppProviderProps} from '@Context'
@@ -150,14 +151,14 @@ export default function DropDown({
       <KeyboardAwareScrollView keyboardShouldPersistTaps="always">
         <Modal
           onSwipeComplete={({swipingDirection}) =>
-            swipingDirection == 'down' && onSheetClose()
+            swipingDirection === 'down' && onSheetClose()
           }
           swipeDirection="down"
           animationIn="fadeInUpBig"
           animationOut="fadeOutDownBig"
           onBackdropPress={onSheetClose}
           avoidKeyboard={true}
-          style={{margin: 0}}
+          style={styles.noMargin}
           isVisible={isOpen}>
           <ModalWrapper>{renderContent()}</ModalWrapper>
         </Modal>
@@ -260,3 +261,6 @@ const ClickableItemText = styled(Text)<{isRTL: boolean}>`
   color: #1e1e1c;
   text-align: ${props => (props.isRTL ? 'right' : 'left')};
 `
+const styles = StyleSheet.create({
+  noMargin: {margin: 0},
+})
