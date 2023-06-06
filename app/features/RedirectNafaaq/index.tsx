@@ -160,6 +160,9 @@ const NafaqScreen = ({navigation, route}: Props) => {
     if (nafathPullData?.kyc_status && nafathPullData.kyc_status === 'SUCCESS') {
       if (nafathPullData?.name_mismatch) {
         setOnboardingProgress(true, true, nafathPullData?.key_details)
+        navigation.navigate('NameVerification', {
+          key_details: nafathPullData,
+        })
       } else {
         setOnboardingProgress({
           ...onBoardingProgress,
@@ -168,7 +171,9 @@ const NafaqScreen = ({navigation, route}: Props) => {
           kycData: nafathPullData?.key_details,
         })
         setOnboardingProgress(true, true, nafathPullData?.key_details)
-        navigation.navigate('personalInfo')
+        navigation.navigate('personalInfo', {
+          key_details: nafathPullData,
+        })
       }
     } else {
       if (state.startTime && Date.now() - state.startTime > 90000) {

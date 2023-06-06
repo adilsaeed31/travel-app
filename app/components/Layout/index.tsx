@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {memo} from 'react'
 import {
   View,
   Dimensions,
@@ -61,9 +61,9 @@ const Loader = styled(View)`
   flex: 1;
   background-color: rgba(0, 0, 0, 0.3);
   position: absolute;
-  top: 0;
+  bottom: 0;
   left: 0;
-  height: 100%;
+  height: ${Dimensions.get('window').height}px;
   width: 100%;
   z-index: 1000;
   display: flex;
@@ -110,7 +110,7 @@ const AppLayout: React.FC<LayoutProps> = ({
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <ScrollView
         scrollEventThrottle={16}
-        scrollEnabled={isScrollable}
+        scrollEnabled={isLoading ? false : isScrollable}
         keyboardShouldPersistTaps="handled"
         onScroll={onScroll}>
         <TouchableOpacity onPress={Keyboard.dismiss} activeOpacity={1}>
@@ -155,4 +155,4 @@ const AppLayout: React.FC<LayoutProps> = ({
   )
 }
 
-export default AppLayout
+export default memo(AppLayout)

@@ -60,7 +60,7 @@ const TopNavigationSimpleUsageShowcase: React.FC<PropsType> = ({
           <ViewSub>
             <ArrowLeftIcon />
             <LanguageBackText variant={TEXT_VARIANTS.bodyBold}>
-              {t('onboarding:back')}
+              {t('common:back')}
             </LanguageBackText>
           </ViewSub>
         </TouchableOpacity>

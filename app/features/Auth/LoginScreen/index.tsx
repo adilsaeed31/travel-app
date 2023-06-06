@@ -130,6 +130,7 @@ const AuthFeature = ({navigation}: Props) => {
     }
   }, [])
 
+
   return (
     <>
       <Layout isScrollable={false} isLoading={isFetching}>
@@ -174,6 +175,7 @@ const AuthFeature = ({navigation}: Props) => {
             <TCMultiLinkButton
               callbacks={[
                 () => {
+                  setPassword('')
                   navigation.navigate('PersonalID')
                 },
               ]}>

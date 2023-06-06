@@ -135,20 +135,14 @@ const OtpAuthScreen = ({navigation, route}: Props) => {
           setFinishTimer(finishTimer + 1)
           break
         case status === 509:
-          navigation.navigate('AfterOtpPersonalId', {
-            status: 'error',
-            case: 'Bandwidth Limit Exceeded',
-          })
+          setStatusError('Limit Exceeded')
           break
         case status > 399 && status <= 500:
           if (invalidAttempts < 2) {
             setStatusError('Invalid Otp. Please try Again')
             setInvalidAttempts(invalidAttempts + 1)
           } else {
-            navigation.navigate('AfterOtpPersonalId', {
-              status: 'error',
-              case: 'Invalid Attempts',
-            })
+            setStatusError('Max Attempts Limit Exceeded')
           }
           break
         default:

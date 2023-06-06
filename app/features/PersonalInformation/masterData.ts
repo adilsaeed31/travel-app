@@ -1,3120 +1,2492 @@
 export const educationList = [
+  {
+    levelCode: 'DIPL',
 
-    {
+    levelNameEn: 'Secondary school (Diploma level)',
 
-        "levelCode": "DIPL",
+    levelNameAr: 'دراسة ثانوية-دبلوم',
+  },
 
-        "levelNameEn": "Secondary school (Diploma level)",
+  {
+    levelCode: 'NONE',
 
-        "levelNameAr": "دراسة ثانوية-دبلوم"
+    levelNameEn: 'No education',
 
-    },
+    levelNameAr: 'غير متعلم',
+  },
 
-    {
+  {
+    levelCode: 'POST',
 
-        "levelCode": "NONE",
+    levelNameEn: 'Higher education (Post graduate)',
 
-        "levelNameEn": "No education",
+    levelNameAr: 'تعليم عالي',
+  },
 
-        "levelNameAr": "غير متعلم"
+  {
+    levelCode: 'SCHO',
 
-    },
+    levelNameEn: 'Primary (Elementary/Middle) school',
 
-    {
+    levelNameAr: 'ابتدائية او متوسط',
+  },
 
-        "levelCode": "POST",
+  {
+    levelCode: 'UNIV',
 
-        "levelNameEn": "Higher education (Post graduate)",
+    levelNameEn: 'University level (University or College)',
 
-        "levelNameAr": "تعليم عالي"
-
-    },
-
-    {
-
-        "levelCode": "SCHO",
-
-        "levelNameEn": "Primary (Elementary/Middle) school",
-
-        "levelNameAr": "ابتدائية او متوسط"
-
-    },
-
-    {
-
-        "levelCode": "UNIV",
-
-        "levelNameEn": "University level (University or College)",
-
-        "levelNameAr": "جامعي"
-
-    }
-
+    levelNameAr: 'جامعي',
+  },
 ]
 export const countriesList = [
+  {
+    code: 'CI',
 
-    {
+    nameEn: 'IVORY COAST',
 
-        "code": "CI",
+    nameAr: 'ساحل العاج',
+  },
 
-        "nameEn": "IVORY COAST",
+  {
+    code: 'KN',
 
-        "nameAr": "ساحل العاج"
+    nameEn: 'Saint Christopher (St. Kitts) and Nevis',
 
-    },
+    nameAr: 'سان كريستوفر نيفر',
+  },
 
-    {
+  {
+    code: 'AZ',
 
-        "code": "KN",
+    nameEn: 'Azerbaijanin',
 
-        "nameEn": "Saint Christopher (St. Kitts) and Nevis",
+    nameAr: 'أذربيجان',
+  },
 
-        "nameAr": "سان كريستوفر نيفر"
+  {
+    code: 'AM',
 
-    },
+    nameEn: 'Armenia',
 
-    {
+    nameAr: 'أرمينيا',
+  },
 
-        "code": "AZ",
+  {
+    code: 'RU',
 
-        "nameEn": "Azerbaijanin",
+    nameEn: 'Russian Federation',
 
-        "nameAr": "أذربيجان"
+    nameAr: 'الاتحاد الروسي',
+  },
 
-    },
+  {
+    code: 'S7',
 
-    {
+    nameEn: 'Tribal Individuals',
 
-        "code": "AM",
+    nameAr: 'أفراد القبائل',
+  },
 
-        "nameEn": "Armenia",
+  {
+    code: 'AF',
 
-        "nameAr": "أرمينيا"
+    nameEn: 'Afghanistan',
 
-    },
+    nameAr: 'أفغانستان',
+  },
 
-    {
+  {
+    code: 'AL',
 
-        "code": "RU",
+    nameEn: 'Albania',
 
-        "nameEn": "Russian Federation",
+    nameAr: 'البانيا',
+  },
 
-        "nameAr": "الاتحاد الروسي"
+  {
+    code: 'DZ',
 
-    },
+    nameEn: 'Algeria',
 
-    {
+    nameAr: 'الجزائر',
+  },
 
-        "code": "S7",
+  {
+    code: 'AS',
 
-        "nameEn": "Tribal Individuals",
+    nameEn: 'American Samoa',
 
-        "nameAr": "أفراد القبائل"
+    nameAr: 'ساموا الأمريكية',
+  },
 
-    },
+  {
+    code: 'AD',
 
-    {
+    nameEn: 'Andorra',
 
-        "code": "AF",
+    nameAr: 'أندورا',
+  },
 
-        "nameEn": "Afghanistan",
+  {
+    code: 'AO',
 
-        "nameAr": "أفغانستان"
+    nameEn: 'Angola',
 
-    },
+    nameAr: 'أنغولا',
+  },
 
-    {
+  {
+    code: 'AQ',
 
-        "code": "AL",
+    nameEn: 'Antartica',
 
-        "nameEn": "Albania",
+    nameAr: 'القارة القطبية الجنوبية',
+  },
 
-        "nameAr": "البانيا"
+  {
+    code: 'AG',
 
-    },
+    nameEn: 'Antigua and Barbuda',
 
-    {
+    nameAr: 'أنتيغوا وبربودا',
+  },
 
-        "code": "DZ",
+  {
+    code: 'AR',
 
-        "nameEn": "Algeria",
+    nameEn: 'Argentina',
 
-        "nameAr": "الجزائر"
+    nameAr: 'الأرجنتين',
+  },
 
-    },
+  {
+    code: 'AU',
 
-    {
+    nameEn: 'Australia',
 
-        "code": "AS",
+    nameAr: 'أستراليا',
+  },
 
-        "nameEn": "American Samoa",
+  {
+    code: 'AT',
 
-        "nameAr": "ساموا الأمريكية"
+    nameEn: 'Austria',
 
-    },
+    nameAr: 'النمسا',
+  },
 
-    {
+  {
+    code: 'BS',
 
-        "code": "AD",
+    nameEn: 'Bahamas',
 
-        "nameEn": "Andorra",
+    nameAr: 'جزر البهاما',
+  },
 
-        "nameAr": "أندورا"
+  {
+    code: 'BH',
 
-    },
+    nameEn: 'Bahrain',
 
-    {
+    nameAr: 'البحرين',
+  },
 
-        "code": "AO",
+  {
+    code: 'BD',
 
-        "nameEn": "Angola",
+    nameEn: 'Bangladesh',
 
-        "nameAr": "أنغولا"
+    nameAr: 'بنغلاديش',
+  },
 
-    },
+  {
+    code: 'BB',
 
-    {
+    nameEn: 'Barbados',
 
-        "code": "AQ",
+    nameAr: 'بربادوس',
+  },
 
-        "nameEn": "Antartica",
+  {
+    code: 'BE',
 
-        "nameAr": "القارة القطبية الجنوبية"
+    nameEn: 'Belgium',
 
-    },
+    nameAr: 'بلجيكا',
+  },
 
-    {
+  {
+    code: 'BZ',
 
-        "code": "AG",
+    nameEn: 'Belize',
 
-        "nameEn": "Antigua and Barbuda",
+    nameAr: 'بليز',
+  },
 
-        "nameAr": "أنتيغوا وبربودا"
+  {
+    code: 'BJ',
 
-    },
+    nameEn: 'Benin',
 
-    {
+    nameAr: 'بنين',
+  },
 
-        "code": "AR",
+  {
+    code: 'BM',
 
-        "nameEn": "Argentina",
+    nameEn: 'Bermuda',
 
-        "nameAr": "الأرجنتين"
+    nameAr: 'برمودا',
+  },
 
-    },
+  {
+    code: 'BT',
 
-    {
+    nameEn: 'Bhutan',
 
-        "code": "AU",
+    nameAr: 'بوتان',
+  },
 
-        "nameEn": "Australia",
+  {
+    code: 'BO',
 
-        "nameAr": "أستراليا"
+    nameEn: 'Bolivia',
 
-    },
+    nameAr: 'بوليفيا',
+  },
 
-    {
+  {
+    code: 'BA',
 
-        "code": "AT",
+    nameEn: 'Bosnia-Herzegovina',
 
-        "nameEn": "Austria",
+    nameAr: 'البوسنة والهرسك',
+  },
 
-        "nameAr": "النمسا"
+  {
+    code: 'BW',
 
-    },
+    nameEn: 'Botswana',
 
-    {
+    nameAr: 'بوتسوانا',
+  },
 
-        "code": "BS",
+  {
+    code: 'BV',
 
-        "nameEn": "Bahamas",
+    nameEn: 'Bouvet Island',
 
-        "nameAr": "جزر البهاما"
+    nameAr: 'جزيرة بوفيه',
+  },
 
-    },
+  {
+    code: 'BR',
 
-    {
+    nameEn: 'Brazil',
 
-        "code": "BH",
+    nameAr: 'البرازيل',
+  },
 
-        "nameEn": "Bahrain",
+  {
+    code: 'IO',
 
-        "nameAr": "البحرين"
+    nameEn: 'British Indian Oc Te',
 
-    },
+    nameAr: 'إقليم المحيط الهندي البريطاني',
+  },
 
-    {
+  {
+    code: 'BN',
 
-        "code": "BD",
+    nameEn: 'Brunei Darussalam',
 
-        "nameEn": "Bangladesh",
+    nameAr: 'بروناي دار السلام',
+  },
 
-        "nameAr": "بنغلاديش"
+  {
+    code: 'BG',
 
-    },
+    nameEn: 'Bulgaria',
 
-    {
+    nameAr: 'بلغاريا',
+  },
 
-        "code": "BB",
+  {
+    code: 'BF',
 
-        "nameEn": "Barbados",
+    nameEn: 'Burkina Fasso',
 
-        "nameAr": "بربادوس"
+    nameAr: 'بوركينا فاسو',
+  },
 
-    },
+  {
+    code: 'BI',
 
-    {
+    nameEn: 'Burundi',
 
-        "code": "BE",
+    nameAr: 'بوروندي',
+  },
 
-        "nameEn": "Belgium",
+  {
+    code: 'KH',
 
-        "nameAr": "بلجيكا"
+    nameEn: 'Cambodia',
 
-    },
+    nameAr: 'كمبوديا',
+  },
 
-    {
+  {
+    code: 'CM',
 
-        "code": "BZ",
+    nameEn: 'Cameroon',
 
-        "nameEn": "Belize",
+    nameAr: 'الكاميرون',
+  },
 
-        "nameAr": "بليز"
+  {
+    code: 'CA',
 
-    },
+    nameEn: 'Canada',
 
-    {
+    nameAr: 'كندا',
+  },
 
-        "code": "BJ",
+  {
+    code: 'CV',
 
-        "nameEn": "Benin",
+    nameEn: 'Cape Verde',
 
-        "nameAr": "بنين"
+    nameAr: 'الرأس الأخضر',
+  },
 
-    },
+  {
+    code: 'KY',
 
-    {
+    nameEn: 'Cayman Islands',
 
-        "code": "BM",
+    nameAr: 'جزر كايمان',
+  },
 
-        "nameEn": "Bermuda",
+  {
+    code: 'CF',
 
-        "nameAr": "برمودا"
+    nameEn: 'Central African Rep',
 
-    },
+    nameAr: 'جمهورية أفريقيا الوسطى',
+  },
 
-    {
+  {
+    code: 'TD',
 
-        "code": "BT",
+    nameEn: 'Chad',
 
-        "nameEn": "Bhutan",
+    nameAr: 'تشاد',
+  },
 
-        "nameAr": "بوتان"
+  {
+    code: 'CL',
 
-    },
+    nameEn: 'Chile',
 
-    {
+    nameAr: 'تشيلي',
+  },
 
-        "code": "BO",
+  {
+    code: 'CN',
 
-        "nameEn": "Bolivia",
+    nameEn: 'China',
 
-        "nameAr": "بوليفيا"
+    nameAr: 'الصين',
+  },
 
-    },
+  {
+    code: 'CX',
 
-    {
+    nameEn: 'Christmas Island',
 
-        "code": "BA",
+    nameAr: 'جزيرة كريسماس',
+  },
 
-        "nameEn": "Bosnia-Herzegovina",
+  {
+    code: 'CC',
 
-        "nameAr": "البوسنة والهرسك"
+    nameEn: 'Cocos (Keeling) Is',
 
-    },
+    nameAr: 'جزر كوكوس (كيلينغ)',
+  },
 
-    {
+  {
+    code: 'CO',
 
-        "code": "BW",
+    nameEn: 'Columbia',
 
-        "nameEn": "Botswana",
+    nameAr: 'كولومبيا',
+  },
 
-        "nameAr": "بوتسوانا"
+  {
+    code: 'KM',
 
-    },
+    nameEn: 'Comoros',
 
-    {
+    nameAr: 'جزر القمر',
+  },
 
-        "code": "BV",
+  {
+    code: 'CG',
 
-        "nameEn": "Bouvet Island",
+    nameEn: 'Congo',
 
-        "nameAr": "جزيرة بوفيه"
+    nameAr: 'الكونغو',
+  },
 
-    },
+  {
+    code: 'CK',
 
-    {
+    nameEn: 'Cook Islands',
 
-        "code": "BR",
+    nameAr: 'جزر كوك',
+  },
 
-        "nameEn": "Brazil",
+  {
+    code: 'CR',
 
-        "nameAr": "البرازيل"
+    nameEn: 'Costa Rica',
 
-    },
+    nameAr: 'كوستاريكا',
+  },
 
-    {
+  {
+    code: 'CU',
 
-        "code": "IO",
+    nameEn: 'Cuba',
 
-        "nameEn": "British Indian Oc Te",
+    nameAr: 'كوبا',
+  },
 
-        "nameAr": "إقليم المحيط الهندي البريطاني"
+  {
+    code: 'CY',
 
-    },
+    nameEn: 'Cyprus',
 
-    {
+    nameAr: 'قبرص',
+  },
 
-        "code": "BN",
+  {
+    code: 'CZ',
 
-        "nameEn": "Brunei Darussalam",
+    nameEn: 'Czech Republic',
 
-        "nameAr": "بروناي دار السلام"
+    nameAr: 'جمهورية التشيك',
+  },
 
-    },
+  {
+    code: 'DK',
 
-    {
+    nameEn: 'Denmark',
 
-        "code": "BG",
+    nameAr: 'الدنمارك',
+  },
 
-        "nameEn": "Bulgaria",
+  {
+    code: 'DJ',
 
-        "nameAr": "بلغاريا"
+    nameEn: 'Djibouti',
 
-    },
+    nameAr: 'جيبوتي',
+  },
 
-    {
+  {
+    code: 'DM',
 
-        "code": "BF",
+    nameEn: 'Dominica',
 
-        "nameEn": "Burkina Fasso",
+    nameAr: 'دومينيكا',
+  },
 
-        "nameAr": "بوركينا فاسو"
+  {
+    code: 'DO',
 
-    },
+    nameEn: 'Dominican Republic',
 
-    {
+    nameAr: 'جمهورية الدومينيكان',
+  },
 
-        "code": "BI",
+  {
+    code: 'TP',
 
-        "nameEn": "Burundi",
+    nameEn: 'East Timor',
 
-        "nameAr": "بوروندي"
+    nameAr: 'تيمور الشرقية',
+  },
 
-    },
+  {
+    code: 'EC',
 
-    {
+    nameEn: 'Ecuador',
 
-        "code": "KH",
+    nameAr: 'الاكوادور',
+  },
 
-        "nameEn": "Cambodia",
+  {
+    code: 'EG',
 
-        "nameAr": "كمبوديا"
+    nameEn: 'Egypt',
 
-    },
+    nameAr: 'مصر',
+  },
 
-    {
+  {
+    code: 'SV',
 
-        "code": "CM",
+    nameEn: 'El Salvador',
 
-        "nameEn": "Cameroon",
+    nameAr: 'السلفادور',
+  },
 
-        "nameAr": "الكاميرون"
+  {
+    code: 'GQ',
 
-    },
+    nameEn: 'Equatorial Guinea',
 
-    {
+    nameAr: 'غينيا الاستوائية',
+  },
 
-        "code": "CA",
+  {
+    code: 'ER',
 
-        "nameEn": "Canada",
+    nameEn: 'Eritrea',
 
-        "nameAr": "كندا"
+    nameAr: 'إريتريا',
+  },
 
-    },
+  {
+    code: 'ET',
 
-    {
+    nameEn: 'Ethiopia',
 
-        "code": "CV",
+    nameAr: 'أثيوبيا',
+  },
 
-        "nameEn": "Cape Verde",
+  {
+    code: 'FO',
 
-        "nameAr": "الرأس الأخضر"
+    nameEn: 'Faeroe Islands',
 
-    },
+    nameAr: 'جزر فارو',
+  },
 
-    {
+  {
+    code: 'FK',
 
-        "code": "KY",
+    nameEn: 'Falkland Islands',
 
-        "nameEn": "Cayman Islands",
+    nameAr: 'جزر فوكلاند',
+  },
 
-        "nameAr": "جزر كايمان"
+  {
+    code: 'FJ',
 
-    },
+    nameEn: 'Fiji',
 
-    {
+    nameAr: 'فيجي',
+  },
 
-        "code": "CF",
+  {
+    code: 'FI',
 
-        "nameEn": "Central African Rep",
+    nameEn: 'Finland',
 
-        "nameAr": "جمهورية أفريقيا الوسطى"
+    nameAr: 'فنلندا',
+  },
 
-    },
+  {
+    code: 'FR',
 
-    {
+    nameEn: 'France',
 
-        "code": "TD",
+    nameAr: 'فرنسا',
+  },
 
-        "nameEn": "Chad",
+  {
+    code: 'GF',
 
-        "nameAr": "تشاد"
+    nameEn: 'French Guiana',
 
-    },
+    nameAr: 'جويانا الفرنسية',
+  },
 
-    {
+  {
+    code: 'PF',
 
-        "code": "CL",
+    nameEn: 'French Polynesia',
 
-        "nameEn": "Chile",
+    nameAr: 'بولينيزيا الفرنسية',
+  },
 
-        "nameAr": "تشيلي"
+  {
+    code: 'TF',
 
-    },
+    nameEn: "French S'thn Terr.",
 
-    {
+    nameAr: 'مقاطعة سيتن الفرنسية',
+  },
 
-        "code": "CN",
+  {
+    code: 'GA',
 
-        "nameEn": "China",
+    nameEn: 'Gabon',
 
-        "nameAr": "الصين"
+    nameAr: 'الغابون',
+  },
 
-    },
+  {
+    code: 'GM',
 
-    {
+    nameEn: 'Gambia',
 
-        "code": "CX",
+    nameAr: 'غامبيا',
+  },
 
-        "nameEn": "Christmas Island",
+  {
+    code: 'GE',
 
-        "nameAr": "جزيرة كريسماس"
+    nameEn: 'Georgia',
 
-    },
+    nameAr: 'جورجيا',
+  },
 
-    {
+  {
+    code: 'DE',
 
-        "code": "CC",
+    nameEn: 'Germany',
 
-        "nameEn": "Cocos (Keeling) Is",
+    nameAr: 'المانيا',
+  },
 
-        "nameAr": "جزر كوكوس (كيلينغ)"
+  {
+    code: 'GH',
 
-    },
+    nameEn: 'Ghana',
 
-    {
+    nameAr: 'غانا',
+  },
 
-        "code": "CO",
+  {
+    code: 'GI',
 
-        "nameEn": "Columbia",
+    nameEn: 'Gibraltar',
 
-        "nameAr": "كولومبيا"
+    nameAr: 'جبل طارق',
+  },
 
-    },
+  {
+    code: 'GR',
 
-    {
+    nameEn: 'Greece',
 
-        "code": "KM",
+    nameAr: 'اليونان',
+  },
 
-        "nameEn": "Comoros",
+  {
+    code: 'GL',
 
-        "nameAr": "جزر القمر"
+    nameEn: 'Greenland',
 
-    },
+    nameAr: 'جرينلاند',
+  },
 
-    {
+  {
+    code: 'GD',
 
-        "code": "CG",
+    nameEn: 'Grenada',
 
-        "nameEn": "Congo",
+    nameAr: 'غرينادا',
+  },
 
-        "nameAr": "الكونغو"
+  {
+    code: 'GP',
 
-    },
+    nameEn: 'Guadeloupe',
 
-    {
+    nameAr: 'غوادلوب',
+  },
 
-        "code": "CK",
+  {
+    code: 'GU',
 
-        "nameEn": "Cook Islands",
+    nameEn: 'Guam',
 
-        "nameAr": "جزر كوك"
+    nameAr: 'غوام',
+  },
 
-    },
+  {
+    code: 'GT',
 
-    {
+    nameEn: 'Guatemala',
 
-        "code": "CR",
+    nameAr: 'غواتيمالا',
+  },
 
-        "nameEn": "Costa Rica",
+  {
+    code: 'GG',
 
-        "nameAr": "كوستاريكا"
+    nameEn: 'Guernsey C.I.',
 
-    },
+    nameAr: 'جيرنسي',
+  },
 
-    {
+  {
+    code: 'GN',
 
-        "code": "CU",
+    nameEn: 'Guinea',
 
-        "nameEn": "Cuba",
+    nameAr: 'غينيا',
+  },
 
-        "nameAr": "كوبا"
+  {
+    code: 'GW',
 
-    },
+    nameEn: 'Guinea-Bissau',
 
-    {
+    nameAr: 'غينيا بيساو',
+  },
 
-        "code": "CY",
+  {
+    code: 'GY',
 
-        "nameEn": "Cyprus",
+    nameEn: 'Guyana',
 
-        "nameAr": "قبرص"
+    nameAr: 'غيانا',
+  },
 
-    },
+  {
+    code: 'HT',
 
-    {
+    nameEn: 'Haiti',
 
-        "code": "CZ",
+    nameAr: 'هايتي',
+  },
 
-        "nameEn": "Czech Republic",
+  {
+    code: 'HM',
 
-        "nameAr": "جمهورية التشيك"
+    nameEn: 'Heard & McDonald Is',
 
-    },
+    nameAr: 'جزيرة هيرد وماكدونالد',
+  },
 
-    {
+  {
+    code: 'HN',
 
-        "code": "DK",
+    nameEn: 'Honduras',
 
-        "nameEn": "Denmark",
+    nameAr: 'هندوراس',
+  },
 
-        "nameAr": "الدنمارك"
+  {
+    code: 'HK',
 
-    },
+    nameEn: 'Hong Kong',
 
-    {
+    nameAr: 'هونغ كونغ',
+  },
 
-        "code": "DJ",
+  {
+    code: 'HU',
 
-        "nameEn": "Djibouti",
+    nameEn: 'Hungary',
 
-        "nameAr": "جيبوتي"
+    nameAr: 'هنغاريا',
+  },
 
-    },
+  {
+    code: 'IS',
 
-    {
+    nameEn: 'Iceland',
 
-        "code": "DM",
+    nameAr: 'ايسلندا',
+  },
 
-        "nameEn": "Dominica",
+  {
+    code: 'IN',
 
-        "nameAr": "دومينيكا"
+    nameEn: 'India',
 
-    },
+    nameAr: 'الهند',
+  },
 
-    {
+  {
+    code: 'ID',
 
-        "code": "DO",
+    nameEn: 'Indonesia',
 
-        "nameEn": "Dominican Republic",
+    nameAr: 'أندونيسيا',
+  },
 
-        "nameAr": "جمهورية الدومينيكان"
+  {
+    code: 'IR',
 
-    },
+    nameEn: 'Iran (Islamic Repl)',
 
-    {
+    nameAr: 'ايران',
+  },
 
-        "code": "TP",
+  {
+    code: 'IQ',
 
-        "nameEn": "East Timor",
+    nameEn: 'Iraq',
 
-        "nameAr": "تيمور الشرقية"
+    nameAr: 'العراق',
+  },
 
-    },
+  {
+    code: 'IE',
 
-    {
+    nameEn: 'Ireland',
 
-        "code": "EC",
+    nameAr: 'ايرلندا',
+  },
 
-        "nameEn": "Ecuador",
+  {
+    code: 'IM',
 
-        "nameAr": "الاكوادور"
+    nameEn: 'Isle of Man',
 
-    },
+    nameAr: 'جزيرة مان',
+  },
 
-    {
+  {
+    code: 'IT',
 
-        "code": "EG",
+    nameEn: 'Italy',
 
-        "nameEn": "Egypt",
+    nameAr: 'إيطاليا',
+  },
 
-        "nameAr": "مصر"
+  {
+    code: 'JM',
 
-    },
+    nameEn: 'Jamaica',
 
-    {
+    nameAr: 'جامايكا',
+  },
 
-        "code": "SV",
+  {
+    code: 'JP',
 
-        "nameEn": "El Salvador",
+    nameEn: 'Japan',
 
-        "nameAr": "السلفادور"
+    nameAr: 'اليابان',
+  },
 
-    },
+  {
+    code: 'JE',
 
-    {
+    nameEn: 'Jersey C.I.',
 
-        "code": "GQ",
+    nameAr: 'جزيرة جيرسي',
+  },
 
-        "nameEn": "Equatorial Guinea",
+  {
+    code: 'JO',
 
-        "nameAr": "غينيا الاستوائية"
+    nameEn: 'Jordan',
 
-    },
+    nameAr: 'الأردن',
+  },
 
-    {
+  {
+    code: 'KE',
 
-        "code": "ER",
+    nameEn: 'Kenya',
 
-        "nameEn": "Eritrea",
+    nameAr: 'كينيا',
+  },
 
-        "nameAr": "إريتريا"
+  {
+    code: 'KI',
 
-    },
+    nameEn: 'Kiribati',
 
-    {
+    nameAr: 'كيريباتي',
+  },
 
-        "code": "ET",
+  {
+    code: 'KR',
 
-        "nameEn": "Ethiopia",
+    nameEn: 'Korea',
 
-        "nameAr": "أثيوبيا"
+    nameAr: 'كوريا الجنوبية',
+  },
 
-    },
+  {
+    code: 'KP',
 
-    {
+    nameEn: 'Korea, Dem Ppl Rep',
 
-        "code": "FO",
+    nameAr: 'كوريا الشمالية',
+  },
 
-        "nameEn": "Faeroe Islands",
+  {
+    code: 'KW',
 
-        "nameAr": "جزر فارو"
+    nameEn: 'Kuwait',
 
-    },
+    nameAr: 'الكويت',
+  },
 
-    {
+  {
+    code: 'LA',
 
-        "code": "FK",
+    nameEn: "Lao People's Dem Rep",
 
-        "nameEn": "Falkland Islands",
+    nameAr: 'جمهورية لاوس',
+  },
 
-        "nameAr": "جزر فوكلاند"
+  {
+    code: 'LB',
 
-    },
+    nameEn: 'Lebanon',
 
-    {
+    nameAr: 'لبنان',
+  },
 
-        "code": "FJ",
+  {
+    code: 'LS',
 
-        "nameEn": "Fiji",
+    nameEn: 'Lesotho',
 
-        "nameAr": "فيجي"
+    nameAr: 'ليسوتو',
+  },
 
-    },
+  {
+    code: 'LR',
 
-    {
+    nameEn: 'Liberia',
 
-        "code": "FI",
+    nameAr: 'ليبيريا',
+  },
 
-        "nameEn": "Finland",
+  {
+    code: 'LY',
 
-        "nameAr": "فنلندا"
+    nameEn: 'Libya',
 
-    },
+    nameAr: 'الجماهيرية العربية الليبية',
+  },
 
-    {
+  {
+    code: 'LI',
 
-        "code": "FR",
+    nameEn: 'Liechtenstein',
 
-        "nameEn": "France",
+    nameAr: 'ليختنشتاين',
+  },
 
-        "nameAr": "فرنسا"
+  {
+    code: 'LT',
 
-    },
+    nameEn: 'Lithuania',
 
-    {
+    nameAr: 'ليتوانيا',
+  },
 
-        "code": "GF",
+  {
+    code: 'LU',
 
-        "nameEn": "French Guiana",
+    nameEn: 'Luxembourg',
 
-        "nameAr": "جويانا الفرنسية"
+    nameAr: 'لوكسمبورغ',
+  },
 
-    },
+  {
+    code: 'MO',
 
-    {
+    nameEn: 'Macau',
 
-        "code": "PF",
+    nameAr: 'ماكاو',
+  },
 
-        "nameEn": "French Polynesia",
+  {
+    code: 'MG',
 
-        "nameAr": "بولينيزيا الفرنسية"
+    nameEn: 'Madagascar',
 
-    },
+    nameAr: 'مدغشقر',
+  },
 
-    {
+  {
+    code: 'MW',
 
-        "code": "TF",
+    nameEn: 'Malawi',
 
-        "nameEn": "French S'thn Terr.",
+    nameAr: 'ملاوي',
+  },
 
-        "nameAr": "مقاطعة سيتن الفرنسية"
+  {
+    code: 'MY',
 
-    },
+    nameEn: 'Malaysia',
 
-    {
+    nameAr: 'ماليزيا',
+  },
 
-        "code": "GA",
+  {
+    code: 'MV',
 
-        "nameEn": "Gabon",
+    nameEn: 'Maldives',
 
-        "nameAr": "الغابون"
+    nameAr: 'جزر المالديف',
+  },
 
-    },
+  {
+    code: 'ML',
 
-    {
+    nameEn: 'Mali',
 
-        "code": "GM",
+    nameAr: 'مالي',
+  },
 
-        "nameEn": "Gambia",
+  {
+    code: 'MT',
 
-        "nameAr": "غامبيا"
+    nameEn: 'Malta',
 
-    },
+    nameAr: 'مالطا',
+  },
 
-    {
+  {
+    code: 'MQ',
 
-        "code": "GE",
+    nameEn: 'Martinique',
 
-        "nameEn": "Georgia",
+    nameAr: 'مارتينيك',
+  },
 
-        "nameAr": "جورجيا"
+  {
+    code: 'MR',
 
-    },
+    nameEn: 'Mauritania',
 
-    {
+    nameAr: 'موريتانيا',
+  },
 
-        "code": "DE",
+  {
+    code: 'MU',
 
-        "nameEn": "Germany",
+    nameEn: 'Mauritius',
 
-        "nameAr": "المانيا"
+    nameAr: 'موريشيوس',
+  },
 
-    },
+  {
+    code: 'MX',
 
-    {
+    nameEn: 'Mexico',
 
-        "code": "GH",
+    nameAr: 'المكسيك',
+  },
 
-        "nameEn": "Ghana",
+  {
+    code: 'MD',
 
-        "nameAr": "غانا"
+    nameEn: 'Moldova, Republic of',
 
-    },
+    nameAr: 'جمهورية مولدوفا',
+  },
 
-    {
+  {
+    code: 'MC',
 
-        "code": "GI",
+    nameEn: 'Monaco',
 
-        "nameEn": "Gibraltar",
+    nameAr: 'موناكو',
+  },
 
-        "nameAr": "جبل طارق"
+  {
+    code: 'MN',
 
-    },
+    nameEn: 'Mongolia',
 
-    {
+    nameAr: 'منغوليا',
+  },
 
-        "code": "GR",
+  {
+    code: 'MA',
 
-        "nameEn": "Greece",
+    nameEn: 'Morocco',
 
-        "nameAr": "اليونان"
+    nameAr: 'المغرب',
+  },
 
-    },
+  {
+    code: 'MZ',
 
-    {
+    nameEn: 'Mozambique',
 
-        "code": "GL",
+    nameAr: 'موزمبيق',
+  },
 
-        "nameEn": "Greenland",
+  {
+    code: 'NA',
 
-        "nameAr": "جرينلاند"
+    nameEn: 'Namibia',
 
-    },
+    nameAr: 'ناميبيا',
+  },
 
-    {
+  {
+    code: 'NR',
 
-        "code": "GD",
+    nameEn: 'Nauru',
 
-        "nameEn": "Grenada",
+    nameAr: 'ناورو',
+  },
 
-        "nameAr": "غرينادا"
+  {
+    code: 'NP',
 
-    },
+    nameEn: 'Nepal',
 
-    {
+    nameAr: 'نيبال',
+  },
 
-        "code": "GP",
+  {
+    code: 'NL',
 
-        "nameEn": "Guadeloupe",
+    nameEn: 'Netherlands',
 
-        "nameAr": "غوادلوب"
+    nameAr: 'هولندا',
+  },
 
-    },
+  {
+    code: 'NT',
 
-    {
+    nameEn: 'Neutral Zone',
 
-        "code": "GU",
+    nameAr: 'المنطقة المحايدة',
+  },
 
-        "nameEn": "Guam",
+  {
+    code: 'NC',
 
-        "nameAr": "غوام"
+    nameEn: 'New Caledonia',
 
-    },
+    nameAr: 'كاليدونيا الجديدة',
+  },
 
-    {
+  {
+    code: 'NZ',
 
-        "code": "GT",
+    nameEn: 'New Zealand',
 
-        "nameEn": "Guatemala",
+    nameAr: 'نيوزيلندا',
+  },
 
-        "nameAr": "غواتيمالا"
+  {
+    code: 'NI',
 
-    },
+    nameEn: 'Nicaragua',
 
-    {
+    nameAr: 'نيكاراغوا',
+  },
 
-        "code": "GG",
+  {
+    code: 'NE',
 
-        "nameEn": "Guernsey C.I.",
+    nameEn: 'Niger',
 
-        "nameAr": "جيرنسي"
+    nameAr: 'النيجر',
+  },
 
-    },
+  {
+    code: 'NG',
 
-    {
+    nameEn: 'Nigeria',
 
-        "code": "GN",
+    nameAr: 'نيجيريا',
+  },
 
-        "nameEn": "Guinea",
+  {
+    code: 'NU',
 
-        "nameAr": "غينيا"
+    nameEn: 'Niue',
 
-    },
+    nameAr: 'نيوي',
+  },
 
-    {
+  {
+    code: 'NF',
 
-        "code": "GW",
+    nameEn: 'Norfolk Island',
 
-        "nameEn": "Guinea-Bissau",
+    nameAr: 'جزيرة نورفولك',
+  },
 
-        "nameAr": "غينيا بيساو"
+  {
+    code: 'NO',
 
-    },
+    nameEn: 'Norway',
 
-    {
+    nameAr: 'النرويج',
+  },
 
-        "code": "GY",
+  {
+    code: 'OM',
 
-        "nameEn": "Guyana",
+    nameEn: 'Oman',
 
-        "nameAr": "غيانا"
+    nameAr: 'عمان',
+  },
 
-    },
+  {
+    code: 'PK',
 
-    {
+    nameEn: 'Pakistan',
 
-        "code": "HT",
+    nameAr: 'باكستان',
+  },
 
-        "nameEn": "Haiti",
+  {
+    code: 'PS',
 
-        "nameAr": "هايتي"
+    nameEn: 'Palestine',
 
-    },
+    nameAr: 'فلسطين',
+  },
 
-    {
+  {
+    code: 'PA',
 
-        "code": "HM",
+    nameEn: 'Panama',
 
-        "nameEn": "Heard & McDonald Is",
+    nameAr: 'بناما',
+  },
 
-        "nameAr": "جزيرة هيرد وماكدونالد"
+  {
+    code: 'PZ',
 
-    },
+    nameEn: 'Panama Canal Zone',
 
-    {
+    nameAr: 'منطقة قناة بنما',
+  },
 
-        "code": "HN",
+  {
+    code: 'PG',
 
-        "nameEn": "Honduras",
+    nameEn: 'Papua New Guinea',
 
-        "nameAr": "هندوراس"
+    nameAr: 'بابوا غينيا الجديدة',
+  },
 
-    },
+  {
+    code: 'PY',
 
-    {
+    nameEn: 'Paraguay',
 
-        "code": "HK",
+    nameAr: 'باراغواي',
+  },
 
-        "nameEn": "Hong Kong",
+  {
+    code: 'PE',
 
-        "nameAr": "هونغ كونغ"
+    nameEn: 'Peru',
 
-    },
+    nameAr: 'بيرو',
+  },
 
-    {
+  {
+    code: 'PH',
 
-        "code": "HU",
+    nameEn: 'Philippines',
 
-        "nameEn": "Hungary",
+    nameAr: 'الفلبين',
+  },
 
-        "nameAr": "هنغاريا"
+  {
+    code: 'PN',
 
-    },
+    nameEn: 'Pitcairn',
 
-    {
+    nameAr: 'بيتكيرن',
+  },
 
-        "code": "IS",
+  {
+    code: 'PL',
 
-        "nameEn": "Iceland",
+    nameEn: 'Poland',
 
-        "nameAr": "ايسلندا"
+    nameAr: 'بولندا',
+  },
 
-    },
+  {
+    code: 'PT',
 
-    {
+    nameEn: 'Portugal',
 
-        "code": "IN",
+    nameAr: 'البرتغال',
+  },
 
-        "nameEn": "India",
+  {
+    code: 'PR',
 
-        "nameAr": "الهند"
+    nameEn: 'Puerto Rico',
 
-    },
+    nameAr: 'بورتوريكو',
+  },
 
-    {
+  {
+    code: 'QA',
 
-        "code": "ID",
+    nameEn: 'Qatar',
 
-        "nameEn": "Indonesia",
+    nameAr: 'قطر',
+  },
 
-        "nameAr": "أندونيسيا"
+  {
+    code: 'S8',
 
-    },
+    nameEn: 'Resident',
 
-    {
+    nameAr: 'مقيم',
+  },
 
-        "code": "IR",
+  {
+    code: 'RE',
 
-        "nameEn": "Iran (Islamic Repl)",
+    nameEn: 'Reunion',
 
-        "nameAr": "ايران"
+    nameAr: 'جزيرة ريونيون',
+  },
 
-    },
+  {
+    code: 'RO',
 
-    {
+    nameEn: 'Romania',
 
-        "code": "IQ",
+    nameAr: 'رومانيا',
+  },
 
-        "nameEn": "Iraq",
+  {
+    code: 'RW',
 
-        "nameAr": "العراق"
+    nameEn: 'Rwanda',
 
-    },
+    nameAr: 'رواندا',
+  },
 
-    {
+  {
+    code: 'LC',
 
-        "code": "IE",
+    nameEn: 'Saint Lucia',
 
-        "nameEn": "Ireland",
+    nameAr: 'سانت لوسيا',
+  },
 
-        "nameAr": "ايرلندا"
+  {
+    code: 'WS',
 
-    },
+    nameEn: 'Samoa',
 
-    {
+    nameAr: 'ساموا',
+  },
 
-        "code": "IM",
+  {
+    code: 'SM',
 
-        "nameEn": "Isle of Man",
+    nameEn: 'San Marino',
 
-        "nameAr": "جزيرة مان"
+    nameAr: 'سان مارينو',
+  },
 
-    },
+  {
+    code: 'ST',
 
-    {
+    nameEn: 'Sao Tome & Principe',
 
-        "code": "IT",
+    nameAr: 'ساو تومي وبرينسيبي',
+  },
 
-        "nameEn": "Italy",
+  {
+    code: 'SA',
 
-        "nameAr": "إيطاليا"
+    nameEn: 'Saudi Arabia',
 
-    },
+    nameAr: 'المملكة العربية السعودية',
+  },
 
-    {
+  {
+    code: 'SN',
 
-        "code": "JM",
+    nameEn: 'Senegal',
 
-        "nameEn": "Jamaica",
+    nameAr: 'السنغال',
+  },
 
-        "nameAr": "جامايكا"
+  {
+    code: 'SC',
 
-    },
+    nameEn: 'Seychelles',
 
-    {
+    nameAr: 'سيشيل',
+  },
 
-        "code": "JP",
+  {
+    code: 'SL',
 
-        "nameEn": "Japan",
+    nameEn: 'Sierra Leone',
 
-        "nameAr": "اليابان"
+    nameAr: 'سيراليون',
+  },
 
-    },
+  {
+    code: 'SG',
 
-    {
+    nameEn: 'Singapore',
 
-        "code": "JE",
+    nameAr: 'سنغافورة',
+  },
 
-        "nameEn": "Jersey C.I.",
+  {
+    code: 'SI',
 
-        "nameAr": "جزيرة جيرسي"
+    nameEn: 'Slovenia',
 
-    },
+    nameAr: 'سلوفينيا',
+  },
 
-    {
+  {
+    code: 'SB',
 
-        "code": "JO",
+    nameEn: 'Solomon Islands',
 
-        "nameEn": "Jordan",
+    nameAr: 'جزر سليمان',
+  },
 
-        "nameAr": "الأردن"
+  {
+    code: 'SO',
 
-    },
+    nameEn: 'Somalia',
 
-    {
+    nameAr: 'الصومال',
+  },
 
-        "code": "KE",
+  {
+    code: 'ZA',
 
-        "nameEn": "Kenya",
+    nameEn: 'South Africa',
 
-        "nameAr": "كينيا"
+    nameAr: 'جنوب أفريقيا',
+  },
 
-    },
+  {
+    code: 'ES',
 
-    {
+    nameEn: 'Spain',
 
-        "code": "KI",
+    nameAr: 'اسبانيا',
+  },
 
-        "nameEn": "Kiribati",
+  {
+    code: 'LK',
 
-        "nameAr": "كيريباتي"
+    nameEn: 'Sri Lanka',
 
-    },
+    nameAr: 'سري لانكا',
+  },
 
-    {
+  {
+    code: 'SH',
 
-        "code": "KR",
+    nameEn: 'St Helena',
 
-        "nameEn": "Korea",
+    nameAr: 'سانت هيلينا',
+  },
 
-        "nameAr": "كوريا الجنوبية"
+  {
+    code: 'PM',
 
-    },
+    nameEn: 'St Pierre & Miquelon',
 
-    {
+    nameAr: 'سانت بيير وميكلون',
+  },
 
-        "code": "KP",
+  {
+    code: 'VC',
 
-        "nameEn": "Korea, Dem Ppl Rep",
+    nameEn: 'St Vincent & the Gre',
 
-        "nameAr": "كوريا الشمالية"
+    nameAr: 'سانت فنسينت والجرينادينز',
+  },
 
-    },
+  {
+    code: 'S9',
 
-    {
+    nameEn: 'Stateless (Bedoun)',
 
-        "code": "KW",
+    nameAr: 'البدون/لا يحمل جنسية',
+  },
 
-        "nameEn": "Kuwait",
+  {
+    code: 'SD',
 
-        "nameAr": "الكويت"
+    nameEn: 'Sudan',
 
-    },
+    nameAr: 'السودان',
+  },
 
-    {
+  {
+    code: 'SR',
 
-        "code": "LA",
+    nameEn: 'Suriname',
 
-        "nameEn": "Lao People's Dem Rep",
+    nameAr: 'سورينام',
+  },
 
-        "nameAr": "جمهورية لاوس"
+  {
+    code: 'SZ',
 
-    },
+    nameEn: 'Swaziland',
 
-    {
+    nameAr: 'سوازيلاند',
+  },
 
-        "code": "LB",
+  {
+    code: 'SE',
 
-        "nameEn": "Lebanon",
+    nameEn: 'Sweden',
 
-        "nameAr": "لبنان"
+    nameAr: 'السويد',
+  },
 
-    },
+  {
+    code: 'CH',
 
-    {
+    nameEn: 'Switzerland',
 
-        "code": "LS",
+    nameAr: 'سويسرا',
+  },
 
-        "nameEn": "Lesotho",
+  {
+    code: 'SY',
 
-        "nameAr": "ليسوتو"
+    nameEn: 'Syrian Arab Republic',
 
-    },
+    nameAr: 'سوريا',
+  },
 
-    {
+  {
+    code: 'TW',
 
-        "code": "LR",
+    nameEn: 'Taiwan',
 
-        "nameEn": "Liberia",
+    nameAr: 'تايوان',
+  },
 
-        "nameAr": "ليبيريا"
+  {
+    code: 'TZ',
 
-    },
+    nameEn: 'Tanzania, Utd Rep of',
 
-    {
+    nameAr: 'تنزانيا',
+  },
 
-        "code": "LY",
+  {
+    code: 'TH',
 
-        "nameEn": "Libya",
+    nameEn: 'Thailand',
 
-        "nameAr": "الجماهيرية العربية الليبية"
+    nameAr: 'تايلاند',
+  },
 
-    },
+  {
+    code: 'TG',
 
-    {
+    nameEn: 'Togo',
 
-        "code": "LI",
+    nameAr: 'توغو',
+  },
 
-        "nameEn": "Liechtenstein",
+  {
+    code: 'TK',
 
-        "nameAr": "ليختنشتاين"
+    nameEn: 'Tokelau',
 
-    },
+    nameAr: 'توكيلاو',
+  },
 
-    {
+  {
+    code: 'TO',
 
-        "code": "LT",
+    nameEn: 'Tonga',
 
-        "nameEn": "Lithuania",
+    nameAr: 'تونغا',
+  },
 
-        "nameAr": "ليتوانيا"
+  {
+    code: 'TT',
 
-    },
+    nameEn: 'Trinidad & Tobago',
 
-    {
+    nameAr: 'ترينيداد وتوباجو',
+  },
 
-        "code": "LU",
+  {
+    code: 'TN',
 
-        "nameEn": "Luxembourg",
+    nameEn: 'Tunisia',
 
-        "nameAr": "لوكسمبورغ"
+    nameAr: 'تونس',
+  },
 
-    },
+  {
+    code: 'TC',
 
-    {
+    nameEn: 'Turka & Caicos Is',
 
-        "code": "MO",
+    nameAr: 'جزر توركس وكايكوس',
+  },
 
-        "nameEn": "Macau",
+  {
+    code: 'TR',
 
-        "nameAr": "ماكاو"
+    nameEn: 'Turkey',
 
-    },
+    nameAr: 'تركيا',
+  },
 
-    {
+  {
+    code: 'TM',
 
-        "code": "MG",
+    nameEn: 'Turkmenistan',
 
-        "nameEn": "Madagascar",
+    nameAr: 'تركمانستان',
+  },
 
-        "nameAr": "مدغشقر"
+  {
+    code: 'TV',
 
-    },
+    nameEn: 'Tuvalu',
 
-    {
+    nameAr: 'توفالو',
+  },
 
-        "code": "MW",
+  {
+    code: 'UG',
 
-        "nameEn": "Malawi",
+    nameEn: 'Uganda',
 
-        "nameAr": "ملاوي"
+    nameAr: 'أوغندا',
+  },
 
-    },
+  {
+    code: 'UA',
 
-    {
+    nameEn: 'Ukraine',
 
-        "code": "MY",
+    nameAr: 'أوكرانيا',
+  },
 
-        "nameEn": "Malaysia",
+  {
+    code: 'AE',
 
-        "nameAr": "ماليزيا"
+    nameEn: 'United Arab Emirates',
 
-    },
+    nameAr: 'الإمارات العربية المتحدة',
+  },
 
-    {
+  {
+    code: 'GB',
 
-        "code": "MV",
+    nameEn: 'United Kingdom',
 
-        "nameEn": "Maldives",
+    nameAr: 'المملكة المتحدة',
+  },
 
-        "nameAr": "جزر المالديف"
+  {
+    code: 'US',
 
-    },
+    nameEn: 'United States',
 
-    {
+    nameAr: 'الولايات المتحدة',
+  },
 
-        "code": "ML",
+  {
+    code: 'UY',
 
-        "nameEn": "Mali",
+    nameEn: 'Uruguay',
 
-        "nameAr": "مالي"
+    nameAr: 'أوروغواي',
+  },
 
-    },
+  {
+    code: 'UZ',
 
-    {
+    nameEn: 'Uzbekistan',
 
-        "code": "MT",
+    nameAr: 'أوزبكستان',
+  },
 
-        "nameEn": "Malta",
+  {
+    code: 'VU',
 
-        "nameAr": "مالطا"
+    nameEn: 'Vanuatu',
 
-    },
+    nameAr: 'فانواتو',
+  },
 
-    {
+  {
+    code: 'VE',
 
-        "code": "MQ",
+    nameEn: 'Venezuela',
 
-        "nameEn": "Martinique",
+    nameAr: 'فنزويلا',
+  },
 
-        "nameAr": "مارتينيك"
+  {
+    code: 'VN',
 
-    },
+    nameEn: 'Vietnam',
 
-    {
+    nameAr: 'فيتنام',
+  },
 
-        "code": "MR",
+  {
+    code: 'VG',
 
-        "nameEn": "Mauritania",
+    nameEn: 'Virgin Islands, Brit',
 
-        "nameAr": "موريتانيا"
+    nameAr: 'الجزر العذراء البريطانية',
+  },
 
-    },
+  {
+    code: 'VI',
 
-    {
+    nameEn: 'Virgin Islands, U.S.',
 
-        "code": "MU",
+    nameAr: 'الجزر العذراء الأميركية',
+  },
 
-        "nameEn": "Mauritius",
+  {
+    code: 'EH',
 
-        "nameAr": "موريشيوس"
+    nameEn: 'Western Sahara',
 
-    },
+    nameAr: 'الصحراء الغربية',
+  },
 
-    {
+  {
+    code: 'YE',
 
-        "code": "MX",
+    nameEn: 'Republic of Yemen',
 
-        "nameEn": "Mexico",
+    nameAr: 'الجمهورية اليمنية',
+  },
 
-        "nameAr": "المكسيك"
+  {
+    code: 'YU',
 
-    },
+    nameEn: 'Yugoslavia',
 
-    {
+    nameAr: 'يوغوسلافيا',
+  },
 
-        "code": "MD",
+  {
+    code: 'ZR',
 
-        "nameEn": "Moldova, Republic of",
+    nameEn: 'Zaire',
 
-        "nameAr": "جمهورية مولدوفا"
+    nameAr: 'زائير',
+  },
 
-    },
+  {
+    code: 'ZM',
 
-    {
+    nameEn: 'Zambia',
 
-        "code": "MC",
+    nameAr: 'زامبيا',
+  },
 
-        "nameEn": "Monaco",
+  {
+    code: 'ZW',
 
-        "nameAr": "موناكو"
+    nameEn: 'Zimbabwe',
 
-    },
+    nameAr: 'زيمبابوي',
+  },
 
-    {
+  {
+    code: 'TJ',
 
-        "code": "MN",
+    nameEn: 'Tajikistan',
 
-        "nameEn": "Mongolia",
+    nameAr: 'تاجیکستان',
+  },
 
-        "nameAr": "منغوليا"
+  {
+    code: 'RS',
 
-    },
+    nameEn: 'Serbia',
 
-    {
+    nameAr: 'صربيا',
+  },
 
-        "code": "MA",
+  {
+    code: 'MM',
 
-        "nameEn": "Morocco",
+    nameEn: 'Myanmar(Burma)',
 
-        "nameAr": "المغرب"
-
-    },
-
-    {
-
-        "code": "MZ",
-
-        "nameEn": "Mozambique",
-
-        "nameAr": "موزمبيق"
-
-    },
-
-    {
-
-        "code": "NA",
-
-        "nameEn": "Namibia",
-
-        "nameAr": "ناميبيا"
-
-    },
-
-    {
-
-        "code": "NR",
-
-        "nameEn": "Nauru",
-
-        "nameAr": "ناورو"
-
-    },
-
-    {
-
-        "code": "NP",
-
-        "nameEn": "Nepal",
-
-        "nameAr": "نيبال"
-
-    },
-
-    {
-
-        "code": "NL",
-
-        "nameEn": "Netherlands",
-
-        "nameAr": "هولندا"
-
-    },
-
-    {
-
-        "code": "NT",
-
-        "nameEn": "Neutral Zone",
-
-        "nameAr": "المنطقة المحايدة"
-
-    },
-
-    {
-
-        "code": "NC",
-
-        "nameEn": "New Caledonia",
-
-        "nameAr": "كاليدونيا الجديدة"
-
-    },
-
-    {
-
-        "code": "NZ",
-
-        "nameEn": "New Zealand",
-
-        "nameAr": "نيوزيلندا"
-
-    },
-
-    {
-
-        "code": "NI",
-
-        "nameEn": "Nicaragua",
-
-        "nameAr": "نيكاراغوا"
-
-    },
-
-    {
-
-        "code": "NE",
-
-        "nameEn": "Niger",
-
-        "nameAr": "النيجر"
-
-    },
-
-    {
-
-        "code": "NG",
-
-        "nameEn": "Nigeria",
-
-        "nameAr": "نيجيريا"
-
-    },
-
-    {
-
-        "code": "NU",
-
-        "nameEn": "Niue",
-
-        "nameAr": "نيوي"
-
-    },
-
-    {
-
-        "code": "NF",
-
-        "nameEn": "Norfolk Island",
-
-        "nameAr": "جزيرة نورفولك"
-
-    },
-
-    {
-
-        "code": "NO",
-
-        "nameEn": "Norway",
-
-        "nameAr": "النرويج"
-
-    },
-
-    {
-
-        "code": "OM",
-
-        "nameEn": "Oman",
-
-        "nameAr": "عمان"
-
-    },
-
-    {
-
-        "code": "PK",
-
-        "nameEn": "Pakistan",
-
-        "nameAr": "باكستان"
-
-    },
-
-    {
-
-        "code": "PS",
-
-        "nameEn": "Palestine",
-
-        "nameAr": "فلسطين"
-
-    },
-
-    {
-
-        "code": "PA",
-
-        "nameEn": "Panama",
-
-        "nameAr": "بناما"
-
-    },
-
-    {
-
-        "code": "PZ",
-
-        "nameEn": "Panama Canal Zone",
-
-        "nameAr": "منطقة قناة بنما"
-
-    },
-
-    {
-
-        "code": "PG",
-
-        "nameEn": "Papua New Guinea",
-
-        "nameAr": "بابوا غينيا الجديدة"
-
-    },
-
-    {
-
-        "code": "PY",
-
-        "nameEn": "Paraguay",
-
-        "nameAr": "باراغواي"
-
-    },
-
-    {
-
-        "code": "PE",
-
-        "nameEn": "Peru",
-
-        "nameAr": "بيرو"
-
-    },
-
-    {
-
-        "code": "PH",
-
-        "nameEn": "Philippines",
-
-        "nameAr": "الفلبين"
-
-    },
-
-    {
-
-        "code": "PN",
-
-        "nameEn": "Pitcairn",
-
-        "nameAr": "بيتكيرن"
-
-    },
-
-    {
-
-        "code": "PL",
-
-        "nameEn": "Poland",
-
-        "nameAr": "بولندا"
-
-    },
-
-    {
-
-        "code": "PT",
-
-        "nameEn": "Portugal",
-
-        "nameAr": "البرتغال"
-
-    },
-
-    {
-
-        "code": "PR",
-
-        "nameEn": "Puerto Rico",
-
-        "nameAr": "بورتوريكو"
-
-    },
-
-    {
-
-        "code": "QA",
-
-        "nameEn": "Qatar",
-
-        "nameAr": "قطر"
-
-    },
-
-    {
-
-        "code": "S8",
-
-        "nameEn": "Resident",
-
-        "nameAr": "مقيم"
-
-    },
-
-    {
-
-        "code": "RE",
-
-        "nameEn": "Reunion",
-
-        "nameAr": "جزيرة ريونيون"
-
-    },
-
-    {
-
-        "code": "RO",
-
-        "nameEn": "Romania",
-
-        "nameAr": "رومانيا"
-
-    },
-
-    {
-
-        "code": "RW",
-
-        "nameEn": "Rwanda",
-
-        "nameAr": "رواندا"
-
-    },
-
-    {
-
-        "code": "LC",
-
-        "nameEn": "Saint Lucia",
-
-        "nameAr": "سانت لوسيا"
-
-    },
-
-    {
-
-        "code": "WS",
-
-        "nameEn": "Samoa",
-
-        "nameAr": "ساموا"
-
-    },
-
-    {
-
-        "code": "SM",
-
-        "nameEn": "San Marino",
-
-        "nameAr": "سان مارينو"
-
-    },
-
-    {
-
-        "code": "ST",
-
-        "nameEn": "Sao Tome & Principe",
-
-        "nameAr": "ساو تومي وبرينسيبي"
-
-    },
-
-    {
-
-        "code": "SA",
-
-        "nameEn": "Saudi Arabia",
-
-        "nameAr": "المملكة العربية السعودية"
-
-    },
-
-    {
-
-        "code": "SN",
-
-        "nameEn": "Senegal",
-
-        "nameAr": "السنغال"
-
-    },
-
-    {
-
-        "code": "SC",
-
-        "nameEn": "Seychelles",
-
-        "nameAr": "سيشيل"
-
-    },
-
-    {
-
-        "code": "SL",
-
-        "nameEn": "Sierra Leone",
-
-        "nameAr": "سيراليون"
-
-    },
-
-    {
-
-        "code": "SG",
-
-        "nameEn": "Singapore",
-
-        "nameAr": "سنغافورة"
-
-    },
-
-    {
-
-        "code": "SI",
-
-        "nameEn": "Slovenia",
-
-        "nameAr": "سلوفينيا"
-
-    },
-
-    {
-
-        "code": "SB",
-
-        "nameEn": "Solomon Islands",
-
-        "nameAr": "جزر سليمان"
-
-    },
-
-    {
-
-        "code": "SO",
-
-        "nameEn": "Somalia",
-
-        "nameAr": "الصومال"
-
-    },
-
-    {
-
-        "code": "ZA",
-
-        "nameEn": "South Africa",
-
-        "nameAr": "جنوب أفريقيا"
-
-    },
-
-    {
-
-        "code": "ES",
-
-        "nameEn": "Spain",
-
-        "nameAr": "اسبانيا"
-
-    },
-
-    {
-
-        "code": "LK",
-
-        "nameEn": "Sri Lanka",
-
-        "nameAr": "سري لانكا"
-
-    },
-
-    {
-
-        "code": "SH",
-
-        "nameEn": "St Helena",
-
-        "nameAr": "سانت هيلينا"
-
-    },
-
-    {
-
-        "code": "PM",
-
-        "nameEn": "St Pierre & Miquelon",
-
-        "nameAr": "سانت بيير وميكلون"
-
-    },
-
-    {
-
-        "code": "VC",
-
-        "nameEn": "St Vincent & the Gre",
-
-        "nameAr": "سانت فنسينت والجرينادينز"
-
-    },
-
-    {
-
-        "code": "S9",
-
-        "nameEn": "Stateless (Bedoun)",
-
-        "nameAr": "البدون/لا يحمل جنسية"
-
-    },
-
-    {
-
-        "code": "SD",
-
-        "nameEn": "Sudan",
-
-        "nameAr": "السودان"
-
-    },
-
-    {
-
-        "code": "SR",
-
-        "nameEn": "Suriname",
-
-        "nameAr": "سورينام"
-
-    },
-
-    {
-
-        "code": "SZ",
-
-        "nameEn": "Swaziland",
-
-        "nameAr": "سوازيلاند"
-
-    },
-
-    {
-
-        "code": "SE",
-
-        "nameEn": "Sweden",
-
-        "nameAr": "السويد"
-
-    },
-
-    {
-
-        "code": "CH",
-
-        "nameEn": "Switzerland",
-
-        "nameAr": "سويسرا"
-
-    },
-
-    {
-
-        "code": "SY",
-
-        "nameEn": "Syrian Arab Republic",
-
-        "nameAr": "سوريا"
-
-    },
-
-    {
-
-        "code": "TW",
-
-        "nameEn": "Taiwan",
-
-        "nameAr": "تايوان"
-
-    },
-
-    {
-
-        "code": "TZ",
-
-        "nameEn": "Tanzania, Utd Rep of",
-
-        "nameAr": "تنزانيا"
-
-    },
-
-    {
-
-        "code": "TH",
-
-        "nameEn": "Thailand",
-
-        "nameAr": "تايلاند"
-
-    },
-
-    {
-
-        "code": "TG",
-
-        "nameEn": "Togo",
-
-        "nameAr": "توغو"
-
-    },
-
-    {
-
-        "code": "TK",
-
-        "nameEn": "Tokelau",
-
-        "nameAr": "توكيلاو"
-
-    },
-
-    {
-
-        "code": "TO",
-
-        "nameEn": "Tonga",
-
-        "nameAr": "تونغا"
-
-    },
-
-    {
-
-        "code": "TT",
-
-        "nameEn": "Trinidad & Tobago",
-
-        "nameAr": "ترينيداد وتوباجو"
-
-    },
-
-    {
-
-        "code": "TN",
-
-        "nameEn": "Tunisia",
-
-        "nameAr": "تونس"
-
-    },
-
-    {
-
-        "code": "TC",
-
-        "nameEn": "Turka & Caicos Is",
-
-        "nameAr": "جزر توركس وكايكوس"
-
-    },
-
-    {
-
-        "code": "TR",
-
-        "nameEn": "Turkey",
-
-        "nameAr": "تركيا"
-
-    },
-
-    {
-
-        "code": "TM",
-
-        "nameEn": "Turkmenistan",
-
-        "nameAr": "تركمانستان"
-
-    },
-
-    {
-
-        "code": "TV",
-
-        "nameEn": "Tuvalu",
-
-        "nameAr": "توفالو"
-
-    },
-
-    {
-
-        "code": "UG",
-
-        "nameEn": "Uganda",
-
-        "nameAr": "أوغندا"
-
-    },
-
-    {
-
-        "code": "UA",
-
-        "nameEn": "Ukraine",
-
-        "nameAr": "أوكرانيا"
-
-    },
-
-    {
-
-        "code": "AE",
-
-        "nameEn": "United Arab Emirates",
-
-        "nameAr": "الإمارات العربية المتحدة"
-
-    },
-
-    {
-
-        "code": "GB",
-
-        "nameEn": "United Kingdom",
-
-        "nameAr": "المملكة المتحدة"
-
-    },
-
-    {
-
-        "code": "US",
-
-        "nameEn": "United States",
-
-        "nameAr": "الولايات المتحدة"
-
-    },
-
-    {
-
-        "code": "UY",
-
-        "nameEn": "Uruguay",
-
-        "nameAr": "أوروغواي"
-
-    },
-
-    {
-
-        "code": "UZ",
-
-        "nameEn": "Uzbekistan",
-
-        "nameAr": "أوزبكستان"
-
-    },
-
-    {
-
-        "code": "VU",
-
-        "nameEn": "Vanuatu",
-
-        "nameAr": "فانواتو"
-
-    },
-
-    {
-
-        "code": "VE",
-
-        "nameEn": "Venezuela",
-
-        "nameAr": "فنزويلا"
-
-    },
-
-    {
-
-        "code": "VN",
-
-        "nameEn": "Vietnam",
-
-        "nameAr": "فيتنام"
-
-    },
-
-    {
-
-        "code": "VG",
-
-        "nameEn": "Virgin Islands, Brit",
-
-        "nameAr": "الجزر العذراء البريطانية"
-
-    },
-
-    {
-
-        "code": "VI",
-
-        "nameEn": "Virgin Islands, U.S.",
-
-        "nameAr": "الجزر العذراء الأميركية"
-
-    },
-
-    {
-
-        "code": "EH",
-
-        "nameEn": "Western Sahara",
-
-        "nameAr": "الصحراء الغربية"
-
-    },
-
-    {
-
-        "code": "YE",
-
-        "nameEn": "Republic of Yemen",
-
-        "nameAr": "الجمهورية اليمنية"
-
-    },
-
-    {
-
-        "code": "YU",
-
-        "nameEn": "Yugoslavia",
-
-        "nameAr": "يوغوسلافيا"
-
-    },
-
-    {
-
-        "code": "ZR",
-
-        "nameEn": "Zaire",
-
-        "nameAr": "زائير"
-
-    },
-
-    {
-
-        "code": "ZM",
-
-        "nameEn": "Zambia",
-
-        "nameAr": "زامبيا"
-
-    },
-
-    {
-
-        "code": "ZW",
-
-        "nameEn": "Zimbabwe",
-
-        "nameAr": "زيمبابوي"
-
-    },
-
-    {
-
-        "code": "TJ",
-
-        "nameEn": "Tajikistan",
-
-        "nameAr": "تاجیکستان"
-
-    },
-
-    {
-
-        "code": "RS",
-
-        "nameEn": "Serbia",
-
-        "nameAr": "صربيا"
-
-    },
-
-    {
-
-        "code": "MM",
-
-        "nameEn": "Myanmar(Burma)",
-
-        "nameAr": "ميانمار(بورما)"
-
-    }
-
+    nameAr: 'ميانمار(بورما)',
+  },
 ]
 
-export const SaudiList =[
+export const SaudiList = [
+  {
+    code: 'ABQ',
 
-    {
+    nameEn: 'Abqaiq',
 
-        "code": "ABQ",
+    nameAr: 'أبقيق',
+  },
 
-        "nameEn": "Abqaiq",
+  {
+    code: 'AFI',
 
-        "nameAr": "أبقيق"
+    nameEn: 'Afif',
 
-    },
+    nameAr: 'عفيف',
+  },
 
-    {
+  {
+    code: 'ABW',
 
-        "code": "AFI",
+    nameEn: 'Al Abwa',
 
-        "nameEn": "Afif",
+    nameAr: 'الأبواء',
+  },
 
-        "nameAr": "عفيف"
+  {
+    code: 'ART',
 
-    },
+    nameEn: 'Al Artaweyah',
 
-    {
+    nameAr: 'الأرطاوية',
+  },
 
-        "code": "ABW",
+  {
+    code: 'BAH',
 
-        "nameEn": "Al Abwa",
+    nameEn: 'Al Bahah',
 
-        "nameAr": "الأبواء"
+    nameAr: 'الباحة',
+  },
 
-    },
+  {
+    code: 'AGW',
 
-    {
+    nameEn: 'Al Gweiiyyah',
 
-        "code": "ART",
+    nameAr: 'القويعية',
+  },
 
-        "nameEn": "Al Artaweyah",
+  {
+    code: 'HAE',
 
-        "nameAr": "الأرطاوية"
+    nameEn: 'Al Hareeq',
 
-    },
+    nameAr: 'الحريق',
+  },
 
-    {
+  {
+    code: 'HUF',
 
-        "code": "BAH",
+    nameEn: 'Al Hufuf',
 
-        "nameEn": "Al Bahah",
+    nameAr: 'الهفوف',
+  },
 
-        "nameAr": "الباحة"
+  {
+    code: 'JAF',
 
-    },
+    nameEn: 'Al Jafer',
 
-    {
+    nameAr: 'الجفر',
+  },
 
-        "code": "AGW",
+  {
+    code: 'JAW',
 
-        "nameEn": "Al Gweiiyyah",
+    nameEn: 'Al Jawf',
 
-        "nameAr": "القويعية"
+    nameAr: 'الجوف',
+  },
 
-    },
+  {
+    code: 'KHR',
 
-    {
+    nameEn: 'Al Kharj',
 
-        "code": "HAE",
+    nameAr: 'الخرج',
+  },
 
-        "nameEn": "Al Hareeq",
+  {
+    code: 'LIT',
 
-        "nameAr": "الحريق"
+    nameEn: 'Al Lith',
 
-    },
+    nameAr: 'الليث',
+  },
 
-    {
+  {
+    code: 'MAJ',
 
-        "code": "HUF",
+    nameEn: "Al Majma'ah",
 
-        "nameEn": "Al Hufuf",
+    nameAr: 'المجمعة',
+  },
 
-        "nameAr": "الهفوف"
+  {
+    code: 'NAM',
 
-    },
+    nameEn: 'Al Namas',
 
-    {
+    nameAr: 'النماص',
+  },
 
-        "code": "JAF",
+  {
+    code: 'OMR',
 
-        "nameEn": "Al Jafer",
+    nameEn: 'Al Omran',
 
-        "nameAr": "الجفر"
+    nameAr: 'العمران',
+  },
 
-    },
+  {
+    code: 'OYO',
 
-    {
+    nameEn: 'Al Oyoon',
 
-        "code": "JAW",
+    nameAr: 'العيون',
+  },
 
-        "nameEn": "Al Jawf",
+  {
+    code: 'QUN',
 
-        "nameAr": "الجوف"
+    nameEn: 'Al Qunfudhah',
 
-    },
+    nameAr: 'القنفذة',
+  },
 
-    {
+  {
+    code: 'RAS',
 
-        "code": "KHR",
+    nameEn: 'Al Rass',
 
-        "nameEn": "Al Kharj",
+    nameAr: 'الرس',
+  },
 
-        "nameAr": "الخرج"
+  {
+    code: 'THU',
 
-    },
+    nameEn: 'Al Thuqbah',
 
-    {
+    nameAr: 'الثقبة',
+  },
 
-        "code": "LIT",
+  {
+    code: 'WAJ',
 
-        "nameEn": "Al Lith",
+    nameEn: 'Al Wajh',
 
-        "nameAr": "الليث"
+    nameAr: 'الوجه',
+  },
 
-    },
+  {
+    code: 'MUB',
 
-    {
+    nameEn: 'Al-Mubarraz',
 
-        "code": "MAJ",
+    nameAr: 'المبرز',
+  },
 
-        "nameEn": "Al Majma'ah",
+  {
+    code: 'ULA',
 
-        "nameAr": "المجمعة"
+    nameEn: 'AlUla',
 
-    },
+    nameAr: 'العلا',
+  },
 
-    {
+  {
+    code: 'ARA',
 
-        "code": "NAM",
+    nameEn: 'Arar',
 
-        "nameEn": "Al Namas",
+    nameAr: 'عرعر',
+  },
 
-        "nameAr": "النماص"
+  {
+    code: 'SUL',
 
-    },
+    nameEn: 'As Sulayyil',
 
-    {
+    nameAr: 'السليل',
+  },
 
-        "code": "OMR",
+  {
+    code: 'BAD',
 
-        "nameEn": "Al Omran",
+    nameEn: 'Badr',
 
-        "nameAr": "العمران"
+    nameAr: 'بدر',
+  },
 
-    },
+  {
+    code: 'BAL',
 
-    {
+    nameEn: 'Baljurashi',
 
-        "code": "OYO",
+    nameAr: 'بلجرشي',
+  },
 
-        "nameEn": "Al Oyoon",
+  {
+    code: 'BIS',
 
-        "nameAr": "العيون"
+    nameEn: 'Bisha',
 
-    },
+    nameAr: 'بيشة',
+  },
 
-    {
+  {
+    code: 'BUQ',
 
-        "code": "QUN",
+    nameEn: 'Buqaa',
 
-        "nameEn": "Al Qunfudhah",
+    nameAr: 'بقعاء',
+  },
 
-        "nameAr": "القنفذة"
+  {
+    code: 'BUR',
 
-    },
+    nameEn: 'Buraidah',
 
-    {
+    nameAr: 'بريدة',
+  },
 
-        "code": "RAS",
+  {
+    code: 'DAH',
 
-        "nameEn": "Al Rass",
+    nameEn: 'Dahaban',
 
-        "nameAr": "الرس"
+    nameAr: 'ذهبان',
+  },
 
-    },
+  {
+    code: 'DAM',
 
-    {
+    nameEn: 'Dammam',
 
-        "code": "THU",
+    nameAr: 'الدمام',
+  },
 
-        "nameEn": "Al Thuqbah",
+  {
+    code: 'DHA',
 
-        "nameAr": "الثقبة"
+    nameEn: 'Dhahran',
 
-    },
+    nameAr: 'الظهران',
+  },
 
-    {
+  {
+    code: 'DHU',
 
-        "code": "WAJ",
+    nameEn: 'Dhurma',
 
-        "nameEn": "Al Wajh",
+    nameAr: 'ضرماء',
+  },
 
-        "nameAr": "الوجه"
+  {
+    code: 'DIR',
 
-    },
+    nameEn: 'Diriyah',
 
-    {
+    nameAr: 'الدرعية',
+  },
 
-        "code": "MUB",
+  {
+    code: 'DUB',
 
-        "nameEn": "Al-Mubarraz",
+    nameEn: 'Duba',
 
-        "nameAr": "المبرز"
+    nameAr: 'ضباء',
+  },
 
-    },
+  {
+    code: 'DUM',
 
-    {
+    nameEn: 'Dumat Al Jandal',
 
-        "code": "ULA",
+    nameAr: 'دومة الجندل',
+  },
 
-        "nameEn": "AlUla",
+  {
+    code: 'DWA',
 
-        "nameAr": "العلا"
+    nameEn: 'Dwadmi',
 
-    },
+    nameAr: 'الدوادمي',
+  },
 
-    {
+  {
+    code: 'GUR',
 
-        "code": "ARA",
+    nameEn: 'Gurayat',
 
-        "nameEn": "Arar",
+    nameAr: 'القريات',
+  },
 
-        "nameAr": "عرعر"
+  {
+    code: 'HAF',
 
-    },
+    nameEn: 'Hafr Al-Batin',
 
-    {
+    nameAr: 'حفر الباطن',
+  },
 
-        "code": "SUL",
+  {
+    code: 'HAQ',
 
-        "nameEn": "As Sulayyil",
+    nameEn: 'Haql',
 
-        "nameAr": "السليل"
+    nameAr: 'حقل',
+  },
 
-    },
+  {
+    code: 'HOT',
 
-    {
+    nameEn: 'Hotat Bani Tamim',
 
-        "code": "BAD",
+    nameAr: 'حوطة بني تميم',
+  },
 
-        "nameEn": "Badr",
+  {
+    code: 'JED',
 
-        "nameAr": "بدر"
+    nameEn: 'Jeddah',
 
-    },
+    nameAr: 'جدة',
+  },
 
-    {
+  {
+    code: 'JEC',
 
-        "code": "BAL",
+    nameEn: 'Jizan Economic City',
 
-        "nameEn": "Baljurashi",
+    nameAr: 'مدينة جيزان الاقتصادية',
+  },
 
-        "nameAr": "بلجرشي"
+  {
+    code: 'JUB',
 
-    },
+    nameEn: 'Jubail',
 
-    {
+    nameAr: 'الجبيل',
+  },
 
-        "code": "BIS",
+  {
+    code: 'KHA',
 
-        "nameEn": "Bisha",
+    nameEn: 'Khafji',
 
-        "nameAr": "بيشة"
+    nameAr: 'الخفجي',
+  },
 
-    },
+  {
+    code: 'KHM',
 
-    {
+    nameEn: 'Khamis Mushayt',
 
-        "code": "BUQ",
+    nameAr: 'خميس مشيط',
+  },
 
-        "nameEn": "Buqaa",
+  {
+    code: 'KHO',
 
-        "nameAr": "بقعاء"
+    nameEn: 'Khobar',
 
-    },
+    nameAr: 'الخبر',
+  },
 
-    {
+  {
+    code: 'LAY',
 
-        "code": "BUR",
+    nameEn: 'Layla',
 
-        "nameEn": "Buraidah",
+    nameAr: 'ليلى',
+  },
 
-        "nameAr": "بريدة"
+  {
+    code: 'MAS',
 
-    },
+    nameEn: 'Mastoorah',
 
-    {
+    nameAr: 'مستورة',
+  },
 
-        "code": "DAH",
+  {
+    code: 'MEC',
 
-        "nameEn": "Dahaban",
+    nameEn: 'Makkah',
 
-        "nameAr": "ذهبان"
+    nameAr: 'مكة المكرمة',
+  },
 
-    },
+  {
+    code: 'MED',
 
-    {
+    nameEn: 'Medina',
 
-        "code": "DAM",
+    nameAr: 'المدينة المنورة',
+  },
 
-        "nameEn": "Dammam",
+  {
+    code: 'MUZ',
 
-        "nameAr": "الدمام"
+    nameEn: 'Muzahmiyya',
 
-    },
+    nameAr: 'المزاحمية',
+  },
 
-    {
+  {
+    code: 'NAJ',
 
-        "code": "DHA",
+    nameEn: 'Najran',
 
-        "nameEn": "Dhahran",
+    nameAr: 'نجران',
+  },
 
-        "nameAr": "الظهران"
+  {
+    code: 'QAI',
 
-    },
+    nameEn: 'Qaisumah',
 
-    {
+    nameAr: 'القيصومة',
+  },
 
-        "code": "DHU",
+  {
+    code: 'QAT',
 
-        "nameEn": "Dhurma",
+    nameEn: 'Qatif',
 
-        "nameAr": "ضرماء"
+    nameAr: 'القطيف',
+  },
 
-    },
+  {
+    code: 'RAB',
 
-    {
+    nameEn: 'Rabigh',
 
-        "code": "DIR",
+    nameAr: 'رابغ',
+  },
 
-        "nameEn": "Diriyah",
+  {
+    code: 'RAF',
 
-        "nameAr": "الدرعية"
+    nameEn: 'Rafha',
 
-    },
+    nameAr: 'رفحاء',
+  },
 
-    {
+  {
+    code: 'RAT',
 
-        "code": "DUB",
+    nameEn: 'Ras Tanura',
 
-        "nameEn": "Duba",
+    nameAr: 'رأس تنورة',
+  },
 
-        "nameAr": "ضباء"
+  {
+    code: 'RIY',
 
-    },
+    nameEn: 'Riyadh',
 
-    {
+    nameAr: 'الرياض',
+  },
 
-        "code": "DUM",
+  {
+    code: 'SAB',
 
-        "nameEn": "Dumat Al Jandal",
+    nameEn: 'Sabt Al Alaya',
 
-        "nameAr": "دومة الجندل"
+    nameAr: 'سبت العلايا',
+  },
 
-    },
+  {
+    code: 'SAF',
 
-    {
+    nameEn: 'Safwa City',
 
-        "code": "DWA",
+    nameAr: 'صفوى',
+  },
 
-        "nameEn": "Dwadmi",
+  {
+    code: 'SAI',
 
-        "nameAr": "الدوادمي"
+    nameEn: 'Saihat',
 
-    },
+    nameAr: 'سيهات',
+  },
 
-    {
+  {
+    code: 'SAK',
 
-        "code": "GUR",
+    nameEn: 'Sakakah',
 
-        "nameEn": "Gurayat",
+    nameAr: 'سكاكا',
+  },
 
-        "nameAr": "القريات"
+  {
+    code: 'SHG',
 
-    },
+    nameEn: 'Shaqraa',
 
-    {
+    nameAr: 'شقراء',
+  },
 
-        "code": "HAF",
+  {
+    code: 'SHA',
 
-        "nameEn": "Hafr Al-Batin",
+    nameEn: 'Sharurah',
 
-        "nameAr": "حفر الباطن"
+    nameAr: 'شرورة',
+  },
 
-    },
+  {
+    code: 'TAB',
 
-    {
+    nameEn: 'Tabuk',
 
-        "code": "HAQ",
+    nameAr: 'تبوك',
+  },
 
-        "nameEn": "Haql",
+  {
+    code: 'TAI',
 
-        "nameAr": "حقل"
+    nameEn: 'Taif',
 
-    },
+    nameAr: 'الطائف',
+  },
 
-    {
+  {
+    code: 'TAN',
 
-        "code": "HOT",
+    nameEn: 'Tanomah',
 
-        "nameEn": "Hotat Bani Tamim",
+    nameAr: 'تنومة',
+  },
 
-        "nameAr": "حوطة بني تميم"
+  {
+    code: 'TAR',
 
-    },
+    nameEn: 'Tarout',
 
-    {
+    nameAr: 'تاروت',
+  },
 
-        "code": "JED",
+  {
+    code: 'TAY',
 
-        "nameEn": "Jeddah",
+    nameEn: 'Tayma',
 
-        "nameAr": "جدة"
+    nameAr: 'تيماء',
+  },
 
-    },
+  {
+    code: 'THA',
 
-    {
+    nameEn: 'Thadiq',
 
-        "code": "JEC",
+    nameAr: 'ثادق',
+  },
 
-        "nameEn": "Jizan Economic City",
+  {
+    code: 'TUR',
 
-        "nameAr": "مدينة جيزان الاقتصادية"
+    nameEn: 'Turaif',
 
-    },
+    nameAr: 'طريف',
+  },
 
-    {
+  {
+    code: 'UMS',
 
-        "code": "JUB",
+    nameEn: 'Um Al Sahek',
 
-        "nameEn": "Jubail",
+    nameAr: 'أم الساهك',
+  },
 
-        "nameAr": "الجبيل"
+  {
+    code: 'UNA',
 
-    },
+    nameEn: 'Unaizah',
 
-    {
+    nameAr: 'عنيزة',
+  },
 
-        "code": "KHA",
+  {
+    code: 'WAD',
 
-        "nameEn": "Khafji",
+    nameEn: 'Wadi Al Dawasir',
 
-        "nameAr": "الخفجي"
+    nameAr: 'وادي الدواسر',
+  },
 
-    },
+  {
+    code: 'YAN',
 
-    {
+    nameEn: 'Yanbu',
 
-        "code": "KHM",
+    nameAr: 'ينبع',
+  },
 
-        "nameEn": "Khamis Mushayt",
+  {
+    code: 'ZUL',
 
-        "nameAr": "خميس مشيط"
+    nameEn: 'Zulfi',
 
-    },
+    nameAr: 'الزلفي',
+  },
 
-    {
+  {
+    code: 'ABH',
 
-        "code": "KHO",
+    nameEn: 'Abha',
 
-        "nameEn": "Khobar",
+    nameAr: 'ابها',
+  },
 
-        "nameAr": "الخبر"
+  {
+    code: 'EHS',
 
-    },
+    nameEn: 'Al Ehsaa',
 
-    {
+    nameAr: 'الاحساء',
+  },
 
-        "code": "LAY",
+  {
+    code: 'RUF',
 
-        "nameEn": "Layla",
+    nameEn: 'AHAD REFAIDAH',
 
-        "nameAr": "ليلى"
+    nameAr: 'أحد رفيدة',
+  },
 
-    },
+  {
+    code: '26',
 
-    {
+    nameEn: 'KHULAYES',
 
-        "code": "MAS",
-
-        "nameEn": "Mastoorah",
-
-        "nameAr": "مستورة"
-
-    },
-
-    {
-
-        "code": "MEC",
-
-        "nameEn": "Makkah",
-
-        "nameAr": "مكة المكرمة"
-
-    },
-
-    {
-
-        "code": "MED",
-
-        "nameEn": "Medina",
-
-        "nameAr": "المدينة المنورة"
-
-    },
-
-    {
-
-        "code": "MUZ",
-
-        "nameEn": "Muzahmiyya",
-
-        "nameAr": "المزاحمية"
-
-    },
-
-    {
-
-        "code": "NAJ",
-
-        "nameEn": "Najran",
-
-        "nameAr": "نجران"
-
-    },
-
-    {
-
-        "code": "QAI",
-
-        "nameEn": "Qaisumah",
-
-        "nameAr": "القيصومة"
-
-    },
-
-    {
-
-        "code": "QAT",
-
-        "nameEn": "Qatif",
-
-        "nameAr": "القطيف"
-
-    },
-
-    {
-
-        "code": "RAB",
-
-        "nameEn": "Rabigh",
-
-        "nameAr": "رابغ"
-
-    },
-
-    {
-
-        "code": "RAF",
-
-        "nameEn": "Rafha",
-
-        "nameAr": "رفحاء"
-
-    },
-
-    {
-
-        "code": "RAT",
-
-        "nameEn": "Ras Tanura",
-
-        "nameAr": "رأس تنورة"
-
-    },
-
-    {
-
-        "code": "RIY",
-
-        "nameEn": "Riyadh",
-
-        "nameAr": "الرياض"
-
-    },
-
-    {
-
-        "code": "SAB",
-
-        "nameEn": "Sabt Al Alaya",
-
-        "nameAr": "سبت العلايا"
-
-    },
-
-    {
-
-        "code": "SAF",
-
-        "nameEn": "Safwa City",
-
-        "nameAr": "صفوى"
-
-    },
-
-    {
-
-        "code": "SAI",
-
-        "nameEn": "Saihat",
-
-        "nameAr": "سيهات"
-
-    },
-
-    {
-
-        "code": "SAK",
-
-        "nameEn": "Sakakah",
-
-        "nameAr": "سكاكا"
-
-    },
-
-    {
-
-        "code": "SHG",
-
-        "nameEn": "Shaqraa",
-
-        "nameAr": "شقراء"
-
-    },
-
-    {
-
-        "code": "SHA",
-
-        "nameEn": "Sharurah",
-
-        "nameAr": "شرورة"
-
-    },
-
-    {
-
-        "code": "TAB",
-
-        "nameEn": "Tabuk",
-
-        "nameAr": "تبوك"
-
-    },
-
-    {
-
-        "code": "TAI",
-
-        "nameEn": "Taif",
-
-        "nameAr": "الطائف"
-
-    },
-
-    {
-
-        "code": "TAN",
-
-        "nameEn": "Tanomah",
-
-        "nameAr": "تنومة"
-
-    },
-
-    {
-
-        "code": "TAR",
-
-        "nameEn": "Tarout",
-
-        "nameAr": "تاروت"
-
-    },
-
-    {
-
-        "code": "TAY",
-
-        "nameEn": "Tayma",
-
-        "nameAr": "تيماء"
-
-    },
-
-    {
-
-        "code": "THA",
-
-        "nameEn": "Thadiq",
-
-        "nameAr": "ثادق"
-
-    },
-
-    {
-
-        "code": "TUR",
-
-        "nameEn": "Turaif",
-
-        "nameAr": "طريف"
-
-    },
-
-    {
-
-        "code": "UMS",
-
-        "nameEn": "Um Al Sahek",
-
-        "nameAr": "أم الساهك"
-
-    },
-
-    {
-
-        "code": "UNA",
-
-        "nameEn": "Unaizah",
-
-        "nameAr": "عنيزة"
-
-    },
-
-    {
-
-        "code": "WAD",
-
-        "nameEn": "Wadi Al Dawasir",
-
-        "nameAr": "وادي الدواسر"
-
-    },
-
-    {
-
-        "code": "YAN",
-
-        "nameEn": "Yanbu",
-
-        "nameAr": "ينبع"
-
-    },
-
-    {
-
-        "code": "ZUL",
-
-        "nameEn": "Zulfi",
-
-        "nameAr": "الزلفي"
-
-    },
-
-    {
-
-        "code": "ABH",
-
-        "nameEn": "Abha",
-
-        "nameAr": "ابها"
-
-    },
-
-    {
-
-        "code": "EHS",
-
-        "nameEn": "Al Ehsaa",
-
-        "nameAr": "الاحساء"
-
-    },
-
-    {
-
-        "code": "RUF",
-
-        "nameEn": "AHAD REFAIDAH",
-
-        "nameAr": "أحد رفيدة"
-
-    },
-
-    {
-
-        "code": "26",
-
-        "nameEn": "KHULAYES",
-
-        "nameAr": "خليص"
-
-    }
-
+    nameAr: 'خليص',
+  },
 ]
