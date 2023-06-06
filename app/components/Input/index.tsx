@@ -89,6 +89,11 @@ const CustomInput: FC<CustomInputProps> = ({
   useEffect(() => {
     errorMessage && setError(errorMessage)
   }, [errorMessage])
+
+  useEffect(() => {
+    setInputValue(value)
+  }, [value])
+
   const handleFocus = (): void => {
     setIsFocused(true)
   }

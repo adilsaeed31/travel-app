@@ -6,8 +6,7 @@ export type AuthStateProps = {
 }
 
 const AuthState: StateCreator<AuthStateProps> = set => ({
-  user: null,
-
+  user: null, // TODO for skipping login we can add object there
   setUser: (user: any) => {
     set(() => ({
       user: user,
