@@ -109,7 +109,7 @@ export default function DropDown({
         <OneFlexView>
           <ToNotch />
           <Title isRTL={!!isRTL}>{title}</Title>
-          <Subtitle isRTL={!!isRTL}>{subTitle}</Subtitle>
+          {/* <Subtitle isRTL={!!isRTL}>{subTitle}</Subtitle> */}
           {hasSearch && (
             <InputWrapper>
               <Search />
@@ -122,7 +122,7 @@ export default function DropDown({
               />
             </InputWrapper>
           )}
-          <View style={{height: Dimensions.get('window').height / 3}}>
+          <View style={{paddingBottom: 10}}>
             <FlatList
               keyboardShouldPersistTaps="always"
               data={SearchResult}
@@ -236,6 +236,8 @@ const InputWrapper = styled(View)`
   padding-right: 10px;
   padding-left: 10px;
   flex-direction: row;
+  margin-top: 15px;
+  margin-bottom: 10px;
 `
 const InputView = styled(TextInput)`
   flex: 1;

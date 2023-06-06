@@ -21,17 +21,13 @@ import {countriesList, SaudiList, educationList} from './masterData'
 Splash.hide()
 import styled from 'styled-components/native'
 import {
-  MobileNumberValidator,
-  BuildingNumberValidator,
-  StreetNameValidator,
-  districtValidator,
   PostalCodeValidator,
   CityValidator,
   ContactName,
-  relationValidaor,
+  BuildingNumberValidator,
 } from './validators'
 const fakeToke =
-  'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2NDdkOTcwNWQ1Y2NiZDQ1OWJjZDliOWEiLCJzdWIiOiIwNDM1NDM1MzQ1Iiwicm9sZXMiOlsiT05CT0FSRElORyJdLCJpc3MiOiJjb20uc2FpYi52ZW50dXJlcy5hdXRoIiwiYXVkIjoiY29tLnNhaWIudmVudHVyZXMuYXV0aCIsImV4cCI6MjQ4NTk1NTg3MSwiaWRlbnRpdHkiOiIyNTQ1MzEyOTMyIiwicGhvbmVfbnVtYmVyIjoiMDU2NzExMzUzNCJ9.CcktJQUa1JFMeVaoK8Hd7PMLyP-NnLSW-OTOpxFEltxoH_09UBicyfpB-2D_CgSrjEh-uSuKszdAnxVLbq7gyA'
+  'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2NDdmM2RhZDM5OTQ2NDM2ODA4MzlmMzAiLCJzdWIiOiIwNTMxOTg1MjE0Iiwicm9sZXMiOlsiT05CT0FSRElORyJdLCJpc3MiOiJjb20uc2FpYi52ZW50dXJlcy5hdXRoIiwiYXVkIjoiY29tLnNhaWIudmVudHVyZXMuYXV0aCIsImV4cCI6MTc4NjA2NDA3NSwiaWRlbnRpdHkiOiIyNTQ1MzI5NzYxIiwicGhvbmVfbnVtYmVyIjoiMDUzMTk4NTIxNCJ9.eNr4-Y2FzTWcTxmyjn0653UfWVWWhR29IJDzesZQ3y-WLPLXtEGk2KDILUW_yZBvaeIy3XuIUYmHV2M9M2b85w'
 import {AppContext, AppProviderProps} from '@Context'
 type IFormTYpe = {
   city: string | null
@@ -248,18 +244,58 @@ function PersonalInformation() {
     },
   })
   useEffect(() => {
-    if (PersonalInformationData) {
-      MapApiToState(values, PersonalInformationData, isRTL)
-    }
-  }, [PersonalInformationData])
-  useEffect(() => {
-    //  GetPersonalInformationData()
+    GetPersonalInformationData()
   }, [])
   useEffect(() => {
-    if (data?.PersonalInformationData) {
+    console.log('======PersonalInformationData Get=========')
+    console.log(PersonalInformationData)
+    // {
+    //   "additional_contact": null,
+    //   "birth_city": {"code": "ABW", "name_ar": "الأبواء", "name_en": "Al Abwa"},
+    //   "birth_country": {
+    //     "code": "SA",
+    //     "name_ar": "المملكة العربية السعودية",
+    //     "name_en": "Saudi Arabia"
+    //   },
+    //   "education": {
+    //     "level_code": "DIPL",
+    //     "level_name_ar": "دراسة ثانوية-دبلوم",
+    //     "level_name_en": "Secondary school (Diploma level)"
+    //   },
+    //   "offshore_address": null,
+    //   "onboarding_application_id": "647f746b1696492b30d8c59f"
+    // }
+
+    setValues({
+      ...values,
+      countryOfBirth: isRTL
+        ? PersonalInformationData?.birth_country?.name_ar
+        : PersonalInformationData?.birth_country?.name_en,
+      city: isRTL
+        ? PersonalInformationData?.birth_city?.name_ar ||
+          PersonalInformationData?.offshore_address?.city
+        : PersonalInformationData?.birth_city?.name_en ||
+          PersonalInformationData?.offshore_address?.city,
+      education: isRTL
+        ? PersonalInformationData?.education?.level_name_ar
+        : PersonalInformationData?.education?.level_name_en,
+      buldingNumber: PersonalInformationData?.offshore_address?.building_number,
+      postalCode: PersonalInformationData?.offshore_address?.postal_code,
+      streetNanme: PersonalInformationData?.offshore_address?.street,
+      contactName: PersonalInformationData?.offshore_address?.contact_number,
+    })
+
+    //      MapApiToState(values, PersonalInformationData, isRTL)
+    console.log('======PersonalInformationData Get=========')
+  }, [PersonalInformationData])
+
+  useEffect(() => {
+    console.log('-----------------')
+    console.log('needed-re', data)
+    console.log('-----------------')
+
+    if (data?.onboarding_application_id) {
       navigation.push('FinicalInformation')
-    } else {
-      data && Alert.alert('some thing went wrong')
     }
   }, [data])
 
@@ -285,16 +321,17 @@ function PersonalInformation() {
     [showAdditionalInformation],
   )
   const handlePostPersonalInformation = () => {
-    setFormLoading(true)
-    setTimeout(() => {
-      setFormLoading(false)
-      navigation.navigate('FinicalInformation')
-    }, 300)
+    // setFormLoading(true)
+    // setTimeout(() => {
+    //   setFormLoading(false)
+    //   navigation.navigate('FinicalInformation')
+    // }, 300)
+    mutate()
   }
   return (
     <ScrollView
       keyboardShouldPersistTaps="always"
-      key={values.city + showAdditionalInformation + values.countryOfBirth}
+      key={showAdditionalInformation + values.countryOfBirth}
       contentContainerStyle={{flex: 1}}>
       <Layout
         isBack={true}

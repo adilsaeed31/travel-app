@@ -97,8 +97,7 @@ const OtpPersonalIdScreen = ({navigation, route}: Props) => {
           mobile_number: mobileNumber,
           id: govtId,
         },
-        token:
-          'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2NDdkOTcwNWQ1Y2NiZDQ1OWJjZDliOWEiLCJzdWIiOiIwNDM1NDM1MzQ1Iiwicm9sZXMiOlsiT05CT0FSRElORyJdLCJpc3MiOiJjb20uc2FpYi52ZW50dXJlcy5hdXRoIiwiYXVkIjoiY29tLnNhaWIudmVudHVyZXMuYXV0aCIsImV4cCI6MjQ4NTk1NTg3MSwiaWRlbnRpdHkiOiIyNTQ1MzEyOTMyIiwicGhvbmVfbnVtYmVyIjoiMDU2NzExMzUzNCJ9.CcktJQUa1JFMeVaoK8Hd7PMLyP-NnLSW-OTOpxFEltxoH_09UBicyfpB-2D_CgSrjEh-uSuKszdAnxVLbq7gyA',
+        token: otpData.access_token,
       })
       // TODO :  need to remove static token with otpData.access_token
       let res = await req.json()
@@ -173,10 +172,6 @@ const OtpPersonalIdScreen = ({navigation, route}: Props) => {
 
   useEffect(() => {
     if (otpData && otpData.access_token) {
-      // TODO : to remove
-      otpData.access_token =
-        'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2NDdkOTcwNWQ1Y2NiZDQ1OWJjZDliOWEiLCJzdWIiOiIwNDM1NDM1MzQ1Iiwicm9sZXMiOlsiT05CT0FSRElORyJdLCJpc3MiOiJjb20uc2FpYi52ZW50dXJlcy5hdXRoIiwiYXVkIjoiY29tLnNhaWIudmVudHVyZXMuYXV0aCIsImV4cCI6MjQ4NTk1NTg3MSwiaWRlbnRpdHkiOiIyNTQ1MzEyOTMyIiwicGhvbmVfbnVtYmVyIjoiMDU2NzExMzUzNCJ9.CcktJQUa1JFMeVaoK8Hd7PMLyP-NnLSW-OTOpxFEltxoH_09UBicyfpB-2D_CgSrjEh-uSuKszdAnxVLbq7gyA'
-      // =========
       setItem('journeySecrets', JSON.stringify(otpData))
       verifyTahaquq()
     } else {

@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable eqeqeq */
-/* eslint-disable no-alert */
+
 // /* eslint-disable react/no-unstable-nested-components */
 // /* eslint-disable react-native/no-inline-styles */
 // /* eslint-disable eqeqeq */
@@ -31,6 +31,9 @@ function getFormattedDate(date) {
 
   return month + '/' + day + '/' + year
 }
+const fakeToken =
+  'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2NDdmM2RhZDM5OTQ2NDM2ODA4MzlmMzAiLCJzdWIiOiIwNTMxOTg1MjE0Iiwicm9sZXMiOlsiT05CT0FSRElORyJdLCJpc3MiOiJjb20uc2FpYi52ZW50dXJlcy5hdXRoIiwiYXVkIjoiY29tLnNhaWIudmVudHVyZXMuYXV0aCIsImV4cCI6MTc4NjA2NDA3NSwiaWRlbnRpdHkiOiIyNTQ1MzI5NzYxIiwicGhvbmVfbnVtYmVyIjoiMDUzMTk4NTIxNCJ9.eNr4-Y2FzTWcTxmyjn0653UfWVWWhR29IJDzesZQ3y-WLPLXtEGk2KDILUW_yZBvaeIy3XuIUYmHV2M9M2b85w'
+
 type IFormTYpe = {
   //   // start
   occupation: string | null
@@ -133,31 +136,206 @@ const SheetData = {
       description_ar: '',
     },
   ],
+
   jobCategory: [
     {
-      type_code: 'CONS',
-      description_en: 'Consultant',
-      description_ar: 'مستشار',
+      code: 'ACCT',
+
+      nameEn: 'Accountant',
+
+      nameAr: 'محاسب',
     },
+
     {
-      type_code: 'CONS',
-      description_en: 'Consultant2',
-      description_ar: 'مستشار2',
+      code: 'MBOA',
+
+      nameEn: 'Board member',
+
+      nameAr: 'عضو مجلس ادارة',
     },
+
     {
-      type_code: 'CONS',
-      description_en: 'Consultant3',
-      description_ar: 'مستشار3',
+      code: 'MDIR',
+
+      nameEn: 'CEO, general manager, managing director',
+
+      nameAr: 'مدير عام, رئيس تنفيذي , عضو منتدب',
     },
+
     {
-      type_code: 'CONS',
-      description_en: 'Consultant4',
-      description_ar: 'مستشار4',
+      code: 'CLER',
+
+      nameEn: 'Clerk',
+
+      nameAr: 'كاتب',
     },
+
     {
-      type_code: 'CONS',
-      description_en: 'Consultant5',
-      description_ar: 'مستشار5',
+      code: 'CONS',
+
+      nameEn: 'Consultant',
+
+      nameAr: 'مستشار',
+    },
+
+    {
+      code: 'DMNG',
+
+      nameEn: 'Deputy manager',
+
+      nameAr: 'نائب مدير',
+    },
+
+    {
+      code: 'DOCT',
+
+      nameEn: 'Doctor, dentist, physician',
+
+      nameAr: 'دكتور, طبيب , طبيب اسنان',
+    },
+
+    {
+      code: 'ENGR',
+
+      nameEn: 'Engineer',
+
+      nameAr: 'مهندس',
+    },
+
+    {
+      code: 'HOME',
+
+      nameEn: 'Housewife',
+
+      nameAr: 'ربة بيت',
+    },
+
+    {
+      code: 'JRNL',
+
+      nameEn: 'Journalist',
+
+      nameAr: 'صحفي',
+    },
+
+    {
+      code: 'LABO',
+
+      nameEn: 'Laborer',
+
+      nameAr: 'عامل',
+    },
+
+    {
+      code: 'LAWY',
+
+      nameEn: 'Lawyer',
+
+      nameAr: 'محامي',
+    },
+
+    {
+      code: 'MNGR',
+
+      nameEn: 'Manager, Senior Manager',
+
+      nameAr: 'مدير',
+    },
+
+    {
+      code: 'NONE',
+
+      nameEn: 'Not employed',
+
+      nameAr: 'بدون عمل',
+    },
+
+    {
+      code: 'NURS',
+
+      nameEn: 'Nurse',
+
+      nameAr: 'ممرض',
+    },
+
+    {
+      code: 'PHRM',
+
+      nameEn: 'Pharmacist',
+
+      nameAr: 'صيدلاني',
+    },
+
+    {
+      code: 'PLOT',
+
+      nameEn: 'Pilot',
+
+      nameAr: 'طيار',
+    },
+
+    {
+      code: 'PRFL',
+
+      nameEn: 'Professional',
+
+      nameAr: 'مهني متخصص',
+    },
+
+    {
+      code: 'PROF',
+
+      nameEn: 'Professor',
+
+      nameAr: 'استاذ جامعي',
+    },
+
+    {
+      code: 'RTRD',
+
+      nameEn: 'Retired',
+
+      nameAr: 'متقاعد',
+    },
+
+    {
+      code: 'SELF',
+
+      nameEn: 'Self-Employed',
+
+      nameAr: 'عمل خاص',
+    },
+
+    {
+      code: 'STDN',
+
+      nameEn: 'Student',
+
+      nameAr: 'طالب',
+    },
+
+    {
+      code: 'SPRV',
+
+      nameEn: 'Supervisor',
+
+      nameAr: 'مشرف',
+    },
+
+    {
+      code: 'TCHR',
+
+      nameEn: 'Teacher',
+
+      nameAr: 'مدرس',
+    },
+
+    {
+      code: 'TECH',
+
+      nameEn: 'Technician',
+
+      nameAr: 'فني',
     },
   ],
   jobTitle: [
@@ -859,29 +1037,159 @@ const SheetData = {
   ],
   sectors: [
     {
-      type_code: 'CNTR',
-      description_en: 'Construction & Contracting1',
-      description_ar: '1البناء والمقاولات',
+      typeCode: 'ACFS',
+      descriptionEn: 'Accommodation & Food Services',
+      descriptionAr: 'خدمات الاقامة والطعام',
     },
     {
-      type_code: 'CNTR',
-      description_en: 'Construction & Contracting2',
-      description_ar: '2البناء والمقاولات',
+      typeCode: 'AGRH',
+      descriptionEn: 'Agriculture & Hunting',
+      descriptionAr: 'الزراعة والصيد',
     },
     {
-      type_code: 'CNTR',
-      description_en: 'Construction & Contracting3',
-      description_ar: '3البناء والمقاولات',
+      typeCode: 'AREN',
+      descriptionEn: 'Arts & Entertainment',
+      descriptionAr: 'الفنون والترفية والتسلية',
     },
     {
-      type_code: 'CNTR',
-      description_en: 'Construction & Contracting4',
-      description_ar: '4البناء والمقاولات',
+      typeCode: 'ASSA',
+      descriptionEn: 'Administrative & Support Services Activities',
+      descriptionAr: 'أنشطة الخدمات الادارية وخدمات الدعم',
     },
     {
-      type_code: 'CNTR',
-      description_en: 'Construction & Contracting5',
-      description_ar: '5البناء والمقاولات',
+      typeCode: 'BKFI',
+      descriptionEn: 'Financial & Insurance',
+      descriptionAr: 'الأنشطةالمالية والتأمين',
+    },
+    {
+      typeCode: 'CHRT',
+      descriptionEn: 'Human Health & Social Work',
+      descriptionAr: 'الأنشطة في مجال صحة الانسان والعمل الاجتماعي',
+    },
+    {
+      typeCode: 'CMMR',
+      descriptionEn: 'Wholesale & Retail Trade',
+      descriptionAr: 'تجارة الجملة والتجزئة',
+    },
+    {
+      typeCode: 'CNTR',
+      descriptionEn: 'Construction & Contracting',
+      descriptionAr: 'البناء والمقاولات',
+    },
+    {
+      typeCode: 'DIPL',
+      descriptionEn: 'Diplomatic',
+      descriptionAr: 'النشاط الدبلوماسي',
+    },
+    {
+      typeCode: 'EDUC',
+      descriptionEn: 'Educational',
+      descriptionAr: 'تعليمي',
+    },
+    {
+      typeCode: 'EGSS',
+      descriptionEn: 'Electricity, Gas and Sewage Supply',
+      descriptionAr: ' امدادت الكهرباء والغاز والصرف الصحي',
+    },
+    {
+      typeCode: 'ENRG',
+      descriptionEn: 'Energy',
+      descriptionAr: 'الطاقة',
+    },
+    {
+      typeCode: 'FRBU',
+      descriptionEn: 'Free Business',
+      descriptionAr: 'أعمال حرة',
+    },
+    {
+      typeCode: 'GOVT',
+      descriptionEn: 'Government',
+      descriptionAr: 'حكومي',
+    },
+    {
+      typeCode: 'HSAC',
+      descriptionEn: 'Household Activities',
+      descriptionAr: 'أنشطة الأسر المعيشية',
+    },
+    {
+      typeCode: 'INDL',
+      descriptionEn: 'Industries',
+      descriptionAr: 'الصناعات',
+    },
+    {
+      typeCode: 'INFT',
+      descriptionEn: 'Information & Communication',
+      descriptionAr: 'المعلومات والاتصالات',
+    },
+    {
+      typeCode: 'INSU',
+      descriptionEn: 'Insurance',
+      descriptionAr: 'التامين',
+    },
+    {
+      typeCode: 'MEDA',
+      descriptionEn: 'Media',
+      descriptionAr: 'النشاط الاعلامي',
+    },
+    {
+      typeCode: 'MEDH',
+      descriptionEn: 'Medical or health',
+      descriptionAr: 'طبي او صحي',
+    },
+    {
+      typeCode: 'MILT',
+      descriptionEn: 'Military',
+      descriptionAr: 'عسكري',
+    },
+    {
+      typeCode: 'MNOE',
+      descriptionEn: 'Mining & Oil Extraction',
+      descriptionAr: 'التعدين واستخراج البترول',
+    },
+    {
+      typeCode: 'NTEM',
+      descriptionEn: 'Not Employed',
+      descriptionAr: 'اخرى',
+    },
+    {
+      typeCode: 'OTHR',
+      descriptionEn: 'Other',
+      descriptionAr: 'اخرى',
+    },
+    {
+      typeCode: 'PENS',
+      descriptionEn: 'Pension',
+      descriptionAr: 'النظام التقاعدي',
+    },
+    {
+      typeCode: 'PPAI',
+      descriptionEn: 'Public Pension Agency',
+      descriptionAr: 'المؤسسة العامه للتقاعد',
+    },
+    {
+      typeCode: 'PSTA',
+      descriptionEn: 'Professional, Scientific & Technical Activities',
+      descriptionAr: 'الأنشطة المهنية والعلمية والتقنية',
+    },
+    {
+      typeCode: 'QGOV',
+      descriptionEn: 'Semi-Government',
+      descriptionAr: 'شبه حكومي',
+    },
+    {
+      typeCode: 'REAC',
+      descriptionEn: 'Real Estate Activities',
+      descriptionAr: 'الأنشطة العقارية',
+    },
+    {
+      typeCode: 'TLCM',
+      descriptionEn: 'Telecommunications',
+      descriptionAr: 'الاتصالات',
+    },
+    {
+      typeCode: 'TRNS',
+      descriptionEn: 'Transport & Storage',
+      descriptionAr: 'النقل والتخزين',
     },
   ],
   primarySourceOfIncome: [
@@ -924,40 +1232,52 @@ const SheetData = {
     },
   ],
 }
-const MapStateForAPi = (values, isRTL) => {
+const MapApiForState = (response, isRtl) => {
+  return
+}
+const MapStateForAPi = (values: IFormTYpe) => {
+  let occupation = SheetData.Occupation.find(c => c.name == values.occupation)
+  let business_name = values.nameOfBusiness
+  let tilte = SheetData.jobTitle.find(
+    c =>
+      c.descriptionAr == values.jobTitle || c.descriptionEn == values.jobTitle,
+  )
+  let sector = SheetData.sectors.find(
+    sec =>
+      sec.descriptionAr == values.sector || sec.descriptionAr == values.sector,
+  )
+  let category = SheetData.jobCategory.find(
+    c => c.nameAr || values.jobCategory || c.nameEn == values.jobCategory,
+  )
+  let additional_income_list = []
+  if (values.AddetionalSourceOfIncome) {
+    additional_income_list.push({
+      amount: values.AddetionalSourceOfIncomeAmount,
+      source: values.AddetionalSourceOfIncomeSource,
+    })
+    if (values.AnotherAddetionalSourceOfIncome) {
+      additional_income_list.push({
+        amount: values.AnotherAddetionalSourceOfIncomeAmount,
+        source: values.AnotherAddetionalSourceOfIncomeSource,
+      })
+    }
+  }
   return {
-    occupation: {
-      code: 0,
-      name: 'string',
-      description_en: 'string',
-      description_ar: 'string',
-    },
-    business_name: 'string',
+    occupation: occupation,
+    business_name: business_name,
     employment: {
-      title: {
-        type_code: 'string',
-        description_en: 'string',
-        description_ar: 'string',
-      },
-      sector: {
-        type_code: 'string',
-        description_en: 'string',
-        description_ar: 'string',
-      },
-      joining_date: 'string',
-      joining_date_calendar: 'string',
+      title: tilte || null,
+      sector: sector || null,
+      joining_date: values.dateOfJoin,
+      joining_date_calendar: 'gregorian',
+      category,
     },
     primary_income: {
-      amount: 'string',
-      source: 'string',
+      amount: values.monthlyPrimaryIncomAmount,
+      source: null,
     },
-    investment_type: 'string',
-    additional_income_list: [
-      {
-        amount: 'string',
-        source: 'string',
-      },
-    ],
+    investment_type: values.investmentType,
+    additional_income_list,
   }
 }
 function FinacialInformationScreen() {
@@ -973,17 +1293,81 @@ function FinacialInformationScreen() {
   const [GosiSuccess, SetGosiSuccess] = React.useState(false)
   const [postingFinacial, setPostingFincail] = useState(false)
 
+  const ToggleSheet = (indx: number) => {
+    setCurrentOpenedInx(indx)
+  }
+  const {
+    isLoading,
+    data: FinicailInformationPostResult,
+    mutate: PostFinicailInformationReques,
+    reset,
+  } = useMutation({
+    mutationFn: async () => {
+      let journeySecrets
+      let journeySecretsData = await getItem('journeySecrets')
+      if (journeySecretsData) {
+        journeySecrets = JSON.parse(journeySecretsData)
+      }
+      console.log('=================')
+      console.log('journeySecrets.access_token,', journeySecrets.access_token)
+      console.log('=================')
+      console.log('======request-body================')
+      console.log(MapStateForAPi(values))
+      console.log('=======request-body===============')
+      let req: any = await fetcher(BASE_URL + '/onboarding/personal', {
+        method: 'POST',
+        token: journeySecrets.access_token,
+        body: MapStateForAPi(values),
+      })
+      let res = await req.json()
+      return res
+    },
+  })
+  useEffect(() => {
+    console.log('---------needed-result--------')
+    console.log('FinicailInformationPostResult', FinicailInformationPostResult)
+    console.log('-----------needed-result------------')
+    if (FinicailInformationPostResult?.onboarding_application_id) {
+      navigation.push('LegalinfoMain')
+    }
+  }, [FinicailInformationPostResult])
   const handelPostForm = () => {
+    PostFinicailInformationReques()
+    return
     setPostingFincail(true)
     setTimeout(() => {
       setPostingFincail(false)
     }, 1000)
     navigation.navigate('login')
   }
-  const ToggleSheet = (indx: number) => {
-    setCurrentOpenedInx(indx)
-  }
-
+  const {
+    isLoading: LoadingFincialInformation,
+    data: fincialInformationGetData,
+    mutate: GetFinicalInformationMutate,
+    reset: GetFinicalInformationRestt,
+  } = useMutation({
+    mutationFn: async () => {
+      let journeySecrets
+      let journeySecretsData = await getItem('journeySecrets')
+      if (journeySecretsData) {
+        journeySecrets = JSON.parse(journeySecretsData)
+      }
+      let req: any = await fetcher(BASE_URL + '/onboarding/financial', {
+        method: 'GET',
+        token: journeySecrets.access_token,
+      })
+      let res = await req.json()
+      return res
+    },
+  })
+  useEffect(() => {
+    GetFinicalInformationMutate()
+  }, [])
+  useEffect(() => {
+    console.log('=====fincialInformationGetData=======')
+    console.log(fincialInformationGetData)
+    console.log('=====fincialInformationGetData=======')
+  }, [fincialInformationGetData])
   const isFormValid = useMemo(() => {
     let currentOccupationCode =
       SheetData.Occupation.find(sheet => sheet.name === values.occupation)
@@ -1043,24 +1427,6 @@ function FinacialInformationScreen() {
     return validationResult
   }, [values])
   const navigation = useNavigation()
-  const {isLoading, data, mutate, reset} = useMutation({
-    mutationFn: async () => {
-      let journeySecrets
-      let journeySecretsData = await getItem('journeySecrets')
-      if (journeySecretsData) {
-        journeySecrets = JSON.parse(journeySecretsData)
-      }
-      console.log('=================')
-      console.log('journeySecrets.access_token,', journeySecrets.access_token)
-      console.log('=================')
-      let req: any = await fetcher(BASE_URL + '/onboarding/personal', {
-        method: 'GET',
-        token: journeySecrets.access_token,
-      })
-      let res = await req.json()
-      return res
-    },
-  })
 
   const HandleContinuePressed = () => {}
   const RenderCurrentForm = () => {
@@ -1160,7 +1526,7 @@ function FinacialInformationScreen() {
           <Spacer />
           <DropDown
             data={SheetData.jobCategory.map(cat =>
-              !isRTL ? cat.description_en : cat.description_ar,
+              !isRTL ? cat.nameEn : cat.nameAr,
             )}
             label={'Job Category'}
             toogleClick={() => ToggleSheet(SheetsIndexs.jobCategory)}
@@ -1215,7 +1581,7 @@ function FinacialInformationScreen() {
         <>
           <DropDown
             data={SheetData.jobCategory.map(cat =>
-              isRTL ? cat.description_ar : cat.description_en,
+              isRTL ? cat.nameAr : cat.nameEn,
             )}
             label={t('onboarding:financialInformation:jobCategory') || ''}
             toogleClick={() => ToggleSheet(SheetsIndexs.jobCategory)}
@@ -1247,7 +1613,7 @@ function FinacialInformationScreen() {
           <Spacer />
           <DropDown
             data={SheetData.sectors.map(sect =>
-              isRTL ? sect.description_ar : sect.description_en,
+              isRTL ? sect.descriptionAr : sect.descriptionEn,
             )}
             label={t('onboarding:financialInformation:selectSector') || ''}
             toogleClick={() => ToggleSheet(SheetsIndexs.sector)}
@@ -1481,7 +1847,7 @@ function FinacialInformationScreen() {
         isBack={true}
         isHeader={true}
         isBackground={true}
-        isLoading={isLoading || postingFinacial}
+        isLoading={isLoading || postingFinacial || LoadingFincialInformation}
         onBack={() => navigation.goBack()}>
         <SafeAreaWrapper>
           <FormWrapper isRTL={!!isRTL}>
