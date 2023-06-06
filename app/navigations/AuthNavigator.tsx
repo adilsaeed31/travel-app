@@ -18,6 +18,7 @@ import {
   PersonalInformation,
   AfterPersonExisting,
   NameVerification,
+  CreateUser,
 } from '@Features'
 import {ExistingScreen} from '@Screens'
 
@@ -26,7 +27,7 @@ const {Navigator, Screen} = createStackNavigator()
 const AuthNavigator = () => {
   return (
     <Navigator
-      initialRouteName="Auth"
+      initialRouteName="CreateUser"
       screenOptions={{
         headerShown: false,
         gestureEnabled: false,
@@ -46,6 +47,7 @@ const AuthNavigator = () => {
       <Screen name="ActivateCard" component={ActivateCard} />
       <Screen name="AfterPersonExisting" component={AfterPersonExisting} />
       <Screen name="Existing" component={ExistingScreen} />
+      <Screen name="CreateUser" component={CreateUser} />
     </Navigator>
   )
 }

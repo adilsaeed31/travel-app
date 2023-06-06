@@ -4,7 +4,7 @@ import Animated, {FadeIn} from 'react-native-reanimated'
 
 const EnterDotAnimation = FadeIn.duration(500)
 
-const TCDot: React.FC<{isActive?: boolean; hasRounded: boolean}> = ({
+const TCDot: React.FC<{isActive?: boolean; hasRounded?: boolean}> = ({
   isActive,
   hasRounded = false,
 }) => {

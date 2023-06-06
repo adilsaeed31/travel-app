@@ -18,6 +18,7 @@ const BottomTabBar: React.FC<BottomTabBarProps> = props => {
   const {t} = useTranslation()
   const isRTL = useStore(state => state.isRTL)
   const reset = useStore(state => state.reset)
+  const setUser = useStore(state => state.setUser)
   const navigation = useNavigation<any>()
 
   return (
@@ -48,7 +49,10 @@ const BottomTabBar: React.FC<BottomTabBarProps> = props => {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={reset}
+          onPress={() => {
+            reset()
+            setUser(null)
+          }}
           className="justify-center items-center">
           <MenuIcon />
           <TCTextView className="mt-2 text-tc-ios-base text-tc-bottom-tab-text">

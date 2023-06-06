@@ -34,3 +34,30 @@ export const TermsCheckvalidator = yup
   .bool()
   .required('Please check terms and consitions')
   .oneOf([true], 'Please check terms and consitions')
+
+export function strongPasswordMethod() {
+  return this.test('strongPasswordTest', _, function (value: string) {
+    const {path, createError} = this
+    switch (Boolean(value)) {
+      case !/^(?=.*[a-z])/.test(value):
+        return createError({
+          path,
+          message: 'password must include lowercase letter',
+        })
+      case !/^(?=.*[A-Z])/.test(value):
+        return createError({
+          path,
+          message: 'password must include uppercase letter',
+        })
+      case !/^(?=.*[0-9])/.test(value):
+        return createError({path, message: 'password must include digit'})
+      case !/^(?=.*[!@#\$%\^&\*])/.test(value):
+        return createError({
+          path,
+          message: 'password must include special character',
+        })
+      default:
+        return true
+    }
+  })
+}
