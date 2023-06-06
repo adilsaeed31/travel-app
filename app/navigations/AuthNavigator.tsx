@@ -18,6 +18,7 @@ import {
   PersonalInformation,
   AfterPersonExisting,
   IntroFeature,
+  FinicalInformation,
 } from '@Features'
 import {SplashScreen} from '@Screens'
 
@@ -26,7 +27,7 @@ const {Navigator, Screen} = createStackNavigator()
 const AuthNavigator = () => {
   return (
     <Navigator
-      initialRouteName="Splash"
+      initialRouteName="Auth"
       screenOptions={{
         headerShown: false,
         gestureEnabled: false,
@@ -50,6 +51,7 @@ const AuthNavigator = () => {
       <Screen name="OTPActivateCard" component={OTPActivateCard} />
       <Screen name="ActivateCard" component={ActivateCard} />
       <Screen name="AfterPersonExisting" component={AfterPersonExisting} />
+      <Screen name="FinicalInformation" component={FinicalInformation} />
     </Navigator>
   )
 }

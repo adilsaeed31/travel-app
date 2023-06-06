@@ -4,7 +4,6 @@ import {
   Pressable,
   Dimensions,
   TextInput,
-  FlatList,
   TouchableOpacity,
 } from 'react-native'
 import styled from 'styled-components/native'
@@ -12,10 +11,11 @@ import {AppContext, AppProviderProps} from '@Context'
 import {Forward} from '@Assets'
 import {TEXT_VARIANTS} from '@Utils'
 import TCTextView from '../TextView'
-import {Search} from '@Assets'
 import Modal from 'react-native-modal'
 import {TCTextView as Text} from '@Components'
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
+import DatePicker from 'react-native-date-picker'
+import {TCButton as Button} from '../index'
+import {useTranslation} from 'react-i18next'
 
 const DropDownInput = styled(Pressable)<{
   isRTL: boolean
@@ -69,40 +69,32 @@ const LabelValueWrapper = styled(View)<{hasValue: boolean}>`
   justify-content: ${props => (props.hasValue ? 'center' : 'center')};
 `
 interface IDropDownProps {
-  data: string[]
   label: string
-  toogleClick: () => void
   value: string | null
   error: string
-  isOpen?: boolean
   disabled?: boolean
   title?: string | null
   subTitle?: string | null
-  hasSearch?: boolean
-  onSheetClose: () => void
-  onItemSelected: (item: string) => void
+  onDateSelected: (d: string) => void
 }
-const SheetHeight = Dimensions.get('window').height / 1.8
+const SheetHeight = Dimensions.get('window').height / 2
 
 export default function DropDown({
-  data = [],
   label = '',
-  toogleClick,
   value,
   error = '',
   disabled = false,
-  isOpen = false,
   title = '',
   subTitle = '',
-  hasSearch,
-  onSheetClose,
-  onItemSelected,
+  onDateSelected = () => {},
 }: IDropDownProps) {
   const {isRTL} = useContext<AppProviderProps>(AppContext)
-  const [searchVaue, setSearchValue] = useState('')
-  const SearchResult = searchVaue
-    ? data?.filter(word => word?.includes(searchVaue))
-    : data
+  const [date, setDate] = useState(
+    new Date(new Date().setFullYear(new Date().getFullYear() - 1)),
+  )
+  const [open, setOpen] = useState(false)
+  const {t} = useTranslation()
+
   const renderContent = () => {
     return (
       <SheetContentWrapper key={10}>
@@ -110,36 +102,28 @@ export default function DropDown({
           <ToNotch />
           <Title isRTL={!!isRTL}>{title}</Title>
           <Subtitle isRTL={!!isRTL}>{subTitle}</Subtitle>
-          {hasSearch && (
-            <InputWrapper>
-              <Search />
-              <InputView
-                selectionColor={'black'}
-                value={searchVaue}
-                onChangeText={(e: React.SetStateAction<string>) => {
-                  setSearchValue(e)
-                }}
-              />
-            </InputWrapper>
-          )}
           <View style={{height: Dimensions.get('window').height / 3}}>
-            <FlatList
-              keyboardShouldPersistTaps="always"
-              data={SearchResult}
-              keyExtractor={(_item, i) => String(i)}
-              renderItem={({item, index}) => (
-                <ClickableItem
-                  hasBorder={SearchResult.length - 1 !== index}
-                  onPress={() => {
-                    onItemSelected(item)
-                    setSearchValue('')
-                    onSheetClose()
-                  }}
-                  key={index}>
-                  <ClickableItemText isRTL={!!isRTL}>{item}</ClickableItemText>
-                </ClickableItem>
-              )}
+            <DatePicker
+              mode="date"
+              modal={true}
+              open={true}
+              date={date}
+              onDateChange={d => setDate(d)}
+              maximumDate={new Date()}
+              onCancel={() => {
+                setOpen(false)
+              }}
             />
+            <StyledButton
+              disabled={false}
+              onPress={() => {
+                onDateSelected(date)
+                setOpen(false)
+              }}>
+              <Text variant={TEXT_VARIANTS.body700}>
+                {t('onboarding:financialInformation:continue')}
+              </Text>
+            </StyledButton>
           </View>
         </OneFlexView>
       </SheetContentWrapper>
@@ -148,29 +132,26 @@ export default function DropDown({
 
   return (
     <>
-      <KeyboardAwareScrollView keyboardShouldPersistTaps="always">
-        <Modal
-          onSwipeComplete={({swipingDirection}) =>
-            swipingDirection == 'down' && onSheetClose()
-          }
-          swipeDirection="down"
-          animationIn="fadeInUpBig"
-          animationOut="fadeOutDownBig"
-          onBackdropPress={onSheetClose}
-          avoidKeyboard={true}
-          style={{margin: 0}}
-          isVisible={isOpen}>
-          <ModalWrapper>{renderContent()}</ModalWrapper>
-        </Modal>
-      </KeyboardAwareScrollView>
+      <Modal
+        onSwipeComplete={({swipingDirection}) =>
+          swipingDirection == 'down' && setOpen(false)
+        }
+        swipeDirection="down"
+        animationIn="fadeInUpBig"
+        animationOut="fadeOutDownBig"
+        onBackdropPress={() => setOpen(false)}
+        avoidKeyboard={true}
+        style={{margin: 0}}
+        isVisible={open}>
+        <ModalWrapper>{renderContent()}</ModalWrapper>
+      </Modal>
 
       <DropDownInput
         disabled={disabled}
         hasError={!!error?.length}
         isRTL={!!isRTL}
         onPress={() => {
-          setSearchValue('')
-          toogleClick()
+          setOpen(true)
         }}>
         <LabelValueWrapper hasValue={!!value}>
           <Label>{label}</Label>
@@ -217,7 +198,7 @@ const ToNotch = styled(View)`
 const SheetContentWrapper = styled(View)`
   background-color: white;
   padding: 16px;
-  height: ${SheetHeight};
+  /* height: ${SheetHeight}; */
   border-top-right-radius: 20px;
   border-top-left-radius: 20px;
   padding-left: 32px;
@@ -262,4 +243,10 @@ const ClickableItemText = styled(Text)<{isRTL: boolean}>`
   line-height: 20px;
   color: #1e1e1c;
   text-align: ${props => (props.isRTL ? 'right' : 'left')};
+`
+const StyledButton = styled(Button)`
+  margin-left: 32px;
+  margin-right: 32px;
+  width: 100%;
+  align-self: center;
 `

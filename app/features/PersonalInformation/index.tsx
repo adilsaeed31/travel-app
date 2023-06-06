@@ -1,9 +1,10 @@
 /* eslint-disable eqeqeq */
 
 import React, {useContext, useState, useMemo, useEffect} from 'react'
-import {View, SafeAreaView} from 'react-native'
+import {View, SafeAreaView, ScrollView, Dimensions} from 'react-native'
 import {fetcher} from '@Api'
 import {useNavigation} from '@react-navigation/native'
+import Splash from 'react-native-splash-screen'
 
 import {useTranslation} from 'react-i18next'
 import {
@@ -17,7 +18,7 @@ import {
 import {TEXT_VARIANTS, Colors, BASE_URL, getItem} from '@Utils'
 import {useMutation} from '@tanstack/react-query'
 import {countriesList, SaudiList, educationList} from './masterData'
-
+Splash.hide()
 import styled from 'styled-components/native'
 import {
   MobileNumberValidator,
@@ -43,6 +44,28 @@ type IFormTYpe = {
   contactName: string | null
   relation: string | null
   mobileNumber: string | null
+}
+
+const MapApiToState = (state, response, isRTL) => {
+  let newVal = {...state}
+  return {
+    ...newVal,
+    education:
+      response.education[isRTL ? 'level_name_ar' : 'level_name_en'] ||
+      newVal.education,
+    countryOfBirth:
+      response.birth_country[isRTL ? 'name_ar' : 'name_en'] ||
+      response?.offshore_address.country ||
+      newVal.countryOfBirth,
+    buldingNumber:
+      response?.offshore_address?.building_number || newVal.buldingNumber,
+    streetNanme: response?.offshore_address?.street || newVal.streetNanme,
+    district: response?.offshore_address?.district || newVal.district,
+    postalCode: response?.offshore_address?.postal_code || newVal.postalCode,
+    city: response?.offshore_address?.city || newVal.city,
+    contactName: response.additional_contact.name || newVal.contactName,
+    mobileNumber: response.additional_contact.contact_number,
+  }
 }
 const MapFormValues = (
   values: IFormTYpe,
@@ -200,15 +223,62 @@ function PersonalInformation() {
       return res
     },
   })
+  const {
+    isLoading: isGetDataLoading,
+    data: PersonalInformationData,
+    mutate: mutatePersonalInformation,
+    reset: restGetPersonalInformation,
+  } = useMutation({
+    mutationFn: async () => {
+      let journeySecrets
+      let journeySecretsData = await getItem('journeySecrets')
+      if (journeySecretsData) {
+        journeySecrets = JSON.parse(journeySecretsData)
+      }
+      let req: any = await fetcher(BASE_URL + '/onboarding/personal', {
+        method: 'GET',
+        token: journeySecrets.access_token,
+      })
+      let res = await req.json()
+      return res
+    },
+  })
+  useEffect(() => {
+    // navigation.push('FinicalInformation')
+    console.log('PersonalInformationData', PersonalInformationData)
+  }, [PersonalInformationData])
 
+  const RenderCHeckbox = React.useMemo(
+    () => (
+      <RadioWrapper isRTL={!!isRTL}>
+        <RadioButton
+          selected={!showAdditionalInformation}
+          onPress={() =>
+            setShowAdditionalInformation(!showAdditionalInformation)
+          }>
+          {t('onboarding:personalInformation:no')}
+        </RadioButton>
+        <RadioButton
+          selected={showAdditionalInformation}
+          onPress={() =>
+            setShowAdditionalInformation(!showAdditionalInformation)
+          }>
+          {t('onboarding:personalInformation:yes')}
+        </RadioButton>
+      </RadioWrapper>
+    ),
+    [showAdditionalInformation],
+  )
   return (
-    <>
+    <ScrollView
+      keyboardShouldPersistTaps="always"
+      key={values.city + showAdditionalInformation + values.countryOfBirth}
+      contentContainerStyle={{flex: 1}}>
       <Layout
-        key={values.city + showAdditionalInformation}
         isBack={true}
         onBack={() => navigation.goBack()}
         isHeader={true}
-        isLoading={isLoading}
+        isLoading={isLoading || isGetDataLoading}
         isBackground={true}>
         <SafeAreaWrapper>
           <View isRTL={!!isRTL}>
@@ -303,7 +373,6 @@ function PersonalInformation() {
                   errorMessage={errors.district}
                   returnKeyType="done"
                   maxLength={10}
-                  schema={districtValidator}
                 />
                 <InputSpacer />
                 <TCInput
@@ -355,22 +424,7 @@ function PersonalInformation() {
               {t('onboarding:personalInformation:additionalPersonSecond')}
             </AdditionalInformation>
             <Spacer />
-            <RadioWrapper isRTL={!!isRTL}>
-              <RadioButton
-                selected={!showAdditionalInformation}
-                onPress={() =>
-                  setShowAdditionalInformation(!showAdditionalInformation)
-                }>
-                {t('onboarding:personalInformation:no')}
-              </RadioButton>
-              <RadioButton
-                selected={showAdditionalInformation}
-                onPress={() =>
-                  setShowAdditionalInformation(!showAdditionalInformation)
-                }>
-                {t('onboarding:personalInformation:yes')}
-              </RadioButton>
-            </RadioWrapper>
+            {RenderCHeckbox}
             <Spacer />
             {showAdditionalInformation && (
               <LoginForm>
@@ -415,7 +469,7 @@ function PersonalInformation() {
           </StyledButton>
         </SafeAreaWrapper>
       </Layout>
-    </>
+    </ScrollView>
   )
 }
 
