@@ -961,8 +961,6 @@ const MapStateForAPi = (values, isRTL) => {
   }
 }
 function FinacialInformationScreen() {
-  const [showAdditionalInformation, setShowAdditionalInformation] =
-    useState(false)
   const [currentOpendIndx, setCurrentOpenedInx] = useState(-1)
   const {isRTL} = useContext<AppProviderProps>(AppContext)
   const {t} = useTranslation()
