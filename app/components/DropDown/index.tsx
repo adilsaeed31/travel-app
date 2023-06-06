@@ -109,7 +109,7 @@ export default function DropDown({
         <OneFlexView>
           <ToNotch />
           <Title isRTL={!!isRTL}>{title}</Title>
-          <Subtitle isRTL={!!isRTL}>{subTitle}</Subtitle>
+          {subTitle && <Subtitle isRTL={!!isRTL}>{subTitle}</Subtitle>}
           {hasSearch && (
             <InputWrapper>
               <Search />

@@ -980,7 +980,7 @@ function FinacialInformationScreen() {
     setTimeout(() => {
       setPostingFincail(false)
     }, 1000)
-    navigation.navigate('login')
+    navigation.navigate('LegalinfoMain')
   }
   const ToggleSheet = (indx: number) => {
     setCurrentOpenedInx(indx)
@@ -1514,7 +1514,7 @@ function FinacialInformationScreen() {
             {RenderCurrentForm()}
           </FormWrapper>
           <StyledButton disabled={!isFormValid} onPress={handelPostForm}>
-            <Text variant={TEXT_VARIANTS.body700}>
+            <Text variant={TEXT_VARIANTS.body}>
               {t('onboarding:financialInformation:continue')}
             </Text>
           </StyledButton>
