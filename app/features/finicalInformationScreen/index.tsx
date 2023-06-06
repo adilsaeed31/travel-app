@@ -961,8 +961,6 @@ const MapStateForAPi = (values, isRTL) => {
   }
 }
 function FinacialInformationScreen() {
-  const [showAdditionalInformation, setShowAdditionalInformation] =
-    useState(false)
   const [currentOpendIndx, setCurrentOpenedInx] = useState(-1)
   const {isRTL} = useContext<AppProviderProps>(AppContext)
   const {t} = useTranslation()
@@ -1514,7 +1512,7 @@ function FinacialInformationScreen() {
             {RenderCurrentForm()}
           </FormWrapper>
           <StyledButton disabled={!isFormValid} onPress={handelPostForm}>
-            <Text variant={TEXT_VARIANTS.body700}>
+            <Text variant={TEXT_VARIANTS.body}>
               {t('onboarding:financialInformation:continue')}
             </Text>
           </StyledButton>

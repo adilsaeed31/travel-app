@@ -39,9 +39,9 @@ const MainNavigation = () => {
                 <ActivityIndicator size="large" />
               </View>
             }>
-            {!isAppReady ? (
+            {0 && !isAppReady ? (
               <SplashNavigator />
-            ) : user ? (
+            ) : 0 && user ? (
               <Animated.View
                 className="flex-1"
                 entering={SlideInRight.delay(50)}>

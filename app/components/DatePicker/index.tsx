@@ -106,6 +106,8 @@ export default function DropDown({
             <DatePicker
               mode="date"
               modal={true}
+              androidVariant="nativeAndroid"
+              locale={isRTL ? 'ar' : 'en'}
               open={true}
               date={date}
               onDateChange={d => setDate(d)}

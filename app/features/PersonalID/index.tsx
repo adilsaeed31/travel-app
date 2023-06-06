@@ -251,7 +251,9 @@ const PersonalIdScreen = ({navigation}: Props) => {
 
         {!keyboardHeight && (
           <ButtonContainer>
-            <StyledButton onPress={onComplete} disabled={isButtonDisabled}>
+            <StyledButton
+              onPress={() => navigation.navigate('personalInfo')}
+              disabled={false}>
               <Text variant={TEXT_VARIANTS.body}>
                 {t('onboarding:continue')}
               </Text>
@@ -267,11 +269,11 @@ const PersonalIdScreen = ({navigation}: Props) => {
         <StickyButtonContainer keyboardHeight={keyboardHeight}>
           <StickyButton
             onPress={() => {
-              if (!isButtonDisabled) {
-                onComplete()
-              }
+              // if (!isButtonDisabled) {
+              //   onComplete()
+              // }
+              navigation.navigate('personalInfo')
             }}
-            isDisabled={isButtonDisabled}
             activeOpacity={isButtonDisabled ? 1 : 0.5}>
             <Text variant={TEXT_VARIANTS.body}>{t('onboarding:continue')}</Text>
           </StickyButton>

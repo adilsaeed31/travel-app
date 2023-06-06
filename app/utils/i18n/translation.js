@@ -87,7 +87,7 @@ export const translation = {
         mobileNumber: 'mobile number',
       },
       financialInformation: {
-        financialInformation: 'financialInformation',
+        financialInformation: 'FinancialInformation',
         occupation: 'occupation',
         continue: 'continue',
         additionalIncomeSource: 'Additional Income source',
