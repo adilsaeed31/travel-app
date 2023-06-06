@@ -11,10 +11,9 @@ import styled from 'styled-components/native'
 import {AppContext, AppProviderProps} from '@Context'
 import {Forward} from '@Assets'
 import {TEXT_VARIANTS} from '@Utils'
-import TCTextView from '../TextView'
 import {Search} from '@Assets'
 import Modal from 'react-native-modal'
-import {TCTextView as Text} from '@Components'
+import Text from '../TextView'
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 
 const DropDownInput = styled(Pressable)<{
@@ -42,14 +41,14 @@ const ArrowIconWrapper = styled(View)<{isRTL: boolean}>`
   transform: rotate(180deg);
   transform: ${props => (!props.isRTL ? 'rotate(360deg)' : 'rotate(180deg)')};
 `
-const Label = styled(TCTextView)`
+const Label = styled(Text)`
   color: #8c8a86;
   font-weight: 400;
   font-size: 13px;
   font-weight: 400;
   line-height: 18px;
 `
-const Value = styled(TCTextView)<{isRTL: boolean}>`
+const Value = styled(Text)<{isRTL: boolean}>`
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
@@ -57,7 +56,7 @@ const Value = styled(TCTextView)<{isRTL: boolean}>`
   text-align: ${props => (props.isRTL ? 'right' : 'left')};
   color: #333333;
 `
-const ErrorText = styled(TCTextView)`
+const ErrorText = styled(Text)`
   color: #f85e5e;
   font-weight: 400;
   font-size: 14px;
@@ -189,14 +188,14 @@ export default function DropDown({
   )
 }
 
-const Title = styled(TCTextView)<{isRTL: boolean}>`
+const Title = styled(Text)<{isRTL: boolean}>`
   font-weight: 700;
   font-size: 20px;
   line-height: 28px;
   text-align: ${props => (props.isRTL ? 'right' : 'left')};
   margin-top: 24px;
 `
-const Subtitle = styled(TCTextView)<{isRTL: boolean}>`
+const Subtitle = styled(Text)<{isRTL: boolean}>`
   font-weight: 400;
   font-size: 12px;
   line-height: 21px;
