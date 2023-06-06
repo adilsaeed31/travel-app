@@ -30,6 +30,8 @@ module.exports = {
           'bottom-tab': '#fcfcfa',
           'bottom-tab-text': '#393939',
           'quick-text': '#464E56',
+          dot: '#D7D7D7',
+          'dot-active': '#4CD964',
         },
       },
     },

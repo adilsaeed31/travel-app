@@ -1,13 +1,13 @@
-import {TEXT_VARIANTS} from '@Utils'
-import React, {useState, useRef, FC, useEffect} from 'react'
-import Text from '../TextView'
-import {TextInput, View} from 'react-native'
-import styled from 'styled-components/native'
+import React, {useState, useRef, FC, useEffect, memo} from 'react'
+import {TextInput, View, TouchableOpacity} from 'react-native'
 import {useTranslation} from 'react-i18next'
+import styled from 'styled-components/native'
+
 import {useStore} from '@Store'
 import {Eye, EyeClosed} from '@Assets'
-import {TouchableOpacity} from 'react-native-gesture-handler'
+import {TEXT_VARIANTS} from '@Utils'
 
+import Text from '../TextView'
 interface CustomInputProps {
   label: string
   schema?: any
@@ -151,4 +151,4 @@ const CustomInput: FC<CustomInputProps> = ({
   )
 }
 
-export default CustomInput
+export default memo(CustomInput)

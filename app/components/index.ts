@@ -12,7 +12,9 @@ export {default as DropDown} from './DropDown'
 export {default as BottomTabBar} from './BottomTabBar'
 export {default as DatePicker} from './DatePicker'
 
+export {default as Dot} from './Dot'
 
 // Screen and feature components in one line import
 export * from './Intro'
 export * from './Dashboard'
+export * from './CreateUser'

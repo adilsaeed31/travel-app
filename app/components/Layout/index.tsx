@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {memo} from 'react'
 import {
   View,
   Dimensions,
@@ -155,4 +155,4 @@ const AppLayout: React.FC<LayoutProps> = ({
   )
 }
 
-export default AppLayout
+export default memo(AppLayout)
