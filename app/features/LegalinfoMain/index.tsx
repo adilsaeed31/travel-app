@@ -24,18 +24,11 @@ import {AppContext, AppProviderProps} from '@Context'
 type IFormTYpe = {
   notKsaResidents: boolean
   pepEnabled: boolean
-  pepValue?: string | null
+  pepValue?: string
   specialNeed: boolean
-  specialNeedValue?: string | null
+  specialNeedValue?: string
 }
-// const MapFormValues = (
-//   values: IFormTYpe,
-//   IsSaudi: boolean,
-//   showAdditionalInformation: boolean,
-//   isRTL: boolean | undefined,
-// ) => {
-//   return {}
-// }
+
 const FormValues = {
   notKsaResidents: false,
   pepEnabled: false,
@@ -175,7 +168,9 @@ function LegalInformation() {
                   )}
                   label={t('Select') || ''}
                   toogleClick={() => ToggleSheet(0)}
-                  onItemSelected={val => setValues({...values, pepValue: val})}
+                  onItemSelected={(val: any) =>
+                    setValues({...values, pepValue: val})
+                  }
                   value={values.pepValue}
                   error={errors.pepValue}
                   isOpen={currentOpendIndx == 0}
