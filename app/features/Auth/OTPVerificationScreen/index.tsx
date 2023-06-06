@@ -1,7 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useState, useContext} from 'react'
+import * as yup from 'yup'
 import {View, Keyboard, Dimensions, TouchableOpacity} from 'react-native'
 import {useTranslation} from 'react-i18next'
+import styled from 'styled-components/native'
+import {useMutation} from '@tanstack/react-query'
+import {StackNavigationProp} from '@react-navigation/stack'
 import {
   Layout,
   TCButton as Button,
@@ -9,16 +13,254 @@ import {
   TCOTP as OTP,
   Spacer,
 } from '@Components'
-import {SPACER_SIZES, TEXT_VARIANTS} from '@Utils'
-import styled from 'styled-components/native'
-import {Edit} from '@Assets'
-import {StackNavigationProp} from '@react-navigation/stack'
+import {SPACER_SIZES, TEXT_VARIANTS, BASE_URL, setItem} from '@Utils'
 import {AppProviderProps, AppContext} from '@Context'
-import * as yup from 'yup'
 import {fetcher} from '@Api'
-import {useMutation} from '@tanstack/react-query'
-import {BASE_URL} from '@Utils'
+import {Edit} from '@Assets'
 import {useStore} from '@Store'
+import {useFocusEffect} from '@react-navigation/native'
+
+type Props = {
+  navigation: StackNavigationProp<any>
+  route: any
+}
+
+const OtpAuthScreen = ({navigation, route}: Props) => {
+  const {t} = useTranslation()
+
+  const {isRTL} = useContext<AppProviderProps>(AppContext)
+  const [state, setState] = useState<any>({})
+
+  const [error, setError] = useState<string>('')
+  const [statusError, setStatusError] = useState<any>(false)
+  const [resendCount, setResendCount] = useState<number>(1)
+  const [finishTimer, setFinishTimer] = useState<number>(1)
+  const [keyboardHeight, setKeyboardHeight] = useState<Number>(0)
+  const [isButtonDisabled, setButtonDisabled] = useState(true)
+  const [resendAvailable, setResendAvailable] = useState<boolean>(false)
+  const [invalidAttempts, setInvalidAttempts] = useState<number>(0)
+  const setUser = useStore((state: any) => state.setUser)
+  const [otpRefN, setOTPRef] = useState<any>(route?.params?.user?.otp_reference)
+  const [bodyParams] = useState<any>(route?.params?.resendParams)
+
+  const {
+    isLoading: isOTPLoading,
+    data: otpData,
+    mutate: verifyOtp,
+  } = useMutation({
+    mutationFn: async () => {
+      let req: any = await fetcher(BASE_URL + '/auth/login/otp', {
+        method: 'POST',
+        body: {
+          reference_number: otpRefN,
+          otp: state.otp,
+        },
+      })
+      let res = await req.json()
+
+      return res
+    },
+  })
+  const {
+    isLoading: isResend,
+    data: resendData,
+    mutate: resendOTP,
+    reset: resetOTP,
+  } = useMutation({
+    mutationFn: async () => {
+      let req: any = await fetcher(BASE_URL + '/auth/login', {
+        method: 'POST',
+        body: bodyParams,
+      })
+
+      let res = await req.json()
+      return res
+    },
+  })
+
+  useEffect(() => {
+    if (String(state.otp).length > 0) {
+      try {
+        yup
+          .object({
+            otp: yup
+              .string()
+              .required('Please Enter OTP')
+              .length(4, 'Please Enter OTP'),
+          })
+          .validateSync(state)
+
+        setButtonDisabled(false)
+        setError('')
+      } catch (err: any) {
+        setError(err.message)
+        setButtonDisabled(true)
+      }
+    }
+  }, [state.otp])
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardWillShow',
+      e => {
+        setKeyboardHeight(e.endCoordinates.height)
+      },
+    )
+
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardWillHide',
+      () => {
+        setKeyboardHeight(0)
+      },
+    )
+
+    return () => {
+      keyboardDidShowListener.remove()
+      keyboardDidHideListener.remove()
+    }
+  }, [])
+
+  useEffect(() => {
+    if (otpData && otpData.access_token) {
+      setUser(otpData)
+    } else {
+      const status = otpData?.status
+      switch (true) {
+        case status === 409:
+          setStatusError('OTP already Exist, Please wait for a minute')
+          break
+        case status === 403:
+          setStatusError('OTP Expired, Please try again')
+          setResendAvailable(true)
+          setFinishTimer(finishTimer + 1)
+          break
+        case status === 509:
+          navigation.navigate('AfterOtpPersonalId', {
+            status: 'error',
+            case: 'Bandwidth Limit Exceeded',
+          })
+          break
+        case status > 399 && status <= 500:
+          if (invalidAttempts < 2) {
+            setStatusError('Invalid Otp. Please try Again')
+            setInvalidAttempts(invalidAttempts + 1)
+          } else {
+            navigation.navigate('AfterOtpPersonalId', {
+              status: 'error',
+              case: 'Invalid Attempts',
+            })
+          }
+          break
+        default:
+          setStatusError('')
+      }
+    }
+  }, [otpData])
+
+  useEffect(() => {
+    setStatusError('')
+    setResendAvailable(false)
+  }, [resendCount])
+
+  useEffect(() => {
+    if (resendData && resendData.otp_reference) {
+      setOTPRef(resendData.otp_reference)
+    } else {
+      const status = resendData?.status
+      switch (true) {
+        case status === 509:
+          setStatusError('Limit Exceeded')
+          break
+        case status > 399 && status <= 500:
+          setStatusError('Something went wrong. Please try after some time')
+          break
+        default:
+          setStatusError('')
+      }
+    }
+  }, [resendData])
+
+  const onComplete = () => {
+    if (state.otp.length === 4) {
+      verifyOtp()
+    } else {
+      setError('Please Enter OTP')
+    }
+  }
+
+  return (
+    <>
+      <Layout isLoading={isOTPLoading || isResend}>
+        <Spacer horizontal={false} size={SPACER_SIZES.BASE * 3} />
+        <Text variant={TEXT_VARIANTS.heading}>{t('onboarding:enterOTP')}</Text>
+        <Spacer size={SPACER_SIZES.BASE * 3} />
+        <OTP
+          value={state.otp}
+          onChangeText={otp => {
+            setState({...state, otp: otp})
+          }}
+          onTimerComplete={() => {
+            setResendAvailable(true)
+          }}
+          resetCount={resendCount}
+          finishTimer={finishTimer}
+        />
+        <Spacer size={SPACER_SIZES.BASE * 2} />
+        <Row isRTL={isRTL}>
+          <TouchableOpacity onPress={() => navigation.navigate('PersonalID')}>
+            <Row isRTL={isRTL}></Row>
+          </TouchableOpacity>
+          <View>
+            {resendAvailable ? (
+              <TouchableOpacity
+                onPress={() => {
+                  resendOTP()
+                  setResendCount(resendCount + 1)
+                }}>
+                <BottomText variant={TEXT_VARIANTS.body}>
+                  {t('onboarding:resendOTP')}
+                </BottomText>
+              </TouchableOpacity>
+            ) : (
+              <BottomText variant={TEXT_VARIANTS.body} disabled={true}>
+                {t('onboarding:resendOTP')}
+              </BottomText>
+            )}
+          </View>
+        </Row>
+
+        {statusError && state.otp ? (
+          <ErrorWrapper>
+            <ErrorLabel>{statusError}</ErrorLabel>
+          </ErrorWrapper>
+        ) : null}
+
+        {error && state.otp ? (
+          <ErrorWrapper>
+            <ErrorLabel>{error}</ErrorLabel>
+          </ErrorWrapper>
+        ) : null}
+
+        {!keyboardHeight && (
+          <ButtonContainer>
+            <Button onPress={onComplete} disabled={isButtonDisabled}>
+              <Text variant={TEXT_VARIANTS.body}>
+                {t('onboarding:continue')}
+              </Text>
+            </Button>
+          </ButtonContainer>
+        )}
+      </Layout>
+      {!!keyboardHeight && (
+        <StickyButtonContainer keyboardHeight={keyboardHeight}>
+          <StickyButton onPress={onComplete} disabled={isButtonDisabled}>
+            <Text variant={TEXT_VARIANTS.body}>{t('onboarding:continue')}</Text>
+          </StickyButton>
+        </StickyButtonContainer>
+      )}
+    </>
+  )
+}
 
 const ButtonContainer = styled(View)`
   position: absolute;
@@ -51,188 +293,41 @@ const StickyButtonContainer = styled.View<{keyboardHeight: Number}>`
   right: 0;
   align-items: center;
 `
-const ErrorText = styled(Text)`
-  font-weight: 500;
-  color: #f54d3f;
-  padding-left: 16px;
-`
 
-const StickyButton = styled.TouchableOpacity`
-  background-color: #f8d03b;
-  border: 1px solid #f8d03b;
+const StickyButton = styled.TouchableOpacity<{isDisabled?: boolean}>`
+  background-color: ${props => (props.isDisabled ? '#E1E1E1' : '#f8d03b')};
+  border: 1px solid ${props => (props.isDisabled ? '#E1E1E1' : '#f8d03b')};
   width: 100%;
   min-height: 56px;
   align-items: center;
   justify-content: center;
 `
 
-type Props = {
-  navigation: StackNavigationProp<{
-    AfterOtpPersonalId: undefined
-    PersonalID: undefined
-    RedirectNafaaq: undefined
-  }>
-}
+const ErrorWrapper = styled.View`
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  background: #ffdede;
+  border-radius: 16px;
+  min-height: 60px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+`
 
-const OtpAuthScreen = (props, {navigation}: Props) => {
-  const {t} = useTranslation()
-  const [isKeyboardVisible, setKeyboardVisible] = useState<boolean>(false)
-  const [keyboardHeight, setKeyboardHeight] = useState<Number>(0)
-  const [resendCount, setResendCount] = useState<number>(0)
-  const [resendAvailable, setResendAvailable] = useState<boolean>(false)
-  const {isRTL} = useContext<AppProviderProps>(AppContext)
-  const [state, setState] = useState<any>({})
-  const [error, setError] = useState<string>('')
-  const setUser = useStore((state: any) => state.setUser)
+const ErrorLabel = styled.Text`
+  font-family: 'Co Text';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 28px;
+  align-self: center;
+  max-width: 90%;
+  /* or 200% */
 
-  const [isButtonDisabled, setButtonDisabled] = useState(true)
-  const mobileNumber = useStore((store: any) => store.user?.mobileNumber)
-  const OTPRef = useStore((store: any) => store.user?.authOTPRef)
-  const govtId = useStore((state: any) => state.govtId)
+  text-align: center;
+  letter-spacing: -0.4px;
 
-  const {
-    isLoading: isOTPLoading,
-    data: otpData,
-    mutate: verifyOtp,
-    reset: resetOTP,
-  } = useMutation({
-    mutationFn: async () => {
-      let req: any = await fetcher(BASE_URL + '/auth/otp/verify', {
-        method: 'POST',
-        body: {
-          referenceNumber: OTPRef,
-          otp: state.otp,
-        },
-      })
-      return await req.json()
-    },
-  })
+  color: #de2e2e;
+`
 
-  const {
-    isLoading: isTahaquqLoading,
-    data: tahaquqData,
-    mutate: verifyTahaquq,
-    reset: resetTahaquq,
-  } = useMutation({
-    mutationFn: async () => {
-      let req: any = await fetcher(BASE_URL + '/onboarding/id/verify', {
-        method: 'POST',
-        body: {
-          id: govtId,
-          mobileNumber: mobileNumber,
-        },
-      })
-
-      return await req.json()
-    },
-  })
-
-  useEffect(() => {
-    if (String(state.otp).length > 0) {
-      try {
-        yup
-          .object({
-            otp: yup
-              .string()
-              .required('Please Enter OTP')
-              .length(4, 'Please Enter OTP'),
-          })
-          .validateSync(state)
-
-        setButtonDisabled(false)
-        setError('')
-      } catch (err: any) {
-        setError(err.message)
-        setButtonDisabled(true)
-      }
-    }
-  }, [state.otp])
-
-  useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener(
-      'keyboardDidShow',
-      e => {
-        setKeyboardVisible(true)
-        setKeyboardHeight(e.endCoordinates.height)
-      },
-    )
-
-    const keyboardDidHideListener = Keyboard.addListener(
-      'keyboardDidHide',
-      () => {
-        setKeyboardVisible(false)
-      },
-    )
-
-    return () => {
-      keyboardDidShowListener.remove()
-      keyboardDidHideListener.remove()
-    }
-  }, [])
-
-  useEffect(() => {
-    if (resendCount > 2) {
-      navigation.navigate('AfterOtpPersonalId')
-    }
-    setResendAvailable(false)
-  }, [resendCount, navigation])
-
-  const onComplete = () => {
-    // verifyOtp()
-    setUser(props.route.params.user)
-  }
-  if (otpData && otpData.access_token) {
-    // const expiresIn = otpData.expires_in
-    // const access_token = data.access_token
-    // const refresh_token = otpData.refresh_token
-    // const refresh_token_expires_in = otpData.refresh_token_expires_in
-    // const authMech = data.type
-    resetOTP()
-
-    setUser(props.route.params.user)
-  }
-
-  if (state.otp && tahaquqData && !tahaquqData.match) {
-    resetOTP()
-    navigation.navigate('AfterOtpPersonalId')
-  }
-
-  return (
-    <>
-      <Layout isLoading={isOTPLoading || isTahaquqLoading}>
-        <Spacer horizontal={false} size={SPACER_SIZES.BASE * 3} />
-        <Text variant={TEXT_VARIANTS.heading}>{t('onboarding:enterOTP')}</Text>
-        <Spacer size={SPACER_SIZES.BASE * 3} />
-        <OTP
-          onChangeText={otp => {
-            setState({...state, otp: otp})
-          }}
-          onTimerComplete={() => {
-            setResendAvailable(true)
-          }}
-          resetCount={resendCount}
-        />
-        {error && state.otp && <ErrorText>{error}</ErrorText>}
-        <Spacer size={SPACER_SIZES.XL} />
-
-        {!isKeyboardVisible && (
-          <ButtonContainer>
-            <Button onPress={onComplete} disabled={isButtonDisabled}>
-              <Text variant={TEXT_VARIANTS.body}>
-                {t('onboarding:continue')}
-              </Text>
-            </Button>
-          </ButtonContainer>
-        )}
-      </Layout>
-      {isKeyboardVisible && (
-        <StickyButtonContainer keyboardHeight={keyboardHeight}>
-          <StickyButton onPress={onComplete} disabled={isButtonDisabled}>
-            <Text variant={TEXT_VARIANTS.body}>{t('onboarding:continue')}</Text>
-          </StickyButton>
-        </StickyButtonContainer>
-      )}
-    </>
-  )
-}
 export default OtpAuthScreen
