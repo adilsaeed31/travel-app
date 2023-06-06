@@ -3,6 +3,9 @@ export const translation = {
     common: {
       back: 'Back',
       required: 'required',
+      home: 'Home',
+      loyalty: 'Loyalty',
+      menu: 'Menu',
     },
     intro: {
       next: 'Next',
@@ -111,11 +114,26 @@ export const translation = {
       authFailed:
         'Credentials you entered are incorrect. Check your login credentials and try again.',
     },
+    Dashboard: {
+      tabTitle: 'Travel Card',
+      tabTitle2: 'Account',
+    },
+    TravelCard: {
+      currentCodeEuro: '{{amount}} EUR',
+      load: 'Load',
+      unload: 'Unload',
+      currency: 'Currency',
+      manage: 'Manage',
+      quickLoad: 'Quick Load',
+    },
   },
   ar: {
     common: {
       back: 'الخلف',
       required: 'مطلوب',
+      home: 'بيت',
+      loyalty: 'الولاء',
+      menu: 'قائمة طعام',
     },
     intro: {
       next: 'تالي',
@@ -218,6 +236,17 @@ export const translation = {
       newToSaib: 'جديد في البنك السعودي للاستثمار؟ [حساب مفتوح]',
       authFailed:
         'أوراق الاعتماد التي أدخلتها غير صحيحة.  تحقق من بيانات اعتماد تسجيل الدخول الخاصة بك وحاول مرة أخرى.',
+    },
+    Dashboard: {
+      tabTitle: 'بطاقة سفر',
+    },
+    TravelCard: {
+      currentCodeEuro: 'يورو {{amount}}',
+      load: 'حمولة',
+      unload: 'التفريغ',
+      currency: 'عملة',
+      manage: 'يدير',
+      quickLoad: 'تحميل سريع',
     },
   },
 }

@@ -9,7 +9,7 @@ import {splashAnimationJson} from '@Assets'
 import {AppContext, AppProviderProps} from '@Context'
 
 type SplashScreenProps = {
-  navigation: StackNavigationProp<any>
+  navigation: StackNavigationProp<{Intro: undefined; Auth?: undefined}>
 }
 
 const SplashScreen: React.FC<SplashScreenProps> = ({navigation}) => {

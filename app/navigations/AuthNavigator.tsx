@@ -17,10 +17,14 @@ import {
   OtpVerificationScreen,
   PersonalInformation,
   AfterPersonExisting,
+<<<<<<< app/navigations/AuthNavigator.tsx
   IntroFeature,
   FinicalInformation,
+=======
+  NameVerification,
+>>>>>>> app/navigations/AuthNavigator.tsx
 } from '@Features'
-import {SplashScreen} from '@Screens'
+import {ExistingScreen} from '@Screens'
 
 const {Navigator, Screen} = createStackNavigator()
 
@@ -33,12 +37,6 @@ const AuthNavigator = () => {
         gestureEnabled: false,
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       }}>
-      <Screen name="Splash" component={SplashScreen} />
-      <Screen
-        name="Intro"
-        component={IntroFeature}
-        options={{animationEnabled: false}}
-      />
       <Screen name="Auth" component={AuthFeature} />
       <Screen name="OTPAuth" component={OtpVerificationScreen} />
       <Screen name="PersonalID" component={PersonalID} />
@@ -46,12 +44,15 @@ const AuthNavigator = () => {
       <Screen name="AfterOtpPersonalId" component={AfterOtpPersonalId} />
       <Screen name="RedirectNafaaq" component={RedirectNafaaq} />
       <Screen name="AfterNafaath" component={AfterNafaath} />
+      <Screen name="NameVerification" component={NameVerification} />
       <Screen name="personalInfo" component={PersonalInformation} />
       <Screen name="AfterInformation" component={AfterInformation} />
       <Screen name="OTPActivateCard" component={OTPActivateCard} />
       <Screen name="ActivateCard" component={ActivateCard} />
       <Screen name="AfterPersonExisting" component={AfterPersonExisting} />
-      <Screen name="FinicalInformation" component={FinicalInformation} />
+       <Screen name="FinicalInformation" component={FinicalInformation} />
+        <Screen name="Existing" component={ExistingScreen} />
+
     </Navigator>
   )
 }

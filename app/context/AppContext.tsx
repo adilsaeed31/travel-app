@@ -41,6 +41,7 @@ export function AppProvider(props: AppProviderProps) {
   const hasIntroSeen = useStore(state => state.hasIntroSeen)
   const toggleLanguage = useStore(state => state.toggleLanguage)
   const introHasBeenSeen = useStore(state => state.introHasBeenSeen)
+  const setAppHasReady = useStore(state => state.setAppHasReady)
 
   const [language, setLanguage] = useState<string>('en')
   const [direction, setDirection] = useState<string>('ltr')
@@ -63,8 +64,9 @@ export function AppProvider(props: AppProviderProps) {
   // setting app isready here
   const setAppReady = () => {
     setIsAppReady(true)
-    // setIntro()
-    // introHasBeenSeen()
+    setIntro()
+    introHasBeenSeen()
+    setAppHasReady()
   }
 
   return (

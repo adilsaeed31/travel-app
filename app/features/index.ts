@@ -12,3 +12,5 @@ export {default as OTPActivateCard} from './OTPActivateCard'
 export {default as PersonalInformation} from './PersonalInformation'
 export {default as AfterPersonExisting} from './AfterPersonExisting'
 export {default as FinicalInformation} from './finicalInformationScreen'
+export {default as NameVerification} from './NameVerification'
+

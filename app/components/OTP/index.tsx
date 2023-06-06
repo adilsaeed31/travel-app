@@ -46,7 +46,7 @@ const OtpEnter: React.FC<OtpInputProps> = ({
   const [otp, setOtp] = useState<string>(value)
 
   useEffect(() => {
-    if (otp.length === 4 && onChangeText) {
+    if (onChangeText) {
       onChangeText(otp)
     }
   }, [otp])

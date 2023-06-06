@@ -1,28 +1,33 @@
 import React from 'react'
 
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
+import {
+  BottomTabBarProps,
+  createBottomTabNavigator,
+} from '@react-navigation/bottom-tabs'
 
 import {HelpScreen} from '@Screens'
 import {DashboardFeature} from '@Features'
-import {CardNavigator, TravelNavigator} from '@Navigations'
+import {LoyaltyNavigator} from '@Navigations'
+import {BottomTabBar} from '@Components'
 
 const {Navigator, Screen} = createBottomTabNavigator()
 
+// below to wrap as function component for tabBar prop
+const tabBar = (props: BottomTabBarProps) => <BottomTabBar {...props} />
+
 const AppNavigator = () => (
-  <Navigator>
+  <Navigator tabBar={tabBar}>
     <Screen
       name="Dashboard"
-      component={DashboardFeature}
       options={{
         headerShown: false,
       }}
+      component={DashboardFeature}
     />
 
-    <Screen name="Travel" component={TravelNavigator} />
+    <Screen name="Loyalty" component={LoyaltyNavigator} />
 
-    <Screen name="Card" component={CardNavigator} />
-
-    <Screen name="Help" component={HelpScreen} />
+    <Screen name="Menu" component={HelpScreen} />
   </Navigator>
 )
 
