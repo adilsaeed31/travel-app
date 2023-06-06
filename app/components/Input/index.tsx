@@ -76,6 +76,7 @@ const CustomInput: FC<CustomInputProps> = ({
   onChangeText = () => {},
   isValid = () => {},
   errorMessage = '',
+
   ...rest
 }) => {
   const inputRef = useRef<TextInput>(null)
