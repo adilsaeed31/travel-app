@@ -16,8 +16,11 @@ const QuickLoads = () => {
   const isRTL = useStore(state => state.isRTL)
 
   return (
-    <View className={cn(flexRowLayout(isRTL), 'mx-6 items-center')}>
-      <Animated.View entering={SlideInLeft.duration(1000).delay(50)}>
+    <View
+      className={cn(flexRowLayout(isRTL), 'justify-center items-center mx-6')}>
+      <Animated.View
+        className="pt-1 items-center"
+        entering={SlideInLeft.duration(1000).delay(50)}>
         <TCTextView>{t('TravelCard:quickLoad')}</TCTextView>
         <QuickLoadIcon className="mt-1" />
       </Animated.View>
@@ -27,11 +30,13 @@ const QuickLoads = () => {
           'flex-1',
           flexRowLayout(isRTL),
           m2(isRTL),
-          ' justify-between items-center',
+          'items-center',
         )}
         entering={SlideInRight.duration(1000).delay(50)}>
         <QuickLoad name={t('TravelCard:currentCodeEuro', {amount: '100'})} />
+
         <QuickLoad name={t('TravelCard:currentCodeEuro', {amount: '200'})} />
+
         <QuickLoad name={t('TravelCard:currentCodeEuro', {amount: '300'})} />
       </Animated.View>
     </View>
