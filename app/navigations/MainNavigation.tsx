@@ -39,7 +39,7 @@ const MainNavigation = () => {
                 <ActivityIndicator size="large" />
               </View>
             }>
-            {!isAppReady ? (
+            {0 && !isAppReady ? (
               <SplashNavigator />
             ) : user ? (
               <Animated.View

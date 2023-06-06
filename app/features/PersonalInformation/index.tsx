@@ -285,6 +285,7 @@ function PersonalInformation() {
     [showAdditionalInformation],
   )
   const handlePostPersonalInformation = () => {
+    //mutate()
     setFormLoading(true)
     setTimeout(() => {
       setFormLoading(false)

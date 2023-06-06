@@ -21,6 +21,7 @@ import {useQuery} from '@tanstack/react-query'
 import {BASE_URL} from '@Utils'
 import {useStore} from '@Store'
 import {useIsFocused} from '@react-navigation/native'
+import DeviceInfo from 'react-native-device-info'
 
 type Props = {
   navigation: StackNavigationProp<{
@@ -37,11 +38,12 @@ const AuthFeature = ({navigation}: Props) => {
   const {t} = useTranslation()
   const isFocused = useIsFocused()
 
+  const [deviceId, setDeviceId] = useState('')
   const [userName, setUserName] = useState('')
   const [password, setPassword] = useState('')
   const [isKeyboardVisible, setKeyboardVisible] = useState<boolean>(false)
   const [keyboardHeight, setKeyboardHeight] = useState<number>(0)
-  const [status, setstatus] = useState(0)
+  const [status, setstatus] = useState(200)
   const [isAuthFailed, setIsAuthFailed] = useState(false)
   const setUser = useStore((state: any) => state.setUser)
 
@@ -50,10 +52,9 @@ const AuthFeature = ({navigation}: Props) => {
     password: password,
     os: 'IOS',
     language: useStore.getState().language,
-    device_id: 'simulator', // TODO
+    device_id: deviceId,
     os_version: '16.4', // TODO
-    grant_type: 'password',
-    version: '0.1',
+    version: '0.1', // TODO
   }
   const url = `${BASE_URL}/auth/login`
   const {isFetching, data, refetch} = useQuery({
@@ -68,7 +69,6 @@ const AuthFeature = ({navigation}: Props) => {
         if (res.status >= 200 && res.status < 300 && !!res.bodyString) {
           return res.json()
         }
-        setstatus(400)
         return res.status
       } catch (e) {
         return 500 // something went wrong
@@ -82,8 +82,8 @@ const AuthFeature = ({navigation}: Props) => {
   useEffect(() => {
     if (!isFetching && data && isFocused) {
       if (status >= 200 && status < 300) {
-        if (data.is_otp_required) {
-          navigation.navigate('OTPAuth', {user: data})
+        if (data.token_hold) {
+          navigation.navigate('OTPAuth', {user: data, resendParams: bodyParams})
           setstatus(0)
         } else {
           setUser(data)
@@ -95,11 +95,10 @@ const AuthFeature = ({navigation}: Props) => {
         setIsAuthFailed(true)
       }
     }
-  }, [data, isFetching, isFocused, navigation, setUser, status])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data, isFetching, isFocused, status])
 
   const handleLogin = () => {
-    setUser({})
-
     // Perform login logic here
     refetch()
     if (Keyboard) {
@@ -108,6 +107,8 @@ const AuthFeature = ({navigation}: Props) => {
   }
 
   useEffect(() => {
+    setDeviceId(DeviceInfo.getUniqueIdSync())
+
     const keyboardDidShowListener = Keyboard.addListener(
       'keyboardWillShow',
       e => {
@@ -128,6 +129,7 @@ const AuthFeature = ({navigation}: Props) => {
       keyboardDidHideListener.remove()
     }
   }, [])
+
 
   return (
     <>
@@ -173,6 +175,7 @@ const AuthFeature = ({navigation}: Props) => {
             <TCMultiLinkButton
               callbacks={[
                 () => {
+                  setPassword('')
                   navigation.navigate('PersonalID')
                 },
               ]}>

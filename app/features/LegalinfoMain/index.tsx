@@ -2,9 +2,6 @@
 
 import React, {useContext, useState, useMemo} from 'react'
 import {View, SafeAreaView} from 'react-native'
-
-import {useNavigation} from '@react-navigation/native'
-
 import {useTranslation} from 'react-i18next'
 import {
   Layout,
@@ -16,7 +13,7 @@ import {
   Spacer,
 } from '@Components'
 import {TEXT_VARIANTS, Colors, SPACER_SIZES} from '@Utils'
-
+import {StackNavigationProp} from '@react-navigation/stack'
 import styled from 'styled-components/native'
 import {pepList, specialNeedList} from './masterData'
 
@@ -35,7 +32,12 @@ const FormValues = {
   specialNeed: false,
 }
 
-function LegalInformation() {
+type Props = {
+  navigation: StackNavigationProp<any>
+  route: any
+}
+
+function LegalInformation({navigation}: Props) {
   const [currentOpendIndx, setCurrentOpenedInx] = useState(-1)
   const {isRTL} = useContext<AppProviderProps>(AppContext)
   const {t} = useTranslation()
@@ -45,8 +47,7 @@ function LegalInformation() {
   const [errors, setErrors] = useState<IFormTYpe>({
     ...FormValues,
   })
-
-  const navigation = useNavigation()
+  const [isLoader, setIsLoader] = useState<boolean>(false)
 
   const isFormValid = useMemo(() => {
     let isValid = true
@@ -89,6 +90,11 @@ function LegalInformation() {
 
   const onComplete = () => {
     console.log(values)
+    setIsLoader(true)
+    setTimeout(() => {
+      setIsLoader(false)
+      navigation.navigate('CreateUser')
+    }, 2000)
   }
   return (
     <>
@@ -97,7 +103,7 @@ function LegalInformation() {
         isBack={true}
         onBack={() => navigation.goBack()}
         isHeader={true}
-        isLoading={false}
+        isLoading={isLoader}
         isBackground={true}>
         <SafeAreaWrapper>
           <View>
