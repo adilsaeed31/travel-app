@@ -1,14 +1,23 @@
-import React from 'react'
+import React, {memo} from 'react'
 import {ScrollView} from 'react-native'
+import Animated, {FadeInRight} from 'react-native-reanimated'
 
-import {TCTextView} from '@Components'
+import {QuickActions, UserAccountCardView} from '@Components'
 
-const AccountScreen = () => {
+type TravelCardScreenProps = {
+  data?: object
+}
+
+const TravelCardScreen: React.FC<TravelCardScreenProps> = () => {
   return (
-    <ScrollView className="bg-tc-primary">
-      <TCTextView className="text-base">Account Screen</TCTextView>
+    <ScrollView>
+      <Animated.View entering={FadeInRight.duration(1000).delay(50)}>
+        <UserAccountCardView />
+      </Animated.View>
+
+      <QuickActions />
     </ScrollView>
   )
 }
 
-export default AccountScreen
+export default memo(TravelCardScreen)

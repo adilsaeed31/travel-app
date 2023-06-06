@@ -5,14 +5,13 @@ import cn from 'classnames'
 
 import {useStore} from '@Store'
 import {flexRowLayout, screenWidth} from '@Utils'
-import {TravelCardSvg, TravelCardSvgBlack} from '@Assets'
+import {AccountDetails} from '@Assets'
 
-import {default as AddNewCard} from '../AddNewCard'
 import {default as TCDot} from '../../../Intro/Dot'
 
-const data = ['card1', 'card2', 'AddNew']
+const data = ['card1']
 
-const UserTravelCard = () => {
+const UserAccountCardView = () => {
   const carouselRef = useRef(null)
   const isRTL = useStore(state => state.isRTL)
   const [currentItem, setCurrentItem] = useState<number>(0)
@@ -20,32 +19,33 @@ const UserTravelCard = () => {
   const onSnapToItem = (index: number) => setCurrentItem(index)
 
   const renderItem = ({item, index}: {item: any; index: number}) => {
-    if (index === 2) {
-      return <AddNewCard key={index} />
-    }
+    // if (index === 2) {
+    //   return <AddNewCard key={index} />
+    // }
 
     if (index === 1) {
-      return <TravelCardSvgBlack key={index} item={item} />
+      return <AccountDetails key={index} item={item} />
     }
 
-    return <TravelCardSvg ey={index} item={item} />
+    return <AccountDetails ey={index} item={item} />
   }
 
   return (
     <View className="pt-6">
-      <View className="gap-2 flex-1 items-center">
-        <Carousel
-          data={data}
-          itemWidth={255}
-          ref={carouselRef}
-          enableSnap={true}
-          loop={true}
-          autoplay={true}
-          renderItem={renderItem}
-          sliderWidth={screenWidth}
-          onSnapToItem={onSnapToItem}
-        />
-
+      <View className=" flex-1 items-center">
+        <View style={{paddingEnd: 50}}>
+          <Carousel
+            enableSnap={true}
+            loop={true}
+            autoplay={true}
+            data={data}
+            itemWidth={255}
+            ref={carouselRef}
+            renderItem={renderItem}
+            sliderWidth={screenWidth}
+            onSnapToItem={onSnapToItem}
+          />
+        </View>
         <View className={cn(flexRowLayout(isRTL))}>
           {data?.map((item, index) => {
             return (
@@ -58,4 +58,4 @@ const UserTravelCard = () => {
   )
 }
 
-export default memo(UserTravelCard)
+export default memo(UserAccountCardView)

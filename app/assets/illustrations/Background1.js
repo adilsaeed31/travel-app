@@ -5,7 +5,6 @@ const SvgBackground1 = props => (
     xmlns="http://www.w3.org/2000/svg"
     width={372}
     height={300}
-    viewBox="0 0 372 300"
     fill="none"
     {...props}>
     <G stroke="#3F3D36" clipPath="url(#Background1_svg__a)" opacity={0.06}>
