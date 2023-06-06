@@ -978,7 +978,7 @@ function FinacialInformationScreen() {
     setTimeout(() => {
       setPostingFincail(false)
     }, 1000)
-    navigation.navigate('login')
+    navigation.navigate('LegalinfoMain')
   }
   const ToggleSheet = (indx: number) => {
     setCurrentOpenedInx(indx)

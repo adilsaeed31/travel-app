@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useRef, useState} from 'react'
 import {View} from 'react-native'
 import {useTranslation} from 'react-i18next'
@@ -38,7 +39,15 @@ const CreateUserSchema = Yup.object().shape({
 const CreateUser: React.FC<CreateUserProps> = ({navigation}) => {
   const {t} = useTranslation()
   const isRTL = useStore(state => state.isRTL)
-
+  const [isLoader, setLoader] = useState(false)
+  const setUser = useStore((state: any) => state.setUser)
+  const [state, setState] = useState<any>({
+    passwordOne: false,
+    passwordTwo: false,
+    passwordThree: false,
+    passwordFour: false,
+    values: {},
+  })
   // initial values for create user form
   const initialValues: CreateUserForm = {
     userName: '',
@@ -46,13 +55,17 @@ const CreateUser: React.FC<CreateUserProps> = ({navigation}) => {
     confirmPassword: '',
   }
 
+  useEffect(() => {
+    console.log(state.values)
+  }, [state.values])
+
   return (
     <>
       <Layout
         isBack={true}
         onBack={() => navigation.goBack()}
         isHeader={true}
-        isLoading={false}
+        isLoading={isLoader}
         isBackground={true}>
         <View className="flex-1 justify-content">
           <Header isRTL={!!isRTL}>
@@ -63,8 +76,12 @@ const CreateUser: React.FC<CreateUserProps> = ({navigation}) => {
             validateOnMount
             initialValues={initialValues}
             validationSchema={CreateUserSchema}
-            onSubmit={values => {
-              console.log(values, 'onSubmit')
+            onSubmit={(values: any) => {
+              setLoader(true)
+              setTimeout(() => {
+                setLoader(false)
+                setUser(values)
+              }, 1000)
             }}>
             {({
               values,
@@ -115,11 +132,48 @@ const CreateUser: React.FC<CreateUserProps> = ({navigation}) => {
                     </View>
 
                     <View>
-                      <PassRules isActive={isValid} />
+                      <PassRules
+                        passwordOne={
+                          !!(
+                            values.password &&
+                            values.password.length > 7 &&
+                            values.password.length < 17
+                          )
+                        }
+                        passwordTwo={
+                          !!(
+                            values?.password &&
+                            /[!@#$%^&*(),.?":{}|<>]/.test(values?.password)
+                          )
+                        }
+                        passwordThree={
+                          !!(values?.password && /\d/.test(values?.password))
+                        }
+                        passwordFour={
+                          !!(
+                            values?.password &&
+                            /[A-Z]/.test(values?.password) &&
+                            /[a-z]/.test(values?.password)
+                          )
+                        }
+                      />
                     </View>
                   </View>
 
-                  <StyledButton disabled={!isValid} onPress={handleSubmit}>
+                  <StyledButton
+                    disabled={
+                      !(
+                        values.password &&
+                        values.password.length > 7 &&
+                        values.password.length < 17 &&
+                        /[!@#$%^&*(),.?":{}|<>]/.test(values?.password) &&
+                        /\d/.test(values?.password) &&
+                        /[A-Z]/.test(values?.password) &&
+                        /[a-z]/.test(values?.password) &&
+                        values.password === values.confirmPassword
+                      )
+                    }
+                    onPress={handleSubmit}>
                     <TCTextView>{t('onboarding:create')}</TCTextView>
                   </StyledButton>
                 </>

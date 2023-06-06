@@ -143,7 +143,9 @@ const NafaqScreen = ({navigation, route}: Props) => {
       const status = nafathPushData?.status
       switch (true) {
         case status === 409:
-          setStatusError('OTP already Exist, Please wait for a minute')
+          setStatusError(
+            'Nafaath Request already Exist, Please wait for two minutes',
+          )
           break
         case status === 502:
           setStatusError(
@@ -156,7 +158,6 @@ const NafaqScreen = ({navigation, route}: Props) => {
 
   useEffect(() => {
     let timer: any = null
-    console.log(nafathPullData, '++++++++++++++++++++++++')
     if (nafathPullData?.kyc_status && nafathPullData.kyc_status === 'SUCCESS') {
       if (nafathPullData?.name_mismatch) {
         setOnboardingProgress(true, true, nafathPullData?.key_details)
