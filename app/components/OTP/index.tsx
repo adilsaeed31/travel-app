@@ -68,10 +68,6 @@ const OtpEnter: React.FC<OtpInputProps> = ({
     if (text.length === 1 && index < inputRefs.current.length - 1) {
       inputRefs.current[index + 1].focus()
     }
-
-    if (text.length === 0 && index > 0) {
-      inputRefs.current[index - 1].focus()
-    }
   }
 
   const handleKeyPress = (
@@ -79,6 +75,9 @@ const OtpEnter: React.FC<OtpInputProps> = ({
   ) => {
     if (event.nativeEvent.key === 'Backspace') {
       setOtp(otp.slice(0, otp.length - 1))
+      if (otp.length > 0 || otp.length < 4) {
+        inputRefs.current[otp.length - 1]?.focus()
+      }
     }
   }
 
