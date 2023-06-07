@@ -48,7 +48,7 @@ type IFormTYpe = {
   gregorian: boolean
   //   //end
   //   //addetionalSourceOfIncome
-  AddetionalSourceOfIncome: false
+  AddetionalSourceOfIncome: boolean
   AddetionalSourceOfIncomeSource: string | null
   AddetionalSourceOfIncomeAmount: string | null
   AnotherAddetionalSourceOfIncome: boolean
@@ -1309,7 +1309,7 @@ function FinacialInformationScreen() {
         journeySecrets = JSON.parse(journeySecretsData)
       }
       console.log('=================')
-      console.log('journeySecrets.access_token,', journeySecrets.access_token)
+      console.log('journeySecrets.access_token,', journeySecrets?.access_token)
       console.log('=================')
       console.log('======request-body================')
       console.log(MapStateForAPi(values))
@@ -1364,6 +1364,37 @@ function FinacialInformationScreen() {
     GetFinicalInformationMutate()
   }, [])
   useEffect(() => {
+    // {"additional_income_list": null, "business_name": null, "employment": null, "investment_type": null, "occupation": null, "onboarding_application_id": null, "primary_income": null}
+    setValues({
+      ...values,
+      nameOfBusiness: fincialInformationGetData?.business_name || null,
+      monthlyPrimaryIncomAmount: fincialInformationGetData?.primary_income,
+      investmentType: fincialInformationGetData?.investment_type,
+      AddetionalSourceOfIncome: fincialInformationGetData
+        ?.additional_income_list?.length
+        ? true
+        : false,
+      AddetionalSourceOfIncomeSource: fincialInformationGetData
+        ?.additional_income_list?.length
+        ? fincialInformationGetData?.additional_income_list[0]?.soruce
+        : '',
+      AddetionalSourceOfIncomeAmount: fincialInformationGetData
+        ?.additional_income_list?.length
+        ? fincialInformationGetData?.additional_income_list[0]?.amount
+        : '',
+      AnotherAddetionalSourceOfIncome:
+        fincialInformationGetData?.additional_income_list?.length > 1
+          ? true
+          : false,
+      AnotherAddetionalSourceOfIncomeSource: fincialInformationGetData
+        ?.additional_income_list?.length
+        ? fincialInformationGetData?.additional_income_list[0]?.soruce
+        : '',
+      AnotherAddetionalSourceOfIncomeAmount: fincialInformationGetData
+        ?.additional_income_list?.length
+        ? fincialInformationGetData?.additional_income_list[0]?.amount
+        : '',
+    })
     console.log('=====fincialInformationGetData=======')
     console.log(fincialInformationGetData)
     console.log('=====fincialInformationGetData=======')
@@ -1428,7 +1459,6 @@ function FinacialInformationScreen() {
   }, [values])
   const navigation = useNavigation()
 
-  const HandleContinuePressed = () => {}
   const RenderCurrentForm = () => {
     let CurrentFormView = null
     let currentOccupationCode =
@@ -1442,6 +1472,7 @@ function FinacialInformationScreen() {
       CurrentFormView = (
         <>
           <DropDown
+            dynamicHeight
             data={SheetData.primarySourceOfIncome.map(income =>
               isRTL ? income.description_ar : income.description_en,
             )}
@@ -1720,6 +1751,7 @@ function FinacialInformationScreen() {
             {values.AddetionalSourceOfIncome && (
               <View>
                 <DropDown
+                  dynamicHeight
                   data={SheetData.addetionalSourceOfIncome.map(src =>
                     isRTL ? src.description_ar : src.description_en,
                   )}
