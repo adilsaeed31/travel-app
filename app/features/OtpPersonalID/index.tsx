@@ -358,9 +358,7 @@ const OtpPersonalIdScreen = ({navigation, route}: Props) => {
             <Button
               onPress={onComplete}
               disabled={isButtonDisabled || state.otp.length < 4}>
-              <Text variant={TEXT_VARIANTS.body}>
-                {t('onboarding:continue')}
-              </Text>
+              <Text variant={TEXT_VARIANTS.body}>{t('onboarding:Verify')}</Text>
             </Button>
           </ButtonContainer>
         )}
@@ -368,9 +366,16 @@ const OtpPersonalIdScreen = ({navigation, route}: Props) => {
       {!!keyboardHeight && (
         <StickyButtonContainer keyboardHeight={keyboardHeight}>
           <StickyButton
-            onPress={onComplete}
-            disabled={isButtonDisabled || state.otp.length < 4}>
-            <Text variant={TEXT_VARIANTS.body}>{t('onboarding:continue')}</Text>
+            onPress={() => {
+              if (!isButtonDisabled && state.otp.length === 4) {
+                onComplete()
+              }
+            }}
+            isDisabled={isButtonDisabled || state.otp.length < 4}
+            activeOpacity={
+              (isButtonDisabled || state.otp.length) < 4 ? 1 : 0.5
+            }>
+            <Text variant={TEXT_VARIANTS.body}>{t('onboarding:Verify')}</Text>
           </StickyButton>
         </StickyButtonContainer>
       )}
