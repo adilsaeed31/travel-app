@@ -20,9 +20,10 @@ import {
   FinicalInformation,
   NameVerification,
   LegalinfoMain,
+  LegalInfoOther,
   CreateUser,
 } from '@Features'
-import {ExistingScreen} from '@Screens'
+import {ExistingScreen, WIPScreen} from '@Screens'
 
 const {Navigator, Screen} = createStackNavigator()
 
@@ -48,10 +49,12 @@ const AuthNavigator = () => {
       <Screen name="OTPActivateCard" component={OTPActivateCard} />
       <Screen name="ActivateCard" component={ActivateCard} />
       <Screen name="LegalinfoMain" component={LegalinfoMain} />
+      <Screen name="LegalInfoOther" component={LegalInfoOther} />
       <Screen name="AfterPersonExisting" component={AfterPersonExisting} />
       <Screen name="FinicalInformation" component={FinicalInformation} />
       <Screen name="Existing" component={ExistingScreen} />
       <Screen name="CreateUser" component={CreateUser} />
+      <Screen name="WIP" component={WIPScreen} />
     </Navigator>
   )
 }

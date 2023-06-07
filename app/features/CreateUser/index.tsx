@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useRef, useState} from 'react'
 import {View} from 'react-native'
 import {useTranslation} from 'react-i18next'
@@ -5,10 +6,11 @@ import styled from 'styled-components/native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {Formik} from 'formik'
 import * as Yup from 'yup'
-
-import {Colors} from '@Utils'
+import {useMutation} from '@tanstack/react-query'
+import {Colors, BASE_URL} from '@Utils'
 import {useStore} from '@Store'
 import {Layout, TCInput, TCButton, TCTextView, PassRules} from '@Components'
+import {fetcher} from '@Api'
 
 type CreateUserProps = {
   navigation: StackNavigationProp<{}>
@@ -39,6 +41,14 @@ const CreateUser: React.FC<CreateUserProps> = ({navigation}) => {
   const {t} = useTranslation()
   const isRTL = useStore(state => state.isRTL)
 
+  const setUser = useStore((state: any) => state.setUser)
+  const [state, setState] = useState<any>({
+    passwordOne: false,
+    passwordTwo: false,
+    passwordThree: false,
+    passwordFour: false,
+    values: {},
+  })
   // initial values for create user form
   const initialValues: CreateUserForm = {
     userName: '',
@@ -46,13 +56,39 @@ const CreateUser: React.FC<CreateUserProps> = ({navigation}) => {
     confirmPassword: '',
   }
 
+  const {
+    isLoading: isLoading,
+    data: uData,
+    mutate,
+    reset,
+  } = useMutation({
+    mutationFn: async () => {
+      let req: any = await fetcher(BASE_URL + '/onboarding/register', {
+        method: 'POST',
+        body: {
+          username: state.values.userName,
+          password: state.values.password,
+        },
+      })
+      let res = await req.json()
+      return res
+    },
+  })
+
+  useEffect(() => {
+    if (state.values.userName && state.values.password) {
+      reset()
+      setUser({})
+    }
+  }, [uData])
+
   return (
     <>
       <Layout
         isBack={true}
         onBack={() => navigation.goBack()}
         isHeader={true}
-        isLoading={false}
+        isLoading={isLoading}
         isBackground={true}>
         <View className="flex-1 justify-content">
           <Header isRTL={!!isRTL}>
@@ -63,8 +99,9 @@ const CreateUser: React.FC<CreateUserProps> = ({navigation}) => {
             validateOnMount
             initialValues={initialValues}
             validationSchema={CreateUserSchema}
-            onSubmit={values => {
-              console.log(values, 'onSubmit')
+            onSubmit={(values: any) => {
+              setState({...state, values: values})
+              mutate()
             }}>
             {({
               values,
@@ -115,11 +152,48 @@ const CreateUser: React.FC<CreateUserProps> = ({navigation}) => {
                     </View>
 
                     <View>
-                      <PassRules isActive={isValid} />
+                      <PassRules
+                        passwordOne={
+                          !!(
+                            values.password &&
+                            values.password.length > 7 &&
+                            values.password.length < 17
+                          )
+                        }
+                        passwordTwo={
+                          !!(
+                            values?.password &&
+                            /[!@#$%^&*(),.?":{}|<>]/.test(values?.password)
+                          )
+                        }
+                        passwordThree={
+                          !!(values?.password && /\d/.test(values?.password))
+                        }
+                        passwordFour={
+                          !!(
+                            values?.password &&
+                            /[A-Z]/.test(values?.password) &&
+                            /[a-z]/.test(values?.password)
+                          )
+                        }
+                      />
                     </View>
                   </View>
 
-                  <StyledButton disabled={!isValid} onPress={handleSubmit}>
+                  <StyledButton
+                    disabled={
+                      !(
+                        values.password &&
+                        values.password.length > 7 &&
+                        values.password.length < 17 &&
+                        /[!@#$%^&*(),.?":{}|<>]/.test(values?.password) &&
+                        /\d/.test(values?.password) &&
+                        /[A-Z]/.test(values?.password) &&
+                        /[a-z]/.test(values?.password) &&
+                        values.password === values.confirmPassword
+                      )
+                    }
+                    onPress={handleSubmit}>
                     <TCTextView>{t('onboarding:create')}</TCTextView>
                   </StyledButton>
                 </>
