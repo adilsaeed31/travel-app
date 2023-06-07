@@ -1,13 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useState, useContext} from 'react'
 import * as yup from 'yup'
-import {
-  View,
-  Keyboard,
-  Dimensions,
-  TouchableOpacity,
-  Platform,
-} from 'react-native'
+import {View, Keyboard, Dimensions, TouchableOpacity} from 'react-native'
 import {useTranslation} from 'react-i18next'
 import styled from 'styled-components/native'
 import {useMutation} from '@tanstack/react-query'
@@ -103,8 +97,7 @@ const OtpPersonalIdScreen = ({navigation, route}: Props) => {
           mobile_number: mobileNumber,
           id: govtId,
         },
-        token:
-          'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2NDdmM2RhZDM5OTQ2NDM2ODA4MzlmMzAiLCJzdWIiOiIwNTMxOTg1MjE0Iiwicm9sZXMiOlsiT05CT0FSRElORyJdLCJpc3MiOiJjb20uc2FpYi52ZW50dXJlcy5hdXRoIiwiYXVkIjoiY29tLnNhaWIudmVudHVyZXMuYXV0aCIsImV4cCI6MTc4NjA2NDA3NSwiaWRlbnRpdHkiOiIyNTQ1MzI5NzYxIiwicGhvbmVfbnVtYmVyIjoiMDUzMTk4NTIxNCJ9.eNr4-Y2FzTWcTxmyjn0653UfWVWWhR29IJDzesZQ3y-WLPLXtEGk2KDILUW_yZBvaeIy3XuIUYmHV2M9M2b85w',
+        token: otpData.access_token,
       })
       // TODO :  need to remove static token with otpData.access_token
       let res = await req.json()
@@ -158,14 +151,14 @@ const OtpPersonalIdScreen = ({navigation, route}: Props) => {
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
-      Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow',
+      'keyboardWillShow',
       e => {
         setKeyboardHeight(e.endCoordinates.height)
       },
     )
 
     const keyboardDidHideListener = Keyboard.addListener(
-      Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide',
+      'keyboardWillHide',
       () => {
         setKeyboardHeight(0)
       },
@@ -179,10 +172,6 @@ const OtpPersonalIdScreen = ({navigation, route}: Props) => {
 
   useEffect(() => {
     if (otpData && otpData.access_token) {
-      // TODO : to remove
-      otpData.access_token =
-        'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2NDdmM2RhZDM5OTQ2NDM2ODA4MzlmMzAiLCJzdWIiOiIwNTMxOTg1MjE0Iiwicm9sZXMiOlsiT05CT0FSRElORyJdLCJpc3MiOiJjb20uc2FpYi52ZW50dXJlcy5hdXRoIiwiYXVkIjoiY29tLnNhaWIudmVudHVyZXMuYXV0aCIsImV4cCI6MTc4NjA2NDA3NSwiaWRlbnRpdHkiOiIyNTQ1MzI5NzYxIiwicGhvbmVfbnVtYmVyIjoiMDUzMTk4NTIxNCJ9.eNr4-Y2FzTWcTxmyjn0653UfWVWWhR29IJDzesZQ3y-WLPLXtEGk2KDILUW_yZBvaeIy3XuIUYmHV2M9M2b85w'
-      // =========
       setItem('journeySecrets', JSON.stringify(otpData))
       verifyTahaquq()
     } else {
@@ -369,7 +358,9 @@ const OtpPersonalIdScreen = ({navigation, route}: Props) => {
             <Button
               onPress={onComplete}
               disabled={isButtonDisabled || state.otp.length < 4}>
-              <Text variant={TEXT_VARIANTS.body}>{t('onboarding:Verify')}</Text>
+              <Text variant={TEXT_VARIANTS.body}>
+                {t('onboarding:continue')}
+              </Text>
             </Button>
           </ButtonContainer>
         )}
@@ -377,14 +368,9 @@ const OtpPersonalIdScreen = ({navigation, route}: Props) => {
       {!!keyboardHeight && (
         <StickyButtonContainer keyboardHeight={keyboardHeight}>
           <StickyButton
-            onPress={() => {
-              if (!isButtonDisabled && state.otp.length == 4) {
-                onComplete()
-              }
-            }}
-            isDisabled={isButtonDisabled || state.otp.length < 4}
-            activeOpacity={isButtonDisabled || state.otp.length < 4 ? 1 : 0.5}>
-            <Text variant={TEXT_VARIANTS.body}>{t('onboarding:Verify')}</Text>
+            onPress={onComplete}
+            disabled={isButtonDisabled || state.otp.length < 4}>
+            <Text variant={TEXT_VARIANTS.body}>{t('onboarding:continue')}</Text>
           </StickyButton>
         </StickyButtonContainer>
       )}
@@ -418,8 +404,7 @@ const BottomText = styled(Text)<{disabled?: boolean}>`
 
 const StickyButtonContainer = styled.View<{keyboardHeight: Number}>`
   position: absolute;
-  bottom: ${props =>
-    Platform.OS === 'ios' ? props.keyboardHeight + 'px' : '0px'};
+  bottom: ${props => props.keyboardHeight + 'px'};
   left: 0;
   right: 0;
   align-items: center;
