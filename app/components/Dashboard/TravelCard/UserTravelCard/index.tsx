@@ -1,11 +1,11 @@
 import React, {memo, useRef, useState} from 'react'
-import {View} from 'react-native'
+import {View, Image} from 'react-native'
 import Carousel from 'react-native-snap-carousel'
 import cn from 'classnames'
 
 import {useStore} from '@Store'
 import {flexRowLayout, screenWidth} from '@Utils'
-import {TravelCardSvg, TravelCardSvgBlack} from '@Assets'
+import {TravelCardSvg, TravelCardSvgBlack, Shadow} from '@Assets'
 
 import {default as AddNewCard} from '../AddNewCard'
 import {default as TCDot} from '../../../Intro/Dot'
@@ -25,32 +25,40 @@ const UserTravelCard = () => {
     }
 
     if (index === 1) {
-      return <TravelCardSvgBlack key={index} item={item} />
+      return (
+        <>
+          <TravelCardSvgBlack className="z-1" key={index} item={item} />
+          <Image className="relative z-0 -mt-7" source={Shadow} />
+        </>
+      )
     }
 
-    return <TravelCardSvg ey={index} item={item} />
+    return (
+      <>
+        <TravelCardSvg className="z-1" key={index} item={item} />
+        <Image className="relative z-0 -mt-7" source={Shadow} />
+      </>
+    )
   }
 
   return (
-    <View className="pt-6">
-      <View className="gap-2 flex-1 items-center">
-        <Carousel
-          data={data}
-          itemWidth={255}
-          ref={carouselRef}
-          enableSnap={true}
-          renderItem={renderItem}
-          sliderWidth={screenWidth}
-          onSnapToItem={onSnapToItem}
-        />
+    <View className="pt-6 items-center">
+      <Carousel
+        data={data}
+        itemWidth={255}
+        ref={carouselRef}
+        enableSnap={true}
+        renderItem={renderItem}
+        sliderWidth={screenWidth}
+        onSnapToItem={onSnapToItem}
+      />
 
-        <View className={cn(flexRowLayout(isRTL))}>
-          {data?.map((item, index) => {
-            return (
-              <TCDot key={index} isActive={currentItem === index} hasRounded />
-            )
-          })}
-        </View>
+      <View className={cn('-mt-4', flexRowLayout(isRTL))}>
+        {data?.map((item, index) => {
+          return (
+            <TCDot key={index} isActive={currentItem === index} hasRounded />
+          )
+        })}
       </View>
     </View>
   )

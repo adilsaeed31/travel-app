@@ -6,7 +6,7 @@ import {TCTextView} from '@Components'
 
 const Promotions = () => {
   return (
-    <View className="flex-1 mx-6 mt-10">
+    <View className="mx-6 mt-10">
       <TCTextView className="mb-4">Do more with SAIB</TCTextView>
 
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
