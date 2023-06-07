@@ -145,6 +145,7 @@ function PersonalInformation() {
   const [currentOpendIndx, setCurrentOpenedInx] = useState(-1)
   const {isRTL} = useContext<AppProviderProps>(AppContext)
   const [formLoading, setFormLoading] = useState(false)
+  const [disabledFields, setDisabledFields] = useState({countryOfBirth: false})
   const {t} = useTranslation()
   const [values, setValues] = useState<IFormTYpe>({
     ...FormValues,
@@ -213,7 +214,7 @@ function PersonalInformation() {
       if (journeySecretsData) {
         journeySecrets = JSON.parse(journeySecretsData)
       }
-      console.log('ourneySecrets.access_token,', journeySecrets.access_token)
+      console.log('ourneySecrets.access_token,', journeySecrets?.access_token)
       let req: any = await fetcher(BASE_URL + '/onboarding/personal', {
         method: 'POST',
         body: MapFormValues(values, IsSaudi, showAdditionalInformation, isRTL),
@@ -249,22 +250,6 @@ function PersonalInformation() {
   useEffect(() => {
     console.log('======PersonalInformationData Get=========')
     console.log(PersonalInformationData)
-    // {
-    //   "additional_contact": null,
-    //   "birth_city": {"code": "ABW", "name_ar": "الأبواء", "name_en": "Al Abwa"},
-    //   "birth_country": {
-    //     "code": "SA",
-    //     "name_ar": "المملكة العربية السعودية",
-    //     "name_en": "Saudi Arabia"
-    //   },
-    //   "education": {
-    //     "level_code": "DIPL",
-    //     "level_name_ar": "دراسة ثانوية-دبلوم",
-    //     "level_name_en": "Secondary school (Diploma level)"
-    //   },
-    //   "offshore_address": null,
-    //   "onboarding_application_id": "647f746b1696492b30d8c59f"
-    // }
 
     setValues({
       ...values,
@@ -284,7 +269,11 @@ function PersonalInformation() {
       streetNanme: PersonalInformationData?.offshore_address?.street,
       contactName: PersonalInformationData?.offshore_address?.contact_number,
     })
-
+    if (
+      PersonalInformationData?.birth_country.name_ar ||
+      PersonalInformationData?.birth_country.name_ar
+    )
+      setDisabledFields({...disabledFields, countryOfBirth: true})
     //      MapApiToState(values, PersonalInformationData, isRTL)
     console.log('======PersonalInformationData Get=========')
   }, [PersonalInformationData])
@@ -346,6 +335,7 @@ function PersonalInformation() {
               {t('onboarding:personalInformation:personalInformation')}
             </Header>
             <DropDown
+              dynamicHeight
               data={educationList.map(c =>
                 isRTL ? c.levelNameAr : c.levelNameEn,
               )}
@@ -362,6 +352,7 @@ function PersonalInformation() {
             />
             <Spacer />
             <DropDown
+              disabled={disabledFields.countryOfBirth}
               data={countriesList.map(c => (isRTL ? c.nameAr : c.nameEn))}
               toogleClick={() => {
                 ToggleSheet(1)

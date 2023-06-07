@@ -7,6 +7,7 @@ import {
   FlatList,
   TouchableOpacity,
   StyleSheet,
+  Platform,
 } from 'react-native'
 import styled from 'styled-components/native'
 import {AppContext, AppProviderProps} from '@Context'
@@ -81,6 +82,7 @@ interface IDropDownProps {
   hasSearch?: boolean
   onSheetClose: () => void
   onItemSelected: (item: string) => void
+  dynamicHeight?: boolean
 }
 const SheetHeight = Dimensions.get('window').height / 1.8
 
@@ -93,10 +95,10 @@ export default function DropDown({
   disabled = false,
   isOpen = false,
   title = '',
-  subTitle = '',
   hasSearch,
   onSheetClose,
   onItemSelected,
+  dynamicHeight = false,
 }: IDropDownProps) {
   const {isRTL} = useContext<AppProviderProps>(AppContext)
   const [searchVaue, setSearchValue] = useState('')
@@ -105,7 +107,7 @@ export default function DropDown({
     : data
   const renderContent = () => {
     return (
-      <SheetContentWrapper key={10}>
+      <SheetContentWrapper dynamicHeight={dynamicHeight} key={10}>
         <OneFlexView>
           <ToNotch />
           <Title isRTL={!!isRTL}>{title}</Title>
@@ -153,14 +155,17 @@ export default function DropDown({
           onSwipeComplete={({swipingDirection}) =>
             swipingDirection === 'down' && onSheetClose()
           }
-          swipeDirection="down"
+          propagateSwipe={true}
+          swipeDirection={!Platform.OS === 'android' ? 'down' : undefined}
           animationIn="fadeInUpBig"
           animationOut="fadeOutDownBig"
           onBackdropPress={onSheetClose}
           avoidKeyboard={true}
           style={styles.noMargin}
           isVisible={isOpen}>
-          <ModalWrapper>{renderContent()}</ModalWrapper>
+          <ModalWrapper onPress={onSheetClose} activeOpacity={1}>
+            {renderContent()}
+          </ModalWrapper>
         </Modal>
       </KeyboardAwareScrollView>
 
@@ -196,15 +201,15 @@ const Title = styled(Text)<{isRTL: boolean}>`
   text-align: ${props => (props.isRTL ? 'right' : 'left')};
   margin-top: 24px;
 `
-const Subtitle = styled(Text)<{isRTL: boolean}>`
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 21px;
+// const Subtitle = styled(Text)<{isRTL: boolean}>`
+//   font-weight: 400;
+//   font-size: 12px;
+//   line-height: 21px;
 
-  color: #9f9fa7;
-  text-align: ${props => (props.isRTL ? 'right' : 'left')};
-  margin-bottom: 16px;
-`
+//   color: #9f9fa7;
+//   text-align: ${props => (props.isRTL ? 'right' : 'left')};
+//   margin-bottom: 16px;
+// `
 const ToNotch = styled(View)`
   width: 40px;
   height: 5px;
@@ -214,10 +219,10 @@ const ToNotch = styled(View)`
   border-radius: 100px;
 `
 
-const SheetContentWrapper = styled(View)`
+const SheetContentWrapper = styled(View)<{dynamicHeight: boolean}>`
   background-color: white;
   padding: 16px;
-  height: ${SheetHeight};
+  height: ${props => (props.dynamicHeight ? 'auto' : SheetHeight)};
   border-top-right-radius: 20px;
   border-top-left-radius: 20px;
   padding-left: 32px;
@@ -244,7 +249,7 @@ const InputView = styled(TextInput)`
   padding-right: 5px;
   padding-left: 5px;
 `
-const ModalWrapper = styled(View)`
+const ModalWrapper = styled(TouchableOpacity)`
   position: absolute;
   right: 0;
   left: 0;
