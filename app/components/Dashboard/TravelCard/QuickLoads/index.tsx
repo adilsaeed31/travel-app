@@ -17,7 +17,10 @@ const QuickLoads = () => {
 
   return (
     <View
-      className={cn(flexRowLayout(isRTL), 'justify-center items-center mx-6')}>
+      className={cn(
+        flexRowLayout(isRTL),
+        'justify-center items-center mx-6 mt-6',
+      )}>
       <Animated.View
         className="pt-1 items-center"
         entering={SlideInLeft.duration(1000).delay(50)}>

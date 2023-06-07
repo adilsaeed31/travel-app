@@ -1,9 +1,14 @@
 import React, {memo} from 'react'
-import {ScrollView} from 'react-native'
-import Animated, {FadeInRight, LightSpeedInLeft} from 'react-native-reanimated'
+import {View, ScrollView} from 'react-native'
+import Animated, {
+  FadeIn,
+  FadeInRight,
+  LightSpeedInLeft,
+} from 'react-native-reanimated'
 
 import {
   CurrencyRow,
+  Promotions,
   QuickActions,
   QuickLoads,
   UserTravelCard,
@@ -27,6 +32,10 @@ const TravelCardScreen: React.FC<TravelCardScreenProps> = () => {
       <QuickActions />
 
       <QuickLoads />
+
+      <Animated.View entering={FadeIn.duration(1500).delay(150)}>
+        <Promotions />
+      </Animated.View>
     </ScrollView>
   )
 }

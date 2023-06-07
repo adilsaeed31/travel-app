@@ -93,7 +93,7 @@ export default function DropDown({
   disabled = false,
   isOpen = false,
   title = '',
-
+  subTitle = '',
   hasSearch,
   onSheetClose,
   onItemSelected,
@@ -109,6 +109,7 @@ export default function DropDown({
         <OneFlexView>
           <ToNotch />
           <Title isRTL={!!isRTL}>{title}</Title>
+          {/* <Subtitle isRTL={!!isRTL}>{subTitle}</Subtitle> */}
           {hasSearch && (
             <InputWrapper>
               <Search />
@@ -121,7 +122,7 @@ export default function DropDown({
               />
             </InputWrapper>
           )}
-          <View style={{height: Dimensions.get('window').height / 3}}>
+          <View style={{paddingBottom: 10}}>
             <FlatList
               keyboardShouldPersistTaps="always"
               data={SearchResult}
@@ -195,6 +196,15 @@ const Title = styled(Text)<{isRTL: boolean}>`
   text-align: ${props => (props.isRTL ? 'right' : 'left')};
   margin-top: 24px;
 `
+const Subtitle = styled(Text)<{isRTL: boolean}>`
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 21px;
+
+  color: #9f9fa7;
+  text-align: ${props => (props.isRTL ? 'right' : 'left')};
+  margin-bottom: 16px;
+`
 const ToNotch = styled(View)`
   width: 40px;
   height: 5px;
@@ -227,6 +237,7 @@ const InputWrapper = styled(View)`
   padding-left: 10px;
   flex-direction: row;
   margin-top: 15px;
+  margin-bottom: 10px;
 `
 const InputView = styled(TextInput)`
   flex: 1;

@@ -39,8 +39,6 @@ const UserTravelCard = () => {
           itemWidth={255}
           ref={carouselRef}
           enableSnap={true}
-          loop={true}
-          autoplay={true}
           renderItem={renderItem}
           sliderWidth={screenWidth}
           onSnapToItem={onSnapToItem}
