@@ -1,5 +1,6 @@
 import React from 'react'
 import {View, TouchableOpacity} from 'react-native'
+import {NativeWindStyleSheet} from 'nativewind'
 
 import {AddNew} from '@Assets'
 import {TCTextView} from '@Components'
@@ -9,8 +10,8 @@ const AddNewCard = () => {
   const {t} = useTranslation()
 
   return (
-    <View className="flex-1 w-64 h-36 justify-center bg-tc-card rounded-2xl">
-      <TouchableOpacity className="items-center" onPress={() => {}}>
+    <View className="card-width-height justify-center bg-tc-card rounded-2xl z-2">
+      <TouchableOpacity className="items-center">
         <AddNew />
         <TCTextView className="font-tc-light text-sm">
           {t('TravelCard:addNew')}
@@ -19,5 +20,14 @@ const AddNewCard = () => {
     </View>
   )
 }
+
+NativeWindStyleSheet.create({
+  styles: {
+    'card-width-height': {
+      width: 255,
+      height: 150,
+    },
+  },
+})
 
 export default AddNewCard

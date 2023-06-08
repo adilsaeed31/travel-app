@@ -1,4 +1,4 @@
-import React, {memo} from 'react'
+import React from 'react'
 import {
   View,
   Dimensions,
@@ -12,7 +12,7 @@ import styled from 'styled-components/native'
 import {useSafeAreaInsets} from 'react-native-safe-area-context'
 import {ActivityIndicator} from 'react-native'
 
-import {Background1, Background2} from '@Assets'
+import {BottomBg, FlightPath} from '@Assets'
 import {useStore} from '@Store'
 import {vh, vw} from '@Utils'
 
@@ -38,19 +38,20 @@ const Container = styled(View)`
   background-color: #fff;
 `
 
-const BackgroundImage1 = styled(Background1)`
+const BackgroundImage1 = styled(FlightPath)`
   position: absolute;
-  bottom: 0;
+  top: ${vh(116)};
+  align-self: center;
   z-index: -1;
-  elevation: -1;
   transform: ${() => (useStore.getState().isRTL ? 'scaleX(-1)' : 'scaleX(1)')};
 `
 
-const BackgroundImage2 = styled(Background2)`
+const BackgroundImage2 = styled(BottomBg)`
   position: absolute;
+  bottom: 0;
   z-index: -1;
-  elevation: -1;
-  transform: ${() => (useStore.getState().isRTL ? 'scaleX(-1)' : 'scaleX(1)')};
+
+  align-self: center;
 `
 
 const ContentWrapper = styled(View)`
@@ -61,9 +62,9 @@ const Loader = styled(View)`
   flex: 1;
   background-color: rgba(0, 0, 0, 0.3);
   position: absolute;
-  bottom: 0;
+  top: 0;
   left: 0;
-  height: ${Dimensions.get('window').height}px;
+  height: 100%;
   width: 100%;
   z-index: 1000;
   display: flex;
@@ -110,7 +111,7 @@ const AppLayout: React.FC<LayoutProps> = ({
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <ScrollView
         scrollEventThrottle={16}
-        scrollEnabled={isLoading ? false : isScrollable}
+        scrollEnabled={isScrollable}
         keyboardShouldPersistTaps="handled"
         onScroll={onScroll}>
         <TouchableOpacity onPress={Keyboard.dismiss} activeOpacity={1}>
@@ -122,17 +123,11 @@ const AppLayout: React.FC<LayoutProps> = ({
             ) : null}
             {isBackground && (
               <>
-                {backgroundIndex === 1 ? (
-                  <BackgroundImage1 preserveAspectRatio="none" width="100%" />
+                {backgroundIndex === 2 ? (
+                  <BackgroundImage1 preserveAspectRatio="none" />
                 ) : null}
 
-                {backgroundIndex === 2 ? (
-                  <BackgroundImage2
-                    preserveAspectRatio="none"
-                    width="100%"
-                    height="100%"
-                  />
-                ) : null}
+                <BackgroundImage2 />
               </>
             )}
             <ContentWrapper
@@ -155,4 +150,4 @@ const AppLayout: React.FC<LayoutProps> = ({
   )
 }
 
-export default memo(AppLayout)
+export default AppLayout

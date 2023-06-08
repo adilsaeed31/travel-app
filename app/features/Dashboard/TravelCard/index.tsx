@@ -1,5 +1,5 @@
 import React, {memo} from 'react'
-import {View, ScrollView} from 'react-native'
+import {ScrollView} from 'react-native'
 import Animated, {
   FadeIn,
   FadeInRight,

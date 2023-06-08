@@ -1,4 +1,5 @@
 import styled from 'styled-components/native'
+import {vh, vw} from '@Utils'
 
 interface SpacerProps {
   horizontal?: boolean
@@ -9,11 +10,11 @@ const Spacer = styled.View<SpacerProps>`
   ${({horizontal, size}) => {
     if (horizontal) {
       return `
-        margin-left: ${size}px;
+        margin-left: ${vw(size)}px;
       `
     } else {
       return `
-        margin-top: ${size}px;
+        margin-top: ${vh(size)}px;
       `
     }
   }};

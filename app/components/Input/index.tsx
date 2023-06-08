@@ -23,7 +23,7 @@ interface CustomInputProps {
   onChangeText?: (text: string) => void
   isValid?: (valid: boolean) => void
   errorMessage?: string
-  returnKeyType?: ReturnKeyTypeOptions
+returnKeyType?: ReturnKeyTypeOptions
   keyboardType?: KeyboardTypeOptions
 }
 
