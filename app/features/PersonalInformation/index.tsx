@@ -1,10 +1,9 @@
 /* eslint-disable eqeqeq */
 
 import React, {useContext, useState, useMemo, useEffect} from 'react'
-import {View, SafeAreaView, ScrollView, Dimensions, Alert} from 'react-native'
+import {View, SafeAreaView, ScrollView, StyleSheet} from 'react-native'
 import {fetcher} from '@Api'
 import {useNavigation} from '@react-navigation/native'
-import Splash from 'react-native-splash-screen'
 
 import {useTranslation} from 'react-i18next'
 import {
@@ -18,16 +17,9 @@ import {
 import {TEXT_VARIANTS, Colors, BASE_URL, getItem} from '@Utils'
 import {useMutation} from '@tanstack/react-query'
 import {countriesList, SaudiList, educationList} from './masterData'
-Splash.hide()
 import styled from 'styled-components/native'
-import {
-  PostalCodeValidator,
-  CityValidator,
-  ContactName,
-  BuildingNumberValidator,
-} from './validators'
-const fakeToke =
-  'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2NDdmM2RhZDM5OTQ2NDM2ODA4MzlmMzAiLCJzdWIiOiIwNTMxOTg1MjE0Iiwicm9sZXMiOlsiT05CT0FSRElORyJdLCJpc3MiOiJjb20uc2FpYi52ZW50dXJlcy5hdXRoIiwiYXVkIjoiY29tLnNhaWIudmVudHVyZXMuYXV0aCIsImV4cCI6MTc4NjA2NDA3NSwiaWRlbnRpdHkiOiIyNTQ1MzI5NzYxIiwicGhvbmVfbnVtYmVyIjoiMDUzMTk4NTIxNCJ9.eNr4-Y2FzTWcTxmyjn0653UfWVWWhR29IJDzesZQ3y-WLPLXtEGk2KDILUW_yZBvaeIy3XuIUYmHV2M9M2b85w'
+import {PostalCodeValidator, CityValidator, ContactName} from './validators'
+
 import {AppContext, AppProviderProps} from '@Context'
 type IFormTYpe = {
   city: string | null
@@ -43,29 +35,28 @@ type IFormTYpe = {
   relation: string | null
   mobileNumber: string | null
 }
-
-const MapApiToState = (state, response, isRTL) => {
-  let newVal = {...state}
+const MapApiToState = (apiResponse: any, isRTL: boolean | undefined) => {
   return {
-    ...newVal,
-    education:
-      response.education[isRTL ? 'level_name_ar' : 'level_name_en'] ||
-      newVal.education,
-    countryOfBirth:
-      response.birth_country[isRTL ? 'name_ar' : 'name_en'] ||
-      response?.offshore_address.country ||
-      newVal.countryOfBirth,
-    buldingNumber:
-      response?.offshore_address?.building_number || newVal.buldingNumber,
-    streetNanme: response?.offshore_address?.street || newVal.streetNanme,
-    district: response?.offshore_address?.district || newVal.district,
-    postalCode: response?.offshore_address?.postal_code || newVal.postalCode,
-    city: response?.offshore_address?.city || newVal.city,
-    contactName: response.additional_contact.name || newVal.contactName,
-    mobileNumber: response.additional_contact.contact_number,
+    countryOfBirth: isRTL
+      ? apiResponse?.birth_country?.name_ar
+      : apiResponse?.birth_country?.name_en,
+    city: isRTL
+      ? apiResponse?.birth_city?.name_ar || apiResponse?.offshore_address?.city
+      : apiResponse?.birth_city?.name_en || apiResponse?.offshore_address?.city,
+    education: isRTL
+      ? apiResponse?.education?.level_name_ar
+      : apiResponse?.education?.level_name_en,
+    phoneNumber: apiResponse?.offshore_address?.contact_number,
+    buldingNumber: apiResponse?.offshore_address?.building_number,
+    postalCode: apiResponse?.offshore_address?.postal_code,
+    streetNanme: apiResponse?.offshore_address?.street,
+    district: apiResponse?.offshore_address?.district,
+    contactName: apiResponse?.additional_contact?.name,
+    relation: apiResponse?.additional_contact?.relation,
+    mobileNumber: apiResponse?.additional_contact?.contact_number,
   }
 }
-const MapFormValues = (
+const MapFormValuesForApi = (
   values: IFormTYpe,
   IsSaudi: boolean,
   showAdditionalInformation: boolean,
@@ -105,7 +96,7 @@ const MapFormValues = (
         district: values.district,
         postal_code: values.postalCode,
         city: values.city,
-        contact_number: values.contactName,
+        contact_number: values.phoneNumber,
         country: values.countryOfBirth,
       }
   let additional_contact = !showAdditionalInformation
@@ -144,7 +135,6 @@ function PersonalInformation() {
     useState(false)
   const [currentOpendIndx, setCurrentOpenedInx] = useState(-1)
   const {isRTL} = useContext<AppProviderProps>(AppContext)
-  const [formLoading, setFormLoading] = useState(false)
   const [disabledFields, setDisabledFields] = useState({countryOfBirth: false})
   const {t} = useTranslation()
   const [values, setValues] = useState<IFormTYpe>({
@@ -192,7 +182,7 @@ function PersonalInformation() {
       values.poBox &&
       values.postalCode &&
       values.city &&
-      values.phoneNumber
+      values.phoneNumber?.length
     ) {
       isValid = true
     }
@@ -207,17 +197,27 @@ function PersonalInformation() {
     return isValid
   }, [values, IsSaudi, showAdditionalInformation])
 
-  const {isLoading, data, mutate, reset} = useMutation({
+  const {isLoading, data, mutate} = useMutation({
     mutationFn: async () => {
       let journeySecrets
       let journeySecretsData = await getItem('journeySecrets')
       if (journeySecretsData) {
         journeySecrets = JSON.parse(journeySecretsData)
       }
-      console.log('ourneySecrets.access_token,', journeySecrets?.access_token)
+      console.log('request access token,', journeySecrets?.access_token)
+      console.log('========  post personal information==============')
+      console.log(
+        MapFormValuesForApi(values, IsSaudi, showAdditionalInformation, isRTL),
+      )
+      console.log('======================')
       let req: any = await fetcher(BASE_URL + '/onboarding/personal', {
         method: 'POST',
-        body: MapFormValues(values, IsSaudi, showAdditionalInformation, isRTL),
+        body: MapFormValuesForApi(
+          values,
+          IsSaudi,
+          showAdditionalInformation,
+          isRTL,
+        ),
         token: journeySecrets.access_token,
       })
       let res = await req.json()
@@ -228,7 +228,6 @@ function PersonalInformation() {
     isLoading: isGetDataLoading,
     data: PersonalInformationData,
     mutate: GetPersonalInformationData,
-    reset: restGetPersonalInformation,
   } = useMutation({
     mutationFn: async () => {
       let journeySecrets
@@ -246,47 +245,39 @@ function PersonalInformation() {
   })
   useEffect(() => {
     GetPersonalInformationData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
   useEffect(() => {
     console.log('======PersonalInformationData Get=========')
     console.log(PersonalInformationData)
-
     setValues({
       ...values,
-      countryOfBirth: isRTL
-        ? PersonalInformationData?.birth_country?.name_ar
-        : PersonalInformationData?.birth_country?.name_en,
-      city: isRTL
-        ? PersonalInformationData?.birth_city?.name_ar ||
-          PersonalInformationData?.offshore_address?.city
-        : PersonalInformationData?.birth_city?.name_en ||
-          PersonalInformationData?.offshore_address?.city,
-      education: isRTL
-        ? PersonalInformationData?.education?.level_name_ar
-        : PersonalInformationData?.education?.level_name_en,
-      buldingNumber: PersonalInformationData?.offshore_address?.building_number,
-      postalCode: PersonalInformationData?.offshore_address?.postal_code,
-      streetNanme: PersonalInformationData?.offshore_address?.street,
-      contactName: PersonalInformationData?.offshore_address?.contact_number,
+      ...MapApiToState(PersonalInformationData, isRTL),
     })
-    if (
-      PersonalInformationData?.birth_country.name_ar ||
-      PersonalInformationData?.birth_country.name_ar
+    setShowAdditionalInformation(
+      PersonalInformationData?.additional_contact?.contact_number
+        ? true
+        : false,
     )
+    if (
+      PersonalInformationData?.birth_country?.name_ar ||
+      PersonalInformationData?.birth_country?.name_ar
+    ) {
       setDisabledFields({...disabledFields, countryOfBirth: true})
-    //      MapApiToState(values, PersonalInformationData, isRTL)
-    console.log('======PersonalInformationData Get=========')
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [PersonalInformationData])
 
   useEffect(() => {
-    console.log('-----------------')
-    console.log('needed-re', data)
-    console.log('-----------------')
+    console.log('--------personalInformatio post result---------')
+    console.log(data)
+    console.log('--------personalInformatio post result-------------')
 
     if (data?.onboarding_application_id) {
-      navigation.push('FinicalInformation')
+      navigation?.push('FinicalInformation')
     }
-  }, [data])
+  }, [data, navigation])
 
   const RenderCHeckbox = React.useMemo(
     () => (
@@ -307,29 +298,27 @@ function PersonalInformation() {
         </RadioButton>
       </RadioWrapper>
     ),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [showAdditionalInformation],
   )
   const handlePostPersonalInformation = () => {
-    // setFormLoading(true)
-    // setTimeout(() => {
-    //   setFormLoading(false)
-    //   navigation.navigate('FinicalInformation')
-    // }, 300)
     mutate()
   }
   return (
     <ScrollView
       keyboardShouldPersistTaps="always"
-      key={showAdditionalInformation + values.countryOfBirth}
-      contentContainerStyle={{flex: 1}}>
+      key={String(
+        showAdditionalInformation + String(values.countryOfBirth || ''),
+      )}
+      contentContainerStyle={styles.scrollViewContainer}>
       <Layout
         isBack={true}
         onBack={() => navigation.goBack()}
         isHeader={true}
-        isLoading={formLoading || isLoading || isGetDataLoading}
+        isLoading={isLoading || isGetDataLoading}
         isBackground={true}>
         <SafeAreaWrapper>
-          <View isRTL={!!isRTL}>
+          <View>
             <Spacer />
             <Header isRTL={!!isRTL}>
               {t('onboarding:personalInformation:personalInformation')}
@@ -515,7 +504,7 @@ function PersonalInformation() {
           <StyledButton
             disabled={!isFormValid}
             onPress={handlePostPersonalInformation}>
-            <Text variant={TEXT_VARIANTS.body700}>
+            <Text variant={TEXT_VARIANTS.bodyBold}>
               {t('onboarding:personalInformation:continue')}
             </Text>
           </StyledButton>
@@ -561,12 +550,13 @@ const SafeAreaWrapper = styled(SafeAreaView)`
   flex: 1;
   justify-content: space-between;
 `
-const FormWrapper = styled(View)<{isRTL: boolean}>`
-  flex: 1;
-  background-color: red;
-`
 
 const LoginForm = styled.View`
   width: 100%;
   margin-top: 10px;
 `
+const styles = StyleSheet.create({
+  scrollViewContainer: {
+    flex: 1,
+  },
+})

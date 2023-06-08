@@ -1,5 +1,11 @@
 import React, {useState, useRef, FC, useEffect, memo} from 'react'
-import {TextInput, View, TouchableOpacity} from 'react-native'
+import {
+  TextInput,
+  View,
+  TouchableOpacity,
+  ReturnKeyTypeOptions,
+  KeyboardTypeOptions,
+} from 'react-native'
 import {useTranslation} from 'react-i18next'
 import styled from 'styled-components/native'
 
@@ -17,6 +23,8 @@ interface CustomInputProps {
   onChangeText?: (text: string) => void
   isValid?: (valid: boolean) => void
   errorMessage?: string
+  returnKeyType?: ReturnKeyTypeOptions
+  keyboardType?: KeyboardTypeOptions
 }
 
 const InputWrapper = styled(View)<{isError: boolean; isFocused: boolean}>`
@@ -76,6 +84,8 @@ const CustomInput: FC<CustomInputProps> = ({
   onChangeText = () => {},
   isValid = () => {},
   errorMessage = '',
+  returnKeyType,
+  keyboardType,
 
   ...rest
 }) => {
@@ -142,6 +152,8 @@ const CustomInput: FC<CustomInputProps> = ({
             onBlur={handleBlur}
             cursorColor={'#8c8a86'}
             selectionColor={'#8c8a86'}
+            returnKeyType={returnKeyType}
+            keyboardType={keyboardType}
             {...rest}
           />
           {isPassword && (
