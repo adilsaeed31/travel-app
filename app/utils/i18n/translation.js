@@ -133,6 +133,7 @@ export const translation = {
       manage: 'Manage',
       quickLoad: 'Quick Load',
       addNew: 'Add New Card',
+      doMore: 'Do more with SAIB',
     },
   },
   ar: {
@@ -181,12 +182,12 @@ export const translation = {
         'للمتابعة في عملية انشاء الحساب, فضلاً أثبت هويتك عن طريق نفاذ',
       nafathByApp: 'التحقق عن طريق تطبيق نفاذ',
       nafathByWeb: 'التحقق طريق موقع نفاذ',
-      confirmCall:
-        'عملية إنشاء حسابك تمت بنجاح و سيصلك إتصال للتأكيد',
+      confirmCall: 'عملية إنشاء حسابك تمت بنجاح و سيصلك إتصال للتأكيد',
       ref: 'رقم مرجع التسجيل',
       returnLogin: 'العودة لصفحة تسجيل الدخول',
       errorMessage: 'خطأ في التحقق',
-      noNafathInfo: 'عزيزنا العميل, للأسف لم نستطع الحصول علي المعلومات  الكافية من نفاذ',
+      noNafathInfo:
+        'عزيزنا العميل, للأسف لم نستطع الحصول علي المعلومات  الكافية من نفاذ',
       applicationSubmitted:
         'مبروك لقد تم إنشاء حسابك بنجاح, تستطيع الان تفعيل بطاقة السفر',
       activeCard: 'تفعيل البطاقة',
@@ -254,6 +255,7 @@ export const translation = {
     },
     Dashboard: {
       tabTitle: 'بطاقة سفر',
+      tabTitle2: 'حساب',
     },
     TravelCard: {
       currentCodeEuro: 'يورو {{amount}}',
@@ -263,6 +265,7 @@ export const translation = {
       manage: 'يدير',
       quickLoad: 'تحميل سريع',
       addNew: 'إضافة بطاقة جديدة',
+      doMore: 'افعل المزيد مع البنك السعودي للاستثمار',
     },
   },
 }

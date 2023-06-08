@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, StyleSheet, LogBox, TouchableOpacity} from 'react-native'
+import {View, StyleSheet, TouchableOpacity} from 'react-native'
 import {BottomTabBarProps} from '@react-navigation/bottom-tabs'
 import Animated, {ZoomInDown} from 'react-native-reanimated'
 import cn from 'classnames'
@@ -10,9 +10,6 @@ import {useStore} from '@Store'
 import {TCTextView} from '@Components'
 import {Colors, flexRowLayout} from '@Utils'
 import {HomeIcon, LoyaltyIcon, MenuIcon} from '@Assets'
-
-// remove this ignoreLog line after fixing it
-LogBox.ignoreLogs(['ViewPropTypes will be removed from React Native'])
 
 const BottomTabBar: React.FC<BottomTabBarProps> = props => {
   const {t} = useTranslation()

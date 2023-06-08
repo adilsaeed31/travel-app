@@ -17,6 +17,8 @@ interface CustomInputProps {
   onChangeText?: (text: string) => void
   isValid?: (valid: boolean) => void
   errorMessage?: string
+  returnKeyType?: any
+  keyboardType?: any
 }
 
 const InputWrapper = styled(View)<{isError: boolean; isFocused: boolean}>`
@@ -76,7 +78,8 @@ const CustomInput: FC<CustomInputProps> = ({
   onChangeText = () => {},
   isValid = () => {},
   errorMessage = '',
-
+  returnKeyType,
+  keyboardType,
   ...rest
 }) => {
   const inputRef = useRef<TextInput>(null)
@@ -142,6 +145,8 @@ const CustomInput: FC<CustomInputProps> = ({
             onBlur={handleBlur}
             cursorColor={'#8c8a86'}
             selectionColor={'#8c8a86'}
+            returnKeyType={returnKeyType}
+            keyboardType={keyboardType}
             {...rest}
           />
           {isPassword && (
