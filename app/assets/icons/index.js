@@ -8,6 +8,8 @@ export {default as AddNew} from './AddNew'
 export {default as Back} from './Back'
 export {default as Check} from './Check'
 export {default as CheckWarning} from './CheckWarning'
+
+export {default as Close} from './Close'
 export {default as ChevronUp} from './ChevronUp'
 export {default as DownArrow} from './DownArrow'
 export {default as Eye} from './Eye'
