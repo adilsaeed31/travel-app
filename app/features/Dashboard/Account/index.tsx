@@ -2,7 +2,7 @@ import React, {memo} from 'react'
 import {ScrollView, View} from 'react-native'
 import Animated, {FadeInRight} from 'react-native-reanimated'
 
-import {Layout, QuickActions, UserAccountCardView} from '@Components'
+import {QuickActions, UserAccountCardView} from '@Components'
 import ListViewItem from './ListViewItem'
 import {FaceIcon} from '@Assets'
 
@@ -13,9 +13,9 @@ type AccountScreenScreenProps = {
 const AccountScreen: React.FC<AccountScreenScreenProps> = () => {
   return (
     <ScrollView style={{height: '100%', width: '100%'}}>
-      <View style={{flex: 3}}>
+      <Animated.View entering={FadeInRight.duration(1000).delay(50)}>
         <UserAccountCardView />
-      </View>
+      </Animated.View>
       <View style={{flex: 1, flexGrow: 0.8}}>
         <QuickActions />
       </View>

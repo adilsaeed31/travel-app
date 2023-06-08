@@ -7,7 +7,7 @@ import {flexRowLayout, screenWidth} from '@Utils'
 import {TravelCardSvg, TravelCardSvgBlack, Shadow} from '@Assets'
 
 import {default as AddNewCard} from '../AddNewCard'
-import {default as TCDot} from '../../../Intro/Dot'
+import {default as TCDot} from '../../../../Intro/Dot'
 
 const data = ['card1', 'card2', 'AddNew']
 
@@ -85,12 +85,12 @@ const UserTravelCard = () => {
           },
         )}>
         <Item i={0} scrollX={scrollX}>
-          <TravelCardSvgBlack className="z-1" />
+          <TravelCardSvg className="z-1" />
           <Image className="relative z-0 -mt-7" source={Shadow} />
         </Item>
 
         <Item i={1} scrollX={scrollX}>
-          <TravelCardSvg className="z-1" />
+          <TravelCardSvgBlack className="z-1" />
           <Image className="relative z-0 -mt-7" source={Shadow} />
         </Item>
 

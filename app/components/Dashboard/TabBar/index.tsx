@@ -160,7 +160,7 @@ import cn from 'classnames'
 
 import {useStore} from '@Store'
 import {ProfileIcon} from '@Assets'
-import {Colors, flexRowLayout, itemPos, screenWidth as width} from '@Utils'
+import {Colors, flexRowLayout, itemPos, vw, screenWidth as width} from '@Utils'
 import {TCTextView} from '@Components'
 import Animated, {SlideInRight} from 'react-native-reanimated'
 import {useTranslation} from 'react-i18next'
@@ -247,6 +247,7 @@ const TCTabBar = ({left, right}: any) => {
               {useNativeDriver: false},
             )}
             ListFooterComponent={footerComponent}
+            contentContainerStyle={{justifyContent: 'center'}}
             showsHorizontalScrollIndicator={false}
             renderItem={({item, index}) => (
               <View className="overflow-hidden">
@@ -272,7 +273,7 @@ const TCTabBar = ({left, right}: any) => {
             style={[
               styles.headerBar,
               {
-                width: headerWidths[active],
+                width: vw(50),
                 transform: [
                   {translateX: barTranslate},
                   {translateX: barTranslate1},
@@ -331,6 +332,8 @@ const styles = StyleSheet.create({
   headerBar: {
     height: 4,
     bottom: 1,
+    overflow: 'hidden',
+    marginLeft: 20,
     position: 'absolute',
     borderTopLeftRadius: 8,
     borderTopRightRadius: 8,
