@@ -1,5 +1,5 @@
 import React from 'react'
-import {View} from 'react-native'
+import {View, ScrollView} from 'react-native'
 import {useTranslation} from 'react-i18next'
 import Animated, {SlideInLeft, SlideInRight} from 'react-native-reanimated'
 import cn from 'classnames'
@@ -19,7 +19,7 @@ const QuickLoads = () => {
     <View
       className={cn(
         flexRowLayout(isRTL),
-        'justify-center items-center mx-6 mt-6',
+        'justify-center items-center mx-6 mt-2',
       )}>
       <Animated.View
         className="pt-1 items-center"
@@ -36,11 +36,13 @@ const QuickLoads = () => {
           'items-center',
         )}
         entering={SlideInRight.duration(1000).delay(50)}>
-        <QuickLoad name={t('TravelCard:currentCodeEuro', {amount: '100'})} />
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          <QuickLoad name={t('TravelCard:currentCodeEuro', {amount: '100'})} />
 
-        <QuickLoad name={t('TravelCard:currentCodeEuro', {amount: '200'})} />
+          <QuickLoad name={t('TravelCard:currentCodeEuro', {amount: '200'})} />
 
-        <QuickLoad name={t('TravelCard:currentCodeEuro', {amount: '300'})} />
+          <QuickLoad name={t('TravelCard:currentCodeEuro', {amount: '300'})} />
+        </ScrollView>
       </Animated.View>
     </View>
   )

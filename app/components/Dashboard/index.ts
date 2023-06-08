@@ -4,4 +4,3 @@ export {default as QuickLoad} from './QuickLoad'
 
 export * from './TravelCard'
 export * from './Account'
-export * from './TabTiles'
