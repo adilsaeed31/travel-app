@@ -362,7 +362,7 @@ const RadioWrapper = styled(View)<{isRTL: boolean}>`
   flex-direction: row;
 `
 
-const Hr = styled(View)<{isRTL: boolean}>`
+const Hr = styled(View)`
   border-bottom: 1px solid #b7b7b7;
   width: 100%;
   background-color: #b7b7b7;
