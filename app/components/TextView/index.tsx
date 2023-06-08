@@ -22,7 +22,7 @@ function TCTextView({
   children: string | React.ReactElement | null
   variant?: any
   className?: string
-  style?: string
+  style?: string | object
 }) {
   return (
     <StyledTextView
