@@ -6,11 +6,13 @@ import {useTranslation} from 'react-i18next'
 import {DownArrow, EuroFlag} from '@Assets'
 import {flexRowLayout, m2} from '@Utils'
 import {useStore} from '@Store'
-import {TCTextView} from '@Components'
+
+import {default as TCTextView} from '../../../TextView'
 
 const CurrencyRow = () => {
   const {t} = useTranslation()
   const isRTL = useStore(state => state.isRTL)
+
   return (
     <View
       className={cn(

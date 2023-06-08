@@ -1,10 +1,10 @@
 import React from 'react'
 import {View, TouchableOpacity} from 'react-native'
 import {NativeWindStyleSheet} from 'nativewind'
+import {useTranslation} from 'react-i18next'
 
 import {AddNew} from '@Assets'
-import {TCTextView} from '@Components'
-import {useTranslation} from 'react-i18next'
+import {default as TCTextView} from '.././../../TextView'
 
 const AddNewCard = () => {
   const {t} = useTranslation()

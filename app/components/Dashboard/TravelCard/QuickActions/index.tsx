@@ -8,7 +8,7 @@ import {useStore} from '@Store'
 import {flexRowLayout} from '@Utils'
 import {AddCurrencyIcon, LoadIcon, ManageIcon, UnloadIcon} from '@Assets'
 
-import QuickAction from '../../../QuickAction'
+import QuickAction from '../../QuickAction'
 
 const QuickActions = () => {
   const {t} = useTranslation()

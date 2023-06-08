@@ -5,8 +5,9 @@ import cn from 'classnames'
 
 import {useStore} from '@Store'
 import {Promotion1} from '@Assets'
-import {TCTextView} from '@Components'
 import {flexRowLayout, screenWidth} from '@Utils'
+
+import {default as TCTextView} from '../../../TextView'
 
 const itemWidth = (screenWidth / 3) * 2
 const offset = itemWidth
@@ -55,7 +56,7 @@ const Promotions = () => {
             useNativeDriver: false,
           },
         )}>
-        <View className={cn(flexRowLayout(isRTL))}>
+        <View className={cn(flexRowLayout(isRTL), 'mt-5')}>
           <Item i={0} scrollX={scrollX}>
             <Image className="w-80 h-20 mr-2" source={Promotion1} />
           </Item>

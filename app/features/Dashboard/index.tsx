@@ -1,14 +1,28 @@
-import React from 'react'
+import React, {Suspense, lazy} from 'react'
 
 import {Layout as AppLayout, TabBar} from '@Components'
+import {ActivityIndicator} from 'react-native'
 
-import TravelCard from './TravelCard'
-import Account from './Account'
+const TravelCard = lazy(() => import('./TravelCard'))
+const Account = lazy(() => import('./Account'))
 
-export default function DashboardFeature() {
+const DashboardFeature = () => {
   return (
     <AppLayout isDashboardLayout>
-      <TabBar left={<TravelCard />} right={<Account />} />
+      <TabBar
+        left={
+          <Suspense fallback={<ActivityIndicator />}>
+            <TravelCard />
+          </Suspense>
+        }
+        right={
+          <Suspense fallback={<ActivityIndicator />}>
+            <Account />
+          </Suspense>
+        }
+      />
     </AppLayout>
   )
 }
+
+export default DashboardFeature

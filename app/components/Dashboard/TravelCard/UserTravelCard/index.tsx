@@ -7,7 +7,7 @@ import {flexRowLayout, screenWidth} from '@Utils'
 import {TravelCardSvg, TravelCardSvgBlack, Shadow} from '@Assets'
 
 import {default as AddNewCard} from '../AddNewCard'
-import {default as TCDot} from '../../../../Intro/Dot'
+import {default as TCDot} from '../../../Intro/Dot'
 
 const data = ['card1', 'card2', 'AddNew']
 

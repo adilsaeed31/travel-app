@@ -8,8 +8,8 @@ import {useStore} from '@Store'
 import {flexRowLayout, m2} from '@Utils'
 import {QuickLoadIcon} from '@Assets'
 
-import {default as TCTextView} from '../../../../TextView'
-import {default as QuickLoad} from '../../../QuickLoad'
+import {default as TCTextView} from '../../../TextView'
+import {default as QuickLoad} from '../../QuickLoad'
 
 const QuickLoads = () => {
   const {t} = useTranslation()

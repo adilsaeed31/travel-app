@@ -10,7 +10,7 @@ import {View, SafeAreaView, TouchableOpacity, StyleSheet} from 'react-native'
 import {fetcher} from '@Api'
 import {useMutation} from '@tanstack/react-query'
 import {useNavigation} from '@react-navigation/native'
-import {SheetData, SheetsIndexs} from './SheetData'
+import {SheetData, SheetsIndexs} from '../../finicalInformationScreen/SheetData'
 
 import {useTranslation} from 'react-i18next'
 import {

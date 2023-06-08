@@ -1,6 +1,0 @@
-export {default as UserTravelCard} from './UserTravelCard'
-export {default as AddNewCard} from './AddNewCard'
-export {default as CurrencyRow} from './CurrencyRow'
-export {default as QuickActions} from './QuickActions'
-export {default as QuickLoads} from './QuickLoads'
-export {default as Promotions} from './Promotions'
