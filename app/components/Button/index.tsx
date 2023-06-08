@@ -5,6 +5,11 @@ import Ripple, {RippleProps} from 'react-native-material-ripple'
 
 import Text from '../TextView'
 
+const Textview = styled(Text)<any>`
+  font-weight: 400;
+  font-size: 17px;
+`
+
 const StyledView = styled(View)<any>`
   flex-direction: row;
   justify-content: center;
@@ -62,7 +67,7 @@ const TCButton: React.FC<ButtonProps> = ({
 }) => {
   return disabled ? (
     <StyledView isRTL={false} varient={varient} disabled={disabled} {...rest}>
-      <Text>{children}</Text>
+      <Textview>{children}</Textview>
     </StyledView>
   ) : (
     <Ripple
@@ -70,7 +75,7 @@ const TCButton: React.FC<ButtonProps> = ({
       rippleColor={RippleColor}
       {...rest}>
       <StyledView isRTL={false} varient={varient} {...rest}>
-        <Text>{children}</Text>
+        <Textview>{children}</Textview>
       </StyledView>
     </Ripple>
   )
