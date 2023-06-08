@@ -35,7 +35,7 @@ const {Navigator, Screen} = createStackNavigator()
 const AuthNavigator = () => {
   return (
     <Navigator
-      initialRouteName="LegalInfoFlow3"
+      initialRouteName="Auth"
       screenOptions={{
         headerShown: false,
         gestureEnabled: false,
