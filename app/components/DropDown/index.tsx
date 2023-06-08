@@ -7,7 +7,6 @@ import {
   FlatList,
   TouchableOpacity,
   StyleSheet,
-  Platform,
 } from 'react-native'
 import styled from 'styled-components/native'
 import {AppContext, AppProviderProps} from '@Context'
@@ -17,6 +16,7 @@ import {Search} from '@Assets'
 import Modal from 'react-native-modal'
 import Text from '../TextView'
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
+import {Close} from '@Assets'
 
 const DropDownInput = styled(Pressable)<{
   isRTL: boolean
@@ -109,8 +109,13 @@ export default function DropDown({
     return (
       <SheetContentWrapper dynamicHeight={dynamicHeight} key={10}>
         <OneFlexView>
-          <ToNotch />
-          <Title isRTL={!!isRTL}>{title}</Title>
+          <ToNotch onPress={onSheetClose} />
+          <TitelWrapper>
+            <Title isRTL={!!isRTL}>{title}</Title>
+            <TouchableOpacity onPress={() => onSheetClose()}>
+              <Close />
+            </TouchableOpacity>
+          </TitelWrapper>
           {/* <Subtitle isRTL={!!isRTL}>{subTitle}</Subtitle> */}
           {hasSearch && (
             <InputWrapper>
@@ -124,8 +129,9 @@ export default function DropDown({
               />
             </InputWrapper>
           )}
-          <View style={{paddingBottom: 10}}>
+          <FlatListWrapper>
             <FlatList
+              style={{marginBottom: dynamicHeight ? undefined : 100}}
               keyboardShouldPersistTaps="always"
               data={SearchResult}
               keyExtractor={(_item, i) => String(i)}
@@ -142,7 +148,7 @@ export default function DropDown({
                 </ClickableItem>
               )}
             />
-          </View>
+          </FlatListWrapper>
         </OneFlexView>
       </SheetContentWrapper>
     )
@@ -156,16 +162,14 @@ export default function DropDown({
             swipingDirection === 'down' && onSheetClose()
           }
           propagateSwipe={true}
-          swipeDirection={!Platform.OS === 'android' ? 'down' : undefined}
+          // swipeDirection={!Platform.OS === 'android' ? 'down' : undefined}
           animationIn="fadeInUpBig"
           animationOut="fadeOutDownBig"
           onBackdropPress={onSheetClose}
           avoidKeyboard={true}
           style={styles.noMargin}
           isVisible={isOpen}>
-          <ModalWrapper onPress={onSheetClose} activeOpacity={1}>
-            {renderContent()}
-          </ModalWrapper>
+          <ModalWrapper>{renderContent()}</ModalWrapper>
         </Modal>
       </KeyboardAwareScrollView>
 
@@ -199,18 +203,9 @@ const Title = styled(Text)<{isRTL: boolean}>`
   font-size: 20px;
   line-height: 28px;
   text-align: ${props => (props.isRTL ? 'right' : 'left')};
-  margin-top: 24px;
 `
-// const Subtitle = styled(Text)<{isRTL: boolean}>`
-//   font-weight: 400;
-//   font-size: 12px;
-//   line-height: 21px;
 
-//   color: #9f9fa7;
-//   text-align: ${props => (props.isRTL ? 'right' : 'left')};
-//   margin-bottom: 16px;
-// `
-const ToNotch = styled(View)`
+const ToNotch = styled(TouchableOpacity)`
   width: 40px;
   height: 5px;
   align-self: center;
@@ -249,7 +244,7 @@ const InputView = styled(TextInput)`
   padding-right: 5px;
   padding-left: 5px;
 `
-const ModalWrapper = styled(TouchableOpacity)`
+const ModalWrapper = styled(View)`
   position: absolute;
   right: 0;
   left: 0;
@@ -273,3 +268,12 @@ const ClickableItemText = styled(Text)<{isRTL: boolean}>`
 const styles = StyleSheet.create({
   noMargin: {margin: 0},
 })
+const FlatListWrapper = styled(View)`
+  padding-bottom: 20px;
+`
+const TitelWrapper = styled(View)`
+  flex-direction: row;
+  margin-top: 24px;
+  justify-content: space-between;
+  align-items: center;
+`

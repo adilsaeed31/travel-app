@@ -6,10 +6,11 @@
 // /* eslint-disable eqeqeq */
 
 import React, {useContext, useEffect, useMemo, useState} from 'react'
-import {View, SafeAreaView, TouchableOpacity} from 'react-native'
+import {View, SafeAreaView, TouchableOpacity, StyleSheet} from 'react-native'
 import {fetcher} from '@Api'
 import {useMutation} from '@tanstack/react-query'
 import {useNavigation} from '@react-navigation/native'
+import {SheetData, SheetsIndexs} from './SheetData'
 
 import {useTranslation} from 'react-i18next'
 import {
@@ -21,18 +22,15 @@ import {
   TCInput,
   DatePicker,
 } from '@Components'
-import {TEXT_VARIANTS, Colors, getItem, BASE_URL} from '@Utils'
+import {TEXT_VARIANTS, Colors, getItem, BASE_URL, FakeJwtToken} from '@Utils'
 import styled from 'styled-components/native'
 import {AppContext, AppProviderProps} from '@Context'
-function getFormattedDate(date) {
-  let year = date.getFullYear()
-  let month = (1 + date.getMonth()).toString().padStart(2, '0')
-  let day = date.getDate().toString().padStart(2, '0')
-
+function getFormattedDate(date: Date) {
+  let year = date?.getFullYear()
+  let month = (1 + date?.getMonth()).toString().padStart(2, '0')
+  let day = date?.getDate().toString().padStart(2, '0')
   return month + '/' + day + '/' + year
 }
-const fakeToken =
-  'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2NDdmM2RhZDM5OTQ2NDM2ODA4MzlmMzAiLCJzdWIiOiIwNTMxOTg1MjE0Iiwicm9sZXMiOlsiT05CT0FSRElORyJdLCJpc3MiOiJjb20uc2FpYi52ZW50dXJlcy5hdXRoIiwiYXVkIjoiY29tLnNhaWIudmVudHVyZXMuYXV0aCIsImV4cCI6MTc4NjA2NDA3NSwiaWRlbnRpdHkiOiIyNTQ1MzI5NzYxIiwicGhvbmVfbnVtYmVyIjoiMDUzMTk4NTIxNCJ9.eNr4-Y2FzTWcTxmyjn0653UfWVWWhR29IJDzesZQ3y-WLPLXtEGk2KDILUW_yZBvaeIy3XuIUYmHV2M9M2b85w'
 
 type IFormTYpe = {
   //   // start
@@ -80,1161 +78,6 @@ const FormValues = {
   // endaddetionalSourceOfIncome
 }
 
-const SheetsIndexs = {
-  Occupation: 0,
-  jobCategory: 1,
-  jobTitle: 2,
-  sector: 3,
-  nameOfBusiness: 4,
-  investmentType: 5,
-  primarySourceOfIncome: 6,
-  addetionalSourceOfIncome: 7,
-  anotheraddetionalSourceOfIncome: 8,
-}
-const SheetData = {
-  Occupation: [
-    {
-      code: 1,
-      name: 'Salaried',
-      description_en: 'Salaried / Pension',
-      description_ar: '',
-    },
-    {
-      code: 2,
-      name: 'Business & Professional',
-      description_en: 'Salaried / Pension',
-      description_ar: '',
-    },
-    {
-      code: 3,
-      name: 'Investor',
-      description_en: 'Salaried / Pension',
-      description_ar: '',
-    },
-    {
-      code: 4,
-      name: 'Housewife',
-      description_en: 'Salaried / Pension',
-      description_ar: '',
-    },
-    {
-      code: 5,
-      name: 'Student',
-      description_en: 'Salaried / Pension',
-      description_ar: '',
-    },
-    {
-      code: 6,
-      name: 'Unemployed',
-      description_en: 'Salaried / Pension',
-      description_ar: '',
-    },
-    {
-      code: 7,
-      name: 'Not authorized to work',
-      description_en: 'Salaried / Pension',
-      description_ar: '',
-    },
-  ],
-
-  jobCategory: [
-    {
-      code: 'ACCT',
-
-      nameEn: 'Accountant',
-
-      nameAr: 'محاسب',
-    },
-
-    {
-      code: 'MBOA',
-
-      nameEn: 'Board member',
-
-      nameAr: 'عضو مجلس ادارة',
-    },
-
-    {
-      code: 'MDIR',
-
-      nameEn: 'CEO, general manager, managing director',
-
-      nameAr: 'مدير عام, رئيس تنفيذي , عضو منتدب',
-    },
-
-    {
-      code: 'CLER',
-
-      nameEn: 'Clerk',
-
-      nameAr: 'كاتب',
-    },
-
-    {
-      code: 'CONS',
-
-      nameEn: 'Consultant',
-
-      nameAr: 'مستشار',
-    },
-
-    {
-      code: 'DMNG',
-
-      nameEn: 'Deputy manager',
-
-      nameAr: 'نائب مدير',
-    },
-
-    {
-      code: 'DOCT',
-
-      nameEn: 'Doctor, dentist, physician',
-
-      nameAr: 'دكتور, طبيب , طبيب اسنان',
-    },
-
-    {
-      code: 'ENGR',
-
-      nameEn: 'Engineer',
-
-      nameAr: 'مهندس',
-    },
-
-    {
-      code: 'HOME',
-
-      nameEn: 'Housewife',
-
-      nameAr: 'ربة بيت',
-    },
-
-    {
-      code: 'JRNL',
-
-      nameEn: 'Journalist',
-
-      nameAr: 'صحفي',
-    },
-
-    {
-      code: 'LABO',
-
-      nameEn: 'Laborer',
-
-      nameAr: 'عامل',
-    },
-
-    {
-      code: 'LAWY',
-
-      nameEn: 'Lawyer',
-
-      nameAr: 'محامي',
-    },
-
-    {
-      code: 'MNGR',
-
-      nameEn: 'Manager, Senior Manager',
-
-      nameAr: 'مدير',
-    },
-
-    {
-      code: 'NONE',
-
-      nameEn: 'Not employed',
-
-      nameAr: 'بدون عمل',
-    },
-
-    {
-      code: 'NURS',
-
-      nameEn: 'Nurse',
-
-      nameAr: 'ممرض',
-    },
-
-    {
-      code: 'PHRM',
-
-      nameEn: 'Pharmacist',
-
-      nameAr: 'صيدلاني',
-    },
-
-    {
-      code: 'PLOT',
-
-      nameEn: 'Pilot',
-
-      nameAr: 'طيار',
-    },
-
-    {
-      code: 'PRFL',
-
-      nameEn: 'Professional',
-
-      nameAr: 'مهني متخصص',
-    },
-
-    {
-      code: 'PROF',
-
-      nameEn: 'Professor',
-
-      nameAr: 'استاذ جامعي',
-    },
-
-    {
-      code: 'RTRD',
-
-      nameEn: 'Retired',
-
-      nameAr: 'متقاعد',
-    },
-
-    {
-      code: 'SELF',
-
-      nameEn: 'Self-Employed',
-
-      nameAr: 'عمل خاص',
-    },
-
-    {
-      code: 'STDN',
-
-      nameEn: 'Student',
-
-      nameAr: 'طالب',
-    },
-
-    {
-      code: 'SPRV',
-
-      nameEn: 'Supervisor',
-
-      nameAr: 'مشرف',
-    },
-
-    {
-      code: 'TCHR',
-
-      nameEn: 'Teacher',
-
-      nameAr: 'مدرس',
-    },
-
-    {
-      code: 'TECH',
-
-      nameEn: 'Technician',
-
-      nameAr: 'فني',
-    },
-  ],
-  jobTitle: [
-    {
-      typeCode: 'ACCR',
-
-      descriptionEn: 'Airlines Cabin Crew',
-
-      descriptionAr: 'مضيفة طيران',
-    },
-
-    {
-      typeCode: 'ACCT',
-
-      descriptionEn: 'Accountant',
-
-      descriptionAr: 'محاسب',
-    },
-
-    {
-      typeCode: 'ADEM',
-
-      descriptionEn: 'Admin Employee',
-
-      descriptionAr: 'موظف اداري',
-    },
-
-    {
-      typeCode: 'AMBS',
-
-      descriptionEn: 'Ambassador',
-
-      descriptionAr: 'سفير',
-    },
-
-    {
-      typeCode: 'ARTT',
-
-      descriptionEn: 'Artist',
-
-      descriptionAr: 'فنان',
-    },
-
-    {
-      typeCode: 'AUDS',
-
-      descriptionEn: 'Auditor',
-
-      descriptionAr: 'مفتش',
-    },
-
-    {
-      typeCode: 'AUTR',
-
-      descriptionEn: 'Author',
-
-      descriptionAr: 'مؤلف',
-    },
-
-    {
-      typeCode: 'BABR',
-
-      descriptionEn: 'Barber',
-
-      descriptionAr: 'حلاق',
-    },
-
-    {
-      typeCode: 'BRGE',
-
-      descriptionEn: 'Brigadier General',
-
-      descriptionAr: 'عميد',
-    },
-
-    {
-      typeCode: 'BRKR',
-
-      descriptionEn: 'Broker',
-
-      descriptionAr: 'وسيط',
-    },
-
-    {
-      typeCode: 'CAPT',
-
-      descriptionEn: 'Captain',
-
-      descriptionAr: 'نقيب',
-    },
-
-    {
-      typeCode: 'CARP',
-
-      descriptionEn: 'Carpenter',
-
-      descriptionAr: 'نجار',
-    },
-
-    {
-      typeCode: 'CHSE',
-
-      descriptionEn: 'Chief sergeant',
-
-      descriptionAr: 'رئيس رقباء',
-    },
-
-    {
-      typeCode: 'CLER',
-
-      descriptionEn: 'Clerk',
-
-      descriptionAr: 'كاتب',
-    },
-
-    {
-      typeCode: 'CODC',
-
-      descriptionEn: 'Consul/ Deputy consul',
-
-      descriptionAr: 'قنصل',
-    },
-
-    {
-      typeCode: 'COLO',
-
-      descriptionEn: 'Colonel',
-
-      descriptionAr: 'عقيد',
-    },
-
-    {
-      typeCode: 'CONS',
-
-      descriptionEn: 'Consultant',
-
-      descriptionAr: 'مستشار',
-    },
-
-    {
-      typeCode: 'COOK',
-
-      descriptionEn: 'Cook',
-
-      descriptionAr: 'طباخ',
-    },
-
-    {
-      typeCode: 'COSU',
-
-      descriptionEn: 'Computer Support',
-
-      descriptionAr: 'دعم حاسب آلي',
-    },
-
-    {
-      typeCode: 'CPAL',
-
-      descriptionEn: 'Corporal',
-
-      descriptionAr: 'عريف',
-    },
-
-    {
-      typeCode: 'DMNG',
-
-      descriptionEn: 'Deputy manager',
-
-      descriptionAr: 'نائب مدير',
-    },
-
-    {
-      typeCode: 'DOCT',
-
-      descriptionEn: 'Doctor, dentist, physician',
-
-      descriptionAr: 'دكتور، طبيب، طبيب أسنان',
-    },
-
-    {
-      typeCode: 'DPLC',
-
-      descriptionEn: 'Diplomatic',
-
-      descriptionAr: 'دبلوماسي',
-    },
-
-    {
-      typeCode: 'DRIR',
-
-      descriptionEn: 'Driver',
-
-      descriptionAr: 'سائق',
-    },
-
-    {
-      typeCode: 'DSGR',
-
-      descriptionEn: 'Designer',
-
-      descriptionAr: 'مصمم',
-    },
-
-    {
-      typeCode: 'ELCT',
-
-      descriptionEn: 'Electrician',
-
-      descriptionAr: 'كهربائي',
-    },
-
-    {
-      typeCode: 'ENGR',
-
-      descriptionEn: 'Engineer',
-
-      descriptionAr: 'مهندس',
-    },
-
-    {
-      typeCode: 'EXPT',
-
-      descriptionEn: 'Expert',
-
-      descriptionAr: 'خبير',
-    },
-
-    {
-      typeCode: 'FARM',
-
-      descriptionEn: 'Farmer',
-
-      descriptionAr: 'مزارع',
-    },
-
-    {
-      typeCode: 'FRLT',
-
-      descriptionEn: 'First Lieutenant',
-
-      descriptionAr: 'ملازم أول',
-    },
-
-    {
-      typeCode: 'FRST',
-
-      descriptionEn: 'First Sergeant',
-
-      descriptionAr: 'رقيب أول',
-    },
-
-    {
-      typeCode: 'GENL',
-
-      descriptionEn: 'General',
-
-      descriptionAr: 'فريق أول',
-    },
-
-    {
-      typeCode: 'GURD',
-
-      descriptionEn: 'Guard',
-
-      descriptionAr: 'حارس',
-    },
-
-    {
-      typeCode: 'HODU',
-
-      descriptionEn: 'Head of Department / Unit',
-
-      descriptionAr: 'رئيس ادارة / وحدة',
-    },
-
-    {
-      typeCode: 'HOME',
-
-      descriptionEn: 'Housewife',
-
-      descriptionAr: 'ربة بيت',
-    },
-
-    {
-      typeCode: 'HOMU',
-
-      descriptionEn: 'Head of Municipality',
-
-      descriptionAr: 'رئيس بلدية',
-    },
-
-    {
-      typeCode: 'JEWM',
-
-      descriptionEn: 'Jewelry Maker',
-
-      descriptionAr: 'صائغ',
-    },
-
-    {
-      typeCode: 'JRNL',
-
-      descriptionEn: 'Journalist',
-
-      descriptionAr: 'صحفي',
-    },
-
-    {
-      typeCode: 'JUGE',
-
-      descriptionEn: 'Judge',
-
-      descriptionAr: 'قاضي',
-    },
-
-    {
-      typeCode: 'LABO',
-
-      descriptionEn: 'Laborer',
-
-      descriptionAr: 'عامل',
-    },
-
-    {
-      typeCode: 'LABT',
-
-      descriptionEn: 'Laboratory Technician',
-
-      descriptionAr: 'فني مختبرات',
-    },
-
-    {
-      typeCode: 'LAWY',
-
-      descriptionEn: 'Lawyer',
-
-      descriptionAr: 'محامي',
-    },
-
-    {
-      typeCode: 'LCPL',
-
-      descriptionEn: 'Lance Corporal',
-
-      descriptionAr: 'جندي أول',
-    },
-
-    {
-      typeCode: 'LIBA',
-
-      descriptionEn: 'Librarian',
-
-      descriptionAr: 'أمين مكتبة',
-    },
-
-    {
-      typeCode: 'LTCO',
-
-      descriptionEn: 'Lieutenant Colonel',
-
-      descriptionAr: 'مقدم',
-    },
-
-    {
-      typeCode: 'LTGE',
-
-      descriptionEn: 'Lieutenant General',
-
-      descriptionAr: 'فريق',
-    },
-
-    {
-      typeCode: 'MAGE',
-
-      descriptionEn: 'Major General',
-
-      descriptionAr: 'لواء',
-    },
-
-    {
-      typeCode: 'MAJO',
-
-      descriptionEn: 'Major',
-
-      descriptionAr: 'رائد',
-    },
-
-    {
-      typeCode: 'MBOA',
-
-      descriptionEn: 'Board member',
-
-      descriptionAr: 'عضو مجلس ادارة',
-    },
-
-    {
-      typeCode: 'MDIR',
-
-      descriptionEn: 'CEO, general manager, managing director',
-
-      descriptionAr: 'مدير عام، رئيس تنفيذي، عضو منتدب',
-    },
-
-    {
-      typeCode: 'MECH',
-
-      descriptionEn: 'Mechanical',
-
-      descriptionAr: 'ميكانيكي',
-    },
-
-    {
-      typeCode: 'MIDE',
-
-      descriptionEn: 'Minister/ Deputy Minister',
-
-      descriptionAr: 'وزير/ نائب وزير',
-    },
-
-    {
-      typeCode: 'MNGR',
-
-      descriptionEn: 'Manager, senior manager',
-
-      descriptionAr: 'مدير',
-    },
-
-    {
-      typeCode: 'NONE',
-
-      descriptionEn: 'Not employed',
-
-      descriptionAr: 'بدون عمل',
-    },
-
-    {
-      typeCode: 'NOTR',
-
-      descriptionEn: 'Notary',
-
-      descriptionAr: 'كاتب عدل',
-    },
-
-    {
-      typeCode: 'NURS',
-
-      descriptionEn: 'Nurse',
-
-      descriptionAr: 'ممرض',
-    },
-
-    {
-      typeCode: 'NUSE',
-
-      descriptionEn: 'Nurse',
-
-      descriptionAr: 'ممرض/ ممرضة',
-    },
-
-    {
-      typeCode: 'OPRT',
-
-      descriptionEn: 'Operator',
-
-      descriptionAr: 'مشغل',
-    },
-
-    {
-      typeCode: 'OTHR',
-
-      descriptionEn: 'Other',
-
-      descriptionAr: 'اخرى',
-    },
-
-    {
-      typeCode: 'PHOT',
-
-      descriptionEn: 'Photographer',
-
-      descriptionAr: 'مصور',
-    },
-
-    {
-      typeCode: 'PHRM',
-
-      descriptionEn: 'Pharmacist',
-
-      descriptionAr: 'صيدلاني',
-    },
-
-    {
-      typeCode: 'PLOT',
-
-      descriptionEn: 'Pilot',
-
-      descriptionAr: 'طيار',
-    },
-
-    {
-      typeCode: 'PRFL',
-
-      descriptionEn: 'Professional',
-
-      descriptionAr: 'مهني متخصص',
-    },
-
-    {
-      typeCode: 'PROF',
-
-      descriptionEn: 'Professor',
-
-      descriptionAr: 'أستاذ جامعي',
-    },
-
-    {
-      typeCode: 'PURE',
-
-      descriptionEn: 'Public Relation',
-
-      descriptionAr: 'علاقات عامة',
-    },
-
-    {
-      typeCode: 'RECH',
-
-      descriptionEn: 'Researcher',
-
-      descriptionAr: 'باحث',
-    },
-
-    {
-      typeCode: 'REOU',
-
-      descriptionEn: 'Rector of University',
-
-      descriptionAr: 'رئيس جامعة',
-    },
-
-    {
-      typeCode: 'RGOV',
-
-      descriptionEn: 'Region Governor',
-
-      descriptionAr: 'حاكم اداري',
-    },
-
-    {
-      typeCode: 'RTRD',
-
-      descriptionEn: 'Retired',
-
-      descriptionAr: 'متقاعد',
-    },
-
-    {
-      typeCode: 'SALM',
-
-      descriptionEn: 'Salesman',
-
-      descriptionAr: 'بائع',
-    },
-
-    {
-      typeCode: 'SECT',
-
-      descriptionEn: 'Secretary',
-
-      descriptionAr: 'سكرتير',
-    },
-
-    {
-      typeCode: 'SECU',
-
-      descriptionEn: 'Security',
-
-      descriptionAr: 'حارسأمن',
-    },
-
-    {
-      typeCode: 'SEGT',
-
-      descriptionEn: 'Sergeant',
-
-      descriptionAr: 'وكيل رقيب',
-    },
-
-    {
-      typeCode: 'SELF',
-
-      descriptionEn: 'Self-Employed',
-
-      descriptionAr: 'عمل خاص',
-    },
-
-    {
-      typeCode: 'SELT',
-
-      descriptionEn: 'Second Lieutenant',
-
-      descriptionAr: 'ملازم',
-    },
-
-    {
-      typeCode: 'SOLD',
-
-      descriptionEn: 'Soldier',
-
-      descriptionAr: 'جندي',
-    },
-
-    {
-      typeCode: 'SPRV',
-
-      descriptionEn: 'Supervisor',
-
-      descriptionAr: 'مشرف',
-    },
-
-    {
-      typeCode: 'SSGT',
-
-      descriptionEn: 'Staff Sergeant',
-
-      descriptionAr: 'رقيب',
-    },
-
-    {
-      typeCode: 'STAF',
-
-      descriptionEn: 'Staff',
-
-      descriptionAr: 'موظف',
-    },
-
-    {
-      typeCode: 'STDN',
-
-      descriptionEn: 'Student',
-
-      descriptionAr: 'طالب',
-    },
-
-    {
-      typeCode: 'TAIL',
-
-      descriptionEn: 'Tailor',
-
-      descriptionAr: 'خياط',
-    },
-
-    {
-      typeCode: 'TCHR',
-
-      descriptionEn: 'Teacher',
-
-      descriptionAr: 'مدرس',
-    },
-
-    {
-      typeCode: 'TECH',
-
-      descriptionEn: 'Technician',
-
-      descriptionAr: 'فني',
-    },
-
-    {
-      typeCode: 'TESU',
-
-      descriptionEn: 'Technical  Support',
-
-      descriptionAr: 'دعم فني',
-    },
-
-    {
-      typeCode: 'TRAN',
-
-      descriptionEn: 'Translator',
-
-      descriptionAr: 'مترجم',
-    },
-
-    {
-      typeCode: 'TRAR',
-
-      descriptionEn: 'Trainer',
-
-      descriptionAr: 'مدرب',
-    },
-
-    {
-      typeCode: 'WAOF',
-
-      descriptionEn: 'Warrant Officer',
-
-      descriptionAr: 'وكيل ضابط',
-    },
-  ],
-  sectors: [
-    {
-      typeCode: 'ACFS',
-      descriptionEn: 'Accommodation & Food Services',
-      descriptionAr: 'خدمات الاقامة والطعام',
-    },
-    {
-      typeCode: 'AGRH',
-      descriptionEn: 'Agriculture & Hunting',
-      descriptionAr: 'الزراعة والصيد',
-    },
-    {
-      typeCode: 'AREN',
-      descriptionEn: 'Arts & Entertainment',
-      descriptionAr: 'الفنون والترفية والتسلية',
-    },
-    {
-      typeCode: 'ASSA',
-      descriptionEn: 'Administrative & Support Services Activities',
-      descriptionAr: 'أنشطة الخدمات الادارية وخدمات الدعم',
-    },
-    {
-      typeCode: 'BKFI',
-      descriptionEn: 'Financial & Insurance',
-      descriptionAr: 'الأنشطةالمالية والتأمين',
-    },
-    {
-      typeCode: 'CHRT',
-      descriptionEn: 'Human Health & Social Work',
-      descriptionAr: 'الأنشطة في مجال صحة الانسان والعمل الاجتماعي',
-    },
-    {
-      typeCode: 'CMMR',
-      descriptionEn: 'Wholesale & Retail Trade',
-      descriptionAr: 'تجارة الجملة والتجزئة',
-    },
-    {
-      typeCode: 'CNTR',
-      descriptionEn: 'Construction & Contracting',
-      descriptionAr: 'البناء والمقاولات',
-    },
-    {
-      typeCode: 'DIPL',
-      descriptionEn: 'Diplomatic',
-      descriptionAr: 'النشاط الدبلوماسي',
-    },
-    {
-      typeCode: 'EDUC',
-      descriptionEn: 'Educational',
-      descriptionAr: 'تعليمي',
-    },
-    {
-      typeCode: 'EGSS',
-      descriptionEn: 'Electricity, Gas and Sewage Supply',
-      descriptionAr: ' امدادت الكهرباء والغاز والصرف الصحي',
-    },
-    {
-      typeCode: 'ENRG',
-      descriptionEn: 'Energy',
-      descriptionAr: 'الطاقة',
-    },
-    {
-      typeCode: 'FRBU',
-      descriptionEn: 'Free Business',
-      descriptionAr: 'أعمال حرة',
-    },
-    {
-      typeCode: 'GOVT',
-      descriptionEn: 'Government',
-      descriptionAr: 'حكومي',
-    },
-    {
-      typeCode: 'HSAC',
-      descriptionEn: 'Household Activities',
-      descriptionAr: 'أنشطة الأسر المعيشية',
-    },
-    {
-      typeCode: 'INDL',
-      descriptionEn: 'Industries',
-      descriptionAr: 'الصناعات',
-    },
-    {
-      typeCode: 'INFT',
-      descriptionEn: 'Information & Communication',
-      descriptionAr: 'المعلومات والاتصالات',
-    },
-    {
-      typeCode: 'INSU',
-      descriptionEn: 'Insurance',
-      descriptionAr: 'التامين',
-    },
-    {
-      typeCode: 'MEDA',
-      descriptionEn: 'Media',
-      descriptionAr: 'النشاط الاعلامي',
-    },
-    {
-      typeCode: 'MEDH',
-      descriptionEn: 'Medical or health',
-      descriptionAr: 'طبي او صحي',
-    },
-    {
-      typeCode: 'MILT',
-      descriptionEn: 'Military',
-      descriptionAr: 'عسكري',
-    },
-    {
-      typeCode: 'MNOE',
-      descriptionEn: 'Mining & Oil Extraction',
-      descriptionAr: 'التعدين واستخراج البترول',
-    },
-    {
-      typeCode: 'NTEM',
-      descriptionEn: 'Not Employed',
-      descriptionAr: 'اخرى',
-    },
-    {
-      typeCode: 'OTHR',
-      descriptionEn: 'Other',
-      descriptionAr: 'اخرى',
-    },
-    {
-      typeCode: 'PENS',
-      descriptionEn: 'Pension',
-      descriptionAr: 'النظام التقاعدي',
-    },
-    {
-      typeCode: 'PPAI',
-      descriptionEn: 'Public Pension Agency',
-      descriptionAr: 'المؤسسة العامه للتقاعد',
-    },
-    {
-      typeCode: 'PSTA',
-      descriptionEn: 'Professional, Scientific & Technical Activities',
-      descriptionAr: 'الأنشطة المهنية والعلمية والتقنية',
-    },
-    {
-      typeCode: 'QGOV',
-      descriptionEn: 'Semi-Government',
-      descriptionAr: 'شبه حكومي',
-    },
-    {
-      typeCode: 'REAC',
-      descriptionEn: 'Real Estate Activities',
-      descriptionAr: 'الأنشطة العقارية',
-    },
-    {
-      typeCode: 'TLCM',
-      descriptionEn: 'Telecommunications',
-      descriptionAr: 'الاتصالات',
-    },
-    {
-      typeCode: 'TRNS',
-      descriptionEn: 'Transport & Storage',
-      descriptionAr: 'النقل والتخزين',
-    },
-  ],
-  primarySourceOfIncome: [
-    {
-      type_code: 'CONS',
-      description_en: 'welfare',
-      description_ar: 'رعاية',
-    },
-    {
-      type_code: 'Grant',
-      description_en: 'Grant',
-      description_ar: 'منحة',
-    },
-    {
-      type_code: 'Allowance',
-      description_en: 'Allowance',
-      description_ar: 'مخصص',
-    },
-  ],
-  addetionalSourceOfIncome: [
-    {
-      type_code: 'Pension',
-      description_en: 'Pension',
-      description_ar: 'Pension',
-    },
-    {
-      type_code: 'Investment',
-      description_en: 'Investment',
-      description_ar: 'Investment',
-    },
-    {
-      type_code: 'Rental',
-      description_en: 'Rental',
-      description_ar: 'Rental',
-    },
-    {
-      type_code: 'Other free text',
-      description_en: 'Other free text',
-      description_ar: 'Other free text',
-    },
-  ],
-}
-const MapApiForState = (response, isRtl) => {
-  return
-}
 const MapStateForAPi = (values: IFormTYpe) => {
   let occupation = SheetData.Occupation.find(c => c.name == values.occupation)
   let business_name = values.nameOfBusiness
@@ -1244,7 +87,7 @@ const MapStateForAPi = (values: IFormTYpe) => {
   )
   let sector = SheetData.sectors.find(
     sec =>
-      sec.descriptionAr == values.sector || sec.descriptionAr == values.sector,
+      sec.descriptionAr == values.sector || sec.descriptionEn == values.sector,
   )
   let category = SheetData.jobCategory.find(
     c => c.nameAr || values.jobCategory || c.nameEn == values.jobCategory,
@@ -1274,7 +117,13 @@ const MapStateForAPi = (values: IFormTYpe) => {
     },
     primary_income: {
       amount: values.monthlyPrimaryIncomAmount,
-      source: null,
+      source: values.primarySourceOfIncome
+        ? SheetData.primarySourceOfIncome.find(
+            c =>
+              c.description_ar == values.primarySourceOfIncome ||
+              c.description_en == values.primarySourceOfIncome,
+          )?.type_code
+        : null,
     },
     investment_type: values.investmentType,
     additional_income_list,
@@ -1290,8 +139,6 @@ function FinacialInformationScreen() {
   const [errors, setErrors] = useState({
     ...FormValues,
   })
-  const [GosiSuccess, SetGosiSuccess] = React.useState(false)
-  const [postingFinacial, setPostingFincail] = useState(false)
 
   const ToggleSheet = (indx: number) => {
     setCurrentOpenedInx(indx)
@@ -1300,7 +147,6 @@ function FinacialInformationScreen() {
     isLoading,
     data: FinicailInformationPostResult,
     mutate: PostFinicailInformationReques,
-    reset,
   } = useMutation({
     mutationFn: async () => {
       let journeySecrets
@@ -1311,10 +157,10 @@ function FinacialInformationScreen() {
       console.log('=================')
       console.log('journeySecrets.access_token,', journeySecrets?.access_token)
       console.log('=================')
-      console.log('======request-body================')
+      console.log('=====post=request-body================')
       console.log(MapStateForAPi(values))
-      console.log('=======request-body===============')
-      let req: any = await fetcher(BASE_URL + '/onboarding/personal', {
+      console.log('=======post-request==body=============')
+      let req: any = await fetcher(BASE_URL + '/onboarding/financial', {
         method: 'POST',
         token: journeySecrets.access_token,
         body: MapStateForAPi(values),
@@ -1324,27 +170,24 @@ function FinacialInformationScreen() {
     },
   })
   useEffect(() => {
-    console.log('---------needed-result--------')
-    console.log('FinicailInformationPostResult', FinicailInformationPostResult)
-    console.log('-----------needed-result------------')
+    console.log('-------=post=request-result=----')
+    console.log(FinicailInformationPostResult)
+    console.log('---------=post=request-result=----------')
     if (FinicailInformationPostResult?.onboarding_application_id) {
       navigation.push('LegalinfoMain')
+    } else {
+      FinicailInformationPostResult?.message &&
+        alert(FinicailInformationPostResult?.message)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [FinicailInformationPostResult])
   const handelPostForm = () => {
     PostFinicailInformationReques()
-    return
-    setPostingFincail(true)
-    setTimeout(() => {
-      setPostingFincail(false)
-    }, 1000)
-    navigation.navigate('LegalinfoMain')
   }
   const {
     isLoading: LoadingFincialInformation,
     data: fincialInformationGetData,
     mutate: GetFinicalInformationMutate,
-    reset: GetFinicalInformationRestt,
   } = useMutation({
     mutationFn: async () => {
       let journeySecrets
@@ -1363,12 +206,55 @@ function FinacialInformationScreen() {
   useEffect(() => {
     GetFinicalInformationMutate()
   }, [])
+  const GosiSuccess = false
   useEffect(() => {
-    // {"additional_income_list": null, "business_name": null, "employment": null, "investment_type": null, "occupation": null, "onboarding_application_id": null, "primary_income": null}
+    let occupation = fincialInformationGetData?.occupation?.code
+      ? SheetData.Occupation.find(
+          p => p.code == fincialInformationGetData?.occupation?.code,
+        )
+      : null
+    let jobCategory = fincialInformationGetData?.employment?.category
+      ? isRTL
+        ? fincialInformationGetData?.employment?.category.name_ar
+        : fincialInformationGetData?.employment?.category.name_en
+      : null
+    let jobTitle = !fincialInformationGetData?.employment?.title
+      ? null
+      : isRTL
+      ? fincialInformationGetData?.employment?.title?.description_ar
+      : fincialInformationGetData?.employment?.title?.description_en
+    let sector = fincialInformationGetData?.employment?.sector
+      ? isRTL
+        ? fincialInformationGetData?.employment?.sector?.description_ar
+        : fincialInformationGetData?.employment?.sector?.description_en
+      : null
+    let dateOfJoin = fincialInformationGetData?.employment?.joining_date
+    let primarySourceOfIncome = fincialInformationGetData?.primary_income
+      ?.source
+      ? SheetData.primarySourceOfIncome.find(
+          c => c.type_code == fincialInformationGetData?.primary_income?.source,
+        )
+      : null
     setValues({
       ...values,
+      sector,
+      jobCategory,
+      jobTitle,
+      dateOfJoin,
+      primarySourceOfIncome: primarySourceOfIncome
+        ? isRTL
+          ? primarySourceOfIncome.description_ar
+          : primarySourceOfIncome.description_en
+        : null,
+      occupation: occupation
+        ? isRTL
+          ? occupation.description_ar
+          : occupation.description_en
+        : null,
       nameOfBusiness: fincialInformationGetData?.business_name || null,
-      monthlyPrimaryIncomAmount: fincialInformationGetData?.primary_income,
+      monthlyPrimaryIncomAmount:
+        fincialInformationGetData?.primary_income?.amount ||
+        values.monthlyPrimaryIncomAmount,
       investmentType: fincialInformationGetData?.investment_type,
       AddetionalSourceOfIncome: fincialInformationGetData
         ?.additional_income_list?.length
@@ -1376,7 +262,7 @@ function FinacialInformationScreen() {
         : false,
       AddetionalSourceOfIncomeSource: fincialInformationGetData
         ?.additional_income_list?.length
-        ? fincialInformationGetData?.additional_income_list[0]?.soruce
+        ? fincialInformationGetData?.additional_income_list[0]?.source
         : '',
       AddetionalSourceOfIncomeAmount: fincialInformationGetData
         ?.additional_income_list?.length
@@ -1388,16 +274,18 @@ function FinacialInformationScreen() {
           : false,
       AnotherAddetionalSourceOfIncomeSource: fincialInformationGetData
         ?.additional_income_list?.length
-        ? fincialInformationGetData?.additional_income_list[0]?.soruce
+        ? fincialInformationGetData?.additional_income_list[0]?.source
         : '',
       AnotherAddetionalSourceOfIncomeAmount: fincialInformationGetData
         ?.additional_income_list?.length
         ? fincialInformationGetData?.additional_income_list[0]?.amount
         : '',
     })
+
     console.log('=====fincialInformationGetData=======')
     console.log(fincialInformationGetData)
     console.log('=====fincialInformationGetData=======')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fincialInformationGetData])
   const isFormValid = useMemo(() => {
     let currentOccupationCode =
@@ -1456,6 +344,7 @@ function FinacialInformationScreen() {
         : (validationResult = true)
     }
     return validationResult
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [values])
   const navigation = useNavigation()
 
@@ -1463,8 +352,8 @@ function FinacialInformationScreen() {
     let CurrentFormView = null
     let currentOccupationCode =
       SheetData.Occupation.find(sheet => sheet.name === values.occupation)
-        ?.code || 0
-
+        ?.code || (values.occupation ? 1 : 0)
+    console.log('currentOccupationCode', currentOccupationCode)
     if (
       //'Housewife' ||'Unemployed' ||'Not authorized to work' ||Student'
       currentOccupationCode >= 4
@@ -1687,23 +576,6 @@ function FinacialInformationScreen() {
                   })
                 }
               />
-              {/* <Spacer />
-              <RadioWrapper isRTL={!!isRTL}>
-                <RadioButton
-                  selected={!showAdditionalInformation}
-                  onPress={() =>
-                    setShowAdditionalInformation(!showAdditionalInformation)
-                  }>
-                  {'Gregorian'}
-                </RadioButton>
-                <RadioButton
-                  selected={showAdditionalInformation}
-                  onPress={() =>
-                    setShowAdditionalInformation(!showAdditionalInformation)
-                  }>
-                  {'hajri'}
-                </RadioButton>
-              </RadioWrapper> */}
             </View>
           )}
           <Spacer />
@@ -1711,7 +583,7 @@ function FinacialInformationScreen() {
       )
     }
     return (
-      <View style={{flex: 1}}>
+      <View style={styles.container}>
         {CurrentFormView}
         {CurrentFormView && (
           <>
@@ -1874,12 +746,12 @@ function FinacialInformationScreen() {
         String(values.AddetionalSourceOfIncome) +
         String(values.AnotherAddetionalSourceOfIncome)
       }
-      contentContainerStyle={{flex: 1}}>
+      contentContainerStyle={styles.container}>
       <Layout
         isBack={true}
         isHeader={true}
         isBackground={true}
-        isLoading={isLoading || postingFinacial || LoadingFincialInformation}
+        isLoading={isLoading || LoadingFincialInformation}
         onBack={() => navigation.goBack()}>
         <SafeAreaWrapper>
           <FormWrapper isRTL={!!isRTL}>
@@ -1894,7 +766,7 @@ function FinacialInformationScreen() {
                 setValues({
                   ...values,
                   occupation,
-                  monthlyPrimaryIncomAmount: '',
+                  //   monthlyPrimaryIncomAmount: '',
                 })
               }}
               value={values.occupation}
@@ -1973,3 +845,8 @@ const AnotherAddetionalIconmeSource = styled(Text)`
   text-align: center;
   text-decoration-line: underline;
 `
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+})
