@@ -6,19 +6,33 @@ import {
   TCButton as Button,
   TCTextView as Text,
   DropDown,
+  RadioButton,
+  TCInput as Input,
   Spacer,
 } from '@Components'
 import {TEXT_VARIANTS, Colors, SPACER_SIZES} from '@Utils'
 import {StackNavigationProp} from '@react-navigation/stack'
 import styled from 'styled-components/native'
 import {countriesList} from '../masterData'
+import {postalCodeValidator, cityValidator} from '../validators'
 import {AppContext, AppProviderProps} from '@Context'
+
 type IFormTYpe = {
   countries: string[]
+  addressOutsideKSA: boolean
+  buldingNumber?: string
+  streetNanme?: string
+  district?: string
+  poBox?: string
+  postalCode?: string
+  city?: string
+  phoneNumber?: string
 }
 
 const FormValues = {
   countries: [],
+  addressOutsideKSA: false,
+  address: {},
 }
 
 type Props = {
@@ -68,9 +82,7 @@ function Screen({navigation}: Props) {
           <View>
             <Spacer size={SPACER_SIZES.BASE * 1.5} />
             <Header isRTL={!!isRTL}>{t('Legal Requirements')}</Header>
-            <Subheader isRTL={!!isRTL}>
-              {t('Please, select your obligations outside KSA')}
-            </Subheader>
+
             <Spacer size={SPACER_SIZES.BASE * 4} />
             <AdditionalInformation>
               {t(
@@ -108,21 +120,23 @@ function Screen({navigation}: Props) {
               !!values.countries.length &&
               values.countries.map((item, index) => {
                 return (
-                  <Row key={index}>
+                  <Row>
                     <DropDown
+                      key={index}
                       data={countriesList.map(c =>
                         isRTL ? c.nameAr : c.nameEn,
                       )}
                       label={t('Select Country') || ''}
-                      toogleClick={() => ToggleSheet(0)}
+                      toogleClick={() => ToggleSheet(index)}
                       value={item}
                       error={undefined}
                       onItemSelected={val => {
                         let sT = JSON.parse(JSON.stringify(values))
+                        console.log('>>>>>>>>>>', index)
                         sT.countries[index] = val
                         setValues(sT)
                       }}
-                      isOpen={currentOpendIndx === 0}
+                      isOpen={currentOpendIndx === index}
                       title={t('Select Country')}
                       onSheetClose={() => setCurrentOpenedInx(-1)}
                       hasSearch={false}
@@ -146,6 +160,107 @@ function Screen({navigation}: Props) {
                   </AddCountryText>
                 </AddCountry>
               )}
+
+            <AdditionalInformation>
+              {t('Do you have addresss outside of KSA')}
+            </AdditionalInformation>
+            <Spacer size={SPACER_SIZES.BASE * 1.5} />
+            <RadioWrapper isRTL={!!isRTL}>
+              <RadioButton
+                selected={!values.addressOutsideKSA}
+                onPress={() =>
+                  setValues({
+                    ...values,
+                    addressOutsideKSA: !values.addressOutsideKSA,
+                  })
+                }>
+                {t('No')}
+              </RadioButton>
+              <RadioButton
+                selected={values.addressOutsideKSA}
+                onPress={() =>
+                  setValues({
+                    ...values,
+                    addressOutsideKSA: !values.addressOutsideKSA,
+                  })
+                }>
+                {t('Yes')}
+              </RadioButton>
+            </RadioWrapper>
+            <Spacer size={SPACER_SIZES.SM} />
+            {values.addressOutsideKSA && (
+              <Row>
+                <Input
+                  value={values.buldingNumber}
+                  onChangeText={val =>
+                    setValues({...values, buldingNumber: val})
+                  }
+                  label={t('onboarding:personalInformation:buldingNumber')}
+                  errorMessage={errors.buldingNumber}
+                  keyboardType="number-pad"
+                  returnKeyType="done"
+                  maxLength={10}
+                />
+                <Spacer size={SPACER_SIZES.BASE * 4} />
+                <Input
+                  value={values.streetNanme}
+                  onChangeText={val => setValues({...values, streetNanme: val})}
+                  label={t('onboarding:personalInformation:streetNanme')}
+                  errorMessage={errors.streetNanme}
+                  returnKeyType="done"
+                  maxLength={10}
+                />
+                <Spacer size={SPACER_SIZES.BASE * 4} />
+                <Input
+                  value={values.district}
+                  onChangeText={val => setValues({...values, district: val})}
+                  label={t('onboarding:personalInformation:district')}
+                  errorMessage={errors.district}
+                  returnKeyType="done"
+                  maxLength={10}
+                />
+                <Spacer size={SPACER_SIZES.BASE * 4} />
+                <Input
+                  value={values.poBox}
+                  onChangeText={val => setValues({...values, poBox: val})}
+                  label={t('onboarding:personalInformation:poBox')}
+                  errorMessage={errors.poBox}
+                  returnKeyType="done"
+                  maxLength={10}
+                />
+                <Spacer size={SPACER_SIZES.BASE * 4} />
+                <Input
+                  value={values.postalCode}
+                  onChangeText={val => setValues({...values, postalCode: val})}
+                  label={t('onboarding:personalInformation:postalCode')}
+                  errorMessage={errors.postalCode}
+                  keyboardType="number-pad"
+                  returnKeyType="done"
+                  maxLength={10}
+                  schema={postalCodeValidator}
+                />
+                <Spacer size={SPACER_SIZES.BASE * 4} />
+                <Input
+                  value={values.city}
+                  onChangeText={val => setValues({...values, city: val})}
+                  label={t('onboarding:personalInformation:city')}
+                  errorMessage={errors.city}
+                  returnKeyType="done"
+                  maxLength={10}
+                  schema={cityValidator}
+                />
+                <Spacer size={SPACER_SIZES.BASE * 4} />
+                <Input
+                  value={values.phoneNumber}
+                  onChangeText={val => setValues({...values, phoneNumber: val})}
+                  label={t('onboarding:personalInformation:phoneNumber')}
+                  keyboardType="number-pad"
+                  returnKeyType="done"
+                  maxLength={10}
+                />
+                <Spacer size={SPACER_SIZES.BASE * 4} />
+              </Row>
+            )}
           </View>
           <StyledButton disabled={isFormValid} onPress={onComplete}>
             <Text variant={TEXT_VARIANTS.body}>{t('onboarding:continue')}</Text>
@@ -213,4 +328,7 @@ const AddCountryText = styled(Text)`
   color: #3f3d36;
   opacity: 0.5;
   text-align: center;
+`
+const RadioWrapper = styled(View)<{isRTL: boolean}>`
+  flex-direction: row;
 `

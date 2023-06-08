@@ -58,6 +58,37 @@ export const documentTypes = [
 
     levelNameAr: 'آخر',
   },
+  {
+    levelCode: 'adhaar',
+
+    levelNameEn: 'Adhaar Number',
+
+    levelNameAr: 'آخر',
+  },
+  {
+    levelCode: 'pr',
+
+    levelNameEn: 'Permanent Resident',
+
+    levelNameAr: 'آخر',
+  },
+]
+
+export const prStatusList = [
+  {
+    levelCode: 'pr',
+
+    levelNameEn: 'Permanent Resident for 6 month',
+
+    levelNameAr: 'آخر',
+  },
+  {
+    levelCode: 'pr',
+
+    levelNameEn: 'Permanent Resident for 12 month',
+
+    levelNameAr: 'آخر',
+  },
 ]
 
 export const countriesList = [
