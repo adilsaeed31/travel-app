@@ -1,5 +1,5 @@
 export {AuthFeature, OtpVerificationScreen} from './Auth'
-export * from './Intro'
-export * from './Dashboard'
+export {default as DashboardFeature} from './Dashboard'
+export {default as IntroFeature} from './Intro'
 export * from './Auth'
 export * from './Onboarding'

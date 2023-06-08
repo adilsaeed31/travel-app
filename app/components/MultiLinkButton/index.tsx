@@ -31,7 +31,7 @@ const LinkText = styled(Text)<any>`
 const ClickableText = styled(Text)<any>`
   font-family: 'Co Text';
   font-style: normal;
-  font-weight: 400;
+  font-weight: 700;
   font-size: 15px;
   line-height: 24px;
   color: #3f3d36;

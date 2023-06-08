@@ -132,7 +132,7 @@ const AuthFeature = ({navigation}: Props) => {
 
   return (
     <>
-      <Layout isScrollable={false} isLoading={isFetching}>
+      <Layout backgroundIndex={2} isScrollable={false} isLoading={isFetching}>
         <Spacer horizontal={false} size={SPACER_SIZES.BASE} />
         <TCTextView
           className="text-tc-black pt-8"

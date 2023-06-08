@@ -184,7 +184,7 @@ const OtpAuthScreen = ({navigation, route}: Props) => {
 
   return (
     <>
-      <Layout isLoading={isOTPLoading || isResend}>
+      <Layout backgroundIndex={2} isLoading={isOTPLoading || isResend}>
         <Spacer horizontal={false} size={SPACER_SIZES.BASE * 3} />
         <Text variant={TEXT_VARIANTS.heading}>{t('onboarding:enterOTP')}</Text>
         <Spacer size={SPACER_SIZES.BASE * 3} />
