@@ -23,6 +23,10 @@ import {
   LegalInfoOther,
   CreateUser,
   ExistingUser,
+  LegalInfoFlow1,
+  LegalInfoFlow2,
+  LegalInfoFlow3,
+  LegalInfoFlow4,
 } from '@Features'
 import {WIPScreen} from '@Screens'
 
@@ -31,7 +35,7 @@ const {Navigator, Screen} = createStackNavigator()
 const AuthNavigator = () => {
   return (
     <Navigator
-      initialRouteName="Auth"
+      initialRouteName="LegalInfoFlow3"
       screenOptions={{
         headerShown: false,
         gestureEnabled: false,
@@ -51,6 +55,10 @@ const AuthNavigator = () => {
       <Screen name="ActivateCard" component={ActivateCard} />
       <Screen name="LegalinfoMain" component={LegalinfoMain} />
       <Screen name="LegalInfoOther" component={LegalInfoOther} />
+      <Screen name="LegalInfoFlow1" component={LegalInfoFlow1} />
+      <Screen name="LegalInfoFlow2" component={LegalInfoFlow2} />
+      <Screen name="LegalInfoFlow3" component={LegalInfoFlow3} />
+      <Screen name="LegalInfoFlow4" component={LegalInfoFlow4} />
       <Screen name="AfterPersonExisting" component={AfterPersonExisting} />
       <Screen name="FinicalInformation" component={FinicalInformation} />
       <Screen name="Existing" component={ExistingUser} />
