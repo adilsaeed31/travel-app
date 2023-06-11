@@ -1,4 +1,5 @@
-import React, {useContext, useState, useMemo} from 'react'
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {useContext, useState, useMemo, useEffect} from 'react'
 import {View, SafeAreaView} from 'react-native'
 import {useTranslation} from 'react-i18next'
 import {
@@ -10,15 +11,19 @@ import {
   RadioButton,
   Spacer,
 } from '@Components'
-import {TEXT_VARIANTS, Colors, SPACER_SIZES} from '@Utils'
+import {TEXT_VARIANTS, Colors, SPACER_SIZES, BASE_URL, getItem} from '@Utils'
 import {StackNavigationProp} from '@react-navigation/stack'
 import styled from 'styled-components/native'
 import {countriesList} from '../masterData'
 import {AppContext, AppProviderProps} from '@Context'
+import {useStore} from '@Store'
+import {fetcher} from '@Api'
+import {useMutation} from '@tanstack/react-query'
+
 type IFormTYpe = {
   countries: {
     buldingNumber: string
-    streetNanme: string
+    streetName: string
     district: string
     poBox: string
     postalCode: string
@@ -52,6 +57,14 @@ function Screen({navigation}: Props) {
     ...FormValues,
   })
 
+  const [statusError, setStatusError] = useState<any>(false)
+
+  const setOnboardingProgress = useStore(
+    (store: any) => store.setOnboardingProgress,
+  )
+
+  const onBoardingProgress = useStore((store: any) => store.onBoardingProgress)
+
   const ToggleSheet = (indx: number) => {
     setCurrentOpenedInx(indx)
     let err = errors
@@ -61,22 +74,111 @@ function Screen({navigation}: Props) {
 
   const isFormValid = useMemo(() => {
     let isValid = true
-    console.log(values)
     return isValid
   }, [values])
 
   const onComplete = () => {
-    navigation.navigate('LegalInfoFlow3')
+    mutate()
   }
+
+  const createCountry = (country: any) => {
+    let countryObj
+    if (isRTL) {
+      countryObj = countriesList.filter(i => i.nameAr === country)[0]
+    } else {
+      countryObj = countriesList.filter(i => i.nameEn === country)[0]
+    }
+    return {
+      code: countryObj.code,
+      name_en: countryObj.nameEn,
+      name_ar: countryObj.nameAr,
+    }
+  }
+
+  const {isLoading, data, mutate} = useMutation({
+    mutationFn: async () => {
+      let journeySecrets
+      let journeySecretsData = await getItem('journeySecrets')
+      if (journeySecretsData) {
+        journeySecrets = JSON.parse(journeySecretsData)
+      }
+
+      let req: any = await fetcher(BASE_URL + '/onboarding/legal/foreign', {
+        method: 'POST',
+        body: {
+          foreign_tax_list: values.countries.map(item => ({
+            country: createCountry(item.country),
+            tin: item.tinNumber,
+            offshore_address: {
+              building_number: item.buldingNumber,
+              street: item.streetName,
+              district: item.district,
+              postal_code: item.postalCode,
+              city: item.city,
+              contact_number: item.phoneNumber,
+              country: item.country,
+              po_box: item.poBox,
+            },
+          })),
+        },
+        token: journeySecrets.access_token,
+      })
+      let res = await req.json()
+      return res
+    },
+  })
+
+  useEffect(() => {
+    try {
+      if (data) {
+        setOnboardingProgress({
+          ...onBoardingProgress,
+          legalInfoFlow2: values.countries.map(item => ({
+            country: createCountry(item.country),
+            tin: item.tinNumber,
+            offshore_address: {
+              building_number: item.buldingNumber,
+              street: item.streetName,
+              district: item.district,
+              postal_code: item.postalCode,
+              city: item.city,
+              contact_number: item.phoneNumber,
+              country: item.country,
+              po_box: item.poBox,
+            },
+          })),
+        })
+
+        if (onBoardingProgress?.legalInfoMain?.moreCitizens) {
+          navigation.navigate('LegalInfoFlow3')
+          return
+        } else if (onBoardingProgress?.legalInfoMain?.residentOutsideKSA) {
+          navigation.navigate('LegalInfoFlow4')
+          return
+        } else {
+          navigation.navigate('CreateUser')
+          return
+        }
+      }
+    } catch (e) {
+      const status = data?.status
+      switch (true) {
+        case status > 399 && status <= 500:
+          setStatusError('Some Error Occurred ')
+          break
+        default:
+          setStatusError('')
+      }
+    }
+  }, [data])
 
   return (
     <>
       <Layout
-        key={1}
         isBack={true}
         onBack={() => navigation.goBack()}
         isHeader={true}
-        isLoading={false}
+        isLoading={isLoading}
         isBackground={true}>
         <SafeAreaWrapper>
           <View>
@@ -111,7 +213,7 @@ function Screen({navigation}: Props) {
                         ...values.countries,
                         {
                           buldingNumber: '',
-                          streetNanme: '',
+                          streetName: '',
                           district: '',
                           poBox: '',
                           postalCode: '',
@@ -157,7 +259,7 @@ function Screen({navigation}: Props) {
                             ...values.countries,
                             {
                               buldingNumber: '',
-                              streetNanme: '',
+                              streetName: '',
                               district: '',
                               poBox: '',
                               postalCode: '',
@@ -247,10 +349,10 @@ function Screen({navigation}: Props) {
                     />
                     <Spacer size={SPACER_SIZES.SM} />
                     <Input
-                      value={item.buldingNumber}
+                      value={item.streetName}
                       onChangeText={val => {
                         let sT = JSON.parse(JSON.stringify(values))
-                        sT.countries[index].buldingNumber = val
+                        sT.countries[index].streetName = val
                         setValues(sT)
                       }}
                       label={t('onboarding:personalInformation:streetNanme')}
@@ -259,10 +361,10 @@ function Screen({navigation}: Props) {
                     />
                     <Spacer size={SPACER_SIZES.SM} />
                     <Input
-                      value={item.streetNanme}
+                      value={item.district}
                       onChangeText={val => {
                         let sT = JSON.parse(JSON.stringify(values))
-                        sT.countries[index].streetNanme = val
+                        sT.countries[index].district = val
                         setValues(sT)
                       }}
                       label={t('onboarding:personalInformation:district')}
@@ -335,7 +437,7 @@ function Screen({navigation}: Props) {
                         ...values.countries,
                         {
                           buldingNumber: '',
-                          streetNanme: '',
+                          streetName: '',
                           district: '',
                           poBox: '',
                           postalCode: '',
@@ -355,6 +457,7 @@ function Screen({navigation}: Props) {
                 </AddCountry>
               )}
           </View>
+          {statusError ? <ErrorText>{statusError}</ErrorText> : null}
           <StyledButton disabled={false && isFormValid} onPress={onComplete}>
             <Text variant={TEXT_VARIANTS.body}>{t('onboarding:continue')}</Text>
           </StyledButton>
@@ -427,4 +530,9 @@ const AddCountryText = styled(Text)`
 
 const RadioWrapper = styled(View)<{isRTL: boolean}>`
   flex-direction: row;
+`
+const ErrorText = styled(Text)`
+  font-weight: 500;
+  color: #f54d3f;
+  padding-left: 16px;
 `
