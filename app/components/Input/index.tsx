@@ -23,8 +23,9 @@ interface CustomInputProps {
   onChangeText?: (text: string) => void
   isValid?: (valid: boolean) => void
   errorMessage?: string
-returnKeyType?: ReturnKeyTypeOptions
+  returnKeyType?: ReturnKeyTypeOptions
   keyboardType?: KeyboardTypeOptions
+  onEndEditing?: () => {}
 }
 
 const InputWrapper = styled(View)<{isError: boolean; isFocused: boolean}>`
@@ -86,6 +87,7 @@ const CustomInput: FC<CustomInputProps> = ({
   errorMessage = '',
   returnKeyType,
   keyboardType,
+  onEndEditing,
 
   ...rest
 }) => {
@@ -154,6 +156,7 @@ const CustomInput: FC<CustomInputProps> = ({
             selectionColor={'#8c8a86'}
             returnKeyType={returnKeyType}
             keyboardType={keyboardType}
+            onSubmitEditing={onEndEditing}
             {...rest}
           />
           {isPassword && (

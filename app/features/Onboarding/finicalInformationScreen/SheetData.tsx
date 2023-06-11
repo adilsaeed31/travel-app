@@ -1133,9 +1133,9 @@ export const SheetData = {
       description_ar: 'تأجير',
     },
     {
-      type_code: 'Other free text',
-      description_en: 'Other free text',
-      description_ar: 'عمل حر آخر',
+      type_code: 'Other',
+      description_en: 'Other',
+      description_ar: 'آخر',
     },
   ],
 }
