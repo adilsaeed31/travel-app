@@ -1,37 +1,34 @@
-import React, {useContext, useState, useMemo} from 'react'
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {useContext, useState, useMemo, useEffect} from 'react'
 import {View, SafeAreaView} from 'react-native'
 import {useTranslation} from 'react-i18next'
 import {
   Layout,
   TCButton as Button,
   TCTextView as Text,
-  TCInput as Input,
-  DropDown,
   RadioButton,
   Spacer,
 } from '@Components'
-import {TEXT_VARIANTS, Colors, SPACER_SIZES} from '@Utils'
+import {TEXT_VARIANTS, Colors, SPACER_SIZES, BASE_URL, getItem} from '@Utils'
 import {StackNavigationProp} from '@react-navigation/stack'
 import styled from 'styled-components/native'
-import {pepList, specialNeedList} from '../masterData'
-
 import {AppContext, AppProviderProps} from '@Context'
+import {useStore} from '@Store'
+import {fetcher} from '@Api'
+import {useMutation} from '@tanstack/react-query'
+
 type IFormTYpe = {
-  notKsaResidents: boolean
-  pepEnabled: boolean
-  pepValue?: string
-  specialNeed: boolean
-  visaKSA: boolean
-  specialNeedValue?: string
+  isUsPerson?: boolean
+  taxOutsideKSA?: boolean
+  moreCitizens?: boolean
+  residentOutsideKSA?: boolean
 }
 
 const FormValues = {
-  notKsaResidents: undefined,
-  pepEnabled: undefined,
-  pepValue: undefined,
-  specialNeed: undefined,
-  visaKSA: undefined,
-  specialNeedValue: undefined,
+  isUsPerson: undefined,
+  taxOutsideKSA: undefined,
+  moreCitizens: undefined,
+  residentOutsideKSA: undefined,
 }
 
 type Props = {
@@ -40,48 +37,104 @@ type Props = {
 }
 
 function LegalInfoOther({navigation}: Props) {
-  const [currentOpendIndx, setCurrentOpenedInx] = useState(-1)
   const {isRTL} = useContext<AppProviderProps>(AppContext)
   const {t} = useTranslation()
+  const [statusError, setStatusError] = useState<any>(false)
   const [values, setValues] = useState<IFormTYpe>({
     ...FormValues,
   })
-  const [errors, setErrors] = useState<IFormTYpe>({
-    ...FormValues,
-  })
-  const [isLoader, setIsLoader] = useState<boolean>(false)
+
+  const setOnboardingProgress = useStore(
+    (store: any) => store.setOnboardingProgress,
+  )
+
+  const onBoardingProgress = useStore((store: any) => store.onBoardingProgress)
 
   const isFormValid = useMemo(() => {
-    const {notKsaResidents, pepEnabled, specialNeed, visaKSA} = values
+    const {isUsPerson, taxOutsideKSA, moreCitizens, residentOutsideKSA} = values
     return (
-      notKsaResidents !== undefined &&
-      pepEnabled !== undefined &&
-      specialNeed !== undefined &&
-      visaKSA !== undefined
+      isUsPerson !== undefined &&
+      taxOutsideKSA !== undefined &&
+      moreCitizens !== undefined &&
+      residentOutsideKSA !== undefined
     )
   }, [values])
 
-  const ToggleSheet = (indx: number) => {
-    setCurrentOpenedInx(indx)
-    let err = errors
-    if (indx === 0) {
-      err.pepValue = ''
-    }
-    if (indx === 1) {
-      err.specialNeedValue = ''
-    }
+  const {isLoading, data, mutate} = useMutation({
+    mutationFn: async () => {
+      let journeySecrets
+      let journeySecretsData = await getItem('journeySecrets')
+      if (journeySecretsData) {
+        journeySecrets = JSON.parse(journeySecretsData)
+      }
+      let {isUsPerson, taxOutsideKSA, moreCitizens, residentOutsideKSA} = values
+      let req: any = await fetcher(BASE_URL + '/onboarding/legal/foreign', {
+        method: 'POST',
+        body: {
+          isUsa: isUsPerson,
+          offshore_tax_resident: taxOutsideKSA,
+          offshore_citizen: moreCitizens,
+          offshore_permanent_resident: residentOutsideKSA,
+        },
+        token: journeySecrets.access_token,
+      })
+      let res = await req.json()
+      return res
+    },
+  })
 
-    setErrors(err)
-  }
-
-  const onComplete = () => {
-    console.log(values)
-    setIsLoader(true)
-    setTimeout(() => {
-      setIsLoader(false)
-      navigation.navigate('CreateUser')
-    }, 2000)
-  }
+  useEffect(() => {
+    try {
+      if (
+        data ||
+        data.isUsPerson ||
+        data.taxOutsideKSA ||
+        data.moreCitizens ||
+        data.residentOutsideKSA ||
+        (data.isUsPerson === false &&
+          data.taxOutsideKSA === false &&
+          data.moreCitizens === false &&
+          data.residentOutsideKSA === false)
+      ) {
+        let {isUsPerson, taxOutsideKSA, moreCitizens, residentOutsideKSA} =
+          values
+        setOnboardingProgress({
+          ...onBoardingProgress,
+          legalInfoMain: {
+            isUsPerson,
+            taxOutsideKSA,
+            moreCitizens,
+            residentOutsideKSA,
+          },
+        })
+        if (values.isUsPerson) {
+          navigation.navigate('LegalInfoFlow1')
+          return
+        } else if (values.taxOutsideKSA) {
+          navigation.navigate('LegalInfoFlow2')
+          return
+        } else if (values.moreCitizens) {
+          navigation.navigate('LegalInfoFlow3')
+          return
+        } else if (values.residentOutsideKSA) {
+          navigation.navigate('LegalInfoFlow4')
+          return
+        } else {
+          navigation.navigate('CreateUser')
+          return
+        }
+      }
+    } catch (e) {
+      const status = data?.status
+      switch (true) {
+        case status > 399 && status <= 500:
+          setStatusError('Some Error Occurred ')
+          break
+        default:
+          setStatusError('')
+      }
+    }
+  }, [data])
 
   return (
     <>
@@ -90,7 +143,7 @@ function LegalInfoOther({navigation}: Props) {
         isBack={true}
         onBack={() => navigation.goBack()}
         isHeader={true}
-        isLoading={isLoader}
+        isLoading={isLoading}
         isBackground={true}>
         <SafeAreaWrapper>
           <View>
@@ -103,21 +156,21 @@ function LegalInfoOther({navigation}: Props) {
             <Spacer size={SPACER_SIZES.BASE * 1.5} />
             <RadioWrapper isRTL={!!isRTL}>
               <RadioButton
-                selected={values.notKsaResidents === false}
+                selected={values.isUsPerson === false}
                 onPress={() =>
                   setValues({
                     ...values,
-                    notKsaResidents: false,
+                    isUsPerson: false,
                   })
                 }>
                 {t('No')}
               </RadioButton>
               <RadioButton
-                selected={values.notKsaResidents === true}
+                selected={values.isUsPerson === true}
                 onPress={() =>
                   setValues({
                     ...values,
-                    notKsaResidents: true,
+                    isUsPerson: true,
                   })
                 }>
                 {t('Yes')}
@@ -132,21 +185,21 @@ function LegalInfoOther({navigation}: Props) {
             <Spacer size={SPACER_SIZES.BASE * 1.5} />
             <RadioWrapper isRTL={!!isRTL}>
               <RadioButton
-                selected={values.pepEnabled === false}
+                selected={values.taxOutsideKSA === false}
                 onPress={() =>
                   setValues({
                     ...values,
-                    pepEnabled: false,
+                    taxOutsideKSA: false,
                   })
                 }>
                 {t('No')}
               </RadioButton>
               <RadioButton
-                selected={values.pepEnabled === true}
+                selected={values.taxOutsideKSA === true}
                 onPress={() =>
                   setValues({
                     ...values,
-                    pepEnabled: true,
+                    taxOutsideKSA: true,
                   })
                 }>
                 {t('Yes')}
@@ -159,21 +212,21 @@ function LegalInfoOther({navigation}: Props) {
             <Spacer size={SPACER_SIZES.BASE * 1.5} />
             <RadioWrapper isRTL={!!isRTL}>
               <RadioButton
-                selected={values.specialNeed === false}
+                selected={values.moreCitizens === false}
                 onPress={() =>
                   setValues({
                     ...values,
-                    specialNeed: false,
+                    moreCitizens: false,
                   })
                 }>
                 {t('No')}
               </RadioButton>
               <RadioButton
-                selected={values.specialNeed === true}
+                selected={values.moreCitizens === true}
                 onPress={() =>
                   setValues({
                     ...values,
-                    specialNeed: true,
+                    moreCitizens: true,
                   })
                 }>
                 {t('Yes')}
@@ -188,40 +241,33 @@ function LegalInfoOther({navigation}: Props) {
             <Spacer size={SPACER_SIZES.BASE * 1.5} />
             <RadioWrapper isRTL={!!isRTL}>
               <RadioButton
-                selected={values.visaKSA === false}
+                selected={values.residentOutsideKSA === false}
                 onPress={() =>
                   setValues({
                     ...values,
-                    visaKSA: false,
+                    residentOutsideKSA: false,
                   })
                 }>
                 {t('No')}
               </RadioButton>
               <RadioButton
-                selected={values.visaKSA === true}
+                selected={values.residentOutsideKSA === true}
                 onPress={() =>
                   setValues({
                     ...values,
-                    visaKSA: true,
+                    residentOutsideKSA: true,
                   })
                 }>
                 {t('Yes')}
               </RadioButton>
             </RadioWrapper>
           </View>
-          {isFormValid ? (
-            <StyledButton onPress={onComplete}>
-              <Text variant={TEXT_VARIANTS.body}>
-                {t('onboarding:personalInformation:continue')}
-              </Text>
-            </StyledButton>
-          ) : (
-            <StyledButton disabled>
-              <Text variant={TEXT_VARIANTS.body}>
-                {t('onboarding:personalInformation:continue')}
-              </Text>
-            </StyledButton>
-          )}
+          {statusError ? <ErrorText>{statusError}</ErrorText> : null}
+          <StyledButton disabled={!isFormValid} onPress={mutate}>
+            <Text variant={TEXT_VARIANTS.body}>
+              {t('onboarding:personalInformation:continue')}
+            </Text>
+          </StyledButton>
         </SafeAreaWrapper>
       </Layout>
     </>
@@ -260,4 +306,10 @@ const RadioWrapper = styled(View)<{isRTL: boolean}>`
 const SafeAreaWrapper = styled(SafeAreaView)`
   flex: 1;
   justify-content: space-between;
+`
+
+const ErrorText = styled(Text)`
+  font-weight: 500;
+  color: #f54d3f;
+  padding-left: 16px;
 `

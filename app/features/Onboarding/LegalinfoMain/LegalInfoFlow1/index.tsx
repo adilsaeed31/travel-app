@@ -1,4 +1,5 @@
-import React, {useContext, useState, useMemo} from 'react'
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {useContext, useState, useMemo, useEffect} from 'react'
 import {View, SafeAreaView} from 'react-native'
 import {useTranslation} from 'react-i18next'
 import {
@@ -10,12 +11,16 @@ import {
   RadioButton,
   Spacer,
 } from '@Components'
-import {TEXT_VARIANTS, Colors, SPACER_SIZES} from '@Utils'
+import {TEXT_VARIANTS, Colors, SPACER_SIZES, BASE_URL, getItem} from '@Utils'
 import {StackNavigationProp} from '@react-navigation/stack'
 import styled from 'styled-components/native'
 import {documentTypes} from '../masterData'
 import {postalCodeValidator, cityValidator} from '../validators'
 import {AppContext, AppProviderProps} from '@Context'
+import {useStore} from '@Store'
+import {fetcher} from '@Api'
+import {useMutation} from '@tanstack/react-query'
+
 type IFormTYpe = {
   documentType: string | null
   documentNumber: string | null
@@ -52,6 +57,13 @@ function Screen({navigation}: Props) {
   const [errors, setErrors] = useState<IFormTYpe>({
     ...FormValues,
   })
+  const [statusError, setStatusError] = useState<any>(false)
+
+  const setOnboardingProgress = useStore(
+    (store: any) => store.setOnboardingProgress,
+  )
+
+  const onBoardingProgress = useStore((store: any) => store.onBoardingProgress)
 
   const ToggleSheet = (indx: number) => {
     setCurrentOpenedInx(indx)
@@ -96,9 +108,87 @@ function Screen({navigation}: Props) {
     values.phoneNumber,
   ])
 
-  const onComplete = () => {
-    navigation.navigate('LegalInfoFlow2')
-  }
+  const {isLoading, data, mutate} = useMutation({
+    mutationFn: async () => {
+      let journeySecrets
+      let journeySecretsData = await getItem('journeySecrets')
+      if (journeySecretsData) {
+        journeySecrets = JSON.parse(journeySecretsData)
+      }
+
+      let req: any = await fetcher(BASE_URL + '/onboarding/legal/foreign', {
+        method: 'POST',
+        body: {
+          document_type: values.documentType,
+          document_number: values.documentNumber,
+          offshore_address: values.addressOutsideKSA
+            ? {
+                building_number: values.buldingNumber,
+                street: values.streetNanme,
+                district: values.district,
+                postal_code: values.postalCode,
+                city: values.city,
+                contact_number: values.phoneNumber,
+                country: 'USA',
+                po_box: values.poBox,
+              }
+            : null,
+        },
+        token: journeySecrets.access_token,
+      })
+      let res = await req.json()
+      return res
+    },
+  })
+
+  useEffect(() => {
+    try {
+      if (data) {
+        setOnboardingProgress({
+          ...onBoardingProgress,
+          legalInfoFlow1: {
+            document_type: values.documentType,
+            document_number: values.documentNumber,
+            offshore_address: values.addressOutsideKSA
+              ? {
+                  building_number: values.buldingNumber,
+                  street: values.streetNanme,
+                  district: values.district,
+                  postal_code: values.postalCode,
+                  city: values.city,
+                  contact_number: values.phoneNumber,
+                  country: 'USA',
+                  po_box: values.poBox,
+                }
+              : null,
+          },
+        })
+
+        if (onBoardingProgress?.legalInfoMain?.taxOutsideKSA) {
+          navigation.navigate('LegalInfoFlow2')
+          return
+        } else if (onBoardingProgress?.legalInfoMain?.moreCitizens) {
+          navigation.navigate('LegalInfoFlow3')
+          return
+        } else if (onBoardingProgress?.legalInfoMain?.residentOutsideKSA) {
+          navigation.navigate('LegalInfoFlow4')
+          return
+        } else {
+          navigation.navigate('CreateUser')
+          return
+        }
+      }
+    } catch (e) {
+      const status = data?.status
+      switch (true) {
+        case status > 399 && status <= 500:
+          setStatusError('Some Error Occurred ')
+          break
+        default:
+          setStatusError('')
+      }
+    }
+  }, [data])
 
   return (
     <>
@@ -107,7 +197,7 @@ function Screen({navigation}: Props) {
         isBack={true}
         onBack={() => navigation.goBack()}
         isHeader={true}
-        isLoading={false}
+        isLoading={isLoading}
         isBackground={true}>
         <SafeAreaWrapper>
           <View>
@@ -243,7 +333,8 @@ function Screen({navigation}: Props) {
               </Row>
             )}
           </View>
-          <StyledButton disabled={!isFormValid} onPress={onComplete}>
+          {statusError ? <ErrorText>{statusError}</ErrorText> : null}
+          <StyledButton disabled={!isFormValid} onPress={mutate}>
             <Text variant={TEXT_VARIANTS.body}>{t('onboarding:continue')}</Text>
           </StyledButton>
         </SafeAreaWrapper>
@@ -286,4 +377,10 @@ const StyledButton = styled(Button)`
   margin-right: 32px;
   width: 100%;
   align-self: center;
+`
+
+const ErrorText = styled(Text)`
+  font-weight: 500;
+  color: #f54d3f;
+  padding-left: 16px;
 `
