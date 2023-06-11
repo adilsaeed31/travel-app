@@ -1135,7 +1135,7 @@ export const SheetData = {
     {
       type_code: 'Other',
       description_en: 'Other',
-      description_ar: 'عمل حر آخر',
+      description_ar: 'آخر',
     },
   ],
 }
