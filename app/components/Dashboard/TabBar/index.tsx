@@ -5,15 +5,14 @@ import {
   FlatList,
   LayoutAnimation,
   StyleSheet,
-  TouchableOpacity,
 } from 'react-native'
 import Animated, {SlideInRight} from 'react-native-reanimated'
 import {useTranslation} from 'react-i18next'
 import Ripple from 'react-native-material-ripple'
-import cn from 'classnames'
+
 import {useStore} from '@Store'
 import {ProfileIcon} from '@Assets'
-import {Colors, flexRowLayout, screenWidth as width} from '@Utils'
+import {Colors, screenWidth as width} from '@Utils'
 import {TCTextView} from '@Components'
 
 let animationActive = true
@@ -26,7 +25,6 @@ type TCTabBarProps = {
 
 const TCTabBar: React.FC<TCTabBarProps> = ({left, right}) => {
   const {t} = useTranslation()
-  const isRTL = useStore(state => state.isRTL)
   const toggleLanguage = useStore(state => state.toggleLanguage)
 
   const [headerWidths, setWidths] = useState([0])
@@ -88,7 +86,7 @@ const TCTabBar: React.FC<TCTabBarProps> = ({left, right}) => {
 
   return (
     <View className="bg-white pt-4">
-      <View className={cn('flex-row justify-center items-center mb-6')}>
+      <View className="flex-row justify-center items-center mb-6">
         <View className="flex-1 w-20" />
         <View className="overflow-hidden bg-tc-bottom-tab">
           <FlatList
@@ -108,6 +106,7 @@ const TCTabBar: React.FC<TCTabBarProps> = ({left, right}) => {
               <View className="overflow-hidden" key={item}>
                 <Ripple
                   rippleColor={Colors.Supernova}
+                  rippleContainerBorderRadius={16}
                   onPress={() => onPressHeader(index)}
                   onLayout={e =>
                     onHeaderLayout(e.nativeEvent.layout.width, index)
@@ -139,9 +138,9 @@ const TCTabBar: React.FC<TCTabBarProps> = ({left, right}) => {
         <Animated.View
           className="flex-1 items-end mr-4"
           entering={SlideInRight.duration(1000).delay(200)}>
-          <TouchableOpacity onPress={toggleLanguage}>
+          <Ripple onPress={toggleLanguage} rippleColor={Colors.Supernova}>
             <ProfileIcon />
-          </TouchableOpacity>
+          </Ripple>
         </Animated.View>
       </View>
 

@@ -1,5 +1,6 @@
 import React, {memo} from 'react'
-import {StyleSheet, TouchableOpacity} from 'react-native'
+import {StyleSheet} from 'react-native'
+import Ripple from 'react-native-material-ripple'
 
 import {Colors, vh} from '@Utils'
 import {TCTextView} from '@Components'
@@ -9,14 +10,16 @@ const QuickLoad: React.FC<{
   onPress?: () => void
 }> = ({name, onPress}) => {
   return (
-    <TouchableOpacity
+    <Ripple
+      onPress={onPress}
       style={styles.container}
-      className="px-4 mr-2 rounded-2xl"
-      onPress={onPress}>
+      rippleColor={Colors.Supernova}
+      rippleContainerBorderRadius={16}
+      className="px-4 mr-2 rounded-2xl">
       <TCTextView className="text-tc-ios-base text-tc-quick-text">
         {name}
       </TCTextView>
-    </TouchableOpacity>
+    </Ripple>
   )
 }
 
