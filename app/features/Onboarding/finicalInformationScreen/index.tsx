@@ -771,6 +771,7 @@ function FinacialInformationScreen({navigation}: Props) {
               data={SheetData.Occupation.map(d => d.name)}
               label={t('onboarding:financialInformation:occupation') || ''}
               toogleClick={() => ToggleSheet(SheetsIndexs.Occupation)}
+              disabled={GosiSuccess}
               onItemSelected={occupation => {
                 setValues({
                   ...values,
