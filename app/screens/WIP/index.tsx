@@ -11,9 +11,7 @@ type ExistingScreenProps = {
   navigation: StackNavigationProp<{Auth: undefined}>
 }
 
-const WIPScreen: React.FC<ExistingScreenProps> = ({
-  navigation,
-}: ExistingScreenProps) => {
+function WIPScreen({navigation}: ExistingScreenProps) {
   const {t} = useTranslation()
 
   const backToLogin = () => {

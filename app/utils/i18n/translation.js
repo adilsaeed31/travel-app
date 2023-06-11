@@ -6,6 +6,7 @@ export const translation = {
       home: 'Home',
       loyalty: 'Loyalty',
       menu: 'Menu',
+      downstreamFailMsg: 'Downstream Failure',
     },
     intro: {
       next: 'Next',
@@ -143,6 +144,7 @@ export const translation = {
       home: 'بيت',
       loyalty: 'الولاء',
       menu: 'قائمة طعام',
+      downstreamFailMsg: 'حدث خطآ ما',
     },
     intro: {
       next: 'التالي',

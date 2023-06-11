@@ -250,8 +250,11 @@ const OtpPersonalIdScreen = ({navigation, route}: Props) => {
         case status === 409:
           setStatusError('OTP already Exist, Please wait for a minute')
           break
-        case status > 399 && status <= 500:
+        case status > 399 && status < 500:
           setStatusError('Some Error Occurred. Please try After Some Time')
+          break
+        case status >= 500:
+          navigation.navigate('DownstreamFail')
           break
         default:
           setStatusError('')

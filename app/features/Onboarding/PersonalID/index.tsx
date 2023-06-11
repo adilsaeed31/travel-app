@@ -310,7 +310,6 @@ const DisclaimerView = styled(View)<{
 `
 
 const UnderlineText = styled(Text)`
-  text-decoration: underline;
   text-decoration-color: rgba(63, 61, 54, 0.8);
   color: rgba(63, 61, 54, 0.8);
   line-height: 16px;

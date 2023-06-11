@@ -22,13 +22,12 @@ import {
   LegalinfoMain,
   LegalInfoOther,
   CreateUser,
-  ExistingUser,
   LegalInfoFlow1,
   LegalInfoFlow2,
   LegalInfoFlow3,
   LegalInfoFlow4,
 } from '@Features'
-import {WIPScreen} from '@Screens'
+import {WIPScreen, DownstreamFail} from '@Screens'
 
 const {Navigator, Screen} = createStackNavigator()
 
@@ -51,8 +50,7 @@ const AuthNavigator = () => {
       <Screen name="NameVerification" component={NameVerification} />
       <Screen name="personalInfo" component={PersonalInformation} />
       <Screen name="AfterInformation" component={AfterInformation} />
-      <Screen name="OTPActivateCard" component={OTPActivateCard} />
-      <Screen name="ActivateCard" component={ActivateCard} />
+      <Screen name="FinicalInformation" component={FinicalInformation} />
       <Screen name="LegalinfoMain" component={LegalinfoMain} />
       <Screen name="LegalInfoOther" component={LegalInfoOther} />
       <Screen name="LegalInfoFlow1" component={LegalInfoFlow1} />
@@ -60,10 +58,11 @@ const AuthNavigator = () => {
       <Screen name="LegalInfoFlow3" component={LegalInfoFlow3} />
       <Screen name="LegalInfoFlow4" component={LegalInfoFlow4} />
       <Screen name="AfterPersonExisting" component={AfterPersonExisting} />
-      <Screen name="FinicalInformation" component={FinicalInformation} />
-      <Screen name="Existing" component={ExistingUser} />
       <Screen name="CreateUser" component={CreateUser} />
+      <Screen name="ActivateCard" component={ActivateCard} />
+      <Screen name="OTPActivateCard" component={OTPActivateCard} />
       <Screen name="WIP" component={WIPScreen} />
+      <Screen name="DownstreamFail" component={DownstreamFail} />
     </Navigator>
   )
 }
