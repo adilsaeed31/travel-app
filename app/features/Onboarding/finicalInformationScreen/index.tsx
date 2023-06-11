@@ -40,7 +40,7 @@ type IFormTYpe = {
   jobTitle: string | null
   sector: string | null
   investmentType: string | null
-  monthlyPrimaryIncomAmount: string | null
+  monthlyPrimaryIncomAmount: number
   primarySourceOfIncome: string | null
   dateOfJoin: string | null
   gregorian: boolean
@@ -131,11 +131,13 @@ type Props = {
 function FinacialInformationScreen({navigation}: Props) {
   const [currentOpendIndx, setCurrentOpenedInx] = useState(-1)
   const {isRTL} = useContext<AppProviderProps>(AppContext)
+  const [systemErrorMessage, setSystemErrorMessage] = useState('')
+
   const {t} = useTranslation()
   const [values, setValues] = useState<IFormTYpe>({
     ...FormValues,
   })
-  const [errors] = useState({
+  const [errors, setErrors] = useState({
     ...FormValues,
   })
 
@@ -167,8 +169,38 @@ function FinacialInformationScreen({navigation}: Props) {
     if (FinicailInformationPostResult?.onboarding_application_id) {
       navigation.push('LegalinfoMain')
     }
+
+    if (
+      FinicailInformationPostResult &&
+      !FinicailInformationPostResult?.onboarding_application_id
+    ) {
+      setSystemErrorMessage(t('common:someThingWentWrong'))
+    }
   }, [FinicailInformationPostResult])
   const handelPostForm = () => {
+    let currentOccupationCode =
+      SheetData.Occupation.find(sheet => sheet.name === values.occupation)
+        ?.code || (values.occupation ? 1 : 0)
+    let alreadyFetchedFromGosiForSalaried =
+      currentOccupationCode === 1 && GosiSuccess
+    const isValideMonthlyPrimaryIncome =
+      alreadyFetchedFromGosiForSalaried || !values.monthlyPrimaryIncomAmount
+        ? true
+        : values.monthlyPrimaryIncomAmount >= 3000 &&
+          values.monthlyPrimaryIncomAmount <= 500000
+    if (!isValideMonthlyPrimaryIncome) {
+      return setErrors({
+        ...errors,
+        monthlyPrimaryIncomAmount: t(
+          'onboarding:financialInformation:monthlyIncomeValidation',
+        ),
+      })
+    } else {
+      setErrors({
+        ...errors,
+        monthlyPrimaryIncomAmount: '',
+      })
+    }
     PostFinicailInformationReques()
   }
   const {
@@ -193,7 +225,7 @@ function FinacialInformationScreen({navigation}: Props) {
   useEffect(() => {
     GetFinicalInformationMutate()
   }, [])
-  const GosiSuccess = false
+  const GosiSuccess = fincialInformationGetData?.primary_income
   useEffect(() => {
     let occupation = fincialInformationGetData?.occupation?.code
       ? SheetData.Occupation.find(
@@ -370,7 +402,6 @@ function FinacialInformationScreen({navigation}: Props) {
             errorMessage={errors.monthlyPrimaryIncomAmount}
             keyboardType="numeric"
             returnKeyType="done"
-            maxLength={10}
           />
           <Spacer />
         </>
@@ -389,6 +420,7 @@ function FinacialInformationScreen({navigation}: Props) {
             label={t('onboarding:financialInformation:InvestmentType')}
             errorMessage={errors.investmentType}
             returnKeyType="done"
+            maxLength={50}
           />
           <Spacer />
           <TCInput
@@ -400,7 +432,6 @@ function FinacialInformationScreen({navigation}: Props) {
               'onboarding:financialInformation:MonthlyPrimaryIncomeAmount',
             )}
             errorMessage={errors.monthlyPrimaryIncomAmount}
-            maxLength={10}
             keyboardType="numeric"
             returnKeyType="done"
           />
@@ -420,7 +451,7 @@ function FinacialInformationScreen({navigation}: Props) {
             label={t('onboarding:financialInformation:NameOfBussiness')}
             errorMessage={errors.nameOfBusiness}
             returnKeyType="done"
-            maxLength={10}
+            maxLength={50}
           />
 
           <Spacer />
@@ -467,13 +498,13 @@ function FinacialInformationScreen({navigation}: Props) {
             errorMessage={errors.monthlyPrimaryIncomAmount}
             keyboardType="numeric"
             returnKeyType="done"
-            maxLength={10}
           />
           <Spacer />
         </>
       )
     }
     if (
+      //let currentOccupationCode =
       //  'Salary/Pension'
       currentOccupationCode === 1
     ) {
@@ -540,7 +571,6 @@ function FinacialInformationScreen({navigation}: Props) {
                 errorMessage={errors.monthlyPrimaryIncomAmount}
                 returnKeyType="done"
                 keyboardType="numeric"
-                maxLength={10}
               />
               <Spacer />
               <DatePicker
@@ -637,7 +667,6 @@ function FinacialInformationScreen({navigation}: Props) {
                   )}
                   errorMessage={errors.AddetionalSourceOfIncomeAmount}
                   returnKeyType="done"
-                  maxLength={10}
                   keyboardType="numeric"
                 />
                 <Spacer />
@@ -761,11 +790,20 @@ function FinacialInformationScreen({navigation}: Props) {
             <Spacer />
             {RenderCurrentForm()}
           </FormWrapper>
-          <StyledButton disabled={!isFormValid} onPress={handelPostForm}>
-            <Text variant={TEXT_VARIANTS.body}>
-              {t('onboarding:financialInformation:continue')}
-            </Text>
-          </StyledButton>
+          <View>
+            {systemErrorMessage?.length ? (
+              <ErrorView>
+                <Text variant={TEXT_VARIANTS.caption}>
+                  {systemErrorMessage}
+                </Text>
+              </ErrorView>
+            ) : null}
+            <StyledButton disabled={!isFormValid} onPress={handelPostForm}>
+              <Text variant={TEXT_VARIANTS.body}>
+                {t('onboarding:financialInformation:continue')}
+              </Text>
+            </StyledButton>
+          </View>
         </SafeAreaWrapper>
       </Layout>
     </ScrollerView>
@@ -776,6 +814,19 @@ export default FinacialInformationScreen
 
 const Spacer = styled(View)`
   margin-bottom: 20px;
+`
+const ErrorView = styled(View)`
+  padding: 14px 16px;
+
+  background: rgba(255, 64, 0, 0.08);
+
+  border: 0.5px solid #ff4000;
+  backdrop-filter: blur(4px);
+  border: 0.5px solid #ff4000;
+  border-radius: 16px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
 `
 const Header = styled(Text)<{isRTL: boolean}>`
   font-size: 28px;
