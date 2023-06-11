@@ -1,5 +1,5 @@
 import React, {memo} from 'react'
-import {ScrollView} from 'react-native'
+import {View, ScrollView} from 'react-native'
 import Animated, {
   FadeIn,
   FadeInRight,
@@ -20,23 +20,25 @@ type TravelCardScreenProps = {
 
 const TravelCardScreen: React.FC<TravelCardScreenProps> = () => {
   return (
-    <ScrollView>
-      <Animated.View entering={FadeInRight.duration(1000).delay(50)}>
-        <UserTravelCard />
-      </Animated.View>
+    <View className="flex-1">
+      <ScrollView>
+        <Animated.View entering={FadeInRight.duration(1000).delay(50)}>
+          <UserTravelCard />
+        </Animated.View>
 
-      <Animated.View entering={LightSpeedInLeft.duration(1000).delay(100)}>
-        <CurrencyRow />
-      </Animated.View>
+        <Animated.View entering={LightSpeedInLeft.duration(1000).delay(100)}>
+          <CurrencyRow />
+        </Animated.View>
 
-      <QuickActions />
+        <QuickActions />
 
-      <QuickLoads />
+        <QuickLoads />
 
-      <Animated.View entering={FadeIn.duration(1500).delay(150)}>
-        <Promotions />
-      </Animated.View>
-    </ScrollView>
+        <Animated.View entering={FadeIn.duration(1500).delay(150)}>
+          <Promotions />
+        </Animated.View>
+      </ScrollView>
+    </View>
   )
 }
 

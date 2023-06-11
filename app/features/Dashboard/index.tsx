@@ -7,7 +7,7 @@ import Account from './Account'
 
 export default function DashboardFeature() {
   return (
-    <AppLayout isDashboardLayout>
+    <AppLayout hasDashboardLayout>
       <TabBar left={<TravelCard />} right={<Account />} />
     </AppLayout>
   )

@@ -1,12 +1,10 @@
-import React, {useRef} from 'react'
+import React, {useRef, memo} from 'react'
 import {useTranslation} from 'react-i18next'
 import {Animated, Image, ScrollView, View} from 'react-native'
-import cn from 'classnames'
 
-import {useStore} from '@Store'
 import {Promotion1} from '@Assets'
 import {TCTextView} from '@Components'
-import {flexRowLayout, screenWidth} from '@Utils'
+import {screenWidth} from '@Utils'
 
 const itemWidth = (screenWidth / 3) * 2
 const offset = itemWidth
@@ -27,7 +25,10 @@ const Item = ({
   })
 
   return (
-    <Animated.View {...rest} style={{width: itemWidth, transform: [{scale}]}}>
+    <Animated.View
+      key={i}
+      {...rest}
+      style={{width: itemWidth, transform: [{scale}]}}>
       {children}
     </Animated.View>
   )
@@ -35,12 +36,13 @@ const Item = ({
 
 const Promotions = () => {
   const {t} = useTranslation()
-  const isRTL = useStore(state => state.isRTL)
   const scrollX = useRef(new Animated.Value(0)).current
 
   return (
-    <View className="ml-6 mt-10">
-      <TCTextView className="mb-4">{t('TravelCard:doMore')}</TCTextView>
+    <View className="ml-4 my-4">
+      <TCTextView className="self-start mb-3">
+        {t('TravelCard:doMore')}
+      </TCTextView>
 
       <ScrollView
         horizontal
@@ -55,16 +57,16 @@ const Promotions = () => {
             useNativeDriver: false,
           },
         )}>
-        <View className={cn(flexRowLayout(isRTL))}>
-          <Item i={0} scrollX={scrollX}>
+        <View className="flex-row">
+          <Item key={0} i={0} scrollX={scrollX}>
             <Image className="w-80 h-20 mr-2" source={Promotion1} />
           </Item>
 
-          <Item i={1} scrollX={scrollX}>
+          <Item key={1} i={1} scrollX={scrollX}>
             <Image className="w-80 h-20 mr-2" source={Promotion1} />
           </Item>
 
-          <Item i={2} scrollX={scrollX}>
+          <Item key={2} i={2} scrollX={scrollX}>
             <Image className="w-80 h-20 mr-2" source={Promotion1} />
           </Item>
         </View>
@@ -73,4 +75,4 @@ const Promotions = () => {
   )
 }
 
-export default Promotions
+export default memo(Promotions)

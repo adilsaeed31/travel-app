@@ -1,10 +1,8 @@
 import React, {memo, useRef, useState} from 'react'
 import {Animated, View, ScrollView} from 'react-native'
-import cn from 'classnames'
 
-import {useStore} from '@Store'
 import {AccountDetails} from '@Assets'
-import {flexRowLayout, screenWidth} from '@Utils'
+import {screenWidth} from '@Utils'
 
 import {default as TCDot} from '../../../Intro/Dot'
 
@@ -45,7 +43,6 @@ type momentumScrollProps = {
 }
 
 const UserAccountCardView = () => {
-  const isRTL = useStore(state => state.isRTL)
   const [currentItem, setCurrentItem] = useState<number>(0)
 
   const scrollX = useRef(new Animated.Value(0)).current
@@ -83,16 +80,16 @@ const UserAccountCardView = () => {
             useNativeDriver: false,
           },
         )}>
-        <Item i={0} scrollX={scrollX}>
+        <Item i={0} key={0} scrollX={scrollX}>
           <AccountDetails />
         </Item>
 
-        <Item i={1} scrollX={scrollX}>
+        <Item i={1} key={1} scrollX={scrollX}>
           <AccountDetails />
         </Item>
       </ScrollView>
 
-      <View className={cn('mt-2', flexRowLayout(isRTL))}>
+      <View className="flex-row mt-2">
         {data?.map((item, index) => (
           <TCDot key={index} isActive={currentItem === index} hasRounded />
         ))}

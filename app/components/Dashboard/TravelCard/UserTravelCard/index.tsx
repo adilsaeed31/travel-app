@@ -1,4 +1,4 @@
-import React, {memo, useRef, useState} from 'react'
+import React, {ReactNode, memo, useRef, useState} from 'react'
 import {Animated, View, Image, ScrollView} from 'react-native'
 import cn from 'classnames'
 
@@ -7,7 +7,7 @@ import {flexRowLayout, screenWidth} from '@Utils'
 import {TravelCardSvg, TravelCardSvgBlack, Shadow} from '@Assets'
 
 import {default as AddNewCard} from '../AddNewCard'
-import {default as TCDot} from '../../../../Intro/Dot'
+import {default as TCDot} from '../../../Intro/Dot'
 
 const data = ['card1', 'card2', 'AddNew']
 
@@ -21,9 +21,9 @@ const Item = ({
   children,
   ...rest
 }: {
-  i: any
+  i: number
   scrollX: any
-  children: any
+  children: ReactNode
 }) => {
   const scale = scrollX.interpolate({
     inputRange: [-offset + i * offset, i * offset, offset + i * offset],
@@ -66,7 +66,7 @@ const UserTravelCard = () => {
   }
 
   return (
-    <View className="pt-6 items-center">
+    <View className="items-center">
       <ScrollView
         horizontal
         pagingEnabled
@@ -84,22 +84,22 @@ const UserTravelCard = () => {
             useNativeDriver: false,
           },
         )}>
-        <Item i={0} scrollX={scrollX}>
+        <Item key={0} i={0} scrollX={scrollX}>
           <TravelCardSvg className="z-1" />
           <Image className="relative z-0 -mt-7" source={Shadow} />
         </Item>
 
-        <Item i={1} scrollX={scrollX}>
+        <Item key={1} i={1} scrollX={scrollX}>
           <TravelCardSvgBlack className="z-1" />
           <Image className="relative z-0 -mt-7" source={Shadow} />
         </Item>
 
-        <Item i={2} scrollX={scrollX}>
+        <Item key={2} i={2} scrollX={scrollX}>
           <AddNewCard />
         </Item>
       </ScrollView>
 
-      <View className={cn('-mt-4', flexRowLayout(isRTL))}>
+      <View className="flex-row -mt-4">
         {data?.map((item, index) => (
           <TCDot key={index} isActive={currentItem === index} hasRounded />
         ))}

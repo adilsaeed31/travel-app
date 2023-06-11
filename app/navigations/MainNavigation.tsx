@@ -21,9 +21,15 @@ const AppNavigator = lazy(() => import('./AppNavigator'))
 const MainNavigation = () => {
   const user = useStore(state => state.user)
   const isAppReady = useStore(state => state.isAppReady)
+  const isRTL = useStore(state => state.isRTL)
+
+  // changing the layout direction if isRTL true
+  const direction = isRTL ? 'rtl' : 'ltr'
 
   return (
-    <SafeAreaProvider className="flex-1 bg-white">
+    <SafeAreaProvider
+      className="flex-1 bg-white"
+      style={{direction: direction}}>
       <StatusBar />
 
       <NavigationContainer>
@@ -41,7 +47,7 @@ const MainNavigation = () => {
             }>
             {!isAppReady ? (
               <SplashNavigator />
-            ) : user ? (
+            ) : !user ? (
               <Animated.View
                 className="flex-1"
                 entering={SlideInRight.delay(50)}>

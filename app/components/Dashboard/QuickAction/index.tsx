@@ -11,7 +11,6 @@ const QuickAction: React.FC<{
 }> = ({icon, name, onPress}) => {
   return (
     <TouchableOpacity
-      // style={[styles.container, {transform: [{scale: 0.8}]}]}
       style={styles.container}
       className="w-20 py-3 rounded-2xl justify-between items-center"
       onPress={onPress}>
