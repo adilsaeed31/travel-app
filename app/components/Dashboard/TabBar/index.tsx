@@ -30,7 +30,6 @@ const TCTabBar: React.FC<TCTabBarProps> = ({left, right}) => {
   const [headerWidths, setWidths] = useState([0])
   const [active, setActive] = useState(0)
   const scrollX = useRef(new AnimatedRN.Value(0)).current
-  const barTranslate = AnimatedRN.multiply(scrollX, -1)
   const barTranslate1 = useRef(new AnimatedRN.Value(0)).current
   const headerScrollView = useRef<any>()
   const itemScrollView = useRef<any>()
@@ -42,7 +41,9 @@ const TCTabBar: React.FC<TCTabBarProps> = ({left, right}) => {
     for (let i = 0; i < active; i += 1) {
       leftOffset += headerWidths[i]
     }
+
     headerScrollView.current?.scrollToIndex({index: active, viewPosition: 0.5})
+
     AnimatedRN.spring(barTranslate1, {
       toValue: leftOffset,
       useNativeDriver: true,
@@ -126,10 +127,7 @@ const TCTabBar: React.FC<TCTabBarProps> = ({left, right}) => {
               {
                 // do not change below 32 value its fixed for top tabbar animated border
                 width: Math.round(headerWidths[active] - 32),
-                transform: [
-                  {translateX: barTranslate},
-                  {translateX: barTranslate1},
-                ],
+                transform: [{translateX: barTranslate1}],
               },
             ]}
           />

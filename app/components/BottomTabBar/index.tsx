@@ -94,11 +94,11 @@ const BottomTabBar: React.FC<BottomTabBarProps> = ({
               key={label.toLowerCase()}
               onLongPress={onLongPress}
               accessibilityRole="button"
-              rippleColor={Colors.Supernova}
               testID={options.tabBarTestID}
+              rippleColor={Colors.Supernova}
+              className="flex-1 justify-center items-center"
               accessibilityLabel={options.tabBarAccessibilityLabel}
-              accessibilityState={isFocused ? {selected: true} : {}}
-              className="flex-1 justify-center items-center">
+              accessibilityState={isFocused ? {selected: true} : {}}>
               {renderIcon(label.toLowerCase(), isFocused)}
               <TCTextView
                 className={cn(
