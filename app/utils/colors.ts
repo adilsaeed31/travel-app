@@ -11,4 +11,5 @@ export const Colors = {
   TabText: '#343D45',
   TabBGColor: '#FCFCFA',
   TabBorder: '#D2D5D7',
+  QuickText: '#2C343B',
 }

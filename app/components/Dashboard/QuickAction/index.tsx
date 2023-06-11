@@ -1,5 +1,6 @@
 import React, {memo} from 'react'
-import {StyleSheet, TouchableOpacity, View} from 'react-native'
+import {StyleSheet} from 'react-native'
+import Ripple from 'react-native-material-ripple'
 
 import {Colors} from '@Utils'
 import {TCTextView} from '@Components'
@@ -10,16 +11,17 @@ const QuickAction: React.FC<{
   onPress?: () => void
 }> = ({icon, name, onPress}) => {
   return (
-    <TouchableOpacity
-      // style={[styles.container, {transform: [{scale: 0.8}]}]}
+    <Ripple
+      onPress={onPress}
       style={styles.container}
-      className="w-20 py-3 rounded-2xl justify-between items-center"
-      onPress={onPress}>
-      <View>{icon}</View>
+      rippleColor={Colors.Supernova}
+      rippleContainerBorderRadius={16}
+      className="w-20 py-3 rounded-2xl justify-between items-center">
+      {icon}
       <TCTextView className="mt-3 text-xs text-tc-quick-text">
         {name}
       </TCTextView>
-    </TouchableOpacity>
+    </Ripple>
   )
 }
 

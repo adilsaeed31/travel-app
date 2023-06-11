@@ -9,10 +9,9 @@ import Animated, {
 import {useTranslation} from 'react-i18next'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {useSafeAreaInsets} from 'react-native-safe-area-context'
-import cn from 'classnames'
 
 import {useAppState} from '@Hooks'
-import {flexRowLayout, vw, vh} from '@Utils'
+import {vw, vh} from '@Utils'
 import {introAnimation, SaibLogo} from '@Assets'
 import {AppContext, AppProviderProps} from '@Context'
 import {TCButton, IntroDot, IntroText, IntroLang, IntroSkip} from '@Components'
@@ -34,7 +33,7 @@ const IntroFeature: React.FC<{
   const {appStateVisible} = useAppState()
   const insetEdges = useSafeAreaInsets()
 
-  const {isAppReady, setAppReady, hasIntroSeen, isRTL} =
+  const {isAppReady, setAppReady, hasIntroSeen} =
     useContext<AppProviderProps>(AppContext)
 
   const [currentValue, setCurrentValue] = useState<number>(FirstSlideFrame)
@@ -116,8 +115,7 @@ const IntroFeature: React.FC<{
       />
 
       <View className="flex-1 p-8">
-        <View
-          className={cn(flexRowLayout(isRTL), 'justify-between items-center')}>
+        <View className="flex-row justify-between items-center">
           <Animated.View entering={EnterAnimationBounceInUp}>
             <SaibLogo />
           </Animated.View>
@@ -142,12 +140,11 @@ const IntroFeature: React.FC<{
           />
         )}
 
-        <View
-          className={cn(flexRowLayout(isRTL), 'items-center justify-between')}>
+        <View className="flex-row items-center justify-between">
           <Animated.View
             entering={EnterAnimationLeft}
-            className={cn(flexRowLayout(isRTL), 'items-center justify-center')}>
-            <View className={cn(flexRowLayout(isRTL))}>
+            className="flex-row items-center justify-center">
+            <View className="flex-row">
               <IntroDot isActive={currentValue === FirstSlideFrame} />
 
               <IntroDot isActive={currentValue === MiddleSlideFrame} />
