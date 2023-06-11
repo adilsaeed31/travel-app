@@ -15,9 +15,7 @@ type ExistingScreenProps = {
   navigation: StackNavigationProp<any>
 }
 
-const AfterPersonExisting: React.FC<ExistingScreenProps> = ({
-  navigation,
-}: ExistingScreenProps) => {
+function AfterPersonExisting({navigation}: ExistingScreenProps) {
   const {t} = useTranslation()
 
   const backToLogin = () => {

@@ -1,16 +1,21 @@
 import React from 'react'
-import {View, Text, Image} from 'react-native'
+import {View, Text} from 'react-native'
 import {useTranslation} from 'react-i18next'
 import {StackNavigationProp} from '@react-navigation/stack'
+import styled from 'styled-components/native'
 
 import {Layout, TCButton as Button} from '@Components'
-import {WarnIconImg} from '@Assets'
+import {WarnIcon} from '@Assets'
 
-type ExistingScreenProps = {
-  navigation: StackNavigationProp<{Auth: undefined}>
+const WarningIconWithShadow = styled(WarnIcon)`
+  box-shadow: 0px 4px 12px rgba(52, 61, 69, 0.12);
+`
+
+type DownstreamFailureProp = {
+  navigation: StackNavigationProp<any>
 }
 
-function ExistingScreen({navigation}: ExistingScreenProps) {
+function DownstreamFailure({navigation}: DownstreamFailureProp) {
   const {t} = useTranslation()
 
   const backToLogin = () => {
@@ -20,14 +25,10 @@ function ExistingScreen({navigation}: ExistingScreenProps) {
   return (
     <Layout isHeader={false} isBackground={false} isScrollable={false}>
       <View className="flex-1 gap-6 items-center justify-center">
-        <Image source={WarnIconImg} />
-
-        <Text className="text-2xl font-bold tc-primary text-tc-black text-center">
-          {t('onboarding:accountExist')}
-        </Text>
+        <WarningIconWithShadow />
 
         <Text className="tc-primary text-tc-secondary text-center">
-          {t('onboarding:saibACText')}
+          {t('common:downstreamFailMsg')}
         </Text>
       </View>
 
@@ -42,4 +43,4 @@ function ExistingScreen({navigation}: ExistingScreenProps) {
   )
 }
 
-export default ExistingScreen
+export default DownstreamFailure

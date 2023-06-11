@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, {useEffect, useRef, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {View} from 'react-native'
 import {useTranslation} from 'react-i18next'
 import styled from 'styled-components/native'
@@ -37,7 +37,7 @@ const CreateUserSchema = Yup.object().shape({
     .required('Please Enter a Value'),
 })
 
-const CreateUser: React.FC<CreateUserProps> = ({navigation}) => {
+function CreateUser({navigation}: CreateUserProps) {
   const {t} = useTranslation()
   const isRTL = useStore(state => state.isRTL)
 
@@ -106,7 +106,7 @@ const CreateUser: React.FC<CreateUserProps> = ({navigation}) => {
             {({
               values,
               errors,
-              isValid,
+
               touched,
               handleChange,
               handleSubmit,
