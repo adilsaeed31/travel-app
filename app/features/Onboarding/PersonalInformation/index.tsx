@@ -1,10 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable eqeqeq */
 
 import React, {useContext, useState, useMemo, useEffect} from 'react'
 import {View, SafeAreaView, ScrollView, StyleSheet} from 'react-native'
 import {fetcher} from '@Api'
-import {useNavigation} from '@react-navigation/native'
-
+import {StackNavigationProp} from '@react-navigation/stack'
 import {useTranslation} from 'react-i18next'
 import {
   Layout,
@@ -130,7 +130,11 @@ const FormValues = {
   mobileNumber: '',
 }
 
-function PersonalInformation() {
+type Props = {
+  navigation: StackNavigationProp<any>
+}
+
+function PersonalInformation({navigation}: Props) {
   const [showAdditionalInformation, setShowAdditionalInformation] =
     useState(false)
   const [currentOpendIndx, setCurrentOpenedInx] = useState(-1)
@@ -153,7 +157,6 @@ function PersonalInformation() {
       current == -1 ? false : countriesList[current].code == 'SA'
     return isSaudiSelected || !values?.countryOfBirth
   }, [values.countryOfBirth])
-  const navigation = useNavigation()
 
   const ToggleSheet = (indx: number) => {
     setCurrentOpenedInx(indx)
@@ -204,12 +207,7 @@ function PersonalInformation() {
       if (journeySecretsData) {
         journeySecrets = JSON.parse(journeySecretsData)
       }
-      console.log('request access token,', journeySecrets?.access_token)
-      console.log('========  post personal information==============')
-      console.log(
-        MapFormValuesForApi(values, IsSaudi, showAdditionalInformation, isRTL),
-      )
-      console.log('======================')
+
       let req: any = await fetcher(BASE_URL + '/onboarding/personal', {
         method: 'POST',
         body: MapFormValuesForApi(
@@ -245,12 +243,9 @@ function PersonalInformation() {
   })
   useEffect(() => {
     GetPersonalInformationData()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
-    console.log('======PersonalInformationData Get=========')
-    console.log(PersonalInformationData)
     setValues({
       ...values,
       ...MapApiToState(PersonalInformationData, isRTL),
@@ -266,18 +261,13 @@ function PersonalInformation() {
     ) {
       setDisabledFields({...disabledFields, countryOfBirth: true})
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [PersonalInformationData])
 
   useEffect(() => {
-    console.log('--------personalInformatio post result---------')
-    console.log(data)
-    console.log('--------personalInformatio post result-------------')
-
     if (data?.onboarding_application_id) {
-      navigation?.push('FinicalInformation')
+      navigation.navigate('FinicalInformation')
     }
-  }, [data, navigation])
+  }, [data])
 
   const RenderCHeckbox = React.useMemo(
     () => (
@@ -298,7 +288,6 @@ function PersonalInformation() {
         </RadioButton>
       </RadioWrapper>
     ),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [showAdditionalInformation],
   )
   const handlePostPersonalInformation = () => {

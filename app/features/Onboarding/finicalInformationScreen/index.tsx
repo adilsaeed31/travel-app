@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable eqeqeq */
 
@@ -9,9 +10,8 @@ import React, {useContext, useEffect, useMemo, useState} from 'react'
 import {View, SafeAreaView, TouchableOpacity, StyleSheet} from 'react-native'
 import {fetcher} from '@Api'
 import {useMutation} from '@tanstack/react-query'
-import {useNavigation} from '@react-navigation/native'
 import {SheetData, SheetsIndexs} from './SheetData'
-
+import {StackNavigationProp} from '@react-navigation/stack'
 import {useTranslation} from 'react-i18next'
 import {
   Layout,
@@ -22,9 +22,10 @@ import {
   TCInput,
   DatePicker,
 } from '@Components'
-import {TEXT_VARIANTS, Colors, getItem, BASE_URL, FakeJwtToken} from '@Utils'
+import {TEXT_VARIANTS, Colors, getItem, BASE_URL} from '@Utils'
 import styled from 'styled-components/native'
 import {AppContext, AppProviderProps} from '@Context'
+
 function getFormattedDate(date: Date) {
   let year = date?.getFullYear()
   let month = (1 + date?.getMonth()).toString().padStart(2, '0')
@@ -33,7 +34,6 @@ function getFormattedDate(date: Date) {
 }
 
 type IFormTYpe = {
-  //   // start
   occupation: string | null
   jobCategory: string | null
   nameOfBusiness: string | null
@@ -44,19 +44,15 @@ type IFormTYpe = {
   primarySourceOfIncome: string | null
   dateOfJoin: string | null
   gregorian: boolean
-  //   //end
-  //   //addetionalSourceOfIncome
   AddetionalSourceOfIncome: boolean
   AddetionalSourceOfIncomeSource: string | null
   AddetionalSourceOfIncomeAmount: string | null
   AnotherAddetionalSourceOfIncome: boolean
   AnotherAddetionalSourceOfIncomeSource: string | null
   AnotherAddetionalSourceOfIncomeAmount: string | null
-  // endaddetionalSourceOfIncome
 }
 
 const FormValues = {
-  //   // start
   occupation: '',
   jobCategory: '',
   nameOfBusiness: '',
@@ -67,15 +63,12 @@ const FormValues = {
   primarySourceOfIncome: '',
   dateOfJoin: '',
   gregorian: true,
-  //   //end
-  //   //addetionalSourceOfIncome
   AddetionalSourceOfIncome: false,
   AddetionalSourceOfIncomeSource: '',
   AddetionalSourceOfIncomeAmount: '',
   AnotherAddetionalSourceOfIncome: false,
   AnotherAddetionalSourceOfIncomeSource: '',
   AnotherAddetionalSourceOfIncomeAmount: '',
-  // endaddetionalSourceOfIncome
 }
 
 const MapStateForAPi = (values: IFormTYpe) => {
@@ -129,14 +122,20 @@ const MapStateForAPi = (values: IFormTYpe) => {
     additional_income_list,
   }
 }
-function FinacialInformationScreen() {
+
+type Props = {
+  navigation: StackNavigationProp<any>
+  route: any
+}
+
+function FinacialInformationScreen({navigation}: Props) {
   const [currentOpendIndx, setCurrentOpenedInx] = useState(-1)
   const {isRTL} = useContext<AppProviderProps>(AppContext)
   const {t} = useTranslation()
   const [values, setValues] = useState<IFormTYpe>({
     ...FormValues,
   })
-  const [errors, setErrors] = useState({
+  const [errors] = useState({
     ...FormValues,
   })
 
@@ -154,12 +153,7 @@ function FinacialInformationScreen() {
       if (journeySecretsData) {
         journeySecrets = JSON.parse(journeySecretsData)
       }
-      console.log('=================')
-      console.log('journeySecrets.access_token,', journeySecrets?.access_token)
-      console.log('=================')
-      console.log('=====post=request-body================')
-      console.log(MapStateForAPi(values))
-      console.log('=======post-request==body=============')
+
       let req: any = await fetcher(BASE_URL + '/onboarding/financial', {
         method: 'POST',
         token: journeySecrets.access_token,
@@ -170,16 +164,9 @@ function FinacialInformationScreen() {
     },
   })
   useEffect(() => {
-    console.log('-------=post=request-result=----')
-    console.log(FinicailInformationPostResult)
-    console.log('---------=post=request-result=----------')
     if (FinicailInformationPostResult?.onboarding_application_id) {
       navigation.push('LegalinfoMain')
-    } else {
-      FinicailInformationPostResult?.message &&
-        alert(FinicailInformationPostResult?.message)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [FinicailInformationPostResult])
   const handelPostForm = () => {
     PostFinicailInformationReques()
@@ -281,11 +268,6 @@ function FinacialInformationScreen() {
         ? fincialInformationGetData?.additional_income_list[0]?.amount
         : '',
     })
-
-    console.log('=====fincialInformationGetData=======')
-    console.log(fincialInformationGetData)
-    console.log('=====fincialInformationGetData=======')
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fincialInformationGetData])
   const isFormValid = useMemo(() => {
     let currentOccupationCode =
@@ -344,9 +326,7 @@ function FinacialInformationScreen() {
         : (validationResult = true)
     }
     return validationResult
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [values])
-  const navigation = useNavigation()
 
   const RenderCurrentForm = () => {
     let CurrentFormView = null
@@ -572,7 +552,7 @@ function FinacialInformationScreen() {
                 onDateSelected={date =>
                   setValues({
                     ...values,
-                    dateOfJoin: getFormattedDate(date),
+                    dateOfJoin: getFormattedDate(new Date(date)),
                   })
                 }
               />
