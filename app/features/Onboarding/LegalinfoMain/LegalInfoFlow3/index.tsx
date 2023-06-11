@@ -1,4 +1,5 @@
-import React, {useContext, useState, useMemo} from 'react'
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {useContext, useState, useMemo, useEffect} from 'react'
 import {View, SafeAreaView} from 'react-native'
 import {useTranslation} from 'react-i18next'
 import {
@@ -10,18 +11,21 @@ import {
   TCInput as Input,
   Spacer,
 } from '@Components'
-import {TEXT_VARIANTS, Colors, SPACER_SIZES} from '@Utils'
+import {TEXT_VARIANTS, Colors, SPACER_SIZES, BASE_URL, getItem} from '@Utils'
 import {StackNavigationProp} from '@react-navigation/stack'
 import styled from 'styled-components/native'
 import {countriesList} from '../masterData'
 import {postalCodeValidator, cityValidator} from '../validators'
 import {AppContext, AppProviderProps} from '@Context'
+import {useStore} from '@Store'
+import {fetcher} from '@Api'
+import {useMutation} from '@tanstack/react-query'
 
 type IFormTYpe = {
   countries: string[]
   addressOutsideKSA: boolean
   buldingNumber?: string
-  streetNanme?: string
+  streetName?: string
   district?: string
   poBox?: string
   postalCode?: string
@@ -52,6 +56,14 @@ function Screen({navigation}: Props) {
     ...FormValues,
   })
 
+  const [statusError, setStatusError] = useState<any>(false)
+
+  const setOnboardingProgress = useStore(
+    (store: any) => store.setOnboardingProgress,
+  )
+
+  const onBoardingProgress = useStore((store: any) => store.onBoardingProgress)
+
   const ToggleSheet = (indx: number) => {
     setCurrentOpenedInx(indx)
     let err = errors
@@ -66,8 +78,91 @@ function Screen({navigation}: Props) {
   }, [values])
 
   const onComplete = () => {
-    navigation.navigate('LegalInfoFlow2')
+    mutate()
   }
+  const createCountry = (country: any) => {
+    let countryObj
+    if (isRTL) {
+      countryObj = countriesList.filter(i => i.nameAr === country)[0]
+    } else {
+      countryObj = countriesList.filter(i => i.nameEn === country)[0]
+    }
+    return {
+      code: countryObj.code,
+      name_en: countryObj.nameEn,
+      name_ar: countryObj.nameAr,
+    }
+  }
+
+  const {isLoading, data, mutate} = useMutation({
+    mutationFn: async () => {
+      let journeySecrets
+      let journeySecretsData = await getItem('journeySecrets')
+      if (journeySecretsData) {
+        journeySecrets = JSON.parse(journeySecretsData)
+      }
+
+      let req: any = await fetcher(BASE_URL + '/onboarding/legal/foreign', {
+        method: 'POST',
+        body: {
+          nationalities: values.countries.map(item => createCountry(item)),
+          offshore_address: {
+            building_number: values.buldingNumber,
+            street: values.streetName,
+            district: values.district,
+            postal_code: values.postalCode,
+            city: values.city,
+            contact_number: values.phoneNumber,
+            country: '',
+            po_box: values.poBox,
+          },
+        },
+        token: journeySecrets.access_token,
+      })
+      let res = await req.json()
+      return res
+    },
+  })
+
+  useEffect(() => {
+    try {
+      if (data) {
+        setOnboardingProgress({
+          ...onBoardingProgress,
+          legalInfoFlow3: {
+            nationalities: values.countries.map(item => createCountry(item)),
+            offshore_address: {
+              building_number: values.buldingNumber,
+              street: values.streetName,
+              district: values.district,
+              postal_code: values.postalCode,
+              city: values.city,
+              contact_number: values.phoneNumber,
+              country: '',
+              po_box: values.poBox,
+            },
+          },
+        })
+
+        if (onBoardingProgress?.legalInfoMain?.residentOutsideKSA) {
+          navigation.navigate('LegalInfoFlow4')
+          return
+        } else {
+          navigation.navigate('CreateUser')
+          return
+        }
+      }
+    } catch (e) {
+      const status = data?.status
+      switch (true) {
+        case status > 399 && status <= 500:
+          setStatusError('Some Error Occurred ')
+          break
+        default:
+          setStatusError('')
+      }
+    }
+  }, [data])
 
   return (
     <>
@@ -76,7 +171,7 @@ function Screen({navigation}: Props) {
         isBack={true}
         onBack={() => navigation.goBack()}
         isHeader={true}
-        isLoading={false}
+        isLoading={isLoading}
         isBackground={true}>
         <SafeAreaWrapper>
           <View>
@@ -85,9 +180,7 @@ function Screen({navigation}: Props) {
 
             <Spacer size={SPACER_SIZES.BASE * 4} />
             <AdditionalInformation>
-              {t(
-                'Are you are Tax resident of any country or countries outside of Saudi Arabia?',
-              )}
+              {t('Do You have more than one citizenship?')}
             </AdditionalInformation>
             <Subheader isRTL={!!isRTL}>
               {t('Maximum of three countries can be selected.')}
@@ -203,10 +296,10 @@ function Screen({navigation}: Props) {
                 />
                 <Spacer size={SPACER_SIZES.BASE * 4} />
                 <Input
-                  value={values.streetNanme}
-                  onChangeText={val => setValues({...values, streetNanme: val})}
-                  label={t('onboarding:personalInformation:streetNanme')}
-                  errorMessage={errors.streetNanme}
+                  value={values.streetName}
+                  onChangeText={val => setValues({...values, streetName: val})}
+                  label={t('onboarding:personalInformation:streetName')}
+                  errorMessage={errors.streetName}
                   returnKeyType="done"
                   maxLength={10}
                 />
@@ -262,6 +355,7 @@ function Screen({navigation}: Props) {
               </Row>
             )}
           </View>
+          {statusError ? <ErrorText>{statusError}</ErrorText> : null}
           <StyledButton disabled={isFormValid} onPress={onComplete}>
             <Text variant={TEXT_VARIANTS.body}>{t('onboarding:continue')}</Text>
           </StyledButton>
@@ -331,4 +425,9 @@ const AddCountryText = styled(Text)`
 `
 const RadioWrapper = styled(View)<{isRTL: boolean}>`
   flex-direction: row;
+`
+const ErrorText = styled(Text)`
+  font-weight: 500;
+  color: #f54d3f;
+  padding-left: 16px;
 `
