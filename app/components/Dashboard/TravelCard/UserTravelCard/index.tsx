@@ -1,9 +1,8 @@
 import React, {ReactNode, memo, useRef, useState} from 'react'
 import {Animated, View, Image, ScrollView} from 'react-native'
-import cn from 'classnames'
 
 import {useStore} from '@Store'
-import {flexRowLayout, screenWidth} from '@Utils'
+import {screenWidth} from '@Utils'
 import {TravelCardSvg, TravelCardSvgBlack, Shadow} from '@Assets'
 
 import {default as AddNewCard} from '../AddNewCard'
@@ -46,7 +45,6 @@ type momentumScrollProps = {
 }
 
 const UserTravelCard = () => {
-  const isRTL = useStore(state => state.isRTL)
   const [currentItem, setCurrentItem] = useState<number>(0)
 
   const scrollX = useRef(new Animated.Value(0)).current
