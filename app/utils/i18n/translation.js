@@ -7,6 +7,7 @@ export const translation = {
       loyalty: 'Loyalty',
       menu: 'Menu',
       someThingWentWrong: 'Some thing went wrong',
+      downstreamFailMsg: 'Downstream Failure',
     },
     intro: {
       next: 'Next',
@@ -146,6 +147,7 @@ export const translation = {
       loyalty: 'الولاء',
       menu: 'قائمة طعام',
       someThingWentWrong: 'حدث خطآ ما',
+      downstreamFailMsg: 'حدث خطآ ما',
     },
     intro: {
       next: 'التالي',
