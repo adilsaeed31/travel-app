@@ -54,6 +54,7 @@ const MapApiToState = (apiResponse: any, isRTL: boolean | undefined) => {
     contactName: apiResponse?.additional_contact?.name,
     relation: apiResponse?.additional_contact?.relation,
     mobileNumber: apiResponse?.additional_contact?.contact_number,
+    poBox: apiResponse?.offshore_address?.po_box,
   }
 }
 const MapFormValuesForApi = (
@@ -106,13 +107,14 @@ const MapFormValuesForApi = (
         relation: values.relation,
         contact_number: values.mobileNumber,
       }
-
+  let po_box = values.poBox
   return {
     education,
     birth_country,
     birth_city,
     offshore_address,
     additional_contact,
+    po_box,
   }
 }
 const FormValues = {
@@ -147,6 +149,7 @@ function PersonalInformation({navigation}: Props) {
   const [errors, setErrors] = useState({
     ...FormValues,
   })
+  const [systemErrorMessage, setSystemErrorMessage] = useState('')
   const IsSaudi = useMemo(() => {
     const current = countriesList.findIndex(
       country =>
@@ -177,17 +180,19 @@ function PersonalInformation({navigation}: Props) {
     if (values.education && values.countryOfBirth && values.city) {
       isValid = true
     }
-    if (
-      !IsSaudi &&
-      values.buldingNumber &&
-      values.streetNanme &&
-      values.district &&
-      values.poBox &&
-      values.postalCode &&
-      values.city &&
-      values.phoneNumber?.length
-    ) {
-      isValid = true
+    if (!IsSaudi) {
+      if (
+        values.buldingNumber &&
+        values.streetNanme &&
+        values.district &&
+        values.postalCode &&
+        values.city &&
+        values.phoneNumber?.length > 3
+      ) {
+        isValid = true
+      } else {
+        return (isValid = false)
+      }
     }
     if (showAdditionalInformation) {
       if (!isValid) {
@@ -267,6 +272,10 @@ function PersonalInformation({navigation}: Props) {
     if (data?.onboarding_application_id) {
       navigation.navigate('FinicalInformation')
     }
+
+    if (data && !data?.onboarding_application_id) {
+      setSystemErrorMessage(t('common:someThingWentWrong'))
+    }
   }, [data])
 
   const RenderCHeckbox = React.useMemo(
@@ -291,6 +300,7 @@ function PersonalInformation({navigation}: Props) {
     [showAdditionalInformation],
   )
   const handlePostPersonalInformation = () => {
+    setSystemErrorMessage('')
     mutate()
   }
   return (
@@ -301,9 +311,9 @@ function PersonalInformation({navigation}: Props) {
       )}
       contentContainerStyle={styles.scrollViewContainer}>
       <Layout
-        isBack={true}
+        isBack={false}
         onBack={() => navigation.goBack()}
-        isHeader={true}
+        isHeader={false}
         isLoading={isLoading || isGetDataLoading}
         isBackground={true}>
         <SafeAreaWrapper>
@@ -331,7 +341,9 @@ function PersonalInformation({navigation}: Props) {
             <Spacer />
             <DropDown
               disabled={disabledFields.countryOfBirth}
-              data={countriesList.map(c => (isRTL ? c.nameAr : c.nameEn))}
+              data={countriesList
+                .filter(c => c.code !== 'SA')
+                .map(c => (isRTL ? c.nameAr : c.nameEn))}
               toogleClick={() => {
                 ToggleSheet(1)
                 setValues({...values, city: null})
@@ -380,7 +392,6 @@ function PersonalInformation({navigation}: Props) {
                   }
                   label={t('onboarding:personalInformation:buldingNumber')}
                   errorMessage={errors.buldingNumber}
-                  keyboardType="number-pad"
                   returnKeyType="done"
                   maxLength={10}
                 />
@@ -391,7 +402,7 @@ function PersonalInformation({navigation}: Props) {
                   label={t('onboarding:personalInformation:streetNanme')}
                   errorMessage={errors.streetNanme}
                   returnKeyType="done"
-                  maxLength={10}
+                  maxLength={50}
                 />
                 <InputSpacer />
                 <TCInput
@@ -400,7 +411,7 @@ function PersonalInformation({navigation}: Props) {
                   label={t('onboarding:personalInformation:district')}
                   errorMessage={errors.district}
                   returnKeyType="done"
-                  maxLength={10}
+                  maxLength={50}
                 />
                 <InputSpacer />
                 <TCInput
@@ -490,13 +501,22 @@ function PersonalInformation({navigation}: Props) {
               </LoginForm>
             )}
           </View>
-          <StyledButton
-            disabled={!isFormValid}
-            onPress={handlePostPersonalInformation}>
-            <Text variant={TEXT_VARIANTS.bodyBold}>
-              {t('onboarding:personalInformation:continue')}
-            </Text>
-          </StyledButton>
+          <View>
+            {systemErrorMessage?.length ? (
+              <ErrorView>
+                <Text variant={TEXT_VARIANTS.caption}>
+                  {systemErrorMessage}
+                </Text>
+              </ErrorView>
+            ) : null}
+            <StyledButton
+              disabled={!isFormValid}
+              onPress={handlePostPersonalInformation}>
+              <Text variant={TEXT_VARIANTS.bodyBold}>
+                {t('onboarding:personalInformation:continue')}
+              </Text>
+            </StyledButton>
+          </View>
         </SafeAreaWrapper>
       </Layout>
     </ScrollView>
@@ -505,6 +525,19 @@ function PersonalInformation({navigation}: Props) {
 
 export default PersonalInformation
 
+const ErrorView = styled(View)`
+  padding: 14px 16px;
+
+  background: rgba(255, 64, 0, 0.08);
+
+  border: 0.5px solid #ff4000;
+  backdrop-filter: blur(4px);
+  border: 0.5px solid #ff4000;
+  border-radius: 16px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+`
 const InputSpacer = styled(View)`
   margin-bottom: 12px;
 `

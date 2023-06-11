@@ -103,7 +103,9 @@ export default function DropDown({
   const {isRTL} = useContext<AppProviderProps>(AppContext)
   const [searchVaue, setSearchValue] = useState('')
   const SearchResult = searchVaue
-    ? data?.filter(word => word?.includes(searchVaue))
+    ? data?.filter(word =>
+        word?.toLowerCase()?.includes(searchVaue?.toLowerCase()),
+      )
     : data
   const renderContent = () => {
     return (
