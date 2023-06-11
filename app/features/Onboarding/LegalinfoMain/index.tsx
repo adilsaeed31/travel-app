@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable eqeqeq */
 
-import React, {useContext, useState, useMemo} from 'react'
+import React, {useContext, useState, useMemo, useEffect} from 'react'
 import {View, SafeAreaView} from 'react-native'
 import {useTranslation} from 'react-i18next'
 import {
@@ -12,24 +13,30 @@ import {
   RadioButton,
   Spacer,
 } from '@Components'
-import {TEXT_VARIANTS, Colors, SPACER_SIZES} from '@Utils'
+import {TEXT_VARIANTS, Colors, SPACER_SIZES, BASE_URL, getItem} from '@Utils'
 import {StackNavigationProp} from '@react-navigation/stack'
 import styled from 'styled-components/native'
 import {pepList, specialNeedList} from './masterData'
-
+import {fetcher} from '@Api'
+import {useMutation} from '@tanstack/react-query'
 import {AppContext, AppProviderProps} from '@Context'
+import {useStore} from '@Store'
+
 type IFormTYpe = {
   notKsaResidents: boolean
   pepEnabled: boolean
-  pepValue?: string
+  pepValue?: string | undefined
   specialNeed: boolean
   specialNeedValue?: string
+  specialNeedText?: string | null
 }
 
 const FormValues = {
   notKsaResidents: false,
   pepEnabled: false,
   specialNeed: false,
+  specialNeedText: null,
+  pepValue: undefined,
 }
 
 type Props = {
@@ -40,14 +47,21 @@ type Props = {
 function LegalInformation({navigation}: Props) {
   const [currentOpendIndx, setCurrentOpenedInx] = useState(-1)
   const {isRTL} = useContext<AppProviderProps>(AppContext)
+  const [statusError, setStatusError] = useState<any>(false)
   const {t} = useTranslation()
+
+  const setOnboardingProgress = useStore(
+    (store: any) => store.setOnboardingProgress,
+  )
+
+  const onBoardingProgress = useStore((store: any) => store.onBoardingProgress)
+
   const [values, setValues] = useState<IFormTYpe>({
     ...FormValues,
   })
   const [errors, setErrors] = useState<IFormTYpe>({
     ...FormValues,
   })
-  const [isLoader, setIsLoader] = useState<boolean>(false)
 
   const isFormValid = useMemo(() => {
     let isValid = true
@@ -62,7 +76,7 @@ function LegalInformation({navigation}: Props) {
 
     if (values.specialNeed) {
       if (values.specialNeedValue) {
-        if (values.specialNeedValue == 'other') {
+        if (values.specialNeedValue == 'Other') {
           return false
         } else {
           return true
@@ -87,16 +101,70 @@ function LegalInformation({navigation}: Props) {
 
     setErrors(err)
   }
-
-  const onComplete = () => {
-    console.log(values)
-    setIsLoader(true)
-    setTimeout(() => {
-      setIsLoader(false)
-      if (values.notKsaResidents) navigation.navigate('LegalInfoOther')
-      else navigation.navigate('CreateUser') // TODO pass this to LegalInfoOther screen
-    }, 2000)
+  const createPepType = (pepValue: string | undefined) => {
+    let nVal = pepValue
+      ? pepValue === 'I am related to politically expoased person'
+        ? 'PEP'
+        : 'REP'
+      : null
+    return nVal
   }
+  const {isLoading, data, mutate} = useMutation({
+    mutationFn: async () => {
+      let journeySecrets
+      let journeySecretsData = await getItem('journeySecrets')
+      if (journeySecretsData) {
+        journeySecrets = JSON.parse(journeySecretsData)
+      }
+      let req: any = await fetcher(BASE_URL + '/onboarding/legal', {
+        method: 'POST',
+        body: {
+          non_resident: values.notKsaResidents,
+          is_pep: values.pepEnabled ? true : false,
+          medically_disabled: values.specialNeed ? true : false,
+          disability_type: values.specialNeedValue,
+          disability_type_description:
+            values.specialNeedValue === 'Other' ? values.specialNeedText : null,
+          pep_type: createPepType(values.pepValue),
+        },
+        token: journeySecrets.access_token,
+      })
+      let res = await req.json()
+      return res
+    },
+  })
+
+  useEffect(() => {
+    if (data && data.on_boarding_application_id) {
+      setOnboardingProgress({
+        ...onBoardingProgress,
+        legalMain: {
+          non_resident: values.notKsaResidents,
+          is_pep: values.pepEnabled ? true : false,
+          medically_disabled: values.specialNeed ? true : false,
+          disability_type: values.specialNeedValue,
+          disability_type_description:
+            values.specialNeedValue === 'Other' ? values.specialNeedText : null,
+          pep_type: createPepType(values.pepValue),
+        },
+      })
+      if (values.notKsaResidents) {
+        navigation.navigate('LegalInfoOther')
+      } else {
+        navigation.navigate('CreateUser')
+      }
+    } else {
+      const status = data?.status
+      switch (true) {
+        case status > 399 && status <= 500:
+          setStatusError('Some Error Occurred ')
+          break
+        default:
+          setStatusError('')
+      }
+    }
+  }, [data])
+
   return (
     <>
       <Layout
@@ -104,7 +172,7 @@ function LegalInformation({navigation}: Props) {
         isBack={true}
         onBack={() => navigation.goBack()}
         isHeader={true}
-        isLoading={isLoader}
+        isLoading={isLoading}
         isBackground={true}>
         <SafeAreaWrapper>
           <View>
@@ -175,9 +243,9 @@ function LegalInformation({navigation}: Props) {
                   )}
                   label={t('Select') || ''}
                   toogleClick={() => ToggleSheet(0)}
-                  onItemSelected={(val: any) =>
+                  onItemSelected={(val: any) => {
                     setValues({...values, pepValue: val})
-                  }
+                  }}
                   value={values.pepValue}
                   error={errors.pepValue}
                   isOpen={currentOpendIndx == 0}
@@ -233,17 +301,22 @@ function LegalInformation({navigation}: Props) {
                   onSheetClose={() => setCurrentOpenedInx(-1)}
                   hasSearch={false}
                 />
-
-                {values.specialNeedValue == 'other' && (
+                {values.specialNeedValue == 'Other' && (
                   <>
                     <Spacer size={SPACER_SIZES.BASE * 1} />
-                    <Input label={'Disability'} />
+                    <Input
+                      onChangeText={val => {
+                        setValues({...values, specialNeedText: val})
+                      }}
+                      label={'Disability'}
+                    />
                   </>
                 )}
               </>
             ) : null}
           </View>
-          <StyledButton disabled={!isFormValid} onPress={onComplete}>
+          {statusError ? <ErrorText>{statusError}</ErrorText> : null}
+          <StyledButton disabled={!isFormValid} onPress={mutate}>
             <Text variant={TEXT_VARIANTS.body}>
               {t('onboarding:personalInformation:continue')}
             </Text>
@@ -283,4 +356,10 @@ const RadioWrapper = styled(View)<{isRTL: boolean}>`
 const SafeAreaWrapper = styled(SafeAreaView)`
   flex: 1;
   justify-content: space-between;
+`
+
+const ErrorText = styled(Text)`
+  font-weight: 500;
+  color: #f54d3f;
+  padding-left: 16px;
 `
