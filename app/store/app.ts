@@ -9,15 +9,18 @@ export type AppStateProps = {
   isRTL: boolean
   hasIntroSeen: boolean
   isAppReady: boolean
+  active: number
   toggleLanguage: () => void
   introHasBeenSeen: () => void
   setAppHasReady: () => void
+  setActiveIndex: () => void
   reset: () => void
 }
 
 const AppState: StateCreator<AppStateProps> = set => ({
   language: 'en',
   isRTL: false,
+  active: 0,
   hasIntroSeen: false,
   isAppReady: false,
   toggleLanguage: () => {
@@ -30,6 +33,7 @@ const AppState: StateCreator<AppStateProps> = set => ({
   },
 
   setAppHasReady: () => set(() => ({isAppReady: true})),
+  setActiveIndex: () => set(active => ({active: active})),
 
   introHasBeenSeen: () =>
     set(() => ({

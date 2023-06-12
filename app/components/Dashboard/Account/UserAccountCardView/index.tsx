@@ -1,15 +1,16 @@
 import React, {memo, useRef, useState} from 'react'
 import {Animated, View, ScrollView} from 'react-native'
 
-import {AccountDetails} from '@Assets'
-import {screenWidth} from '@Utils'
+import {useStore} from '@Store'
+import AccountDetails from './AccountView'
+import {flexRowLayout, screenWidth, vw} from '@Utils'
 
 import {default as TCDot} from '../../../Intro/Dot'
 
 const data = ['card1', 'card2']
 
-const itemWidth = (screenWidth / 3) * 2
-const padding = (screenWidth - itemWidth) / 2
+const itemWidth = (screenWidth / 10) * 8.5 // 85 percent of screen width is the item width
+const padding = vw(24)
 const offset = itemWidth
 
 const Item = ({
@@ -24,7 +25,7 @@ const Item = ({
 }) => {
   const scale = scrollX.interpolate({
     inputRange: [-offset + i * offset, i * offset, offset + i * offset],
-    outputRange: [0.65, 1, 0.65],
+    outputRange: [0, 1, 0],
   })
 
   return (
@@ -80,13 +81,11 @@ const UserAccountCardView = () => {
             useNativeDriver: false,
           },
         )}>
-        <Item i={0} key={0} scrollX={scrollX}>
-          <AccountDetails />
-        </Item>
-
-        <Item i={1} key={1} scrollX={scrollX}>
-          <AccountDetails />
-        </Item>
+        {data?.map((item, index) => (
+          <Item i={index} scrollX={scrollX}>
+            <AccountDetails />
+          </Item>
+        ))}
       </ScrollView>
 
       <View className="flex-row mt-2">

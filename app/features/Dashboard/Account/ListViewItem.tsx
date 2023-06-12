@@ -10,8 +10,8 @@ const ListItemContainer = styled.View`
 `
 
 const Circle = styled.View`
-  width: ${40}px;
-  height: ${40}px;
+  width: 40px;
+  height: 40px;
   border-radius: ${20}px;
   background-color: #f5f5f5;
   align-items: center;
