@@ -104,7 +104,7 @@ export const translation = {
         jobCategory: 'Job Category',
         NameOfBussiness: 'Name of business',
         InvestmentType: 'Investment Type',
-        monthlyIncomeValidation: 'Monthly Income Should be between 300 - 500k',
+        monthlyIncomeValidation: 'Monthly Income Should be between {{min}}  - {{max}} ',
       },
       createUserTitle: 'User Information',
       create: 'Create',
@@ -240,7 +240,7 @@ export const translation = {
         NameOfBussiness: 'اسم العمل',
         InvestmentType: 'نوع الاستثمار',
         monthlyIncomeValidation:
-          'معدل الدخل الشهري لابد ان يكون بين  300 - 500 ريال',
+          'معدل الدخل الشهري لابد ان يكون بين  {{min}} - {{max}} ريال',
       },
       createUserTitle: 'معلومات المستخدم',
       create: 'يخلق',
