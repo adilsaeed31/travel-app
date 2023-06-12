@@ -364,7 +364,7 @@ function FinacialInformationScreen({navigation}: Props) {
     let CurrentFormView = null
     let currentOccupationCode =
       SheetData.Occupation.find(sheet => sheet.name === values.occupation)
-        ?.code || 1
+        ?.code || (values.occupation ? 1 : 0)
     console.log('currentOccupationCode', currentOccupationCode)
     if (
       //'Housewife' ||'Unemployed' ||'Not authorized to work' ||Student'
