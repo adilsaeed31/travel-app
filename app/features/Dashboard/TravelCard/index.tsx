@@ -27,8 +27,8 @@ const TravelCardScreen: React.FC<TravelCardScreenProps> = () => {
   const [status, setstatus] = useState(0)
 
   const url = `${BASE_URL}/card/card`
-  const {isFetching, data, refetch} = useQuery({
-    queryKey: ['card', url],
+  const {isLoading, isFetching, data, refetch} = useQuery({
+    queryKey: ['card', url, token],
     queryFn: async () => {
       let res: any = await fetcher(url, {
         method: 'GET',
@@ -52,11 +52,11 @@ const TravelCardScreen: React.FC<TravelCardScreenProps> = () => {
 
   useEffect(() => {
     if (!isFetching && data && isFocused) {
-      console.log(data)
-      if (status >= 200 && status < 300) {
-      } else if (status > 299 && status < 400) {
-        navigation.navigate('OTPAuth')
-      } else if (status > 399 && status < 500) {
+      // console.log(data)
+      if (status === 200) {
+        // console.log(data)
+      } else {
+        console.log('error')
       }
     }
 
@@ -75,7 +75,7 @@ const TravelCardScreen: React.FC<TravelCardScreenProps> = () => {
     <View className="flex-1">
       <ScrollView>
         <Animated.View entering={FadeInRight.duration(1000).delay(50)}>
-          <UserTravelCard />
+          <UserTravelCard isLoading={isLoading} data={data} />
         </Animated.View>
 
         <Animated.View entering={LightSpeedInLeft.duration(1000).delay(100)}>

@@ -36,6 +36,8 @@ const IntroFeature: React.FC<{
   const insetEdges = useSafeAreaInsets()
   const isRTL = useStore(state => state.isRTL)
 
+  const direction = isRTL ? 'rtl' : 'ltr'
+
   const {isAppReady, setAppReady, hasIntroSeen} =
     useContext<AppProviderProps>(AppContext)
 
@@ -98,6 +100,8 @@ const IntroFeature: React.FC<{
     <View
       className="flex-1"
       style={{
+        // changing the layout direction if isRTL true
+        direction: direction,
         // do not remove this below style props below will
         // adjust the padding/spacing on ios and android
         paddingTop: vh(insetEdges.top),
