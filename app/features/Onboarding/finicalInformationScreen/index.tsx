@@ -169,7 +169,11 @@ const MapApiApiToState = (
   }
 }
 const MapStateForAPi = (values: IFormTYpe) => {
-  let occupation = SheetData.Occupation.find(c => c.name == values.occupation)
+  let occupation = SheetData.Occupation.find(
+    c =>
+      c.description_ar == values.occupation ||
+      c.description_en == values.occupation,
+  )
   let business_name = values.nameOfBusiness
   let tilte = SheetData.jobTitle.find(
     c =>
@@ -262,6 +266,7 @@ function FinacialInformationScreen({navigation}: Props) {
       return res
     },
   })
+
   useEffect(() => {
     if (FinicailInformationPostResult?.onboarding_application_id) {
       navigation.push('LegalinfoMain')
@@ -277,8 +282,11 @@ function FinacialInformationScreen({navigation}: Props) {
 
   const handelPostForm = () => {
     let currentOccupationCode =
-      SheetData.Occupation.find(sheet => sheet.name === values.occupation)
-        ?.code || (values.occupation ? 1 : 0)
+      SheetData.Occupation.find(
+        sheet =>
+          sheet.description_ar === values.occupation ||
+          sheet.description_en === values.occupation,
+      )?.code || (values.occupation ? 1 : 0)
     const {maxIncome, minIncome} = GenerateMinMaxIncome(currentOccupationCode)
 
     let alreadyFetchedFromGosiForSalaried =
@@ -333,8 +341,11 @@ function FinacialInformationScreen({navigation}: Props) {
   }, [fincialInformationGetData])
   const isFormValid = useMemo(() => {
     let currentOccupationCode =
-      SheetData.Occupation.find(sheet => sheet.name === values.occupation)
-        ?.code || 1
+      SheetData.Occupation.find(
+        sheet =>
+          sheet.description_ar === values.occupation ||
+          sheet.description_en === values.occupation,
+      )?.code || 1
     let validationResult = false
 
     if (currentOccupationCode >= 4) {
@@ -393,8 +404,11 @@ function FinacialInformationScreen({navigation}: Props) {
   const RenderCurrentForm = () => {
     let CurrentFormView = null
     let currentOccupationCode =
-      SheetData.Occupation.find(sheet => sheet.name === values.occupation)
-        ?.code || (values.occupation ? 1 : 0)
+      SheetData.Occupation.find(
+        sheet =>
+          sheet.description_ar === values.occupation ||
+          sheet.description_en === values.occupation,
+      )?.code || (values.occupation ? 1 : 0)
     console.log('currentOccupationCode', currentOccupationCode)
     if (
       //'Housewife' ||'Unemployed' ||'Not authorized to work' ||Student'
@@ -407,7 +421,7 @@ function FinacialInformationScreen({navigation}: Props) {
             data={SheetData.primarySourceOfIncome.map(income =>
               isRTL ? income.description_ar : income.description_en,
             )}
-            label={'Primary source of income'}
+            label={t('onboarding:financialInformation:primarySourceOfIncome')}
             toogleClick={() => ToggleSheet(SheetsIndexs.primarySourceOfIncome)}
             onItemSelected={primarySourceOfIncome => {
               setValues({...values, primarySourceOfIncome})
@@ -489,7 +503,7 @@ function FinacialInformationScreen({navigation}: Props) {
             data={SheetData.jobCategory.map(cat =>
               !isRTL ? cat.nameEn : cat.nameAr,
             )}
-            label={'Job Category'}
+            label={t('onboarding:financialInformation:jobCategory')}
             toogleClick={() => ToggleSheet(SheetsIndexs.jobCategory)}
             onItemSelected={jobCategory => setValues({...values, jobCategory})}
             value={values.jobCategory}
@@ -505,14 +519,14 @@ function FinacialInformationScreen({navigation}: Props) {
             data={SheetData.jobTitle.map(title =>
               isRTL ? title.descriptionAr : title.descriptionEn,
             )}
-            label={'Job Title'}
+            label={t('onboarding:financialInformation:jobTitle')}
             toogleClick={() => ToggleSheet(SheetsIndexs.jobTitle)}
             onItemSelected={jobTitle => setValues({...values, jobTitle})}
             value={values.jobTitle}
             error={errors.jobTitle}
             isOpen={currentOpendIndx == SheetsIndexs.jobTitle}
-            title={t('onboarding:financialInformation:jobCategory')}
-            subTitle={t('onboarding:financialInformation:jobCategory')}
+            title={t('onboarding:financialInformation:jobTitle')}
+            subTitle={t('onboarding:financialInformation:jobTitle')}
             onSheetClose={() => setCurrentOpenedInx(-1)}
             hasSearch
           />
@@ -673,9 +687,9 @@ function FinacialInformationScreen({navigation}: Props) {
                   toogleClick={() =>
                     ToggleSheet(SheetsIndexs.addetionalSourceOfIncome)
                   }
-                  onItemSelected={AddetionalSourceOfIncomeSource =>
+                  onItemSelected={AddetionalSourceOfIncomeSource => {
                     setValues({...values, AddetionalSourceOfIncomeSource})
-                  }
+                  }}
                   value={values.AddetionalSourceOfIncomeSource}
                   error={errors.AddetionalSourceOfIncomeSource}
                   isOpen={
@@ -747,6 +761,7 @@ function FinacialInformationScreen({navigation}: Props) {
                       )}
                       onSheetClose={() => setCurrentOpenedInx(-1)}
                       hasSearch
+                      dynamicHeight
                     />
                     <Spacer />
                     <TCInput
@@ -798,7 +813,9 @@ function FinacialInformationScreen({navigation}: Props) {
               {t('onboarding:financialInformation:financialInformation') || ''}
             </Header>
             <DropDown
-              data={SheetData.Occupation.map(d => d.name)}
+              data={SheetData.Occupation.map(d =>
+                isRTL ? d.description_ar : d.description_en,
+              )}
               label={t('onboarding:financialInformation:occupation') || ''}
               toogleClick={() => ToggleSheet(SheetsIndexs.Occupation)}
               disabled={GosiSuccess}
@@ -808,6 +825,10 @@ function FinacialInformationScreen({navigation}: Props) {
                   occupation,
                   //   monthlyPrimaryIncomAmount: '',
                 })
+                setErrors({
+                  ...errors,
+                  monthlyPrimaryIncomAmount: '',
+                })
               }}
               value={values.occupation}
               error={errors.occupation}
@@ -816,6 +837,7 @@ function FinacialInformationScreen({navigation}: Props) {
               subTitle={t('onboarding:financialInformation:occupation')}
               onSheetClose={() => setCurrentOpenedInx(-1)}
               hasSearch
+              dynamicHeight
             />
 
             <Spacer />
