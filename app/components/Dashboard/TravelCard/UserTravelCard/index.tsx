@@ -1,40 +1,43 @@
 import React, {ReactNode, memo, useRef, useState} from 'react'
 import {Animated, View, Image, ScrollView} from 'react-native'
+import cn from 'classnames'
 
 import {useStore} from '@Store'
-import {screenWidth} from '@Utils'
+import {flexRowLayout, screenWidth} from '@Utils'
 import {TravelCardSvg, TravelCardSvgBlack, Shadow} from '@Assets'
 
 import {default as AddNewCard} from '../AddNewCard'
 import {default as TCDot} from '../../../Intro/Dot'
 
-const data = ['card1', 'card2', 'AddNew']
+const data = Array.from([1, 2, 3])
 
 const itemWidth = (screenWidth / 3) * 2
 const padding = (screenWidth - itemWidth) / 2
 const offset = itemWidth
 
-const Item = ({
-  i,
-  scrollX,
-  children,
-  ...rest
-}: {
-  i: number
-  scrollX: any
-  children: ReactNode
-}) => {
-  const scale = scrollX.interpolate({
-    inputRange: [-offset + i * offset, i * offset, offset + i * offset],
-    outputRange: [0.85, 1, 0.85],
-  })
+const Item = memo(
+  ({
+    i,
+    scrollX,
+    children,
+    ...rest
+  }: {
+    i: number
+    scrollX: any
+    children: ReactNode
+  }) => {
+    const scale = scrollX.interpolate({
+      inputRange: [-offset + i * offset, i * offset, offset + i * offset],
+      outputRange: [0.85, 1, 0.85],
+    })
 
-  return (
-    <Animated.View {...rest} style={{width: itemWidth, transform: [{scale}]}}>
-      {children}
-    </Animated.View>
-  )
-}
+    return (
+      <Animated.View {...rest} style={{width: itemWidth, transform: [{scale}]}}>
+        {children}
+      </Animated.View>
+    )
+  },
+)
 
 type momentumScrollProps = {
   nativeEvent: {
@@ -45,6 +48,7 @@ type momentumScrollProps = {
 }
 
 const UserTravelCard = () => {
+  const isRTL = useStore(state => state.isRTL)
   const [currentItem, setCurrentItem] = useState<number>(0)
 
   const scrollX = useRef(new Animated.Value(0)).current
@@ -97,7 +101,7 @@ const UserTravelCard = () => {
         </Item>
       </ScrollView>
 
-      <View className="flex-row -mt-4">
+      <View className={cn(flexRowLayout(isRTL), '-mt-4')}>
         {data?.map((item, index) => (
           <TCDot key={index} isActive={currentItem === index} hasRounded />
         ))}

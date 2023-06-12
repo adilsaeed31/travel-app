@@ -1,8 +1,9 @@
-import React, {lazy, Suspense} from 'react'
+import React, {lazy, Suspense, useEffect} from 'react'
 import {NavigationContainer} from '@react-navigation/native'
 import Animated, {SlideInRight} from 'react-native-reanimated'
 import {StatusBar, ActivityIndicator, View} from 'react-native'
 import {SafeAreaProvider} from 'react-native-safe-area-context'
+import Splash from 'react-native-splash-screen'
 
 import * as eva from '@eva-design/eva'
 import {EvaIconsPack} from '@ui-kitten/eva-icons'
@@ -20,11 +21,20 @@ const AppNavigator = lazy(() => import('./AppNavigator'))
 
 const MainNavigation = () => {
   const user = useStore(state => state.user)
-  const isAppReady = useStore(state => state.isAppReady)
   const isRTL = useStore(state => state.isRTL)
+  const isAppReady = useStore(state => state.isAppReady)
 
   // changing the layout direction if isRTL true
   const direction = isRTL ? 'rtl' : 'ltr'
+
+  // below is useEffect is only for android devices
+  // because isAppReady is true in store on next load
+  // app is not going to auth pages
+  useEffect(() => {
+    if (isAppReady) {
+      Splash.hide()
+    }
+  }, [isAppReady])
 
   return (
     <SafeAreaProvider
@@ -47,7 +57,7 @@ const MainNavigation = () => {
             }>
             {!isAppReady ? (
               <SplashNavigator />
-            ) : !user ? (
+            ) : user ? (
               <Animated.View
                 className="flex-1"
                 entering={SlideInRight.delay(50)}>

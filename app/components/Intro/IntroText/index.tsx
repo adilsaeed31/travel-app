@@ -8,7 +8,7 @@ const EnterAnimationDown = FadeInDown.duration(1000).delay(50)
 
 const IntroText: React.FC<{one: string; two: string}> = ({one, two}) => {
   return (
-    <View className="flex-1 justify-center items-center pt-32">
+    <View className="flex-1 justify-end items-center pb-48">
       <Animated.View entering={EnterAnimationDown}>
         <TCTextView className="text-3xl text-tc-black text-center">
           {one}

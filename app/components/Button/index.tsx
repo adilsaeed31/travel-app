@@ -55,6 +55,8 @@ interface ButtonProps extends RippleProps {
   className?: string
   varient?: string
   disabled?: boolean
+  textcls?: string
+  textstyle?: string | object
 }
 
 const TCButton: React.FC<ButtonProps> = ({
@@ -63,11 +65,15 @@ const TCButton: React.FC<ButtonProps> = ({
   RippleColor = 'white',
   varient = 'primary',
   disabled = false,
+  textcls,
+  textstyle,
   ...rest
 }) => {
   return disabled ? (
     <StyledView isRTL={false} varient={varient} disabled={disabled} {...rest}>
-      <Textview>{children}</Textview>
+      <Textview style={textstyle} className={textcls}>
+        {children}
+      </Textview>
     </StyledView>
   ) : (
     <Ripple
@@ -75,7 +81,9 @@ const TCButton: React.FC<ButtonProps> = ({
       rippleColor={RippleColor}
       {...rest}>
       <StyledView isRTL={false} varient={varient} {...rest}>
-        <Textview>{children}</Textview>
+        <Textview style={textstyle} className={textcls}>
+          {children}
+        </Textview>
       </StyledView>
     </Ripple>
   )

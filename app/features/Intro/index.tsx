@@ -9,17 +9,19 @@ import Animated, {
 import {useTranslation} from 'react-i18next'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {useSafeAreaInsets} from 'react-native-safe-area-context'
+import cn from 'classnames'
 
+import {useStore} from '@Store'
 import {useAppState} from '@Hooks'
-import {vw, vh} from '@Utils'
+import {vw, vh, flexRowLayout} from '@Utils'
 import {introAnimation, SaibLogo} from '@Assets'
 import {AppContext, AppProviderProps} from '@Context'
 import {TCButton, IntroDot, IntroText, IntroLang, IntroSkip} from '@Components'
 
 // each slide frame of intro animation
-const FirstSlideFrame = 240
-const MiddleSlideFrame = 480
-const LastSlideFrame = 720
+const FirstSlideFrame = 238
+const MiddleSlideFrame = 476
+const LastSlideFrame = 714
 
 // enter animation
 const EnterAnimationRight = FadeInRight.duration(1000).delay(50)
@@ -32,6 +34,7 @@ const IntroFeature: React.FC<{
   const {t} = useTranslation()
   const {appStateVisible} = useAppState()
   const insetEdges = useSafeAreaInsets()
+  const isRTL = useStore(state => state.isRTL)
 
   const {isAppReady, setAppReady, hasIntroSeen} =
     useContext<AppProviderProps>(AppContext)
@@ -67,13 +70,21 @@ const IntroFeature: React.FC<{
         nextAnimRef.current?.play(MiddleSlideFrame, LastSlideFrame)
       }
     }
+  }, [appStateVisible])
 
+  useEffect(() => {
     // back handler to stop back functionality on intro
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
       () => true,
     )
 
+    return () => {
+      backHandler.remove()
+    }
+  }, [])
+
+  useEffect(() => {
     // updating the currentValue with updatedValue
     updatedValue.current = currentValue
 
@@ -81,18 +92,7 @@ const IntroFeature: React.FC<{
     if (isAppReady || hasIntroSeen) {
       navigation.navigate('Auth')
     }
-
-    return () => {
-      backHandler.remove()
-    }
-  }, [
-    isAppReady,
-    navigation,
-    updatedValue,
-    currentValue,
-    hasIntroSeen,
-    appStateVisible,
-  ])
+  }, [isAppReady, navigation, updatedValue, currentValue, hasIntroSeen])
 
   return (
     <View
@@ -115,7 +115,8 @@ const IntroFeature: React.FC<{
       />
 
       <View className="flex-1 p-8">
-        <View className="flex-row justify-between items-center">
+        <View
+          className={cn(flexRowLayout(isRTL), 'justify-between items-center')}>
           <Animated.View entering={EnterAnimationBounceInUp}>
             <SaibLogo />
           </Animated.View>
@@ -140,11 +141,12 @@ const IntroFeature: React.FC<{
           />
         )}
 
-        <View className="flex-row items-center justify-between">
+        <View
+          className={cn(flexRowLayout(isRTL), 'items-center justify-between')}>
           <Animated.View
             entering={EnterAnimationLeft}
-            className="flex-row items-center justify-center">
-            <View className="flex-row">
+            className={cn(flexRowLayout(isRTL), 'items-center justify-center')}>
+            <View className={cn(flexRowLayout(isRTL))}>
               <IntroDot isActive={currentValue === FirstSlideFrame} />
 
               <IntroDot isActive={currentValue === MiddleSlideFrame} />
@@ -156,7 +158,9 @@ const IntroFeature: React.FC<{
           </Animated.View>
 
           <Animated.View entering={EnterAnimationRight}>
-            <TCButton onPress={startNextAnimation} className="font-tc-bold">
+            <TCButton
+              onPress={startNextAnimation}
+              textcls="text-tc-secondary font-tc-primary">
               {currentValue >= LastSlideFrame
                 ? (t('auth:buttonLogin') as string)
                 : (t('intro:next') as string)}

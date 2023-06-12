@@ -2,16 +2,20 @@ import React from 'react'
 import {View} from 'react-native'
 import {useTranslation} from 'react-i18next'
 import Animated, {ZoomInEasyDown} from 'react-native-reanimated'
+import cn from 'classnames'
 
+import {useStore} from '@Store'
+import {flexRowLayout} from '@Utils'
 import {AddCurrencyIcon, LoadIcon, ManageIcon, UnloadIcon} from '@Assets'
 
 import QuickAction from '../../QuickAction'
 
 const QuickActions = () => {
   const {t} = useTranslation()
+  const isRTL = useStore(state => state.isRTL)
 
   return (
-    <View className="flex-row justify-between m-4">
+    <View className={cn(flexRowLayout(isRTL), 'justify-between m-4')}>
       <Animated.View entering={ZoomInEasyDown.duration(500).delay(100)}>
         <QuickAction icon={<LoadIcon />} name={t('TravelCard:load')} />
       </Animated.View>

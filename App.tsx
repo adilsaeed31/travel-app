@@ -6,17 +6,18 @@
  */
 
 import React from 'react'
+import i18next from 'i18next'
 import {LogBox} from 'react-native'
 import {QueryClientProvider} from '@tanstack/react-query'
-import {translation} from '@Utils'
 
 import {queryClient} from '@Api'
-import i18next from 'i18next'
+import {translation} from '@Utils'
 import {initReactI18next} from 'react-i18next'
 
+import {useStore} from '@Store'
 import {MainNavigation} from '@Navigations'
 import {AuthProvider, AppProvider} from '@Context'
-import {useStore} from '@Store'
+
 interface CustomLanguageDetectorType {
   type: 'languageDetector'
   async: Boolean
@@ -42,6 +43,7 @@ function App(): React.JSX.Element {
   })
 
   LogBox.ignoreAllLogs()
+
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>

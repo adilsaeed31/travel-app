@@ -5,8 +5,8 @@ import Animated, {SlideInLeft, SlideInRight} from 'react-native-reanimated'
 import cn from 'classnames'
 
 import {useStore} from '@Store'
-import {Colors, flexRowLayout, m2} from '@Utils'
 import {QuickLoadIcon} from '@Assets'
+import {Colors, flexRowLayout, ml} from '@Utils'
 
 import {default as TCTextView} from '../../../TextView'
 import {default as QuickLoad} from '../../QuickLoad'
@@ -16,7 +16,7 @@ const QuickLoads = () => {
   const isRTL = useStore(state => state.isRTL)
 
   return (
-    <View className="flex-row items-center my-4 ml-4">
+    <View className={cn(flexRowLayout(isRTL), 'items-center my-4 ml-4')}>
       <Animated.View entering={SlideInLeft.duration(1000).delay(50)}>
         <TCTextView variant={{color: Colors.QuickText}}>
           {t('TravelCard:quickLoad')}
@@ -25,21 +25,26 @@ const QuickLoads = () => {
       </Animated.View>
 
       <Animated.View
-        className={cn(
-          'flex-1',
-          flexRowLayout(isRTL),
-          m2(isRTL),
-          'items-center',
-        )}
+        className={cn('flex-1', ml(isRTL), 'items-center')}
         entering={SlideInRight.duration(1000).delay(50)}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          <QuickLoad name={t('TravelCard:currentCodeEuro', {amount: '100'})} />
+          <View className={cn(flexRowLayout(isRTL))}>
+            <QuickLoad
+              name={t('TravelCard:currentCodeEuro', {amount: '100'})}
+            />
 
-          <QuickLoad name={t('TravelCard:currentCodeEuro', {amount: '200'})} />
+            <QuickLoad
+              name={t('TravelCard:currentCodeEuro', {amount: '200'})}
+            />
 
-          <QuickLoad name={t('TravelCard:currentCodeEuro', {amount: '300'})} />
+            <QuickLoad
+              name={t('TravelCard:currentCodeEuro', {amount: '300'})}
+            />
 
-          <QuickLoad name={t('TravelCard:currentCodeEuro', {amount: '400'})} />
+            <QuickLoad
+              name={t('TravelCard:currentCodeEuro', {amount: '400'})}
+            />
+          </View>
         </ScrollView>
       </Animated.View>
     </View>

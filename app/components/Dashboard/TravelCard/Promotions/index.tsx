@@ -1,46 +1,44 @@
 import React, {useRef, memo} from 'react'
 import {useTranslation} from 'react-i18next'
 import {Animated, Image, ScrollView, View} from 'react-native'
+import cn from 'classnames'
 
+import {useStore} from '@Store'
 import {Promotion1} from '@Assets'
 import {TCTextView} from '@Components'
-import {screenWidth} from '@Utils'
+import {itemPos, ml, screenWidth} from '@Utils'
 
 const itemWidth = (screenWidth / 3) * 2
 const offset = itemWidth
 
-const Item = ({
-  i,
-  scrollX,
-  children,
-  ...rest
-}: {
-  i: any
-  scrollX: any
-  children: any
-}) => {
-  const scale = scrollX.interpolate({
-    inputRange: [-offset + i * offset, i * offset, offset + i * offset],
-    outputRange: [0.65, 1, 0.65],
-  })
+const Item = memo(
+  ({i, scrollX, children, ...rest}: {i: any; scrollX: any; children: any}) => {
+    const scale = scrollX.interpolate({
+      inputRange: [-offset + i * offset, i * offset, offset + i * offset],
+      outputRange: [0.55, 1, 0.55],
+    })
 
-  return (
-    <Animated.View
-      key={i}
-      {...rest}
-      style={{width: itemWidth, transform: [{scale}]}}>
-      {children}
-    </Animated.View>
-  )
-}
+    return (
+      <Animated.View
+        key={i}
+        {...rest}
+        style={{width: itemWidth, transform: [{scale}]}}>
+        {children}
+      </Animated.View>
+    )
+  },
+)
+
+const imageData = [0, 1, 2]
 
 const Promotions = () => {
   const {t} = useTranslation()
+  const isRTL = useStore(state => state.isRTL)
   const scrollX = useRef(new Animated.Value(0)).current
 
   return (
-    <View className="ml-4 my-4">
-      <TCTextView className="self-start mb-3">
+    <View className={cn('my-4', ml(isRTL, 4))}>
+      <TCTextView className={cn(itemPos(isRTL), 'mb-3')}>
         {t('TravelCard:doMore')}
       </TCTextView>
 
@@ -57,19 +55,11 @@ const Promotions = () => {
             useNativeDriver: false,
           },
         )}>
-        <View className="flex-row">
-          <Item key={0} i={0} scrollX={scrollX}>
-            <Image className="w-80 h-20 mr-2" source={Promotion1} />
+        {imageData.map((item, index) => (
+          <Item key={index.toString()} i={item} scrollX={scrollX}>
+            <Image className="w-80 h-20" source={Promotion1} />
           </Item>
-
-          <Item key={1} i={1} scrollX={scrollX}>
-            <Image className="w-80 h-20 mr-2" source={Promotion1} />
-          </Item>
-
-          <Item key={2} i={2} scrollX={scrollX}>
-            <Image className="w-80 h-20 mr-2" source={Promotion1} />
-          </Item>
-        </View>
+        ))}
       </ScrollView>
     </View>
   )

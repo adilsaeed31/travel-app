@@ -70,6 +70,7 @@ yarn-error.log
 yarn.lock
 package-lock.json
 .yarnrc.yml
+ios/Podfile.lock
 
 # Android APK folder
 /android/app/release/

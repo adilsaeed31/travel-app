@@ -7,8 +7,6 @@ import {useTranslation} from 'react-i18next'
 import Ripple from 'react-native-material-ripple'
 import cn from 'classnames'
 
-import {TCTextView} from '@Components'
-import {Colors, vw, screenWidth as width} from '@Utils'
 import {
   HomeIcon,
   MenuIcon,
@@ -17,6 +15,9 @@ import {
   HomeIconActive,
   LoyaltyIconActive,
 } from '@Assets'
+import {useStore} from '@Store'
+import {TCTextView} from '@Components'
+import {Colors, flexRowLayout, vw, screenWidth as width} from '@Utils'
 
 const BottomTabBar: React.FC<BottomTabBarProps> = ({
   state,
@@ -25,6 +26,7 @@ const BottomTabBar: React.FC<BottomTabBarProps> = ({
   ...rest
 }) => {
   const {t} = useTranslation()
+  const isRTL = useStore(zState => zState.isRTL)
 
   const scrollX = useRef(new AnimatedRN.Value(0)).current
   const barTranslate = AnimatedRN.multiply(scrollX, -1)
@@ -57,7 +59,10 @@ const BottomTabBar: React.FC<BottomTabBarProps> = ({
     <Animated.View entering={ZoomInDown.duration(1000).delay(200)}>
       <View
         {...rest}
-        className="flex-row bar-width-05 border-tc-tab h-16 m-5 rounded-2xl bg-tc-bottom-tab">
+        className={cn(
+          flexRowLayout(isRTL),
+          'bar-width-05 border-tc-tab h-16 m-5 rounded-2xl bg-tc-bottom-tab',
+        )}>
         {state.routes.map((route, index) => {
           const {options} = descriptors[route.key]
           const label: any =

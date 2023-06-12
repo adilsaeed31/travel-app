@@ -9,11 +9,12 @@ import {
 import Animated, {SlideInRight} from 'react-native-reanimated'
 import {useTranslation} from 'react-i18next'
 import Ripple from 'react-native-material-ripple'
+import cn from 'classnames'
 
 import {useStore} from '@Store'
 import {ProfileIcon} from '@Assets'
-import {Colors, screenWidth as width} from '@Utils'
 import {TCTextView} from '@Components'
+import {Colors, itemPos, flexRowLayout, screenWidth as width, mr} from '@Utils'
 
 let animationActive = true
 let animationActiveRef: number
@@ -25,6 +26,7 @@ type TCTabBarProps = {
 
 const TCTabBar: React.FC<TCTabBarProps> = ({left, right}) => {
   const {t} = useTranslation()
+  const isRTL = useStore(state => state.isRTL)
   const toggleLanguage = useStore(state => state.toggleLanguage)
 
   const [headerWidths, setWidths] = useState([0])
@@ -87,7 +89,11 @@ const TCTabBar: React.FC<TCTabBarProps> = ({left, right}) => {
 
   return (
     <View className="bg-white pt-4">
-      <View className="flex-row justify-center items-center mb-6">
+      <View
+        className={cn(
+          flexRowLayout(isRTL),
+          'justify-center items-center mb-6',
+        )}>
         <View className="flex-1 w-20" />
         <View className="overflow-hidden bg-tc-bottom-tab">
           <FlatList
@@ -134,7 +140,7 @@ const TCTabBar: React.FC<TCTabBarProps> = ({left, right}) => {
         </View>
 
         <Animated.View
-          className="flex-1 items-end mr-4"
+          className={cn('flex-1', itemPos(isRTL), mr(isRTL, 4))}
           entering={SlideInRight.duration(1000).delay(200)}>
           <Ripple onPress={toggleLanguage} rippleColor={Colors.Supernova}>
             <ProfileIcon />
