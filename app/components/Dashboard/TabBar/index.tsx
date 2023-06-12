@@ -14,7 +14,7 @@ import cn from 'classnames'
 import {useStore} from '@Store'
 import {ProfileIcon} from '@Assets'
 import {TCTextView} from '@Components'
-import {Colors, itemPos, flexRowLayout, screenWidth as width, mr} from '@Utils'
+import {Colors, flexRowLayout, screenWidth as width} from '@Utils'
 
 let animationActive = true
 let animationActiveRef: number
@@ -77,7 +77,6 @@ const TCTabBar: React.FC<TCTabBarProps> = ({left, right}) => {
       LayoutAnimation.easeInEaseOut()
       setActive(newIndex)
       setActiveIndex(newIndex)
-
     }
   }
 
@@ -157,7 +156,6 @@ const TCTabBar: React.FC<TCTabBarProps> = ({left, right}) => {
       <FlatList
         horizontal
         pagingEnabled
-        nestedScrollEnabled
         scrollEnabled={false}
         data={[left, right]}
         onScroll={onScroll}

@@ -54,7 +54,7 @@ const BackgroundImage2 = styled(BottomBg)`
   align-self: center;
 `
 
-const ContentWrapper = styled(View)`
+const ContentWrapper = styled(View)<any>`
   flex: 1;
 `
 

@@ -16,16 +16,14 @@ import {TravelCardSvg, TravelCardSvgBlack, Shadow} from '@Assets'
 import {default as AddNewCard} from '../AddNewCard'
 import {default as TCDot} from '../../../Intro/Dot'
 
-// const data = Array.from([1, 2, 3])
-
 const itemWidth = (screenWidth / 3) * 2
 const padding = (screenWidth - itemWidth) / 2
 const offset = itemWidth
 
-const Item = memo(
+const ItemLoading = memo(
   ({
-    // i,
-    // scrollX,
+    i,
+    scrollX,
     children,
     ...rest
   }: {
@@ -33,10 +31,34 @@ const Item = memo(
     scrollX?: any
     children: ReactNode
   }) => {
-    // const scale = scrollX.interpolate({
-    //   // inputRange: [-offset + i * offset, i * offset, offset + i * offset],
-    //   // outputRange: [0.85, 1, 0.85],
-    // })
+    const scale = scrollX.interpolate({
+      inputRange: [-offset + i * offset, i * offset, offset + i * offset],
+      outputRange: [0.85, 1, 0.85],
+    })
+
+    return (
+      <Animated.View {...rest} style={{width: itemWidth, transform: [{scale}]}}>
+        {children}
+      </Animated.View>
+    )
+  },
+)
+
+const Item = memo(
+  ({
+    i,
+    scrollX,
+    children,
+    ...rest
+  }: {
+    i?: number
+    scrollX?: any
+    children: ReactNode
+  }) => {
+    const scale = scrollX.interpolate({
+      inputRange: [-offset + i * offset, i * offset, offset + i * offset],
+      outputRange: [0.85, 1, 0.85],
+    })
 
     return (
       <Animated.View {...rest} style={{width: itemWidth}}>
@@ -58,7 +80,7 @@ type momentumScrollProps = {
 }
 
 const UserTravelCard: React.FC<{data: string[]; isLoading: boolean}> = ({
-  data,
+  data = [],
   isLoading,
 }) => {
   console.log(data?.length, 'data in userTravelcard')
@@ -70,17 +92,37 @@ const UserTravelCard: React.FC<{data: string[]; isLoading: boolean}> = ({
   const onMomentumScrollEnd = ({
     nativeEvent: {
       contentOffset: {x: scrollPos},
+    },
+  }: momentumScrollProps) => {
+    if (scrollPos === 0) {
+      setCurrentItem(0)
+    } else if (scrollPos > 200 && scrollPos < 500) {
+      setCurrentItem(1)
+    } else if (scrollPos > 500) {
+      setCurrentItem(2)
+    }
+
+    // const active = Math.floor(scrollPos / layoutWidth)
+
+    // console.log(scrollPos, layoutWidth, active)
+
+    // setCurrentItem(active)
+  }
+
+  const onMomentumScrollEnd2 = ({
+    nativeEvent: {
+      contentOffset: {x: scrollPos},
       layoutMeasurement: {width: layoutWidth},
     },
   }: momentumScrollProps) => {
     const active = Math.floor(scrollPos / layoutWidth)
 
-    // console.log(scrollPos, layoutWidth, active)
+    console.log(scrollPos, layoutWidth, active)
 
     setCurrentItem(active)
   }
 
-  if (isLoading) {
+  if (isLoading || data?.length === 0) {
     return (
       <View className="items-center">
         <ScrollView
@@ -100,23 +142,23 @@ const UserTravelCard: React.FC<{data: string[]; isLoading: boolean}> = ({
               useNativeDriver: false,
             },
           )}>
-          <Item key={0} i={0} scrollX={scrollX}>
+          <ItemLoading key={0} i={0} scrollX={scrollX}>
             <TravelCardSvg className="z-1" />
             <Image className="relative z-0 -mt-7" source={Shadow} />
-          </Item>
+          </ItemLoading>
 
-          <Item key={1} i={1} scrollX={scrollX}>
+          <ItemLoading key={1} i={1} scrollX={scrollX}>
             <TravelCardSvgBlack className="z-1" />
             <Image className="relative z-0 -mt-7" source={Shadow} />
-          </Item>
+          </ItemLoading>
 
-          <Item key={2} i={2} scrollX={scrollX}>
+          <ItemLoading key={2} i={2} scrollX={scrollX}>
             <AddNewCard />
-          </Item>
+          </ItemLoading>
         </ScrollView>
 
         <View className={cn(flexRowLayout(isRTL), '-mt-4')}>
-          {[0, 1, 2]?.map((item, index) => (
+          {[0, 1, 2]?.map((_item, index) => (
             <TCDot key={index} isActive={currentItem === index} hasRounded />
           ))}
         </View>
@@ -142,14 +184,14 @@ const UserTravelCard: React.FC<{data: string[]; isLoading: boolean}> = ({
           paddingHorizontal: padding + 16,
         }}
         showsHorizontalScrollIndicator={false}
-        onMomentumScrollEnd={onMomentumScrollEnd}
+        onMomentumScrollEnd={onMomentumScrollEnd2}
         onScroll={Animated.event(
           [{nativeEvent: {contentOffset: {x: scrollX}}}],
           {
             useNativeDriver: false,
           },
         )}>
-        {data?.map((item, index) =>
+        {data?.map((item: any, index: number) =>
           index % 2 === 0 ? (
             <Item key={index} i={index} scrollX={scrollX}>
               <TravelCardSvg className="z-0" />

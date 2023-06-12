@@ -27,6 +27,7 @@ const BottomTabBar: React.FC<BottomTabBarProps> = ({
 }) => {
   const {t} = useTranslation()
   const isRTL = useStore(zState => zState.isRTL)
+  const direction = isRTL ? 'rtl' : 'ltr'
 
   const scrollX = useRef(new AnimatedRN.Value(0)).current
   const barTranslate = AnimatedRN.multiply(scrollX, -1)
@@ -58,6 +59,7 @@ const BottomTabBar: React.FC<BottomTabBarProps> = ({
   return (
     <Animated.View entering={ZoomInDown.duration(1000).delay(200)}>
       <View
+        style={{direction: direction}}
         {...rest}
         className={cn(
           flexRowLayout(isRTL),
@@ -101,19 +103,25 @@ const BottomTabBar: React.FC<BottomTabBarProps> = ({
               accessibilityRole="button"
               testID={options.tabBarTestID}
               rippleColor={Colors.Supernova}
-              className="flex-1 justify-center items-center"
+              className={cn(
+                'flex-1',
+                flexRowLayout(isRTL),
+                'justify-center items-center',
+              )}
               accessibilityLabel={options.tabBarAccessibilityLabel}
               accessibilityState={isFocused ? {selected: true} : {}}>
-              {renderIcon(label.toLowerCase(), isFocused)}
-              <TCTextView
-                className={cn(
-                  'mt-2 text-tc-ios-base',
-                  isFocused
-                    ? 'text-tc-bottom-tab-text'
-                    : 'text-tc-bottom-tab-text-inactive',
-                )}>
-                {t(`common:${label.toLowerCase()}`)}
-              </TCTextView>
+              <View className="justify-center items-center">
+                {renderIcon(label.toLowerCase(), isFocused)}
+                <TCTextView
+                  className={cn(
+                    'mt-2 text-tc-ios-base',
+                    isFocused
+                      ? 'text-tc-bottom-tab-text'
+                      : 'text-tc-bottom-tab-text-inactive',
+                  )}>
+                  {t(`common:${label.toLowerCase()}`)}
+                </TCTextView>
+              </View>
               {isFocused && (
                 <AnimatedRN.View
                   style={[
