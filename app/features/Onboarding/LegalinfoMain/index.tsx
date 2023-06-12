@@ -107,7 +107,8 @@ function LegalInformation({navigation}: Props) {
         ? 'PEP'
         : 'REP'
       : null
-    return nVal
+
+    return nVal ? nVal : null
   }
   const {isLoading, data, mutate} = useMutation({
     mutationFn: async () => {
@@ -142,9 +143,11 @@ function LegalInformation({navigation}: Props) {
           non_resident: values.notKsaResidents,
           is_pep: values.pepEnabled ? true : false,
           medically_disabled: values.specialNeed ? true : false,
-          disability_type: values.specialNeedValue,
+          disability_type: String(values.specialNeedValue).toUpperCase(),
           disability_type_description:
-            values.specialNeedValue === 'Other' ? values.specialNeedText : null,
+            String(values.specialNeedValue).toUpperCase() === 'OTHER'
+              ? values.specialNeedText
+              : null,
           pep_type: createPepType(values.pepValue),
         },
       })
@@ -305,6 +308,7 @@ function LegalInformation({navigation}: Props) {
                   <>
                     <Spacer size={SPACER_SIZES.BASE * 1} />
                     <Input
+                      maxLength={50}
                       onChangeText={val => {
                         setValues({...values, specialNeedText: val})
                       }}
@@ -362,4 +366,7 @@ const ErrorText = styled(Text)`
   font-weight: 500;
   color: #f54d3f;
   padding-left: 16px;
+  text-align: center;
+  margin-bottom: 10px;
+  margin-top: 20px;
 `
