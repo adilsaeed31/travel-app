@@ -1,21 +1,24 @@
-import React, {useContext, memo} from 'react'
-import {TouchableOpacity} from 'react-native'
+import React, {memo} from 'react'
+import Ripple from 'react-native-material-ripple'
 import {t} from 'i18next'
 
+import {Colors} from '@Utils'
+import {useStore} from '@Store'
 import {TCTextView} from '@Components'
-import {AppContext, AppProviderProps} from '@Context'
 
 function IntroLang() {
-  const {changeLanguage} = useContext<AppProviderProps>(AppContext)
+  const toggleLanguage = useStore(state => state.toggleLanguage)
 
   return (
-    <TouchableOpacity
-      className="p-4 justify-center items-center"
-      onPress={changeLanguage}>
+    <Ripple
+      onPress={toggleLanguage}
+      rippleColor={Colors.Supernova}
+      rippleContainerBorderRadius={24}
+      className="p-4 justify-center items-center">
       <TCTextView className="text-tc-secondary font-tc-bold">
         {t('onboarding:lang')}
       </TCTextView>
-    </TouchableOpacity>
+    </Ripple>
   )
 }
 

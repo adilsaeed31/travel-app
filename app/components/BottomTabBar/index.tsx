@@ -1,71 +1,176 @@
-import React from 'react'
-import {View, StyleSheet, TouchableOpacity} from 'react-native'
+import React, {memo, useRef} from 'react'
+import {View, StyleSheet, Animated as AnimatedRN} from 'react-native'
 import {BottomTabBarProps} from '@react-navigation/bottom-tabs'
 import Animated, {ZoomInDown} from 'react-native-reanimated'
-import cn from 'classnames'
+import {NativeWindStyleSheet} from 'nativewind'
 import {useTranslation} from 'react-i18next'
-import {useNavigation} from '@react-navigation/native'
+import Ripple from 'react-native-material-ripple'
+import cn from 'classnames'
 
+import {
+  HomeIcon,
+  MenuIcon,
+  LoyaltyIcon,
+  MenuIconActive,
+  HomeIconActive,
+  LoyaltyIconActive,
+} from '@Assets'
 import {useStore} from '@Store'
 import {TCTextView} from '@Components'
-import {Colors, flexRowLayout} from '@Utils'
-import {HomeIcon, LoyaltyIcon, MenuIcon} from '@Assets'
+import {Colors, flexRowLayout, vw, screenWidth as width} from '@Utils'
 
-const BottomTabBar: React.FC<BottomTabBarProps> = props => {
+const BottomTabBar: React.FC<BottomTabBarProps> = ({
+  state,
+  descriptors,
+  navigation,
+  ...rest
+}) => {
   const {t} = useTranslation()
-  const isRTL = useStore(state => state.isRTL)
-  const reset = useStore(state => state.reset)
-  const setUser = useStore(state => state.setUser)
-  const navigation = useNavigation<any>()
+  const isRTL = useStore(zState => zState.isRTL)
+
+  const scrollX = useRef(new AnimatedRN.Value(0)).current
+  const barTranslate = AnimatedRN.multiply(scrollX, -1)
+  const barTranslate1 = useRef(new AnimatedRN.Value(0)).current
+
+  const renderIcon = (name: string, active: boolean) => {
+    if (name === 'home') {
+      if (active) {
+        return <HomeIconActive />
+      }
+      return <HomeIcon />
+    }
+
+    if (name === 'loyalty') {
+      if (active) {
+        return <LoyaltyIconActive />
+      }
+      return <LoyaltyIcon />
+    }
+
+    if (name === 'menu') {
+      if (active) {
+        return <MenuIconActive />
+      }
+      return <MenuIcon />
+    }
+  }
 
   return (
     <Animated.View entering={ZoomInDown.duration(1000).delay(200)}>
       <View
-        {...props}
-        style={styles.barStyle}
+        {...rest}
         className={cn(
           flexRowLayout(isRTL),
-          'h-16 m-5 rounded-2xl bg-tc-bottom-tab justify-between items-center px-9',
+          'bar-width-05 border-tc-tab h-16 m-5 rounded-2xl bg-tc-bottom-tab',
         )}>
-        <TouchableOpacity
-          className="justify-center items-center"
-          onPress={() => navigation.navigate('Dashboard')}>
-          <HomeIcon />
-          <TCTextView className="mt-2 text-tc-ios-base text-tc-bottom-tab-text">
-            {t('common:home')}
-          </TCTextView>
-        </TouchableOpacity>
+        {state.routes.map((route, index) => {
+          const {options} = descriptors[route.key]
+          const label: any =
+            options.tabBarLabel !== undefined
+              ? options.tabBarLabel
+              : options.title !== undefined
+              ? options.title
+              : route.name
 
-        <TouchableOpacity
-          className="justify-center items-center"
-          onPress={() => navigation.navigate('Loyalty')}>
-          <LoyaltyIcon />
-          <TCTextView className="mt-2 text-tc-ios-base text-tc-bottom-tab-text">
-            {t('common:loyalty')}
-          </TCTextView>
-        </TouchableOpacity>
+          const isFocused = state.index === index
 
-        <TouchableOpacity
-          onPress={() => {
-            reset()
-            setUser(null)
-          }}
-          className="justify-center items-center">
-          <MenuIcon />
-          <TCTextView className="mt-2 text-tc-ios-base text-tc-bottom-tab-text">
-            {t('common:menu')}
-          </TCTextView>
-        </TouchableOpacity>
+          const onPress = () => {
+            const event = navigation.emit({
+              type: 'tabPress',
+              target: route.key,
+              canPreventDefault: true,
+            })
+
+            if (!isFocused && !event.defaultPrevented) {
+              navigation.navigate({name: route.name, merge: true} as any)
+            }
+          }
+
+          const onLongPress = () => {
+            navigation.emit({
+              type: 'tabLongPress',
+              target: route.key,
+            })
+          }
+
+          return (
+            <Ripple
+              onPress={onPress}
+              key={label.toLowerCase()}
+              onLongPress={onLongPress}
+              accessibilityRole="button"
+              testID={options.tabBarTestID}
+              rippleColor={Colors.Supernova}
+              className="flex-1 justify-center items-center"
+              accessibilityLabel={options.tabBarAccessibilityLabel}
+              accessibilityState={isFocused ? {selected: true} : {}}>
+              {renderIcon(label.toLowerCase(), isFocused)}
+              <TCTextView
+                className={cn(
+                  'mt-2 text-tc-ios-base',
+                  isFocused
+                    ? 'text-tc-bottom-tab-text'
+                    : 'text-tc-bottom-tab-text-inactive',
+                )}>
+                {t(`common:${label.toLowerCase()}`)}
+              </TCTextView>
+              {isFocused && (
+                <AnimatedRN.View
+                  style={[
+                    styles.headerBar,
+                    {
+                      width: vw(50),
+                      transform: [
+                        {translateX: barTranslate},
+                        {translateX: barTranslate1},
+                      ],
+                    },
+                  ]}
+                />
+              )}
+            </Ripple>
+          )
+        })}
       </View>
     </Animated.View>
   )
 }
 
-const styles = StyleSheet.create({
-  barStyle: {
-    borderWidth: 0.5,
-    borderColor: Colors.TabBorder,
+NativeWindStyleSheet.create({
+  styles: {
+    'bar-width-05': {
+      borderWidth: 0.5,
+    },
   },
 })
 
-export default BottomTabBar
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  headerStyle: {
+    borderWidth: 0.5,
+    borderRadius: 24,
+    borderColor: Colors.TabBorder,
+  },
+  headerItem: {
+    padding: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  mainItem: {
+    width: width,
+  },
+  headerBar: {
+    height: 4,
+    bottom: 0,
+    overflow: 'hidden',
+    marginLeft: 18,
+    position: 'absolute',
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
+    backgroundColor: Colors.Supernova,
+  },
+})
+
+export default memo(BottomTabBar)

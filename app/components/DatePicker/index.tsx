@@ -6,16 +6,17 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native'
+import Modal from 'react-native-modal'
+import {useTranslation} from 'react-i18next'
 import styled from 'styled-components/native'
-import {AppContext, AppProviderProps} from '@Context'
+import DatePicker from 'react-native-date-picker'
+
 import {Forward} from '@Assets'
 import {TEXT_VARIANTS} from '@Utils'
+import {AppContext, AppProviderProps} from '@Context'
+
+import {default as Button} from '../Button'
 import TCTextView from '../TextView'
-import Modal from 'react-native-modal'
-import {TCTextView as Text} from '@Components'
-import DatePicker from 'react-native-date-picker'
-import {TCButton as Button} from '../index'
-import {useTranslation} from 'react-i18next'
 
 const DropDownInput = styled(Pressable)<{
   isRTL: boolean
@@ -75,7 +76,7 @@ interface IDropDownProps {
   disabled?: boolean
   title?: string | null
   subTitle?: string | null
-  onDateSelected: (d: string) => void
+  onDateSelected: (d: any) => void
 }
 const SheetHeight = Dimensions.get('window').height / 2
 
@@ -105,16 +106,11 @@ export default function DropDown({
           <View style={{height: Dimensions.get('window').height / 3}}>
             <DatePicker
               mode="date"
-              modal={true}
               androidVariant="nativeAndroid"
               locale={isRTL ? 'ar' : 'en'}
-              open={true}
               date={date}
               onDateChange={d => setDate(d)}
               maximumDate={new Date()}
-              onCancel={() => {
-                setOpen(false)
-              }}
             />
             <StyledButton
               disabled={false}
@@ -122,9 +118,9 @@ export default function DropDown({
                 onDateSelected(date)
                 setOpen(false)
               }}>
-              <Text variant={TEXT_VARIANTS.body700}>
+              <TCTextView variant={TEXT_VARIANTS.bodyBold}>
                 {t('onboarding:financialInformation:continue')}
-              </Text>
+              </TCTextView>
             </StyledButton>
           </View>
         </OneFlexView>
@@ -239,7 +235,7 @@ const ClickableItem = styled(TouchableOpacity)<{hasBorder: boolean}>`
   margin-top: 2px;
   justify-content: center;
 `
-const ClickableItemText = styled(Text)<{isRTL: boolean}>`
+const ClickableItemText = styled(TCTextView)<{isRTL: boolean}>`
   font-weight: 400;
   font-size: 16px;
   line-height: 20px;

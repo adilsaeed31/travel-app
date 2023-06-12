@@ -29,7 +29,7 @@ type LayoutProps = {
   isScrollable?: boolean
   isLoading?: boolean
   onScroll?: () => void
-  isDashboardLayout?: boolean
+  hasDashboardLayout?: boolean
 }
 
 const Container = styled(View)`
@@ -40,7 +40,7 @@ const Container = styled(View)`
 
 const BackgroundImage1 = styled(FlightPath)`
   position: absolute;
-  top: ${vh(116)};
+  top: ${vh(116)}px;
   align-self: center;
   z-index: -1;
   transform: ${() => (useStore.getState().isRTL ? 'scaleX(-1)' : 'scaleX(1)')};
@@ -83,21 +83,20 @@ const AppLayout: React.FC<LayoutProps> = ({
   onScroll = () => {},
   onBack = () => {},
   children,
-  isDashboardLayout = false,
+  hasDashboardLayout = false,
   ...rest
 }) => {
   const insetEdges = useSafeAreaInsets()
 
   // below is the flag to return the dashboard layout without
   // scrollview and keyboard avoidingview and others flag
-  if (isDashboardLayout) {
+  if (hasDashboardLayout) {
     return (
       <View
-        className="flex-1"
         style={{
           // do not remove this below style props below will
           // adjust the padding/spacing on ios and android
-          paddingTop: vh(insetEdges.top),
+          paddingTop: insetEdges.top,
         }}>
         {children}
       </View>
@@ -107,6 +106,11 @@ const AppLayout: React.FC<LayoutProps> = ({
   return (
     <KeyboardAvoidingView
       enabled
+      style={{
+        // do not remove this below style props below will
+        // adjust the padding/spacing on ios and android
+        paddingTop: insetEdges.top,
+      }}
       className="flex-1"
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <ScrollView
@@ -134,9 +138,9 @@ const AppLayout: React.FC<LayoutProps> = ({
               style={{
                 // do not remove this below style props below will
                 // adjust the padding/spacing on ios and android
-                paddingTop: vh(insetEdges.top),
-                paddingLeft: vw(insetEdges.left) + vw(32),
-                paddingRight: vw(insetEdges.right) + vw(32),
+                marginBottom: isHeader && vh(insetEdges.top),
+                paddingLeft: vw(insetEdges.left) + vw(16),
+                paddingRight: vw(insetEdges.right) + vw(16),
                 paddingBottom: vh(insetEdges.bottom),
               }}>
               {isHeader && <Header isBack={isBack} onBack={onBack} />}

@@ -18,7 +18,7 @@ const tabBar = (props: BottomTabBarProps) => <BottomTabBar {...props} />
 const AppNavigator = () => (
   <Navigator tabBar={tabBar}>
     <Screen
-      name="Dashboard"
+      name="Home"
       options={{
         headerShown: false,
       }}

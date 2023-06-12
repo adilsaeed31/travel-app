@@ -1,23 +1,29 @@
 import React, {memo} from 'react'
-import {StyleSheet, TouchableOpacity} from 'react-native'
+import {StyleSheet} from 'react-native'
+import Ripple from 'react-native-material-ripple'
+import cn from 'classnames'
 
-import {Colors} from '@Utils'
+import {useStore} from '@Store'
+import {Colors, mr, vh} from '@Utils'
 import {TCTextView} from '@Components'
 
 const QuickLoad: React.FC<{
   name: string
   onPress?: () => void
 }> = ({name, onPress}) => {
+  const isRTL = useStore(state => state.isRTL)
+
   return (
-    <TouchableOpacity
-      // style={[styles.container, {transform: [{scale: 0.8}]}]}
+    <Ripple
+      onPress={onPress}
       style={styles.container}
-      className="px-4 py-3 mr-2 rounded-2xl"
-      onPress={onPress}>
+      rippleColor={Colors.Supernova}
+      rippleContainerBorderRadius={16}
+      className={cn('px-4 rounded-2xl', mr(isRTL, 2))}>
       <TCTextView className="text-tc-ios-base text-tc-quick-text">
         {name}
       </TCTextView>
-    </TouchableOpacity>
+    </Ripple>
   )
 }
 
@@ -25,6 +31,7 @@ const styles = StyleSheet.create({
   container: {
     borderWidth: 0.5,
     borderColor: Colors.TabBorder,
+    paddingVertical: vh(10),
   },
 })
 

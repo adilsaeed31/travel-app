@@ -304,7 +304,7 @@ function FinacialInformationScreen({navigation}: Props) {
   const isFormValid = useMemo(() => {
     let currentOccupationCode =
       SheetData.Occupation.find(sheet => sheet.name === values.occupation)
-        ?.code || 0
+        ?.code || 1
     let validationResult = false
 
     if (currentOccupationCode >= 4) {
@@ -392,7 +392,7 @@ function FinacialInformationScreen({navigation}: Props) {
           />
           <Spacer />
           <TCInput
-            value={values.monthlyPrimaryIncomAmount}
+            value={String(values.monthlyPrimaryIncomAmount)}
             onChangeText={val => {
               setValues({...values, monthlyPrimaryIncomAmount: val})
             }}
@@ -424,7 +424,7 @@ function FinacialInformationScreen({navigation}: Props) {
           />
           <Spacer />
           <TCInput
-            value={values.monthlyPrimaryIncomAmount}
+            value={String(values.monthlyPrimaryIncomAmount)}
             onChangeText={val =>
               setValues({...values, monthlyPrimaryIncomAmount: val})
             }
@@ -488,7 +488,7 @@ function FinacialInformationScreen({navigation}: Props) {
           />
           <Spacer />
           <TCInput
-            value={values.monthlyPrimaryIncomAmount}
+            value={String(values.monthlyPrimaryIncomAmount)}
             onChangeText={val =>
               setValues({...values, monthlyPrimaryIncomAmount: val})
             }
@@ -561,7 +561,7 @@ function FinacialInformationScreen({navigation}: Props) {
             <View>
               <Spacer />
               <TCInput
-                value={values.monthlyPrimaryIncomAmount}
+                value={String(values.monthlyPrimaryIncomAmount)}
                 onChangeText={val =>
                   setValues({...values, monthlyPrimaryIncomAmount: val})
                 }
