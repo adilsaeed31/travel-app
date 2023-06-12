@@ -21,11 +21,7 @@ const AppNavigator = lazy(() => import('./AppNavigator'))
 
 const MainNavigation = () => {
   const user = useStore(state => state.user)
-  const isRTL = useStore(state => state.isRTL)
   const isAppReady = useStore(state => state.isAppReady)
-
-  // changing the layout direction if isRTL true
-  const direction = isRTL ? 'rtl' : 'ltr'
 
   // below is useEffect is only for android devices
   // because isAppReady is true in store on next load
@@ -37,9 +33,7 @@ const MainNavigation = () => {
   }, [isAppReady])
 
   return (
-    <SafeAreaProvider
-      className="flex-1 bg-white"
-      style={{direction: direction}}>
+    <SafeAreaProvider className="flex-1 bg-white">
       <StatusBar />
 
       <NavigationContainer>

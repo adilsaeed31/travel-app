@@ -54,7 +54,7 @@ const BackgroundImage2 = styled(BottomBg)`
   align-self: center;
 `
 
-const ContentWrapper = styled(View)`
+const ContentWrapper = styled(View)<any>`
   flex: 1;
 `
 
@@ -87,6 +87,8 @@ const AppLayout: React.FC<LayoutProps> = ({
   ...rest
 }) => {
   const insetEdges = useSafeAreaInsets()
+  const isRTL = useStore(state => state.isRTL)
+  const direction = isRTL ? 'rtl' : 'ltr'
 
   // below is the flag to return the dashboard layout without
   // scrollview and keyboard avoidingview and others flag
@@ -94,6 +96,8 @@ const AppLayout: React.FC<LayoutProps> = ({
     return (
       <View
         style={{
+          direction: direction,
+          backgroundColor: 'white',
           // do not remove this below style props below will
           // adjust the padding/spacing on ios and android
           paddingTop: insetEdges.top,
@@ -107,6 +111,7 @@ const AppLayout: React.FC<LayoutProps> = ({
     <KeyboardAvoidingView
       enabled
       style={{
+        backgroundColor: 'white',
         // do not remove this below style props below will
         // adjust the padding/spacing on ios and android
         paddingTop: insetEdges.top,

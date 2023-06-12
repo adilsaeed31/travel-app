@@ -71,8 +71,109 @@ const FormValues = {
   AnotherAddetionalSourceOfIncomeAmount: '',
 }
 
+const GenerateMinMaxIncome = (code: number) => {
+  //'Housewife' ||'Unemployed' ||'Not authorized to work' ||Student' >4// 'Investor' 3 //Business & Professional' 2 //  'Salary/Pension' 1
+  let minIncome =
+    code == 3 ? 300 : code == 2 ? 300 : code >= 4 ? 300 : code == 1 ? 300 : 3000
+  let maxIncome =
+    code == 3
+      ? 10000000
+      : code == 2
+      ? 5000000
+      : code >= 4
+      ? 100000
+      : code == 1
+      ? 500000
+      : 500000
+  return {
+    minIncome,
+    maxIncome,
+  }
+}
+const MapApiApiToState = (
+  values: IFormTYpe,
+  fincialInformationGetData: any,
+  isRTL: boolean,
+) => {
+  let occupation = fincialInformationGetData?.occupation?.code
+    ? SheetData.Occupation.find(
+        p => p.code == fincialInformationGetData?.occupation?.code,
+      )
+    : null
+  let jobCategory = fincialInformationGetData?.employment?.category
+    ? isRTL
+      ? fincialInformationGetData?.employment?.category.name_ar
+      : fincialInformationGetData?.employment?.category.name_en
+    : null
+  let jobTitle = !fincialInformationGetData?.employment?.title
+    ? null
+    : isRTL
+    ? fincialInformationGetData?.employment?.title?.description_ar
+    : fincialInformationGetData?.employment?.title?.description_en
+  let sector = fincialInformationGetData?.employment?.sector
+    ? isRTL
+      ? fincialInformationGetData?.employment?.sector?.description_ar
+      : fincialInformationGetData?.employment?.sector?.description_en
+    : null
+  let dateOfJoin = fincialInformationGetData?.employment?.joining_date
+  let primarySourceOfIncome = fincialInformationGetData?.primary_income?.source
+    ? SheetData.primarySourceOfIncome.find(
+        c => c.type_code == fincialInformationGetData?.primary_income?.source,
+      )
+    : null
+  return {
+    ...values,
+    sector,
+    jobCategory,
+    jobTitle,
+    dateOfJoin,
+    primarySourceOfIncome: primarySourceOfIncome
+      ? isRTL
+        ? primarySourceOfIncome.description_ar
+        : primarySourceOfIncome.description_en
+      : null,
+    occupation: occupation
+      ? isRTL
+        ? occupation.description_ar
+        : occupation.description_en
+      : null,
+    nameOfBusiness: fincialInformationGetData?.business_name || null,
+    monthlyPrimaryIncomAmount:
+      fincialInformationGetData?.primary_income?.amount ||
+      values.monthlyPrimaryIncomAmount,
+    investmentType: fincialInformationGetData?.investment_type,
+    AddetionalSourceOfIncome: fincialInformationGetData?.additional_income_list
+      ?.length
+      ? true
+      : false,
+    AddetionalSourceOfIncomeSource: fincialInformationGetData
+      ?.additional_income_list?.length
+      ? fincialInformationGetData?.additional_income_list[0]?.source
+      : '',
+    AddetionalSourceOfIncomeAmount: fincialInformationGetData
+      ?.additional_income_list?.length
+      ? fincialInformationGetData?.additional_income_list[0]?.amount
+      : '',
+    AnotherAddetionalSourceOfIncome:
+      fincialInformationGetData?.additional_income_list?.length > 1
+        ? true
+        : false,
+    AnotherAddetionalSourceOfIncomeSource: fincialInformationGetData
+      ?.additional_income_list?.length
+      ? fincialInformationGetData?.additional_income_list[0]?.source
+      : '',
+    AnotherAddetionalSourceOfIncomeAmount: fincialInformationGetData
+      ?.additional_income_list?.length
+      ? fincialInformationGetData?.additional_income_list[0]?.amount
+      : '',
+  }
+}
 const MapStateForAPi = (values: IFormTYpe) => {
-  let occupation = SheetData.Occupation.find(c => c.name == values.occupation)
+  let occupation = SheetData.Occupation.find(
+    c =>
+      c.description_ar == values.occupation ||
+      c.description_en == values.occupation,
+  )
   let business_name = values.nameOfBusiness
   let tilte = SheetData.jobTitle.find(
     c =>
@@ -165,6 +266,7 @@ function FinacialInformationScreen({navigation}: Props) {
       return res
     },
   })
+
   useEffect(() => {
     if (FinicailInformationPostResult?.onboarding_application_id) {
       navigation.push('LegalinfoMain')
@@ -177,22 +279,29 @@ function FinacialInformationScreen({navigation}: Props) {
       setSystemErrorMessage(t('common:someThingWentWrong'))
     }
   }, [FinicailInformationPostResult])
+
   const handelPostForm = () => {
     let currentOccupationCode =
-      SheetData.Occupation.find(sheet => sheet.name === values.occupation)
-        ?.code || (values.occupation ? 1 : 0)
+      SheetData.Occupation.find(
+        sheet =>
+          sheet.description_ar === values.occupation ||
+          sheet.description_en === values.occupation,
+      )?.code || (values.occupation ? 1 : 0)
+    const {maxIncome, minIncome} = GenerateMinMaxIncome(currentOccupationCode)
+
     let alreadyFetchedFromGosiForSalaried =
       currentOccupationCode === 1 && GosiSuccess
     const isValideMonthlyPrimaryIncome =
       alreadyFetchedFromGosiForSalaried || !values.monthlyPrimaryIncomAmount
         ? true
-        : values.monthlyPrimaryIncomAmount >= 3000 &&
-          values.monthlyPrimaryIncomAmount <= 500000
+        : values.monthlyPrimaryIncomAmount >= minIncome &&
+          values.monthlyPrimaryIncomAmount <= maxIncome
     if (!isValideMonthlyPrimaryIncome) {
       return setErrors({
         ...errors,
         monthlyPrimaryIncomAmount: t(
           'onboarding:financialInformation:monthlyIncomeValidation',
+          {min: minIncome, max: maxIncome},
         ),
       })
     } else {
@@ -226,85 +335,17 @@ function FinacialInformationScreen({navigation}: Props) {
     GetFinicalInformationMutate()
   }, [])
   const GosiSuccess = fincialInformationGetData?.primary_income
+
   useEffect(() => {
-    let occupation = fincialInformationGetData?.occupation?.code
-      ? SheetData.Occupation.find(
-          p => p.code == fincialInformationGetData?.occupation?.code,
-        )
-      : null
-    let jobCategory = fincialInformationGetData?.employment?.category
-      ? isRTL
-        ? fincialInformationGetData?.employment?.category.name_ar
-        : fincialInformationGetData?.employment?.category.name_en
-      : null
-    let jobTitle = !fincialInformationGetData?.employment?.title
-      ? null
-      : isRTL
-      ? fincialInformationGetData?.employment?.title?.description_ar
-      : fincialInformationGetData?.employment?.title?.description_en
-    let sector = fincialInformationGetData?.employment?.sector
-      ? isRTL
-        ? fincialInformationGetData?.employment?.sector?.description_ar
-        : fincialInformationGetData?.employment?.sector?.description_en
-      : null
-    let dateOfJoin = fincialInformationGetData?.employment?.joining_date
-    let primarySourceOfIncome = fincialInformationGetData?.primary_income
-      ?.source
-      ? SheetData.primarySourceOfIncome.find(
-          c => c.type_code == fincialInformationGetData?.primary_income?.source,
-        )
-      : null
-    setValues({
-      ...values,
-      sector,
-      jobCategory,
-      jobTitle,
-      dateOfJoin,
-      primarySourceOfIncome: primarySourceOfIncome
-        ? isRTL
-          ? primarySourceOfIncome.description_ar
-          : primarySourceOfIncome.description_en
-        : null,
-      occupation: occupation
-        ? isRTL
-          ? occupation.description_ar
-          : occupation.description_en
-        : null,
-      nameOfBusiness: fincialInformationGetData?.business_name || null,
-      monthlyPrimaryIncomAmount:
-        fincialInformationGetData?.primary_income?.amount ||
-        values.monthlyPrimaryIncomAmount,
-      investmentType: fincialInformationGetData?.investment_type,
-      AddetionalSourceOfIncome: fincialInformationGetData
-        ?.additional_income_list?.length
-        ? true
-        : false,
-      AddetionalSourceOfIncomeSource: fincialInformationGetData
-        ?.additional_income_list?.length
-        ? fincialInformationGetData?.additional_income_list[0]?.source
-        : '',
-      AddetionalSourceOfIncomeAmount: fincialInformationGetData
-        ?.additional_income_list?.length
-        ? fincialInformationGetData?.additional_income_list[0]?.amount
-        : '',
-      AnotherAddetionalSourceOfIncome:
-        fincialInformationGetData?.additional_income_list?.length > 1
-          ? true
-          : false,
-      AnotherAddetionalSourceOfIncomeSource: fincialInformationGetData
-        ?.additional_income_list?.length
-        ? fincialInformationGetData?.additional_income_list[0]?.source
-        : '',
-      AnotherAddetionalSourceOfIncomeAmount: fincialInformationGetData
-        ?.additional_income_list?.length
-        ? fincialInformationGetData?.additional_income_list[0]?.amount
-        : '',
-    })
+    setValues(MapApiApiToState(values, fincialInformationGetData, !!isRTL))
   }, [fincialInformationGetData])
   const isFormValid = useMemo(() => {
     let currentOccupationCode =
-      SheetData.Occupation.find(sheet => sheet.name === values.occupation)
-        ?.code || 1
+      SheetData.Occupation.find(
+        sheet =>
+          sheet.description_ar === values.occupation ||
+          sheet.description_en === values.occupation,
+      )?.code || 1
     let validationResult = false
 
     if (currentOccupationCode >= 4) {
@@ -363,8 +404,11 @@ function FinacialInformationScreen({navigation}: Props) {
   const RenderCurrentForm = () => {
     let CurrentFormView = null
     let currentOccupationCode =
-      SheetData.Occupation.find(sheet => sheet.name === values.occupation)
-        ?.code || (values.occupation ? 1 : 0)
+      SheetData.Occupation.find(
+        sheet =>
+          sheet.description_ar === values.occupation ||
+          sheet.description_en === values.occupation,
+      )?.code || (values.occupation ? 1 : 0)
     console.log('currentOccupationCode', currentOccupationCode)
     if (
       //'Housewife' ||'Unemployed' ||'Not authorized to work' ||Student'
@@ -377,7 +421,7 @@ function FinacialInformationScreen({navigation}: Props) {
             data={SheetData.primarySourceOfIncome.map(income =>
               isRTL ? income.description_ar : income.description_en,
             )}
-            label={'Primary source of income'}
+            label={t('onboarding:financialInformation:primarySourceOfIncome')}
             toogleClick={() => ToggleSheet(SheetsIndexs.primarySourceOfIncome)}
             onItemSelected={primarySourceOfIncome => {
               setValues({...values, primarySourceOfIncome})
@@ -459,7 +503,7 @@ function FinacialInformationScreen({navigation}: Props) {
             data={SheetData.jobCategory.map(cat =>
               !isRTL ? cat.nameEn : cat.nameAr,
             )}
-            label={'Job Category'}
+            label={t('onboarding:financialInformation:jobCategory')}
             toogleClick={() => ToggleSheet(SheetsIndexs.jobCategory)}
             onItemSelected={jobCategory => setValues({...values, jobCategory})}
             value={values.jobCategory}
@@ -475,14 +519,14 @@ function FinacialInformationScreen({navigation}: Props) {
             data={SheetData.jobTitle.map(title =>
               isRTL ? title.descriptionAr : title.descriptionEn,
             )}
-            label={'Job Title'}
+            label={t('onboarding:financialInformation:jobTitle')}
             toogleClick={() => ToggleSheet(SheetsIndexs.jobTitle)}
             onItemSelected={jobTitle => setValues({...values, jobTitle})}
             value={values.jobTitle}
             error={errors.jobTitle}
             isOpen={currentOpendIndx == SheetsIndexs.jobTitle}
-            title={t('onboarding:financialInformation:jobCategory')}
-            subTitle={t('onboarding:financialInformation:jobCategory')}
+            title={t('onboarding:financialInformation:jobTitle')}
+            subTitle={t('onboarding:financialInformation:jobTitle')}
             onSheetClose={() => setCurrentOpenedInx(-1)}
             hasSearch
           />
@@ -643,9 +687,9 @@ function FinacialInformationScreen({navigation}: Props) {
                   toogleClick={() =>
                     ToggleSheet(SheetsIndexs.addetionalSourceOfIncome)
                   }
-                  onItemSelected={AddetionalSourceOfIncomeSource =>
+                  onItemSelected={AddetionalSourceOfIncomeSource => {
                     setValues({...values, AddetionalSourceOfIncomeSource})
-                  }
+                  }}
                   value={values.AddetionalSourceOfIncomeSource}
                   error={errors.AddetionalSourceOfIncomeSource}
                   isOpen={
@@ -717,6 +761,7 @@ function FinacialInformationScreen({navigation}: Props) {
                       )}
                       onSheetClose={() => setCurrentOpenedInx(-1)}
                       hasSearch
+                      dynamicHeight
                     />
                     <Spacer />
                     <TCInput
@@ -768,7 +813,9 @@ function FinacialInformationScreen({navigation}: Props) {
               {t('onboarding:financialInformation:financialInformation') || ''}
             </Header>
             <DropDown
-              data={SheetData.Occupation.map(d => d.name)}
+              data={SheetData.Occupation.map(d =>
+                isRTL ? d.description_ar : d.description_en,
+              )}
               label={t('onboarding:financialInformation:occupation') || ''}
               toogleClick={() => ToggleSheet(SheetsIndexs.Occupation)}
               disabled={GosiSuccess}
@@ -778,6 +825,10 @@ function FinacialInformationScreen({navigation}: Props) {
                   occupation,
                   //   monthlyPrimaryIncomAmount: '',
                 })
+                setErrors({
+                  ...errors,
+                  monthlyPrimaryIncomAmount: '',
+                })
               }}
               value={values.occupation}
               error={errors.occupation}
@@ -786,6 +837,7 @@ function FinacialInformationScreen({navigation}: Props) {
               subTitle={t('onboarding:financialInformation:occupation')}
               onSheetClose={() => setCurrentOpenedInx(-1)}
               hasSearch
+              dynamicHeight
             />
 
             <Spacer />

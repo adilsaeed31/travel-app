@@ -2,7 +2,7 @@ export const pepList = [
   {
     levelCode: 'pep',
 
-    levelNameEn: 'I am politically expoased person',
+    levelNameEn: 'I am politically exposed person',
 
     levelNameAr: 'أنا شخص معرض سياسيا',
   },
@@ -10,7 +10,7 @@ export const pepList = [
   {
     levelCode: 'rep',
 
-    levelNameEn: 'I am related to politically expoased person',
+    levelNameEn: 'I am related to politically exposed person',
 
     levelNameAr: 'غير متعلم',
   },

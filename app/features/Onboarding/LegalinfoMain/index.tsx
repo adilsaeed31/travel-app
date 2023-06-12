@@ -103,7 +103,7 @@ function LegalInformation({navigation}: Props) {
   }
   const createPepType = (pepValue: string | undefined) => {
     let nVal = pepValue
-      ? pepValue === 'I am related to politically expoased person'
+      ? pepValue === 'I am related to politically exposed person'
         ? 'PEP'
         : 'REP'
       : null

@@ -1,7 +1,9 @@
 import React from 'react'
-import {View, TouchableOpacity} from 'react-native'
+import {View} from 'react-native'
+import Ripple from 'react-native-material-ripple'
 import {NativeWindStyleSheet} from 'nativewind'
 
+import {Colors} from '@Utils'
 import {AddNew} from '@Assets'
 import {TCTextView} from '@Components'
 import {useTranslation} from 'react-i18next'
@@ -10,13 +12,16 @@ const AddNewCard = () => {
   const {t} = useTranslation()
 
   return (
-    <View className="card-width-height justify-center bg-tc-card rounded-2xl z-2">
-      <TouchableOpacity className="items-center">
+    <View className="card-width-height bg-tc-card rounded-2xl z-2">
+      <Ripple
+        rippleColor={Colors.Supernova}
+        rippleContainerBorderRadius={16}
+        className="flex-1 justify-center items-center">
         <AddNew />
         <TCTextView className="font-tc-light text-sm">
           {t('TravelCard:addNew')}
         </TCTextView>
-      </TouchableOpacity>
+      </Ripple>
     </View>
   )
 }

@@ -226,7 +226,7 @@ const PersonalIdScreen = ({navigation}: Props) => {
         />
         {statusError && <ErrorText>{statusError}</ErrorText>}
         <DisclaimerView isKeyboardVisible={!!keyboardHeight} isRTL={isRTL}>
-          <Checkbox
+          {/* <Checkbox
             onChange={newStatus => {
               setState({...state, isEmailCheck: newStatus})
             }}
@@ -235,7 +235,7 @@ const PersonalIdScreen = ({navigation}: Props) => {
                 {t('onboarding:agreeEmail')}
               </AgreeText>
             }
-          />
+          /> */}
           <Checkbox
             onChange={newStatus => {
               if (newStatus) {

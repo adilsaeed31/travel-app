@@ -6,7 +6,7 @@ import cn from 'classnames'
 import {useStore} from '@Store'
 import {Promotion1} from '@Assets'
 import {TCTextView} from '@Components'
-import {itemPos, ml, screenWidth} from '@Utils'
+import {ml, screenWidth} from '@Utils'
 
 const itemWidth = (screenWidth / 3) * 2
 const offset = itemWidth
@@ -35,10 +35,11 @@ const Promotions = () => {
   const {t} = useTranslation()
   const isRTL = useStore(state => state.isRTL)
   const scrollX = useRef(new Animated.Value(0)).current
+  const direction = isRTL ? 'rtl' : 'ltr'
 
   return (
-    <View className={cn('my-4', ml(isRTL, 4))}>
-      <TCTextView className={cn(itemPos(isRTL), 'mb-3')}>
+    <View style={{direction: direction}} className={cn('my-4', ml(isRTL, 4))}>
+      <TCTextView className="text-left mb-3">
         {t('TravelCard:doMore')}
       </TCTextView>
 
