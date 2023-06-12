@@ -80,10 +80,9 @@ type momentumScrollProps = {
 }
 
 const UserTravelCard: React.FC<{data: string[]; isLoading: boolean}> = ({
-  data = [],
+  data,
   isLoading,
 }) => {
-  console.log(data?.length, 'data in userTravelcard')
   const isRTL = useStore(state => state.isRTL)
   const [currentItem, setCurrentItem] = useState<number>(0)
 
@@ -101,12 +100,6 @@ const UserTravelCard: React.FC<{data: string[]; isLoading: boolean}> = ({
     } else if (scrollPos > 500) {
       setCurrentItem(2)
     }
-
-    // const active = Math.floor(scrollPos / layoutWidth)
-
-    // console.log(scrollPos, layoutWidth, active)
-
-    // setCurrentItem(active)
   }
 
   const onMomentumScrollEnd2 = ({
@@ -122,7 +115,7 @@ const UserTravelCard: React.FC<{data: string[]; isLoading: boolean}> = ({
     setCurrentItem(active)
   }
 
-  if (isLoading || data?.length === 0) {
+  if (data?.length === 0) {
     return (
       <View className="items-center">
         <ScrollView
@@ -162,12 +155,13 @@ const UserTravelCard: React.FC<{data: string[]; isLoading: boolean}> = ({
             <TCDot key={index} isActive={currentItem === index} hasRounded />
           ))}
         </View>
-
-        <ActivityIndicator
-          size="large"
-          className="absolute top-14 mt-1 z-0"
-          color={Colors.Supernova}
-        />
+        {isLoading ? (
+          <ActivityIndicator
+            size="large"
+            className="absolute top-14 mt-1 z-0"
+            color={Colors.Supernova}
+          />
+        ) : null}
       </View>
     )
   }

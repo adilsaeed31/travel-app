@@ -139,6 +139,7 @@ export const translation = {
       quickLoad: 'Quick Load',
       addNew: 'Add New Card',
       doMore: 'Do more with SAIB',
+      recentTrans: 'Recent Transactions',
     },
   },
   ar: {
@@ -276,6 +277,7 @@ export const translation = {
       quickLoad: 'تحميل سريع',
       addNew: 'إضافة بطاقة جديدة',
       doMore: 'افعل المزيد مع البنك السعودي للاستثمار',
+      recentTrans: 'المعاملات الأخيرة',
     },
   },
 }

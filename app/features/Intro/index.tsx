@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState, useContext} from 'react'
+import React, {useEffect, useRef, useState, useContext, memo} from 'react'
 import {View, BackHandler} from 'react-native'
 import LottieView from 'lottie-react-native'
 import Animated, {
@@ -135,7 +135,11 @@ const IntroFeature: React.FC<{
         )}
 
         {currentValue === MiddleSlideFrame && (
-          <IntroText one={t('intro:currency1')} two={t('intro:currency2')} />
+          <IntroText
+            isFirstBold
+            one={t('intro:currency1')}
+            two={t('intro:currency2')}
+          />
         )}
 
         {currentValue >= LastSlideFrame && (
@@ -176,4 +180,4 @@ const IntroFeature: React.FC<{
   )
 }
 
-export default IntroFeature
+export default memo(IntroFeature)

@@ -92,19 +92,17 @@ const AppLayout: React.FC<LayoutProps> = ({
 
   // below is the flag to return the dashboard layout without
   // scrollview and keyboard avoidingview and others flag
+
   if (hasDashboardLayout) {
-    return (
-      <View
-        style={{
-          direction: direction,
-          backgroundColor: 'white',
-          // do not remove this below style props below will
-          // adjust the padding/spacing on ios and android
-          paddingTop: insetEdges.top,
-        }}>
-        {children}
-      </View>
-    )
+    const viewStyle = {
+      flex: 1,
+      direction: direction,
+      backgroundColor: 'white',
+      // do not remove this below style props below will
+      // adjust the padding/spacing on ios and android
+      paddingTop: insetEdges.top,
+    }
+    return <View style={viewStyle}>{children}</View>
   }
 
   return (
