@@ -2,21 +2,45 @@ import React, {memo, useState, useEffect} from 'react'
 import {ScrollView, View} from 'react-native'
 import Animated, {FadeInRight} from 'react-native-reanimated'
 
-import {QuickActions, UserAccountCardView} from '@Components'
+import {
+  QuickActions,
+  Spacer,
+  TCTextView,
+  UserAccountCardView,
+} from '@Components'
 import ListViewItem from './ListViewItem'
 import {FaceIcon} from '@Assets'
-import {BASE_URL} from '@Utils'
+import {BASE_URL, SPACER_SIZES} from '@Utils'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {fetcher, token} from '@Api'
 import {useIsFocused} from '@react-navigation/native'
 import {useQuery} from '@tanstack/react-query'
 import {useStore} from '@Store'
+import {styled} from 'styled-components/native'
 
 type AccountScreenScreenProps = {
   navigation: StackNavigationProp<{
     dataObj?: any
   }>
 }
+
+const TextView = styled(TCTextView)`
+  font-family: 'Co Text';
+  font-style: normal;
+  font-weight: 400;
+  color: #2c343b;
+  font-size: 15px;
+  line-height: 20px;
+`
+
+const SeeAll = styled(TCTextView)`
+  font-family: 'Co Text';
+  font-style: normal;
+  font-weight: 400;
+  color: #7f858a;
+  font-size: 12px;
+  line-height: 14px;
+`
 
 const AccountScreen: React.FC<AccountScreenScreenProps> = ({
   navigation,
@@ -77,7 +101,19 @@ const AccountScreen: React.FC<AccountScreenScreenProps> = ({
       <View style={{flex: 1, flexGrow: 0.8}}>
         <QuickActions />
       </View>
+      <Spacer size={SPACER_SIZES.BASE} />
       <View style={{flex: 2, marginBottom: 60}}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignContent: 'center',
+            alignItems: 'center',
+            paddingHorizontal: 23,
+          }}>
+          <TextView>Transactions</TextView>
+          <SeeAll>See All</SeeAll>
+        </View>
         <ListViewItem
           icon={<FaceIcon />}
           title={'Card Fees *2395'}
