@@ -106,6 +106,11 @@ const AppLayout: React.FC<LayoutProps> = ({
   return (
     <KeyboardAvoidingView
       enabled
+      style={{
+        // do not remove this below style props below will
+        // adjust the padding/spacing on ios and android
+        paddingTop: insetEdges.top,
+      }}
       className="flex-1"
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <ScrollView
@@ -133,7 +138,7 @@ const AppLayout: React.FC<LayoutProps> = ({
               style={{
                 // do not remove this below style props below will
                 // adjust the padding/spacing on ios and android
-                paddingTop: vh(insetEdges.top),
+                marginBottom: isHeader && vh(insetEdges.top),
                 paddingLeft: vw(insetEdges.left) + vw(16),
                 paddingRight: vw(insetEdges.right) + vw(16),
                 paddingBottom: vh(insetEdges.bottom),

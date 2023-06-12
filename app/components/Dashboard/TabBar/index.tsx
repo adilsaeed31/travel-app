@@ -30,6 +30,7 @@ const TCTabBar: React.FC<TCTabBarProps> = ({left, right}) => {
   const toggleLanguage = useStore(state => state.toggleLanguage)
 
   const [headerWidths, setWidths] = useState([0])
+  const setActiveIndex = useStore(state => state.setActiveIndex)
   const [active, setActive] = useState(0)
   const scrollX = useRef(new AnimatedRN.Value(0)).current
   const barTranslate1 = useRef(new AnimatedRN.Value(0)).current
@@ -65,6 +66,7 @@ const TCTabBar: React.FC<TCTabBarProps> = ({left, right}) => {
       itemScrollView.current?.scrollToIndex({index})
       LayoutAnimation.easeInEaseOut()
       setActive(index)
+      setActiveIndex(index)
     }
   }
 
@@ -74,6 +76,8 @@ const TCTabBar: React.FC<TCTabBarProps> = ({left, right}) => {
     if (active !== newIndex && animationActive) {
       LayoutAnimation.easeInEaseOut()
       setActive(newIndex)
+      setActiveIndex(newIndex)
+
     }
   }
 
