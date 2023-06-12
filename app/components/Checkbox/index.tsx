@@ -24,8 +24,8 @@ const CheckboxText = styled.Text<{isRTL?: boolean}>`
 `
 
 const CheckBox = styled.View<CheckBoxProps>`
-  width: 18px;
-  height: 18px;
+  width: 22px;
+  height: 22px;
   border-radius: 4px;
   background-color: ${({checked}) => (checked ? '#F8D03B' : 'transparent')};
   border-width: 1px;

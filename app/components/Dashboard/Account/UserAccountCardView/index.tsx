@@ -63,7 +63,7 @@ const UserAccountCardView = () => {
   }
 
   return (
-    <View className="pt-6 items-center">
+    <View className="items-center">
       <ScrollView
         horizontal
         pagingEnabled

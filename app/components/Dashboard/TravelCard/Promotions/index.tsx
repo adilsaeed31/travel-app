@@ -38,7 +38,7 @@ const Promotions = () => {
 
   return (
     <View className={cn('my-4', ml(isRTL, 4))}>
-      <TCTextView className={cn(itemPos(isRTL), 'mb-3')}>
+      <TCTextView className={cn(itemPos(isRTL), 'mb-4')}>
         {t('TravelCard:doMore')}
       </TCTextView>
 
