@@ -265,7 +265,7 @@ export const translation = {
       tabTitle2: 'حساب',
     },
     TravelCard: {
-      currentCodeEuro: 'يورو {{amount}}',
+      currentCodeEuro: '{{amount}} يورو',
       load: 'حمولة',
       unload: 'التفريغ',
       currency: 'عملة',
