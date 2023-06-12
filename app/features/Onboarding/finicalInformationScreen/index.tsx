@@ -304,7 +304,7 @@ function FinacialInformationScreen({navigation}: Props) {
   const isFormValid = useMemo(() => {
     let currentOccupationCode =
       SheetData.Occupation.find(sheet => sheet.name === values.occupation)
-        ?.code || 0
+        ?.code || 1
     let validationResult = false
 
     if (currentOccupationCode >= 4) {
