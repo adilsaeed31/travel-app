@@ -7,7 +7,7 @@ import {StackNavigationProp} from '@react-navigation/stack'
 import {Formik} from 'formik'
 import * as Yup from 'yup'
 import {useMutation} from '@tanstack/react-query'
-import {Colors, BASE_URL} from '@Utils'
+import {Colors, BASE_URL, getItem} from '@Utils'
 import {useStore} from '@Store'
 import {Layout, TCInput, TCButton, TCTextView, PassRules} from '@Components'
 import {fetcher} from '@Api'
@@ -63,12 +63,18 @@ function CreateUser({navigation}: CreateUserProps) {
     reset,
   } = useMutation({
     mutationFn: async () => {
+      let journeySecrets
+      let journeySecretsData = await getItem('journeySecrets')
+      if (journeySecretsData) {
+        journeySecrets = JSON.parse(journeySecretsData)
+      }
       let req: any = await fetcher(BASE_URL + '/onboarding/register', {
         method: 'POST',
         body: {
           username: state.values.userName,
           password: state.values.password,
         },
+        token: journeySecrets.access_token,
       })
       let res = await req.json()
       return res
