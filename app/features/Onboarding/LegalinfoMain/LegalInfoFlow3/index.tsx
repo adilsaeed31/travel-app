@@ -72,8 +72,37 @@ function Screen({navigation}: Props) {
   }
 
   const isFormValid = useMemo(() => {
-    let isValid = true
-    console.log(values)
+    let isValid = false
+    if (values.countries?.length > 0) {
+      let keyV = true
+
+      values.countries.forEach(i => {
+        if (!i) {
+          keyV = false
+        }
+      })
+
+      if (values.addressOutsideKSA) {
+        if (!keyV) {
+          return false
+        }
+        if (
+          values.addressOutsideKSA &&
+          values.buldingNumber &&
+          values.streetName &&
+          values.district &&
+          values.poBox &&
+          values.postalCode &&
+          values.city &&
+          values.phoneNumber
+        ) {
+          return true
+        }
+      } else {
+        return keyV
+      }
+    }
+
     return isValid
   }, [values])
 
@@ -225,14 +254,13 @@ function Screen({navigation}: Props) {
                       error={undefined}
                       onItemSelected={val => {
                         let sT = JSON.parse(JSON.stringify(values))
-                        console.log('>>>>>>>>>>', index)
                         sT.countries[index] = val
                         setValues(sT)
                       }}
                       isOpen={currentOpendIndx === index}
                       title={t('Select Country')}
                       onSheetClose={() => setCurrentOpenedInx(-1)}
-                      hasSearch={false}
+                      hasSearch={true}
                     />
                     <Spacer size={SPACER_SIZES.BASE * 4} />
                   </Row>
@@ -290,7 +318,6 @@ function Screen({navigation}: Props) {
                   }
                   label={t('onboarding:personalInformation:buldingNumber')}
                   errorMessage={errors.buldingNumber}
-                  keyboardType="number-pad"
                   returnKeyType="done"
                   maxLength={10}
                 />
@@ -301,7 +328,7 @@ function Screen({navigation}: Props) {
                   label={t('onboarding:personalInformation:streetName')}
                   errorMessage={errors.streetName}
                   returnKeyType="done"
-                  maxLength={10}
+                  maxLength={50}
                 />
                 <Spacer size={SPACER_SIZES.BASE * 4} />
                 <Input
@@ -310,7 +337,7 @@ function Screen({navigation}: Props) {
                   label={t('onboarding:personalInformation:district')}
                   errorMessage={errors.district}
                   returnKeyType="done"
-                  maxLength={10}
+                  maxLength={50}
                 />
                 <Spacer size={SPACER_SIZES.BASE * 4} />
                 <Input
@@ -339,7 +366,7 @@ function Screen({navigation}: Props) {
                   label={t('onboarding:personalInformation:city')}
                   errorMessage={errors.city}
                   returnKeyType="done"
-                  maxLength={10}
+                  maxLength={30}
                   schema={cityValidator}
                 />
                 <Spacer size={SPACER_SIZES.BASE * 4} />
@@ -349,14 +376,14 @@ function Screen({navigation}: Props) {
                   label={t('onboarding:personalInformation:phoneNumber')}
                   keyboardType="number-pad"
                   returnKeyType="done"
-                  maxLength={10}
+                  maxLength={16}
                 />
                 <Spacer size={SPACER_SIZES.BASE * 4} />
               </Row>
             )}
           </View>
           {statusError ? <ErrorText>{statusError}</ErrorText> : null}
-          <StyledButton disabled={isFormValid} onPress={onComplete}>
+          <StyledButton disabled={!isFormValid} onPress={onComplete}>
             <Text variant={TEXT_VARIANTS.body}>{t('onboarding:continue')}</Text>
           </StyledButton>
         </SafeAreaWrapper>

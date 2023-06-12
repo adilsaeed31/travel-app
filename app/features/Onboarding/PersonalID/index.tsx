@@ -110,7 +110,7 @@ const PersonalIdScreen = ({navigation}: Props) => {
       let req: any = await fetcher(BASE_URL + '/auth/otp', {
         method: 'POST',
         body: {
-          mobile_number: state.mobileNumber,
+          mobile_number: '0' + state.mobileNumber,
           identity_number: state.govtId,
           role: 'ONBOARDING',
         },
@@ -170,7 +170,7 @@ const PersonalIdScreen = ({navigation}: Props) => {
   useEffect(() => {
     if (data?.reference_number) {
       setOnboardingDetails(
-        state.mobileNumber,
+        '0' + state.mobileNumber,
         state.govtId,
         data.reference_number,
       )
@@ -221,7 +221,7 @@ const PersonalIdScreen = ({navigation}: Props) => {
           onChangeText={text => {
             setState({...state, mobileNumber: text})
           }}
-          maxLength={10}
+          maxLength={9}
           value={state.mobileNumber}
         />
         {statusError && <ErrorText>{statusError}</ErrorText>}

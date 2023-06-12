@@ -50,44 +50,61 @@ export const specialNeedList = [
   },
 ]
 
+export const USdocumentTypes = [
+  {
+    levelCode: 'TIN',
+
+    levelNameEn: 'TIN',
+
+    levelNameAr: 'TIN',
+  },
+  {
+    levelCode: 'ITIN',
+
+    levelNameEn: 'ITIN',
+
+    levelNameAr: 'ITIN',
+  },
+  {
+    levelCode: 'ATIN',
+
+    levelNameEn: 'ATIN',
+
+    levelNameAr: 'ATIN',
+  },
+]
+
 export const documentTypes = [
   {
-    levelCode: 'pan',
-
-    levelNameEn: 'Pan Number',
-
-    levelNameAr: 'آخر',
-  },
-  {
-    levelCode: 'adhaar',
-
-    levelNameEn: 'Adhaar Number',
-
-    levelNameAr: 'آخر',
-  },
-  {
-    levelCode: 'pr',
+    levelCode: 'PERMANENT_RESIDENT',
 
     levelNameEn: 'Permanent Resident',
 
-    levelNameAr: 'آخر',
+    levelNameAr: 'مقيم دائم',
+  },
+  {
+    levelCode: 'IMMIGRANT_VISA',
+
+    levelNameEn: 'Immigrant Visa',
+
+    levelNameAr: 'Immigrant Visa',
   },
 ]
 
 export const prStatusList = [
   {
-    levelCode: 'pr',
+    levelCode: 'USED',
 
-    levelNameEn: 'Permanent Resident for 6 month',
+    levelNameEn: 'Used',
 
-    levelNameAr: 'آخر',
+    levelNameAr: 'مستخدم',
   },
   {
-    levelCode: 'pr',
+    levelCode: 'UNUSED',
 
-    levelNameEn: 'Permanent Resident for 12 month',
+    levelNameEn: 'Not Used',
 
-    levelNameAr: 'آخر',
+    levelNameAr: 'غير مستعمل',
   },
 ]
 
@@ -1890,5 +1907,29 @@ export const countriesList = [
     nameEn: 'Myanmar(Burma)',
 
     nameAr: 'ميانمار(بورما)',
+  },
+]
+
+export const noTinList = [
+  {
+    code: 'NO_TIN_COUNTRY',
+
+    nameEn: 'Country does not provide tin',
+
+    nameAr: 'البلد لا يقدم القصدير',
+  },
+  {
+    code: 'NOT_HAVING_TIN',
+
+    nameEn: 'I dont have tin',
+
+    nameAr: 'البلد لا يوفر القصدير ولكن ليس لدي القصدير',
+  },
+  {
+    code: 'TIN_NO_REQUIRED',
+
+    nameEn: 'TIN not is required',
+
+    nameAr: 'رقم التعريف الضريبي غير مطلوب',
   },
 ]

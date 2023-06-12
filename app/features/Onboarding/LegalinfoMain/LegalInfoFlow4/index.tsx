@@ -1,4 +1,5 @@
-import React, {useContext, useState, useMemo} from 'react'
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {useContext, useState, useMemo, useEffect} from 'react'
 import {View, SafeAreaView} from 'react-native'
 import {useTranslation} from 'react-i18next'
 import {
@@ -10,12 +11,15 @@ import {
   TCInput as Input,
   Spacer,
 } from '@Components'
-import {TEXT_VARIANTS, Colors, SPACER_SIZES} from '@Utils'
+import {TEXT_VARIANTS, Colors, SPACER_SIZES, BASE_URL, getItem} from '@Utils'
 import {StackNavigationProp} from '@react-navigation/stack'
 import styled from 'styled-components/native'
 import {countriesList, documentTypes, prStatusList} from '../masterData'
 import {postalCodeValidator, cityValidator} from '../validators'
 import {AppContext, AppProviderProps} from '@Context'
+import {useStore} from '@Store'
+import {fetcher} from '@Api'
+import {useMutation} from '@tanstack/react-query'
 
 type IFormTYpe = {
   countries: {
@@ -25,7 +29,7 @@ type IFormTYpe = {
   }[]
   addressOutsideKSA: boolean
   buldingNumber?: string
-  streetNanme?: string
+  streetName?: string
   district?: string
   poBox?: string
   postalCode?: string
@@ -60,6 +64,12 @@ function Screen({navigation}: Props) {
   const [errors, setErrors] = useState<IFormTYpe>({
     ...FormValues,
   })
+  const [statusError, setStatusError] = useState<any>(false)
+  const setOnboardingProgress = useStore(
+    (store: any) => store.setOnboardingProgress,
+  )
+
+  const onBoardingProgress = useStore((store: any) => store.onBoardingProgress)
 
   const ToggleSheet = (indx: number) => {
     setCurrentOpenedInx(indx)
@@ -69,14 +79,134 @@ function Screen({navigation}: Props) {
   }
 
   const isFormValid = useMemo(() => {
-    let isValid = true
-    console.log(values)
+    let isValid = false
+    if (values.countries?.length > 0) {
+      let keyV = true
+      values.countries.forEach(i => {
+        if (!i.docType) {
+          keyV = false
+        }
+        if (i.docType === 'Permanent Resident' && !i.permanentStatus) {
+          keyV = false
+        }
+      })
+
+      if (values.addressOutsideKSA) {
+        if (!keyV) {
+          return false
+        }
+        if (
+          values.addressOutsideKSA &&
+          values.buldingNumber &&
+          values.streetName &&
+          values.district &&
+          values.poBox &&
+          values.postalCode &&
+          values.city &&
+          values.phoneNumber
+        ) {
+          return true
+        }
+      } else {
+        return keyV
+      }
+    }
+
     return isValid
   }, [values])
 
   const onComplete = () => {
-    navigation.navigate('LegalInfoFlow2')
+    mutate()
   }
+
+  const {isLoading, data, mutate} = useMutation({
+    mutationFn: async () => {
+      let journeySecrets
+      let journeySecretsData = await getItem('journeySecrets')
+      if (journeySecretsData) {
+        journeySecrets = JSON.parse(journeySecretsData)
+      }
+
+      let req: any = await fetcher(BASE_URL + '/onboarding/legal/foreign', {
+        method: 'POST',
+        body: {
+          residencies: values.countries.map(item => {
+            let countryObj = isRTL
+              ? countriesList.filter(i => i.nameAr === item.country)[0]
+              : countriesList.filter(i => i.nameEn === item.country)[0]
+
+            return {
+              country: countryObj,
+              residency_document_type: item.docType,
+              residency_status: item.permanentStatus,
+            }
+          }),
+          offshore_address: values.addressOutsideKSA
+            ? {
+                building_number: values.buldingNumber,
+                street: values.streetName,
+                district: values.district,
+                postal_code: values.postalCode,
+                city: values.city,
+                contact_number: values.phoneNumber,
+                country: '',
+                po_box: values.poBox,
+              }
+            : null,
+        },
+        token: journeySecrets.access_token,
+      })
+      let res = await req.json()
+      return res
+    },
+  })
+
+  useEffect(() => {
+    try {
+      if (data) {
+        setOnboardingProgress({
+          ...onBoardingProgress,
+          legalInfoFlow4: {
+            residencies: values.countries.map(item => {
+              let countryObj = isRTL
+                ? countriesList.filter(i => i.nameAr === item.country)[0]
+                : countriesList.filter(i => i.nameEn === item.country)[0]
+
+              return {
+                country: countryObj,
+                residency_document_type: item.docType,
+                residency_status: item.permanentStatus,
+              }
+            }),
+            offshore_address: values.addressOutsideKSA
+              ? {
+                  building_number: values.buldingNumber,
+                  street: values.streetName,
+                  district: values.district,
+                  postal_code: values.postalCode,
+                  city: values.city,
+                  contact_number: values.phoneNumber,
+                  country: '',
+                  po_box: values.poBox,
+                }
+              : null,
+          },
+        })
+
+        navigation.navigate('CreateUser')
+        return
+      }
+    } catch (e) {
+      const status = data?.status
+      switch (true) {
+        case status > 399 && status <= 500:
+          setStatusError('Some Error Occurred ')
+          break
+        default:
+          setStatusError('')
+      }
+    }
+  }, [data])
 
   return (
     <>
@@ -85,7 +215,7 @@ function Screen({navigation}: Props) {
         isBack={true}
         onBack={() => navigation.goBack()}
         isHeader={true}
-        isLoading={false}
+        isLoading={isLoading}
         isBackground={true}>
         <SafeAreaWrapper>
           <View>
@@ -226,18 +356,17 @@ function Screen({navigation}: Props) {
                   }
                   label={t('onboarding:personalInformation:buldingNumber')}
                   errorMessage={errors.buldingNumber}
-                  keyboardType="number-pad"
                   returnKeyType="done"
                   maxLength={10}
                 />
                 <Spacer size={SPACER_SIZES.BASE * 4} />
                 <Input
-                  value={values.streetNanme}
-                  onChangeText={val => setValues({...values, streetNanme: val})}
+                  value={values.streetName}
+                  onChangeText={val => setValues({...values, streetName: val})}
                   label={t('onboarding:personalInformation:streetNanme')}
-                  errorMessage={errors.streetNanme}
+                  errorMessage={errors.streetName}
                   returnKeyType="done"
-                  maxLength={10}
+                  maxLength={50}
                 />
                 <Spacer size={SPACER_SIZES.BASE * 4} />
                 <Input
@@ -246,7 +375,7 @@ function Screen({navigation}: Props) {
                   label={t('onboarding:personalInformation:district')}
                   errorMessage={errors.district}
                   returnKeyType="done"
-                  maxLength={10}
+                  maxLength={50}
                 />
                 <Spacer size={SPACER_SIZES.BASE * 4} />
                 <Input
@@ -263,7 +392,6 @@ function Screen({navigation}: Props) {
                   onChangeText={val => setValues({...values, postalCode: val})}
                   label={t('onboarding:personalInformation:postalCode')}
                   errorMessage={errors.postalCode}
-                  keyboardType="number-pad"
                   returnKeyType="done"
                   maxLength={10}
                   schema={postalCodeValidator}
@@ -275,7 +403,7 @@ function Screen({navigation}: Props) {
                   label={t('onboarding:personalInformation:city')}
                   errorMessage={errors.city}
                   returnKeyType="done"
-                  maxLength={10}
+                  maxLength={30}
                   schema={cityValidator}
                 />
                 <Spacer size={SPACER_SIZES.BASE * 4} />
@@ -285,13 +413,14 @@ function Screen({navigation}: Props) {
                   label={t('onboarding:personalInformation:phoneNumber')}
                   keyboardType="number-pad"
                   returnKeyType="done"
-                  maxLength={10}
+                  maxLength={16}
                 />
                 <Spacer size={SPACER_SIZES.BASE * 4} />
               </Row>
             )}
           </View>
-          <StyledButton disabled={isFormValid} onPress={onComplete}>
+          {statusError ? <ErrorText>{statusError}</ErrorText> : null}
+          <StyledButton disabled={!isFormValid} onPress={onComplete}>
             <Text variant={TEXT_VARIANTS.body}>{t('onboarding:continue')}</Text>
           </StyledButton>
         </SafeAreaWrapper>
@@ -368,4 +497,9 @@ const Hr = styled(View)`
   background-color: #b7b7b7;
   height: 1px;
   margin-top: 10px;
+`
+const ErrorText = styled(Text)`
+  font-weight: 500;
+  color: #f54d3f;
+  padding-left: 16px;
 `

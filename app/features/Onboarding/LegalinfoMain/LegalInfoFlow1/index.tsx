@@ -14,7 +14,7 @@ import {
 import {TEXT_VARIANTS, Colors, SPACER_SIZES, BASE_URL, getItem} from '@Utils'
 import {StackNavigationProp} from '@react-navigation/stack'
 import styled from 'styled-components/native'
-import {documentTypes} from '../masterData'
+import {USdocumentTypes} from '../masterData'
 import {postalCodeValidator, cityValidator} from '../validators'
 import {AppContext, AppProviderProps} from '@Context'
 import {useStore} from '@Store'
@@ -68,7 +68,7 @@ function Screen({navigation}: Props) {
   const ToggleSheet = (indx: number) => {
     setCurrentOpenedInx(indx)
     let err = errors
-    if (indx == 0) {
+    if (indx === 0) {
       err.documentType = ''
     }
 
@@ -80,18 +80,22 @@ function Screen({navigation}: Props) {
     if (values.documentType && values.documentNumber) {
       isValid = true
     }
-    console.log(isValid)
-    if (
-      values.addressOutsideKSA &&
-      values.buldingNumber &&
-      values.streetNanme &&
-      values.district &&
-      values.poBox &&
-      values.postalCode &&
-      values.city &&
-      values.phoneNumber
-    ) {
-      isValid = true
+
+    if (values.addressOutsideKSA) {
+      if (
+        values.addressOutsideKSA &&
+        values.buldingNumber &&
+        values.streetNanme &&
+        values.district &&
+        values.poBox &&
+        values.postalCode &&
+        values.city &&
+        values.phoneNumber
+      ) {
+        isValid = true
+      } else {
+        isValid = false
+      }
     }
 
     return isValid
@@ -209,7 +213,7 @@ function Screen({navigation}: Props) {
             </AdditionalInformation>
             <Spacer size={SPACER_SIZES.BASE * 1.5} />
             <DropDown
-              data={documentTypes.map(c =>
+              data={USdocumentTypes.map(c =>
                 isRTL ? c.levelNameAr : c.levelNameEn,
               )}
               label={t('Select') || ''}
@@ -227,6 +231,7 @@ function Screen({navigation}: Props) {
             <Spacer size={SPACER_SIZES.BASE * 4} />
             <Input
               label={'Document number'}
+              maxLength={30}
               onChangeText={text =>
                 setValues({...values, documentNumber: text})
               }
@@ -268,7 +273,6 @@ function Screen({navigation}: Props) {
                   }
                   label={t('onboarding:personalInformation:buldingNumber')}
                   errorMessage={errors.buldingNumber}
-                  keyboardType="number-pad"
                   returnKeyType="done"
                   maxLength={10}
                 />
@@ -279,7 +283,7 @@ function Screen({navigation}: Props) {
                   label={t('onboarding:personalInformation:streetNanme')}
                   errorMessage={errors.streetNanme}
                   returnKeyType="done"
-                  maxLength={10}
+                  maxLength={50}
                 />
                 <Spacer size={SPACER_SIZES.BASE * 4} />
                 <Input
@@ -288,7 +292,7 @@ function Screen({navigation}: Props) {
                   label={t('onboarding:personalInformation:district')}
                   errorMessage={errors.district}
                   returnKeyType="done"
-                  maxLength={10}
+                  maxLength={50}
                 />
                 <Spacer size={SPACER_SIZES.BASE * 4} />
                 <Input
@@ -305,7 +309,6 @@ function Screen({navigation}: Props) {
                   onChangeText={val => setValues({...values, postalCode: val})}
                   label={t('onboarding:personalInformation:postalCode')}
                   errorMessage={errors.postalCode}
-                  keyboardType="number-pad"
                   returnKeyType="done"
                   maxLength={10}
                   schema={postalCodeValidator}
@@ -317,7 +320,7 @@ function Screen({navigation}: Props) {
                   label={t('onboarding:personalInformation:city')}
                   errorMessage={errors.city}
                   returnKeyType="done"
-                  maxLength={10}
+                  maxLength={30}
                   schema={cityValidator}
                 />
                 <Spacer size={SPACER_SIZES.BASE * 4} />
@@ -327,7 +330,7 @@ function Screen({navigation}: Props) {
                   label={t('onboarding:personalInformation:phoneNumber')}
                   keyboardType="number-pad"
                   returnKeyType="done"
-                  maxLength={10}
+                  maxLength={16}
                 />
                 <Spacer size={SPACER_SIZES.BASE * 4} />
               </Row>
