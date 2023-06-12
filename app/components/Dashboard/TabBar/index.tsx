@@ -95,6 +95,7 @@ const TCTabBar: React.FC<TCTabBarProps> = ({left, right}) => {
           'justify-center items-center mb-6',
         )}>
         <View className="flex-1 w-20" />
+
         <View className="overflow-hidden bg-tc-bottom-tab">
           <FlatList
             horizontal
@@ -140,7 +141,8 @@ const TCTabBar: React.FC<TCTabBarProps> = ({left, right}) => {
         </View>
 
         <Animated.View
-          className={cn('flex-1', itemPos(isRTL), mr(isRTL, 4))}
+          className={cn('flex-1 items-end pr-4')}
+          // style={styles.profileIcon}
           entering={SlideInRight.duration(1000).delay(200)}>
           <Ripple onPress={toggleLanguage} rippleColor={Colors.Supernova}>
             <ProfileIcon />
@@ -170,6 +172,12 @@ const TCTabBar: React.FC<TCTabBarProps> = ({left, right}) => {
 }
 
 const styles = StyleSheet.create({
+  profileIcon: {
+    flex: 1,
+    // marginStart: 10,
+    alignSelf: 'flex-start',
+    justifyContent: 'flex-start',
+  },
   headerStyle: {
     height: 40,
     borderWidth: 0.5,
