@@ -112,9 +112,11 @@ export default function DropDown({
       <SheetContentWrapper dynamicHeight={dynamicHeight} key={10}>
         <OneFlexView>
           <ToNotch onPress={onSheetClose} />
-          <TitelWrapper>
+          <TitelWrapper isRTL={!!isRTL}>
             <Title isRTL={!!isRTL}>{title}</Title>
-            <TouchableOpacity onPress={() => onSheetClose()}>
+            <TouchableOpacity
+              hitSlop={{top: 30, right: 20, bottom: 20, left: 20}}
+              onPress={() => onSheetClose()}>
               <Close />
             </TouchableOpacity>
           </TitelWrapper>
@@ -273,8 +275,8 @@ const styles = StyleSheet.create({
 const FlatListWrapper = styled(View)`
   padding-bottom: 20px;
 `
-const TitelWrapper = styled(View)`
-  flex-direction: row;
+const TitelWrapper = styled(View)<{isRTL: boolean}>`
+  flex-direction: ${props => (props.isRTL ? 'row-reverse' : 'row')};
   margin-top: 24px;
   justify-content: space-between;
   align-items: center;

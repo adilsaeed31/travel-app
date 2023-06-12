@@ -104,7 +104,9 @@ export const translation = {
         jobCategory: 'Job Category',
         NameOfBussiness: 'Name of business',
         InvestmentType: 'Investment Type',
-        monthlyIncomeValidation: 'Monthly Income Should be between {{min}}  - {{max}} ',
+        monthlyIncomeValidation:
+          'Monthly Income Should be between {{min}}  - {{max}} Ryal',
+        primarySourceOfIncome: 'Primary source of income',
       },
       createUserTitle: 'User Information',
       create: 'Create',
@@ -230,7 +232,7 @@ export const translation = {
         continue: 'استمرار',
         additionalIncomeSource: 'مصدر الدخل الاضافي',
         MonthlyPrimaryIncomeAmount: 'مبلغ الدخل الأساسي الشهري',
-        selectSector: 'select sector',
+        selectSector: 'اخنتار القسم',
         yes: 'نعم',
         no: 'لا',
         doYouHaveAddetionalSourceOfIncome: 'هل لديك مصدر دخل إضافي؟',
@@ -241,6 +243,7 @@ export const translation = {
         InvestmentType: 'نوع الاستثمار',
         monthlyIncomeValidation:
           'معدل الدخل الشهري لابد ان يكون بين  {{min}} - {{max}} ريال',
+        primarySourceOfIncome: 'مصدر الدخل الرئيسي',
       },
       createUserTitle: 'معلومات المستخدم',
       create: 'يخلق',
