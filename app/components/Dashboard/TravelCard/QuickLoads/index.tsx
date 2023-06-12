@@ -25,7 +25,7 @@ const QuickLoads = () => {
       </Animated.View>
 
       <Animated.View
-        className={cn('flex-1', ml(isRTL), 'items-center')}
+        className="flex-1 ml-2 items-center"
         entering={SlideInRight.duration(1000).delay(50)}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <View className={cn(flexRowLayout(isRTL))}>

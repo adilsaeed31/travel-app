@@ -97,6 +97,7 @@ const AppLayout: React.FC<LayoutProps> = ({
       <View
         style={{
           direction: direction,
+          backgroundColor: 'white',
           // do not remove this below style props below will
           // adjust the padding/spacing on ios and android
           paddingTop: insetEdges.top,
@@ -110,6 +111,7 @@ const AppLayout: React.FC<LayoutProps> = ({
     <KeyboardAvoidingView
       enabled
       style={{
+        backgroundColor: 'white',
         // do not remove this below style props below will
         // adjust the padding/spacing on ios and android
         paddingTop: insetEdges.top,

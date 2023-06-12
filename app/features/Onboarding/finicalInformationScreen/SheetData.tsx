@@ -1101,17 +1101,17 @@ export const SheetData = {
   ],
   primarySourceOfIncome: [
     {
-      type_code: 'CONS',
+      type_code: 'WELFARE',
       description_en: 'welfare',
       description_ar: 'رعاية',
     },
     {
-      type_code: 'Grant',
+      type_code: 'GRANT',
       description_en: 'Grant',
       description_ar: 'منحة',
     },
     {
-      type_code: 'Allowance',
+      type_code: 'ALLOWANCE',
       description_en: 'Allowance',
       description_ar: 'مخصص',
     },
