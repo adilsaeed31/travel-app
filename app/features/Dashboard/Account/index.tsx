@@ -9,7 +9,7 @@ import {
   UserAccountCardView,
 } from '@Components'
 import ListViewItem from './ListViewItem'
-import {FaceIcon} from '@Assets'
+import {LoadCard} from '@Assets'
 import {BASE_URL, SPACER_SIZES} from '@Utils'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {fetcher, token} from '@Api'
@@ -32,6 +32,14 @@ const TextView = styled(TCTextView)`
   line-height: 20px;
 `
 
+const StyledView = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  align-content: center;
+  align-items: center;
+  padding-horizontal: 23px;
+`
+
 const SeeAll = styled(TCTextView)`
   font-family: 'Co Text';
   font-style: normal;
@@ -46,6 +54,7 @@ const AccountScreen: React.FC<AccountScreenScreenProps> = ({
 }: AccountScreenScreenProps) => {
   const [status, setstatus] = useState(0)
   const isFocused = useIsFocused()
+  const active = useStore(state => state.active)
 
   const url = `${BASE_URL}/account/account`
   const {isFetching, data, refetch} = useQuery({
@@ -98,36 +107,22 @@ const AccountScreen: React.FC<AccountScreenScreenProps> = ({
         <QuickActions />
       </View>
       <Spacer size={SPACER_SIZES.BASE} />
-      <View style={{flex: 2, marginBottom: 60}}>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignContent: 'center',
-            alignItems: 'center',
-            paddingHorizontal: 23,
-          }}>
-          <TextView>Transactions</TextView>
-          <SeeAll>See All</SeeAll>
-        </View>
-        <ListViewItem
-          icon={<FaceIcon />}
-          title={'Card Fees *2395'}
-          subtitle={'12 Feb, 13:00'}
-          number={'-100000'}
-        />
-        <ListViewItem
-          icon={<FaceIcon />}
-          title={'Card debit *3395'}
-          subtitle={'12 Feb, 13:00'}
-          number={'-100000'}
-        />
-        <ListViewItem
-          icon={<FaceIcon />}
-          title={'Card credit *3398'}
-          subtitle={'12 Feb, 13:00'}
-          number={'12000'}
-        />
+      <StyledView>
+        <TextView>Transactions</TextView>
+        <SeeAll>See All</SeeAll>
+      </StyledView>
+      <View style={{flex: 2, marginBottom: 150, width: '97%'}}>
+        {data &&
+          active === 1 &&
+          data.map((item, index) => (
+            <ListViewItem
+              key={0}
+              Icon={<LoadCard />}
+              title={'Card Fees *2395'}
+              subtitle={'12 Feb, 13:00'}
+              number={'-100000'}
+            />
+          ))}
       </View>
     </ScrollView>
   )

@@ -13,7 +13,7 @@ export type AppStateProps = {
   toggleLanguage: () => void
   introHasBeenSeen: () => void
   setAppHasReady: () => void
-  setActiveIndex: () => void
+  setActiveIndex: (active: number) => void
   reset: () => void
 }
 
@@ -26,14 +26,18 @@ const AppState: StateCreator<AppStateProps> = set => ({
   toggleLanguage: () => {
     i18n.changeLanguage(i18n.language === 'ar' ? 'en' : 'ar')
 
-    set((state: {language: string; isRTL: boolean}) => ({
+    set(state => ({
       language: state.language === 'en' ? 'ar' : 'en',
       isRTL: !state.isRTL,
     }))
   },
+  setActiveIndex: active => {
+    set(() => ({
+      active: active,
+    }))
+  },
 
   setAppHasReady: () => set(() => ({isAppReady: true})),
-  setActiveIndex: () => set(active => ({active: active})),
 
   introHasBeenSeen: () =>
     set(() => ({

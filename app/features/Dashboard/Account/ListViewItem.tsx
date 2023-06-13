@@ -49,13 +49,11 @@ const Number = styled.Text`
   line-height: 14px;
 `
 
-const ListViewItem = ({icon, title, subtitle, number}) => {
+const ListViewItem = ({Icon, title, subtitle, number}) => {
   return (
     <ListItemContainer>
       <CircleContainer>
-        <Circle>
-          <Subtitle>CA</Subtitle>
-        </Circle>
+          {Icon}
       </CircleContainer>
       <TitleContainer>
         <Title>{title}</Title>
