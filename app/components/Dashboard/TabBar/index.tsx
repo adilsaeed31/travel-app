@@ -24,6 +24,7 @@ const TCTabBar: React.FC = () => {
   const isRTL = useStore(state => state.isRTL)
   const toggleLanguage = useStore(state => state.toggleLanguage)
   const setActiveIndex = useStore(state => state.setActiveIndex)
+  const toggleBottomSheet = useStore(state => state.toggleBottomSheet)
 
   const [active, setActive] = useState(0)
   const [headerWidths, setWidths] = useState([0])
@@ -50,6 +51,7 @@ const TCTabBar: React.FC = () => {
     if (active !== index) {
       setActive(index)
       setActiveIndex()
+      toggleBottomSheet()
     }
   }
 

@@ -46,8 +46,8 @@ const ItemLoading = memo(
 
 const Item = memo(
   ({
-    i,
-    scrollX,
+    // i,
+    // scrollX,
     children,
     ...rest
   }: {
@@ -55,10 +55,10 @@ const Item = memo(
     scrollX?: any
     children: ReactNode
   }) => {
-    const scale = scrollX.interpolate({
-      inputRange: [-offset + i * offset, i * offset, offset + i * offset],
-      outputRange: [0.85, 1, 0.85],
-    })
+    // const scale = scrollX.interpolate({
+    //   inputRange: [-offset + i * offset, i * offset, offset + i * offset],
+    //   outputRange: [0.85, 1, 0.85],
+    // })
 
     return (
       <Animated.View {...rest} style={{width: itemWidth}}>
@@ -79,10 +79,11 @@ type momentumScrollProps = {
   }
 }
 
-const UserTravelCard: React.FC<{data: string[]; isLoading: boolean}> = ({
-  data,
-  isLoading,
-}) => {
+const UserTravelCard: React.FC<{
+  data: string[]
+  isLoading: boolean
+  activeIndex: number
+}> = ({data, isLoading}) => {
   const isRTL = useStore(state => state.isRTL)
   const [currentItem, setCurrentItem] = useState<number>(0)
 
@@ -223,7 +224,7 @@ const UserTravelCard: React.FC<{data: string[]; isLoading: boolean}> = ({
       </ScrollView>
 
       <View className={cn(flexRowLayout(isRTL), '-mt-4')}>
-        {data?.map((item, index) => (
+        {data?.map((_item, index) => (
           <TCDot key={index} isActive={currentItem === index} hasRounded />
         ))}
       </View>

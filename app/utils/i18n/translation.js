@@ -131,7 +131,7 @@ export const translation = {
       tabTitle2: 'Account',
     },
     TravelCard: {
-      currentCodeEuro: '{{amount}} EUR',
+      currentCodeEuro: '{{amount}} {{code}}',
       load: 'Load',
       unload: 'Unload',
       currency: 'Currency',
@@ -269,7 +269,7 @@ export const translation = {
       tabTitle2: 'حساب',
     },
     TravelCard: {
-      currentCodeEuro: '{{amount}} يورو',
+      currentCodeEuro: '{{amount}} {{code}}',
       load: 'حمولة',
       unload: 'التفريغ',
       currency: 'عملة',

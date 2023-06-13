@@ -10,11 +10,16 @@ export type AppStateProps = {
   hasIntroSeen: boolean
   isAppReady: boolean
   active: number
+  enableBottomSheet: boolean
+  transData: string[]
+
   toggleLanguage: () => void
   introHasBeenSeen: () => void
   setAppHasReady: () => void
   setActiveIndex: (active: number) => void
   reset: () => void
+  toggleBottomSheet: () => void
+  setTransData: (data: any) => void
 }
 
 const AppState: StateCreator<AppStateProps> = set => ({
@@ -23,6 +28,8 @@ const AppState: StateCreator<AppStateProps> = set => ({
   active: 0,
   hasIntroSeen: false,
   isAppReady: false,
+  enableBottomSheet: true,
+  transData: [],
   toggleLanguage: () => {
     i18n.changeLanguage(i18n.language === 'ar' ? 'en' : 'ar')
 
@@ -49,8 +56,13 @@ const AppState: StateCreator<AppStateProps> = set => ({
     set({
       hasIntroSeen: false,
       isAppReady: false,
+      enableBottomSheet: true,
     })
   },
+  toggleBottomSheet: () =>
+    set(state => ({enableBottomSheet: !state.enableBottomSheet})),
+
+  setTransData: data => set(() => ({transData: data})),
 })
 
 export default AppState
