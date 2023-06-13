@@ -5,14 +5,12 @@ export const GovtIdValidator = yup
   .required('Please Enter a Value')
   .length(10, 'Please Enter 10 characters')
   .matches(/^\d{10}$/, 'Please Enter Number only')
+  .matches(/^[12]\d*$/, 'National id or Iqama Number Should Start with 1 or 2 ')
 
 export const MobileNumberValidator = yup
   .string()
   .required('Please Enter a Value')
-  .matches(
-    /^((?:[+?0?0?966]+)(?:\s?\d{2})(?:\s?\d{7}))$/,
-    'Please Enter Valid Mobile Number',
-  )
+  .matches(/^(5)\d{8}$/, 'Please Enter Valid Mobile Number that starts with 5')
 
 export const passwordValidator = yup
   .string()
@@ -34,30 +32,3 @@ export const TermsCheckvalidator = yup
   .bool()
   .required('Please check terms and consitions')
   .oneOf([true], 'Please check terms and consitions')
-
-export function strongPasswordMethod() {
-  return this.test('strongPasswordTest', _, function (value: string) {
-    const {path, createError} = this
-    switch (Boolean(value)) {
-      case !/^(?=.*[a-z])/.test(value):
-        return createError({
-          path,
-          message: 'password must include lowercase letter',
-        })
-      case !/^(?=.*[A-Z])/.test(value):
-        return createError({
-          path,
-          message: 'password must include uppercase letter',
-        })
-      case !/^(?=.*[0-9])/.test(value):
-        return createError({path, message: 'password must include digit'})
-      case !/^(?=.*[!@#\$%\^&\*])/.test(value):
-        return createError({
-          path,
-          message: 'password must include special character',
-        })
-      default:
-        return true
-    }
-  })
-}

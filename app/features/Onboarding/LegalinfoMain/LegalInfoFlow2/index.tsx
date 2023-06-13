@@ -14,7 +14,7 @@ import {
 import {TEXT_VARIANTS, Colors, SPACER_SIZES, BASE_URL, getItem} from '@Utils'
 import {StackNavigationProp} from '@react-navigation/stack'
 import styled from 'styled-components/native'
-import {countriesList} from '../masterData'
+import {countriesList, noTinList} from '../masterData'
 import {AppContext, AppProviderProps} from '@Context'
 import {useStore} from '@Store'
 import {fetcher} from '@Api'
@@ -73,7 +73,31 @@ function Screen({navigation}: Props) {
   }
 
   const isFormValid = useMemo(() => {
-    let isValid = true
+    let isValid = false
+    if (values.countries?.length > 0) {
+      let keyV = true
+      values.countries.forEach(i => {
+        if (!keyV) {
+          return false
+        }
+        if (
+          i.buldingNumber &&
+          i.streetName &&
+          i.district &&
+          i.poBox &&
+          i.postalCode &&
+          i.city &&
+          i.phoneNumber &&
+          i.isTin &&
+          i.tinNumber
+        ) {
+          keyV = true
+        } else {
+          keyV = false
+        }
+      })
+      isValid = keyV
+    }
     return isValid
   }, [values])
 
@@ -201,7 +225,9 @@ function Screen({navigation}: Props) {
                 <Spacer size={SPACER_SIZES.BASE * 1.5} />
 
                 <DropDown
-                  data={countriesList.map(c => (isRTL ? c.nameAr : c.nameEn))}
+                  data={countriesList
+                    .filter(i => i.code !== 'SA')
+                    .map(c => (isRTL ? c.nameAr : c.nameEn))}
                   label={t('Select Country') || ''}
                   toogleClick={() => ToggleSheet(0)}
                   value={undefined}
@@ -318,18 +344,25 @@ function Screen({navigation}: Props) {
                           setValues(sT)
                         }}
                         label={t('TIN Number or functional equivalents')}
+                        maxLength={9}
                         returnKeyType="done"
                       />
                     ) : (
-                      <Input
-                        value={item.noTinReason}
-                        onChangeText={val => {
+                      <DropDown
+                        data={noTinList.map(c => (isRTL ? c.nameAr : c.nameEn))}
+                        label={t('Reason for not having a TIN')}
+                        toogleClick={() => ToggleSheet(0)}
+                        value={values.countries[index].noTinReason}
+                        error={undefined}
+                        onItemSelected={val => {
                           let sT = JSON.parse(JSON.stringify(values))
                           sT.countries[index].noTinReason = val
                           setValues(sT)
                         }}
-                        label={t('Reason for not having a TIN')}
-                        returnKeyType="done"
+                        isOpen={currentOpendIndx === 0}
+                        title={t('Reason for not having a TIN')}
+                        onSheetClose={() => setCurrentOpenedInx(-1)}
+                        hasSearch={false}
                       />
                     )}
                     <Spacer size={SPACER_SIZES.SM} />
@@ -343,7 +376,6 @@ function Screen({navigation}: Props) {
                         setValues(sT)
                       }}
                       label={t('onboarding:personalInformation:buldingNumber')}
-                      keyboardType="number-pad"
                       returnKeyType="done"
                       maxLength={10}
                     />
@@ -357,7 +389,7 @@ function Screen({navigation}: Props) {
                       }}
                       label={t('onboarding:personalInformation:streetNanme')}
                       returnKeyType="done"
-                      maxLength={30}
+                      maxLength={50}
                     />
                     <Spacer size={SPACER_SIZES.SM} />
                     <Input
@@ -369,7 +401,7 @@ function Screen({navigation}: Props) {
                       }}
                       label={t('onboarding:personalInformation:district')}
                       returnKeyType="done"
-                      maxLength={10}
+                      maxLength={50}
                     />
                     <Spacer size={SPACER_SIZES.SM} />
                     <Input
@@ -380,7 +412,6 @@ function Screen({navigation}: Props) {
                         setValues(sT)
                       }}
                       label={t('onboarding:personalInformation:poBox')}
-                      keyboardType="number-pad"
                       returnKeyType="done"
                       maxLength={10}
                     />
@@ -393,7 +424,6 @@ function Screen({navigation}: Props) {
                         setValues(sT)
                       }}
                       label={t('onboarding:personalInformation:postalCode')}
-                      keyboardType="number-pad"
                       returnKeyType="done"
                       maxLength={10}
                     />
@@ -407,7 +437,7 @@ function Screen({navigation}: Props) {
                       }}
                       label={t('onboarding:personalInformation:city')}
                       returnKeyType="done"
-                      maxLength={10}
+                      maxLength={30}
                     />
                     <Spacer size={SPACER_SIZES.SM} />
                     <Input
@@ -418,9 +448,8 @@ function Screen({navigation}: Props) {
                         setValues(sT)
                       }}
                       label={t('onboarding:personalInformation:phoneNumber')}
-                      keyboardType="number-pad"
                       returnKeyType="done"
-                      maxLength={10}
+                      maxLength={16}
                     />
                     <Spacer size={SPACER_SIZES.SM} />
                   </Row>
