@@ -4,11 +4,11 @@ import {useTranslation} from 'react-i18next'
 import cn from 'classnames'
 
 import {useStore} from '@Store'
-import {flexRowLayout, ml} from '@Utils'
+import {flexRowLayout} from '@Utils'
 import {TCTextView} from '@Components'
 import {DownArrow, EuroFlag} from '@Assets'
 
-const CurrencyRow = () => {
+const CurrencyRow = ({data, activeIndex}: {data: any; activeIndex: number}) => {
   const {t} = useTranslation()
   const isRTL = useStore(state => state.isRTL)
 
@@ -20,9 +20,16 @@ const CurrencyRow = () => {
       )}>
       <View className={cn(flexRowLayout(isRTL), 'items-center')}>
         <Image source={EuroFlag} />
-        <TCTextView style={styles.leftSpace}>212</TCTextView>
+        <TCTextView style={styles.leftSpace}>
+          {data?.[activeIndex]?.card?.currencies[activeIndex]?.balance ?? '000'}
+        </TCTextView>
         <TCTextView className="font-tc-light">
-          {t('TravelCard:currentCodeEuro', {amount: '.34'})}
+          {t('TravelCard:currentCodeEuro', {
+            amount: '.00',
+            code:
+              data?.[activeIndex]?.card?.currencies[activeIndex]
+                ?.currency_code ?? 'SAR',
+          })}
         </TCTextView>
       </View>
 

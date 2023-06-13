@@ -6,14 +6,16 @@ import cn from 'classnames'
 
 import {useStore} from '@Store'
 import {QuickLoadIcon} from '@Assets'
-import {Colors, flexRowLayout, ml} from '@Utils'
+import {Colors, flexRowLayout} from '@Utils'
 
 import {default as TCTextView} from '../../../TextView'
 import {default as QuickLoad} from '../../QuickLoad'
 
-const QuickLoads = () => {
+const QuickLoads = ({data, activeIndex}: {data: any; activeIndex: number}) => {
   const {t} = useTranslation()
   const isRTL = useStore(state => state.isRTL)
+
+  const code = data?.[activeIndex]?.card?.currencies[activeIndex]?.currency_code
 
   return (
     <View className={cn(flexRowLayout(isRTL), 'items-center my-4 ml-4')}>
@@ -30,19 +32,19 @@ const QuickLoads = () => {
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <View className={cn(flexRowLayout(isRTL))}>
             <QuickLoad
-              name={t('TravelCard:currentCodeEuro', {amount: '100'})}
+              name={t('TravelCard:currentCodeEuro', {amount: '100', code})}
             />
 
             <QuickLoad
-              name={t('TravelCard:currentCodeEuro', {amount: '200'})}
+              name={t('TravelCard:currentCodeEuro', {amount: '200', code})}
             />
 
             <QuickLoad
-              name={t('TravelCard:currentCodeEuro', {amount: '300'})}
+              name={t('TravelCard:currentCodeEuro', {amount: '300', code})}
             />
 
             <QuickLoad
-              name={t('TravelCard:currentCodeEuro', {amount: '400'})}
+              name={t('TravelCard:currentCodeEuro', {amount: '400', code})}
             />
           </View>
         </ScrollView>

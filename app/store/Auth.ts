@@ -2,7 +2,7 @@ import {StateCreator} from 'zustand'
 
 // below is the example to set the multiple files state and store
 export type AuthStateProps = {
-  user: null | {}
+  user: null | {access_token: string}
   setUser: (user: any) => void
 }
 
