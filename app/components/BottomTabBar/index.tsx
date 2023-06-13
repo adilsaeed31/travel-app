@@ -2,9 +2,9 @@ import React, {memo, useRef} from 'react'
 import {View, StyleSheet, Animated as AnimatedRN} from 'react-native'
 import {BottomTabBarProps} from '@react-navigation/bottom-tabs'
 import Animated, {ZoomInDown} from 'react-native-reanimated'
+import Ripple from 'react-native-material-ripple'
 import {NativeWindStyleSheet} from 'nativewind'
 import {useTranslation} from 'react-i18next'
-import Ripple from 'react-native-material-ripple'
 import cn from 'classnames'
 
 import {
@@ -16,7 +16,7 @@ import {
   LoyaltyIconActive,
 } from '@Assets'
 import {useStore} from '@Store'
-import {TCTextView} from '@Components'
+import {BottomSheet, TCTextView} from '@Components'
 import {Colors, flexRowLayout, vw, screenWidth as width} from '@Utils'
 
 const BottomTabBar: React.FC<BottomTabBarProps> = ({
@@ -57,13 +57,15 @@ const BottomTabBar: React.FC<BottomTabBarProps> = ({
   }
 
   return (
-    <Animated.View entering={ZoomInDown.duration(1000).delay(200)}>
+    <Animated.View entering={ZoomInDown.duration(1200).delay(250)}>
+      <BottomSheet />
+
       <View
         style={{direction: direction}}
         {...rest}
         className={cn(
           flexRowLayout(isRTL),
-          'bar-width-05 border-tc-tab h-16 m-5 rounded-2xl bg-tc-bottom-tab',
+          'bar-width-05 border-tc-tab h-16 m-5 rounded-3xl bg-tc-bottom-tab',
         )}>
         {state.routes.map((route, index) => {
           const {options} = descriptors[route.key]

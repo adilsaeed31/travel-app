@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react'
+import React, {useContext, useEffect, memo} from 'react'
 import LottieView from 'lottie-react-native'
 import Splash from 'react-native-splash-screen'
 import {StackNavigationProp} from '@react-navigation/stack'
@@ -51,4 +51,4 @@ const SplashScreen: React.FC<SplashScreenProps> = ({navigation}) => {
   )
 }
 
-export default SplashScreen
+export default memo(SplashScreen)

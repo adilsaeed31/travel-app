@@ -15,11 +15,10 @@ import {StackNavigationProp} from '@react-navigation/stack'
 import {fetcher, token} from '@Api'
 import {useIsFocused} from '@react-navigation/native'
 import {useQuery} from '@tanstack/react-query'
-import {useStore} from '@Store'
 import {styled} from 'styled-components/native'
 
 type AccountScreenScreenProps = {
-  navigation: StackNavigationProp<{
+  navigation?: StackNavigationProp<{
     dataObj?: any
   }>
 }
@@ -56,6 +55,7 @@ const AccountScreen: React.FC<AccountScreenScreenProps> = ({
   const [status, setstatus] = useState(0)
   const isFocused = useIsFocused()
   const active = useStore(state => state.active)
+
   const url = `${BASE_URL}/account/account`
   const {isFetching, data, refetch} = useQuery({
     queryKey: ['account', url],
@@ -93,12 +93,10 @@ const AccountScreen: React.FC<AccountScreenScreenProps> = ({
   }, [data, isFetching, isFocused])
 
   useEffect(() => {
-    if (!data && active === 1) {
+    if (!data) {
       refetch()
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [active])
+  }, [data, refetch])
 
   return (
     <ScrollView style={{height: '100%', width: '100%'}}>
