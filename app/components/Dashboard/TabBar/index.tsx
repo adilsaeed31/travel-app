@@ -36,15 +36,20 @@ const TCTabBar: React.FC = () => {
     let leftOffset = 0
 
     for (let i = 0; i < active; i += 1) {
-      leftOffset += headerWidths[i]
+      if (isRTL) {
+        leftOffset -= headerWidths[i]
+      } else {
+        leftOffset += headerWidths[i]
+      }
     }
-
-    AnimatedRN.spring(barTranslate, {
-      toValue: leftOffset,
-      useNativeDriver: true,
-      bounciness: 0,
-    }).start()
-  }, [active, barTranslate, headerWidths])
+    setTimeout(() => {
+      AnimatedRN.spring(barTranslate, {
+        toValue: leftOffset,
+        useNativeDriver: true,
+        bounciness: 0,
+      }).start()
+    }, 0)
+  }, [active, barTranslate, headerWidths, isRTL])
 
   const onPressHeader = (index: React.SetStateAction<number>) => {
     if (active !== index) {
@@ -114,6 +119,7 @@ const TCTabBar: React.FC = () => {
           <TravelCard />
         </Suspense>
       ) : null}
+
       {active === 1 ? (
         <Suspense
           fallback={
