@@ -111,7 +111,7 @@ const UserTravelCard: React.FC<{
   }: momentumScrollProps) => {
     const active = Math.floor(scrollPos / layoutWidth)
 
-    console.log(scrollPos, layoutWidth, active)
+    // console.log(scrollPos, layoutWidth, active)
 
     setCurrentItem(active)
   }

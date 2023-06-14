@@ -47,7 +47,6 @@ const TCTabBar: React.FC = () => {
     AnimatedRN.spring(barTranslate, {
       toValue: leftOffset,
       useNativeDriver: true,
-      bounciness: 0,
     }).start()
   }, [active, barTranslate, headerWidths, isRTL])
 

@@ -1,5 +1,5 @@
-import React, {memo, useRef, useState} from 'react'
-import {View, StyleSheet, Animated as AnimatedRN} from 'react-native'
+import React, {memo, useEffect, useRef, useState} from 'react'
+import {View, StyleSheet, Animated as AnimatedRN, Text} from 'react-native'
 import {BottomTabBarProps} from '@react-navigation/bottom-tabs'
 import Animated, {ZoomInDown} from 'react-native-reanimated'
 import Ripple from 'react-native-material-ripple'
@@ -18,7 +18,6 @@ import {
 import {useStore} from '@Store'
 import {Colors, flexRowLayout, vw, screenWidth as width} from '@Utils'
 
-import {default as TCTextView} from '../TextView'
 import {default as BottomSheet} from '../BottomSheet'
 
 const BottomTabBar: React.FC<BottomTabBarProps> = ({
@@ -32,50 +31,60 @@ const BottomTabBar: React.FC<BottomTabBarProps> = ({
 
   const direction = isRTL ? 'rtl' : 'ltr'
 
-  const [headerWidths, setWidths] = useState<number[]>([])
-  const [originWidths, setOriginWidths] = useState<string[]>([])
+  const [active, setActive] = useState(0)
+  const [headerWidths, setWidths] = useState([0])
 
-  const barTranslate = useRef(new AnimatedRN.ValueXY()).current
+  const barTranslate = useRef(new AnimatedRN.Value(0)).current
 
-  const renderIcon = (name: string, active: boolean) => {
+  useEffect(() => {
+    let leftOffset = 0
+
+    for (let i = 0; i < active; i += 1) {
+      if (isRTL) {
+        leftOffset -= headerWidths[i]
+      } else {
+        leftOffset += headerWidths[i]
+      }
+    }
+
+    AnimatedRN.spring(barTranslate, {
+      toValue: leftOffset,
+      useNativeDriver: true,
+    }).start()
+  }, [active, barTranslate, headerWidths, isRTL])
+
+  const renderIcon = (name: string, index: boolean) => {
     if (name === 'home') {
-      if (active) {
+      if (index) {
         return <HomeIconActive />
       }
       return <HomeIcon />
     }
 
     if (name === 'loyalty') {
-      if (active) {
+      if (index) {
         return <LoyaltyIconActive />
       }
       return <LoyaltyIcon />
     }
 
     if (name === 'menu') {
-      if (active) {
+      if (index) {
         return <MenuIconActive />
       }
       return <MenuIcon />
     }
   }
 
-  const onLayout = ({e, index}: {e: any; index: number}) => {
-    const _x = e.nativeEvent.layout.x
-
+  const onLayout = (_width: number, index: number) => {
     let newWidths: any = [...headerWidths]
-    let rtlWidths: any = [...originWidths]
-
-    newWidths[index] = _x
-    rtlWidths[index] = '-' + _x
-    setOriginWidths(rtlWidths)
+    newWidths[index] = _width
     setWidths(newWidths)
   }
 
   return (
     <>
       <BottomSheet />
-
       <Animated.View entering={ZoomInDown.duration(1200).delay(250)}>
         <View
           style={{direction: direction}}
@@ -95,23 +104,10 @@ const BottomTabBar: React.FC<BottomTabBarProps> = ({
 
             const isFocused = state.index === index
 
-            const onPress = () => {
-              let revArr: string[] | number[]
-
-              if (isRTL) {
-                revArr = originWidths
-              } else {
-                revArr = headerWidths
+            const onPress = (activeIndex: number) => {
+              if (active !== activeIndex) {
+                setActive(activeIndex)
               }
-
-              AnimatedRN.spring(barTranslate, {
-                toValue: {
-                  x: Number(revArr[index]),
-                  y: 0,
-                },
-                useNativeDriver: true,
-                bounciness: 0,
-              }).start()
 
               const event = navigation.emit({
                 type: 'tabPress',
@@ -133,7 +129,7 @@ const BottomTabBar: React.FC<BottomTabBarProps> = ({
 
             return (
               <Ripple
-                onPress={onPress}
+                onPress={() => onPress(index)}
                 key={label.toLowerCase()}
                 onLongPress={onLongPress}
                 accessibilityRole="button"
@@ -144,35 +140,34 @@ const BottomTabBar: React.FC<BottomTabBarProps> = ({
                   flexRowLayout(isRTL),
                   'justify-center items-center',
                 )}
-                onLayout={e => onLayout({e, index})}
+                onLayout={e => onLayout(e.nativeEvent.layout.width, index)}
                 accessibilityLabel={options.tabBarAccessibilityLabel}
                 accessibilityState={isFocused ? {selected: true} : {}}>
                 <View className="justify-center items-center">
                   {renderIcon(label.toLowerCase(), isFocused)}
-                  <TCTextView
+                  <Text
                     className={cn(
-                      'mt-2 text-tc-ios-base',
+                      'mt-2 text-tc-ios-base font-tc-regular',
                       isFocused
                         ? 'text-tc-bottom-tab-text'
                         : 'text-tc-bottom-tab-text-inactive',
                     )}>
                     {t(`common:${label.toLowerCase()}`)}
-                  </TCTextView>
+                  </Text>
                 </View>
-                {isFocused && (
-                  <AnimatedRN.View
-                    style={[
-                      styles.headerBar,
-                      {
-                        width: vw(32),
-                        transform: [...barTranslate.getTranslateTransform()],
-                      },
-                    ]}
-                  />
-                )}
               </Ripple>
             )
           })}
+
+          <AnimatedRN.View
+            style={[
+              styles.headerBar,
+              {
+                width: vw(32),
+                transform: [{translateX: barTranslate}],
+              },
+            ]}
+          />
         </View>
       </Animated.View>
     </>
