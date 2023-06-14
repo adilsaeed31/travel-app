@@ -5,7 +5,7 @@ export const Colors = {
   Supernova: '#FFC900',
   Alabaster: '#F8F8F8',
   Nobel: '#B3B3B3',
-  back: '#000000',
+  black: '#000000',
   Armadillo: '#3F3D36',
   TabIndicatorColor: '#FFD900',
   TabText: '#343D45',

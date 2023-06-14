@@ -7,11 +7,17 @@ import {Colors} from '@Utils'
 interface IRadioBUtton {
   onPress: () => void
   selected: boolean
+  disabled?: boolean
   children: React.ReactNode
 }
 
-const RadioLabel = styled(Text)<{isRTL: boolean; isSelected: boolean}>`
-  color: ${props => (props.isSelected ? Colors.back : Colors.Armadillo)};
+const RadioLabel = styled(Text)<{
+  isRTL: boolean
+  isSelected: boolean
+  disabled?: boolean | null
+}>`
+  color: ${props =>
+    props.isSelected || props.disabled ? Colors.black : Colors.Armadillo};
   font-size: ${props => (props.isSelected ? '16' : '16')}px;
   margin-left: ${props => (props.isRTL ? '0' : '12')}px;
   margin-right: ${props => (props.isRTL ? '12' : '0')}px;
@@ -39,15 +45,18 @@ const BtnToogle = styled(TouchableOpacity)<{isSelected: boolean}>`
   align-items: center;
   justify-content: center;
 `
-const RadioButton = ({onPress, selected, children}: IRadioBUtton) => {
+const RadioButton = ({onPress, selected, disabled, children}: IRadioBUtton) => {
   const {isRTL} = useContext<AppProviderProps>(AppContext)
   return (
     <RadioWrapperStyle isRTL={!!isRTL}>
       <BtnToogle isSelected={selected} disabled={selected} onPress={onPress}>
         {selected ? <RadioButtonIcon /> : null}
       </BtnToogle>
-      <TouchableOpacity disabled={selected} onPress={onPress}>
-        <RadioLabel isSelected={selected} isRTL={!!isRTL}>
+      <TouchableOpacity
+        disabled={selected}
+        activeOpacity={disabled ? 1 : 0.5}
+        onPress={disabled ? () => {} : onPress}>
+        <RadioLabel isSelected={selected} disabled={disabled} isRTL={!!isRTL}>
           {children}
         </RadioLabel>
       </TouchableOpacity>
