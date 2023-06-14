@@ -84,7 +84,6 @@ function Screen({navigation}: Props) {
           i.buldingNumber &&
           i.streetName &&
           i.district &&
-          i.poBox &&
           i.postalCode &&
           i.city &&
           i.phoneNumber &&
@@ -256,7 +255,7 @@ function Screen({navigation}: Props) {
                   isOpen={currentOpendIndx === 0}
                   title={t('Select Country')}
                   onSheetClose={() => setCurrentOpenedInx(-1)}
-                  hasSearch={false}
+                  hasSearch={true}
                 />
               </>
             )}
@@ -302,7 +301,7 @@ function Screen({navigation}: Props) {
                       isOpen={currentOpendIndx === 0}
                       title={t('Select Country')}
                       onSheetClose={() => setCurrentOpenedInx(-1)}
-                      hasSearch={false}
+                      hasSearch={true}
                     />
                     <Spacer size={SPACER_SIZES.BASE * 2} />
 

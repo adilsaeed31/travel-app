@@ -20,6 +20,7 @@ import {AppContext, AppProviderProps} from '@Context'
 import {useStore} from '@Store'
 import {fetcher} from '@Api'
 import {useMutation} from '@tanstack/react-query'
+import {useFocusEffect} from '@react-navigation/native'
 
 type IFormTYpe = {
   documentType: string | null
@@ -32,13 +33,13 @@ type IFormTYpe = {
   postalCode?: string
   city?: string
   phoneNumber?: string
+  edited?: boolean
 }
 
 const FormValues = {
   documentType: null,
   documentNumber: null,
   addressOutsideKSA: false,
-  address: {},
 }
 
 type Props = {
@@ -46,7 +47,7 @@ type Props = {
   route: any
 }
 
-function Screen({navigation}: Props) {
+function Screen({navigation, route}: Props) {
   const [currentOpendIndx, setCurrentOpenedInx] = useState(-1)
   const {isRTL} = useContext<AppProviderProps>(AppContext)
   const {t} = useTranslation()
@@ -64,6 +65,27 @@ function Screen({navigation}: Props) {
   )
 
   const onBoardingProgress = useStore((store: any) => store.onBoardingProgress)
+
+  useFocusEffect(() => {
+    const routeData = route.params
+    if (routeData?.historyPage === 'LegalInfoFlow3' && !values.edited) {
+      setValues({
+        ...values,
+        edited: true,
+        documentType: null,
+        documentNumber: null,
+        addressOutsideKSA: false,
+        buldingNumber: undefined,
+        streetNanme: undefined,
+        district: undefined,
+        poBox: undefined,
+        postalCode: undefined,
+        city: undefined,
+        phoneNumber: undefined,
+      })
+    } else {
+    }
+  })
 
   const ToggleSheet = (indx: number) => {
     setCurrentOpenedInx(indx)
@@ -87,7 +109,6 @@ function Screen({navigation}: Props) {
         values.buldingNumber &&
         values.streetNanme &&
         values.district &&
-        values.poBox &&
         values.postalCode &&
         values.city &&
         values.phoneNumber
@@ -168,18 +189,30 @@ function Screen({navigation}: Props) {
           },
         })
 
-        if (onBoardingProgress?.legalInfoMain?.taxOutsideKSA) {
-          navigation.navigate('LegalInfoFlow2')
-          return
-        } else if (onBoardingProgress?.legalInfoMain?.moreCitizens) {
-          navigation.navigate('LegalInfoFlow3')
-          return
-        } else if (onBoardingProgress?.legalInfoMain?.residentOutsideKSA) {
-          navigation.navigate('LegalInfoFlow4')
-          return
+        const routeData = route.params
+
+        if (routeData?.historyPage === 'LegalInfoFlow3') {
+          if (onBoardingProgress?.legalInfoMain?.residentOutsideKSA) {
+            navigation.navigate('LegalInfoFlow4')
+            return
+          } else {
+            navigation.navigate('CreateUser')
+            return
+          }
         } else {
-          navigation.navigate('CreateUser')
-          return
+          if (onBoardingProgress?.legalInfoMain?.taxOutsideKSA) {
+            navigation.navigate('LegalInfoFlow2')
+            return
+          } else if (onBoardingProgress?.legalInfoMain?.moreCitizens) {
+            navigation.navigate('LegalInfoFlow3')
+            return
+          } else if (onBoardingProgress?.legalInfoMain?.residentOutsideKSA) {
+            navigation.navigate('LegalInfoFlow4')
+            return
+          } else {
+            navigation.navigate('CreateUser')
+            return
+          }
         }
       }
     } catch (e) {
@@ -227,10 +260,12 @@ function Screen({navigation}: Props) {
               title={t('The Document Type')}
               onSheetClose={() => setCurrentOpenedInx(-1)}
               hasSearch={false}
+              dynamicHeight
             />
             <Spacer size={SPACER_SIZES.BASE * 4} />
             <Input
               label={'Document number'}
+              value={values.documentNumber}
               maxLength={30}
               onChangeText={text =>
                 setValues({...values, documentNumber: text})

@@ -40,6 +40,7 @@ function LegalInfoOther({navigation}: Props) {
   const {isRTL} = useContext<AppProviderProps>(AppContext)
   const {t} = useTranslation()
   const [statusError, setStatusError] = useState<any>(false)
+  const [disableCountry, setDisableCountry] = useState<any>(false)
   const [values, setValues] = useState<IFormTYpe>({
     ...FormValues,
   })
@@ -49,6 +50,19 @@ function LegalInfoOther({navigation}: Props) {
   )
 
   const onBoardingProgress = useStore((store: any) => store.onBoardingProgress)
+
+  useEffect(() => {
+    if (
+      onBoardingProgress.personalInformation?.birth_country?.code &&
+      ['AS', 'GU', 'MP', 'PR', 'VI', 'US'].indexOf(
+        onBoardingProgress.personalInformation?.birth_country?.code,
+      ) &&
+      false
+    ) {
+      setDisableCountry(true)
+      setValues({...values, isUsPerson: true})
+    }
+  }, [onBoardingProgress])
 
   const isFormValid = useMemo(() => {
     const {isUsPerson, taxOutsideKSA, moreCitizens, residentOutsideKSA} = values
@@ -156,6 +170,7 @@ function LegalInfoOther({navigation}: Props) {
             <Spacer size={SPACER_SIZES.BASE * 1.5} />
             <RadioWrapper isRTL={!!isRTL}>
               <RadioButton
+                disabled={disableCountry}
                 selected={values.isUsPerson === false}
                 onPress={() =>
                   setValues({
@@ -166,6 +181,7 @@ function LegalInfoOther({navigation}: Props) {
                 {t('No')}
               </RadioButton>
               <RadioButton
+                disabled={disableCountry}
                 selected={values.isUsPerson === true}
                 onPress={() =>
                   setValues({

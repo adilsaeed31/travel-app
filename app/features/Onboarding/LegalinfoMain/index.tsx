@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable eqeqeq */
 
 import React, {useContext, useState, useMemo, useEffect} from 'react'
 import {View, SafeAreaView} from 'react-native'
@@ -66,9 +65,9 @@ function LegalInformation({navigation}: Props) {
 
   useEffect(() => {
     if (
-      onBoardingProgress.personalInformation?.birth_country.code &&
+      onBoardingProgress.personalInformation?.birth_country?.code &&
       ['AS', 'GU', 'MP', 'PR', 'VI', 'US'].indexOf(
-        onBoardingProgress.personalInformation?.birth_country.code,
+        onBoardingProgress.personalInformation?.birth_country?.code,
       )
     ) {
       setDisableCountry(true)
@@ -89,7 +88,7 @@ function LegalInformation({navigation}: Props) {
 
     if (values.specialNeed) {
       if (values.specialNeedValue) {
-        if (values.specialNeedValue == 'Other') {
+        if (values.specialNeedValue === 'Other') {
           return false
         } else {
           return true
@@ -105,10 +104,10 @@ function LegalInformation({navigation}: Props) {
   const ToggleSheet = (indx: number) => {
     setCurrentOpenedInx(indx)
     let err = errors
-    if (indx == 0) {
+    if (indx === 0) {
       err.pepValue = ''
     }
-    if (indx == 1) {
+    if (indx === 1) {
       err.specialNeedValue = ''
     }
 
@@ -203,7 +202,7 @@ function LegalInformation({navigation}: Props) {
             <Spacer size={SPACER_SIZES.BASE * 1.5} />
             <RadioWrapper isRTL={!!isRTL}>
               <RadioButton
-                disabled={true}
+                disabled={disableCountry}
                 selected={!values.notKsaResidents}
                 onPress={() =>
                   setValues({
@@ -214,7 +213,7 @@ function LegalInformation({navigation}: Props) {
                 {t('No')}
               </RadioButton>
               <RadioButton
-                disabled={true}
+                disabled={disableCountry}
                 selected={values.notKsaResidents}
                 onPress={() =>
                   setValues({
@@ -266,10 +265,11 @@ function LegalInformation({navigation}: Props) {
                   }}
                   value={values.pepValue}
                   error={errors.pepValue}
-                  isOpen={currentOpendIndx == 0}
+                  isOpen={currentOpendIndx === 0}
                   title={t('Are you a PEP or REP?')}
                   onSheetClose={() => setCurrentOpenedInx(-1)}
                   hasSearch={false}
+                  dynamicHeight
                 />
               </>
             ) : null}
@@ -314,12 +314,13 @@ function LegalInformation({navigation}: Props) {
                   }
                   value={values.specialNeedValue}
                   error={errors.specialNeedValue}
-                  isOpen={currentOpendIndx == 1}
+                  isOpen={currentOpendIndx === 1}
                   title={t('Do you have special needs?')}
                   onSheetClose={() => setCurrentOpenedInx(-1)}
                   hasSearch={false}
+                  dynamicHeight
                 />
-                {values.specialNeedValue == 'Other' && (
+                {values.specialNeedValue === 'Other' && (
                   <>
                     <Spacer size={SPACER_SIZES.BASE * 1} />
                     <Input
