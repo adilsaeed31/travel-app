@@ -9,6 +9,7 @@ import React from 'react'
 import i18next from 'i18next'
 import {LogBox} from 'react-native'
 import {QueryClientProvider} from '@tanstack/react-query'
+import {GestureHandlerRootView} from 'react-native-gesture-handler'
 
 import {queryClient} from '@Api'
 import {translation} from '@Utils'
@@ -46,14 +47,16 @@ function App(): React.JSX.Element {
   LogBox.ignoreAllLogs()
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <AppProvider>
-          <MainNavigation />
-        </AppProvider>
-      </AuthProvider>
+    <GestureHandlerRootView className="flex-1">
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <AppProvider>
+            <MainNavigation />
+          </AppProvider>
+        </AuthProvider>
+      </QueryClientProvider>
       <Toast />
-    </QueryClientProvider>
+    </GestureHandlerRootView>
   )
 }
 

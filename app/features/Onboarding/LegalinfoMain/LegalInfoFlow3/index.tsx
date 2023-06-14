@@ -91,7 +91,6 @@ function Screen({navigation}: Props) {
           values.buldingNumber &&
           values.streetName &&
           values.district &&
-          values.poBox &&
           values.postalCode &&
           values.city &&
           values.phoneNumber
@@ -153,6 +152,12 @@ function Screen({navigation}: Props) {
     },
   })
 
+  const intersectCounteries = (arr1: any, arr2: any) => {
+    return arr1.filter((el: {code: any}) =>
+      arr2.includes(createCountry(el).code),
+    )
+  }
+
   useEffect(() => {
     try {
       if (data) {
@@ -173,12 +178,45 @@ function Screen({navigation}: Props) {
           },
         })
 
-        if (onBoardingProgress?.legalInfoMain?.residentOutsideKSA) {
-          navigation.navigate('LegalInfoFlow4')
+        console.log(
+          intersectCounteries(values.countries, [
+            'AS',
+            'GU',
+            'MP',
+            'PR',
+            'VI',
+            'US',
+          ]),
+          intersectCounteries(values.countries, [
+            'AS',
+            'GU',
+            'MP',
+            'PR',
+            'VI',
+            'US',
+          ]).length,
+          values.countries,
+        )
+        if (
+          intersectCounteries(values.countries, [
+            'AS',
+            'GU',
+            'MP',
+            'PR',
+            'VI',
+            'US',
+          ]).length
+        ) {
+          navigation.navigate('LegalInfoFlow1', {historyPage: 'LegalInfoFlow3'})
           return
         } else {
-          navigation.navigate('CreateUser')
-          return
+          if (onBoardingProgress?.legalInfoMain?.residentOutsideKSA) {
+            navigation.navigate('LegalInfoFlow4')
+            return
+          } else {
+            navigation.navigate('CreateUser')
+            return
+          }
         }
       }
     } catch (e) {
@@ -233,7 +271,7 @@ function Screen({navigation}: Props) {
                   isOpen={currentOpendIndx === 0}
                   title={t('Select Country')}
                   onSheetClose={() => setCurrentOpenedInx(-1)}
-                  hasSearch={false}
+                  hasSearch={true}
                 />
               </>
             )}

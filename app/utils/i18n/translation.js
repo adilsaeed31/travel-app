@@ -135,7 +135,7 @@ export const translation = {
       IBAN: 'IBAN',
     },
     TravelCard: {
-      currentCodeEuro: '{{amount}} EUR',
+      currentCodeEuro: '{{amount}} {{code}}',
       load: 'Load',
       unload: 'Unload',
       currency: 'Currency',
@@ -277,7 +277,7 @@ export const translation = {
       IBAN: 'رقم الآيبان',
     },
     TravelCard: {
-      currentCodeEuro: '{{amount}} يورو',
+      currentCodeEuro: '{{code}} {{amount}} ',
       load: 'حمولة',
       unload: 'التفريغ',
       currency: 'عملة',

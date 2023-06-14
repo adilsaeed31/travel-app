@@ -19,8 +19,9 @@ import {useMutation} from '@tanstack/react-query'
 import {countriesList, SaudiList, educationList} from './masterData'
 import styled from 'styled-components/native'
 import {PostalCodeValidator, CityValidator, ContactName} from './validators'
-
+import {useStore} from '@Store'
 import {AppContext, AppProviderProps} from '@Context'
+
 type IFormTYpe = {
   city: string | null
   education: string | null
@@ -149,7 +150,14 @@ function PersonalInformation({navigation}: Props) {
   const [errors, setErrors] = useState({
     ...FormValues,
   })
-  const [systemErrorMessage, setSystemErrorMessage] = useState('')
+
+  const setOnboardingProgress = useStore(
+    (store: any) => store.setOnboardingProgress,
+  )
+
+  const onBoardingProgress = useStore((store: any) => store.onBoardingProgress)
+
+  const [systemErrorMessage, setSystemErrorMessage] = useState<any>('')
   const IsSaudi = useMemo(() => {
     const current = countriesList.findIndex(
       country =>
@@ -187,6 +195,7 @@ function PersonalInformation({navigation}: Props) {
         values.district &&
         values.postalCode &&
         values.city &&
+        values.phoneNumber &&
         values.phoneNumber?.length > 3
       ) {
         isValid = true
@@ -227,6 +236,7 @@ function PersonalInformation({navigation}: Props) {
       return res
     },
   })
+
   const {
     isLoading: isGetDataLoading,
     data: PersonalInformationData,
@@ -270,6 +280,15 @@ function PersonalInformation({navigation}: Props) {
 
   useEffect(() => {
     if (data?.onboarding_application_id) {
+      setOnboardingProgress({
+        ...onBoardingProgress,
+        personalInformation: MapFormValuesForApi(
+          values,
+          IsSaudi,
+          showAdditionalInformation,
+          isRTL,
+        ),
+      })
       navigation.navigate('FinicalInformation')
     }
 

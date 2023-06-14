@@ -1,0 +1,8 @@
+app_identifier("com.saib.venture.travel") # The bundle identifier of your app
+apple_id("najeeb_rifaat@pm.me") # Your Apple Developer Portal username
+
+itc_team_id("126422074") # App Store Connect Team ID
+team_id("J682D8LW46") # Developer Portal Team ID
+
+# For more information about the Appfile, see:
+#     https://docs.fastlane.tools/advanced/#appfile

@@ -1,15 +1,14 @@
 import React from 'react'
 import {Image, View, TouchableOpacity, StyleSheet} from 'react-native'
-import {useTranslation} from 'react-i18next'
+import {Trans} from 'react-i18next'
 import cn from 'classnames'
 
 import {useStore} from '@Store'
-import {flexRowLayout, ml} from '@Utils'
+import {flexRowLayout} from '@Utils'
 import {TCTextView} from '@Components'
 import {DownArrow, EuroFlag} from '@Assets'
 
-const CurrencyRow = () => {
-  const {t} = useTranslation()
+const CurrencyRow = ({data, activeIndex}: {data: any; activeIndex: number}) => {
   const isRTL = useStore(state => state.isRTL)
 
   return (
@@ -20,10 +19,29 @@ const CurrencyRow = () => {
       )}>
       <View className={cn(flexRowLayout(isRTL), 'items-center')}>
         <Image source={EuroFlag} />
-        <TCTextView style={styles.leftSpace}>212</TCTextView>
-        <TCTextView className="font-tc-light">
-          {t('TravelCard:currentCodeEuro', {amount: '.34'})}
-        </TCTextView>
+        <View className="flex-row" style={styles.leftSpace}>
+          <Trans
+            defaults="<0>{{amount1}}</0><1>{{separator}}</1><2>{{amount2}}</2><3>{{code}}</3>"
+            values={{
+              amount1:
+                data?.[activeIndex]?.card?.currencies[activeIndex]?.balance ??
+                '212',
+              separator: '.',
+              amount2:
+                data?.[activeIndex]?.card?.currencies[activeIndex]?.balance ??
+                '34',
+              code:
+                data?.[activeIndex]?.card?.currencies[activeIndex]
+                  ?.currency_code ?? 'SAR',
+            }}
+            components={[
+              <TCTextView />,
+              <TCTextView />,
+              <TCTextView className="font-tc-light flex-row" />,
+              <TCTextView style={styles.separator} />,
+            ]}
+          />
+        </View>
       </View>
 
       <TouchableOpacity>
@@ -35,6 +53,9 @@ const CurrencyRow = () => {
 
 const styles = StyleSheet.create({
   leftSpace: {
+    marginStart: 4,
+  },
+  separator: {
     marginStart: 4,
   },
 })

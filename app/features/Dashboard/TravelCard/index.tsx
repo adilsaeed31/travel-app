@@ -1,9 +1,9 @@
-import React, {memo} from 'react'
+import React, {memo, useEffect} from 'react'
 import {ScrollView} from 'react-native'
 import {useQuery} from '@tanstack/react-query'
 import Animated, {
-  FadeInRight,
   FadeInUp,
+  FadeInRight,
   LightSpeedInLeft,
 } from 'react-native-reanimated'
 
@@ -14,44 +14,55 @@ import {
   QuickLoads,
   UserTravelCard,
 } from '@Components'
-import {BASE_URL} from '@Utils'
-import {fetcher, token} from '@Api'
+
+import {useStore} from '@Store'
+import {getCardsData, getTransData} from '@Api'
 
 const TravelCardScreen: React.FC = () => {
-  const {isLoading, data} = useQuery({
-    initialData: [],
-    queryKey: ['card', BASE_URL, token],
-    queryFn: async () => {
-      let res: any = await fetcher(`${BASE_URL}/card/card`, {
-        method: 'GET',
-        token: token,
-      })
-      try {
-        if (res.status >= 200 && res.status < 300 && !!res.bodyString) {
-          return await res.json()
-        }
-        return res.status
-      } catch (e) {
-        console.log(e, 'e')
-        return 500
-        // return 500 // something went wrong
-      }
-    },
+  const setTransData = useStore(state => state.setTransData)
+
+  const {
+    error,
+    isError,
+    isLoading,
+    data: cardData,
+  } = useQuery({
+    queryKey: ['card'],
+    queryFn: getCardsData,
   })
+
+  const {data: transData} = useQuery({
+    queryKey: ['trans', {currency: 'sar'}],
+    queryFn: ({queryKey}) => getTransData(queryKey),
+  })
+
+  useEffect(() => {
+    if (transData?.length > 0) {
+      setTransData(transData)
+    }
+  }, [setTransData, transData])
+
+  const activeIndex = Math.floor(Math.random() * 6) + 1
 
   return (
     <ScrollView>
       <Animated.View entering={FadeInRight.duration(1000).delay(50)}>
-        <UserTravelCard isLoading={isLoading} data={data} />
+        <UserTravelCard
+          error={error}
+          data={cardData}
+          isError={isError}
+          isLoading={isLoading}
+          activeIndex={activeIndex}
+        />
       </Animated.View>
 
       <Animated.View entering={LightSpeedInLeft.duration(1000).delay(100)}>
-        <CurrencyRow />
+        <CurrencyRow data={cardData} activeIndex={activeIndex} />
       </Animated.View>
 
       <QuickActions />
 
-      <QuickLoads />
+      <QuickLoads data={cardData} activeIndex={activeIndex} />
 
       <Animated.View entering={FadeInUp.duration(1000).delay(150)}>
         <Promotions />
