@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react-hooks/rules-of-hooks */
 
 import React, {useEffect, useState} from 'react'
 import {View, Dimensions, Image, Platform, Linking} from 'react-native'
@@ -316,7 +315,7 @@ const ButtonContainerSecond = styled(View)`
 const NafaaqImg = styled(Image)`
   height: 135px;
   width: 135px;
-  margin-top: ${isSmall ? 30 : 90}px;
+  margin-top: ${isSmall ? 10 : 50}px;
   margin-bottom: ${isSmall ? 10 : 34}px;
 `
 

@@ -213,6 +213,7 @@ const PersonalIdScreen = ({navigation}: Props) => {
           }}
           maxLength={10}
           value={state.govtId}
+          keyboardType="numeric"
         />
         <Spacer horizontal={false} size={SPACER_SIZES.BASE * 4} />
         <Input
@@ -223,6 +224,7 @@ const PersonalIdScreen = ({navigation}: Props) => {
           }}
           maxLength={9}
           value={state.mobileNumber}
+          keyboardType="numeric"
         />
         {statusError && <ErrorText>{statusError}</ErrorText>}
         <DisclaimerView isKeyboardVisible={!!keyboardHeight} isRTL={isRTL}>
