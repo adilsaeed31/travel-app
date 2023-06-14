@@ -32,9 +32,10 @@ const BottomTabBar: React.FC<BottomTabBarProps> = ({
 
   const direction = isRTL ? 'rtl' : 'ltr'
 
-  const scrollX = useRef(new AnimatedRN.Value(0)).current
-  const barTranslate = AnimatedRN.multiply(scrollX, -1)
-  const barTranslate1 = useRef(new AnimatedRN.Value(0)).current
+  const [headerWidths, setWidths] = useState<number[]>([])
+  const [originWidths, setOriginWidths] = useState<string[]>([])
+
+  const barTranslate = useRef(new AnimatedRN.ValueXY()).current
 
   const renderIcon = (name: string, active: boolean) => {
     if (name === 'home') {
@@ -59,6 +60,18 @@ const BottomTabBar: React.FC<BottomTabBarProps> = ({
     }
   }
 
+  const onLayout = ({e, index}: {e: any; index: number}) => {
+    const _x = e.nativeEvent.layout.x
+
+    let newWidths: any = [...headerWidths]
+    let rtlWidths: any = [...originWidths]
+
+    newWidths[index] = _x
+    rtlWidths[index] = '-' + _x
+    setOriginWidths(rtlWidths)
+    setWidths(newWidths)
+  }
+
   return (
     <>
       <BottomSheet />
@@ -69,7 +82,7 @@ const BottomTabBar: React.FC<BottomTabBarProps> = ({
           {...rest}
           className={cn(
             flexRowLayout(isRTL),
-            'bar-width-05 border-tc-tab h-16 m-5 rounded-3xl bg-tc-bottom-tab',
+            'bar-width-05 border-tc-tab h-16 m-5 rounded-3xl bg-tc-bottom-tab overflow-hidden',
           )}>
           {state.routes.map((route, index) => {
             const {options} = descriptors[route.key]
@@ -83,6 +96,23 @@ const BottomTabBar: React.FC<BottomTabBarProps> = ({
             const isFocused = state.index === index
 
             const onPress = () => {
+              let revArr: string[] | number[]
+
+              if (isRTL) {
+                revArr = originWidths
+              } else {
+                revArr = headerWidths
+              }
+
+              AnimatedRN.spring(barTranslate, {
+                toValue: {
+                  x: Number(revArr[index]),
+                  y: 0,
+                },
+                useNativeDriver: true,
+                bounciness: 0,
+              }).start()
+
               const event = navigation.emit({
                 type: 'tabPress',
                 target: route.key,
@@ -114,6 +144,7 @@ const BottomTabBar: React.FC<BottomTabBarProps> = ({
                   flexRowLayout(isRTL),
                   'justify-center items-center',
                 )}
+                onLayout={e => onLayout({e, index})}
                 accessibilityLabel={options.tabBarAccessibilityLabel}
                 accessibilityState={isFocused ? {selected: true} : {}}>
                 <View className="justify-center items-center">
@@ -133,11 +164,8 @@ const BottomTabBar: React.FC<BottomTabBarProps> = ({
                     style={[
                       styles.headerBar,
                       {
-                        width: vw(50),
-                        transform: [
-                          {translateX: barTranslate},
-                          {translateX: barTranslate1},
-                        ],
+                        width: vw(32),
+                        transform: [...barTranslate.getTranslateTransform()],
                       },
                     ]}
                   />
@@ -177,10 +205,10 @@ const styles = StyleSheet.create({
     width: width,
   },
   headerBar: {
+    flex: 1,
     height: 4,
     bottom: 0,
-    overflow: 'hidden',
-    marginLeft: 18,
+    marginLeft: 40,
     position: 'absolute',
     borderTopLeftRadius: 8,
     borderTopRightRadius: 8,

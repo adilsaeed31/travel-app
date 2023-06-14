@@ -37,7 +37,11 @@ const TCTabBar: React.FC = () => {
     let leftOffset = 0
 
     for (let i = 0; i < active; i += 1) {
-      leftOffset += headerWidths[i]
+      if (isRTL) {
+        leftOffset -= headerWidths[i]
+      } else {
+        leftOffset += headerWidths[i]
+      }
     }
 
     AnimatedRN.spring(barTranslate, {
@@ -45,12 +49,12 @@ const TCTabBar: React.FC = () => {
       useNativeDriver: true,
       bounciness: 0,
     }).start()
-  }, [active, barTranslate, headerWidths])
+  }, [active, barTranslate, headerWidths, isRTL])
 
   const onPressHeader = (index: React.SetStateAction<number>) => {
     if (active !== index) {
       setActive(index)
-      setActiveIndex()
+      setActiveIndex(active)
       toggleBottomSheet()
     }
   }
