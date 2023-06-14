@@ -10,7 +10,7 @@ import {ChevronUp} from '@Assets'
 
 import TransItem from '../TransItem'
 
-const transData = [
+const mockData = [
   {
     title: 'Adil',
     amount: '100,00',
@@ -76,7 +76,7 @@ const BottomSheet = () => {
   const [backDrop, setBackDrop] = useState<boolean>(false)
   const [display, setDisplay] = useState<boolean>(false)
 
-  // const transData = useStore(state => state.transData)
+  const transData = useStore(state => state.transData)
   const enableBottomSheet = useStore(state => state.enableBottomSheet)
 
   if (enableBottomSheet) {
@@ -110,7 +110,7 @@ const BottomSheet = () => {
         body={
           display ? (
             <>
-              {transData?.map(
+              {(transData ?? mockData)?.map(
                 (
                   {
                     title,
