@@ -22,46 +22,52 @@ const TravelCardScreen: React.FC = () => {
   const user = useStore(state => state.user)
   const setTransData = useStore(state => state.setTransData)
 
-  const {isLoading, data} = useQuery({
+  const {
+    isLoading,
+    data: cardData,
+    isError,
+    error,
+  } = useQuery({
     placeholderData: [],
     queryKey: ['card', BASE_URL, token, user?.access_token],
     queryFn: async () => {
-      let res: any = await fetcher(`${BASE_URL}/card/card`, {
-        method: 'GET',
+      const res: any = await fetcher(`${BASE_URL}/card/card`, {
         token: user?.access_token ?? token,
       })
-      try {
-        if (res.status >= 200 && res.status < 300 && !!res.bodyString) {
-          return await res.json()
-        }
-        return res.status
-      } catch (e) {
-        console.log(e, 'e')
-        return 500
+
+      console.log(res.ok, 'ok')
+
+      const data = await res.json()
+      console.log(data, 'data card')
+
+      if (data?.status > 200) {
+        return []
       }
+
+      return data
     },
   })
-
-  console.log(data, 'data')
 
   const {data: transData} = useQuery({
     placeholderData: [],
     queryKey: ['trans', BASE_URL, token, user?.access_token],
     queryFn: async () => {
-      let res: any = await fetcher(`${BASE_URL}/card/transactions`, {
+      const res: any = await fetcher(`${BASE_URL}/card/transactions`, {
         method: 'POST',
-        body: {currency: 'SAR'},
+        body: {currency: 'adil'},
         token: user?.access_token ?? token,
       })
-      try {
-        if (res.status >= 200 && res.status < 300 && !!res.bodyString) {
-          return await res.json()
-        }
-        return res.status
-      } catch (e) {
-        console.log(e, 'e')
-        return 500
+
+      console.log(res.ok, 'ok')
+
+      const data = await res.json()
+
+      if (data?.status > 200) {
+        return []
       }
+
+      console.log(data, 'data trans')
+      return data
     },
   })
 
@@ -77,19 +83,21 @@ const TravelCardScreen: React.FC = () => {
     <ScrollView>
       <Animated.View entering={FadeInRight.duration(1000).delay(50)}>
         <UserTravelCard
-          data={data}
+          data={cardData}
           isLoading={isLoading}
           activeIndex={activeIndex}
+          isError={isError}
+          error={error}
         />
       </Animated.View>
 
       <Animated.View entering={LightSpeedInLeft.duration(1000).delay(100)}>
-        <CurrencyRow data={data} activeIndex={activeIndex} />
+        <CurrencyRow data={cardData} activeIndex={activeIndex} />
       </Animated.View>
 
       <QuickActions />
 
-      <QuickLoads data={data} activeIndex={activeIndex} />
+      <QuickLoads data={cardData} activeIndex={activeIndex} />
 
       <Animated.View entering={FadeInUp.duration(1000).delay(150)}>
         <Promotions />

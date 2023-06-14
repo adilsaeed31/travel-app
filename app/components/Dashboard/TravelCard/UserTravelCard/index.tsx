@@ -80,10 +80,19 @@ type momentumScrollProps = {
 }
 
 const UserTravelCard: React.FC<{
-  data: string[]
+  data: any
   isLoading: boolean
+  isError: boolean
+  error: any
   activeIndex: number
-}> = ({data, isLoading}) => {
+}> = ({data, isLoading, isError, error}) => {
+  console.log('================')
+  console.log('data', data)
+  console.log('isLoading', isLoading)
+  console.log('isError', isError)
+  console.log('error', error)
+  console.log('================')
+
   const isRTL = useStore(state => state.isRTL)
   const [currentItem, setCurrentItem] = useState<number>(0)
 
@@ -110,8 +119,6 @@ const UserTravelCard: React.FC<{
     },
   }: momentumScrollProps) => {
     const active = Math.floor(scrollPos / layoutWidth)
-
-    // console.log(scrollPos, layoutWidth, active)
 
     setCurrentItem(active)
   }
@@ -224,7 +231,7 @@ const UserTravelCard: React.FC<{
       </ScrollView>
 
       <View className={cn(flexRowLayout(isRTL), '-mt-4')}>
-        {data?.map((_item, index) => (
+        {data?.map((_item: any, index: number) => (
           <TCDot key={index} isActive={currentItem === index} hasRounded />
         ))}
       </View>
