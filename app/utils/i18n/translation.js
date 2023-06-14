@@ -129,6 +129,10 @@ export const translation = {
     Dashboard: {
       tabTitle: 'Travel Card',
       tabTitle2: 'Account',
+      accountName: 'Account Name',
+      currentAccount: 'Current Account',
+      accountNumber: 'Account Number',
+      IBAN: 'IBAN',
     },
     TravelCard: {
       currentCodeEuro: '{{amount}} {{code}}',
@@ -267,6 +271,10 @@ export const translation = {
     Dashboard: {
       tabTitle: 'بطاقة سفر',
       tabTitle2: 'حساب',
+      accountName: 'إسم الحساب',
+      currentAccount: 'الحساب الحال',
+      accountNumber: 'رقم حساب',
+      IBAN: 'رقم الآيبان',
     },
     TravelCard: {
       currentCodeEuro: '{{code}} {{amount}} ',

@@ -18,6 +18,7 @@ import {initReactI18next} from 'react-i18next'
 import {useStore} from '@Store'
 import {MainNavigation} from '@Navigations'
 import {AuthProvider, AppProvider} from '@Context'
+import Toast from 'react-native-toast-message'
 
 interface CustomLanguageDetectorType {
   type: 'languageDetector'
@@ -54,6 +55,7 @@ function App(): React.JSX.Element {
           </AppProvider>
         </AuthProvider>
       </QueryClientProvider>
+      <Toast />
     </GestureHandlerRootView>
   )
 }
