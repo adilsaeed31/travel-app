@@ -100,7 +100,6 @@ function Screen({navigation}: Props) {
           values.buldingNumber &&
           values.streetName &&
           values.district &&
-          values.poBox &&
           values.postalCode &&
           values.city &&
           values.phoneNumber
@@ -237,7 +236,7 @@ function Screen({navigation}: Props) {
               values.countries.map((item, index) => {
                 return (
                   <View key={index}>
-                    {index != 0 ? <Hr /> : null}
+                    {index !== 0 ? <Hr /> : null}
                     <Spacer size={SPACER_SIZES.SM} />
                     <DropDown
                       data={countriesList.map(c =>
@@ -275,6 +274,7 @@ function Screen({navigation}: Props) {
                       title={t('Select Document')}
                       onSheetClose={() => setCurrentOpenedInx(-1)}
                       hasSearch={false}
+                      dynamicHeight
                     />
                     {values.countries[index].docType ===
                     'Permanent Resident' ? (
@@ -297,6 +297,7 @@ function Screen({navigation}: Props) {
                           title={t('Select Permanent Status')}
                           onSheetClose={() => setCurrentOpenedInx(-1)}
                           hasSearch={false}
+                          dynamicHeight
                         />
                       </>
                     ) : null}
