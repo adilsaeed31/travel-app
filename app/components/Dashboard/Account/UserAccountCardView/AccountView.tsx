@@ -3,6 +3,7 @@ import {View, Text as TextView} from 'react-native'
 import styled from 'styled-components/native'
 import {AccountsBg, Share} from '@Assets'
 import {normalize} from '@Utils'
+import {useTranslation} from 'react-i18next'
 
 const Container = styled(View)`
   flex: 1;
@@ -76,7 +77,9 @@ const Text = styled(TextView)<TextProps>`
   color: ${({color}) => (color ? color : '#343D45')};
 `
 
-const AccountDetails: React.FC = () => {
+const AccountDetails: React.FC = ({item}: any) => {
+  const {t} = useTranslation()
+
   return (
     <Container>
       <FirstSection>
@@ -86,31 +89,31 @@ const AccountDetails: React.FC = () => {
         </Text>
         <TextWrapper flexDirection={'row'}>
           <Text lineHeight={normalize(27)} weight={700} size={normalize(22)}>
-            523,212
+            {parseInt(item.balance)}
           </Text>
           <Text
             alignSelf={'center'}
             lineHeight={normalize(18)}
             weight={300}
             size={normalize(12)}>
-            .34 SAR
+            {(item.balance % 1).toFixed(2).slice(1)} {item.currency_code}
           </Text>
         </TextWrapper>
       </FirstSection>
       <Divider />
       <SectionWrapper>
         <LeftSection>
-          <Text color={'#6B7278'}>Account Name</Text>
+          <Text color={'#6B7278'}>{t('Dashboard:accountName')}</Text>
           <TextWrapper>
-            <Text>A. Muhammad Asif</Text>
+            <Text>{item.name}</Text>
           </TextWrapper>
         </LeftSection>
         <RightSection>
           <TextWrapper>
-            <Text color={'#6B7278'}>Account Number</Text>
+            <Text color={'#6B7278'}>{t('Dashboard:accountNumber')}</Text>
           </TextWrapper>
           <TextWrapper>
-            <Text>0101 D94093 001</Text>
+            <Text>{item.number}</Text>
           </TextWrapper>
         </RightSection>
       </SectionWrapper>
@@ -118,10 +121,10 @@ const AccountDetails: React.FC = () => {
       <SectionWrapper>
         <LeftSection>
           <TextWrapper>
-            <Text color={'#6B7278'}>IBAN</Text>
+            <Text color={'#6B7278'}>{t('Dashboard:IBAN')}</Text>
           </TextWrapper>
           <TextWrapper>
-            <Text>SA6476500000101D94093 001</Text>
+            <Text>{item.iban}</Text>
           </TextWrapper>
         </LeftSection>
         <RightSection flexGrow={0.4}>

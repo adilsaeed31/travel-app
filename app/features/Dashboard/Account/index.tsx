@@ -1,21 +1,19 @@
 import React, {memo, useState, useEffect} from 'react'
 import {ScrollView, View} from 'react-native'
-import Animated, {FadeInRight} from 'react-native-reanimated'
 
 import {
   QuickActions,
   Spacer,
   TCTextView,
-  UserAccountCardView,
+  UserAccountCarousel,
 } from '@Components'
 import ListViewItem from './ListViewItem'
 import {LoadCard} from '@Assets'
-import {BASE_URL, SPACER_SIZES} from '@Utils'
+import {SPACER_SIZES} from '@Utils'
 import {StackNavigationProp} from '@react-navigation/stack'
-import {fetcher, token} from '@Api'
-import {useIsFocused} from '@react-navigation/native'
-import {useQuery} from '@tanstack/react-query'
 import {styled} from 'styled-components/native'
+import {useStore} from '@Store'
+import useAccountApi from './useAccountApi'
 
 type AccountScreenScreenProps = {
   navigation?: StackNavigationProp<{
@@ -52,57 +50,28 @@ const SeeAll = styled(TCTextView)`
 const AccountScreen: React.FC<AccountScreenScreenProps> = ({
   navigation,
 }: AccountScreenScreenProps) => {
-  const [status, setstatus] = useState(0)
-  const isFocused = useIsFocused()
   const active = useStore(state => state.active)
+  const [accountNumber, setAccountNumber] = useState('')
 
-  const url = `${BASE_URL}/account/account`
-  const {isFetching, data, refetch} = useQuery({
-    queryKey: ['account', url],
-    queryFn: async () => {
-      let res: any = await fetcher(url, {
-        method: 'GET',
-        token: token,
-      })
-      try {
-        setstatus(res.status)
-        if (res.status >= 200 && res.status < 300 && !!res.bodyString) {
-          return await res.json()
-        }
-        return res.status
-      } catch (e) {
-        setstatus(500)
-        return 500 // something went wrong
-      }
-    },
-    refetchOnWindowFocus: false,
+  const {isFetching: isFetchingAccounts, data: AccountsList} =
+    useAccountApi('/account/account')
 
-    enabled: false, // disable this query from automatically running
-  })
+  const {
+    isFetching: isFetchingTransactions,
+    data: TransactionsList,
+    refetch: refetchTransactionList,
+  } = useAccountApi('/account/account/transactions/' + accountNumber)
 
-  useEffect(() => {
-    if (!isFetching && data && isFocused) {
-      if (status >= 200 && status < 300) {
-      } else if (status > 299 && status < 400) {
-        navigation.navigate('OTPAuth')
-      } else if (status > 399 && status < 500) {
-      }
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, isFetching, isFocused])
-
-  useEffect(() => {
-    if (!data) {
-      refetch()
-    }
-  }, [data, refetch])
-
+  const onAccountSelection = (index: number) => {
+    const accountNo = AccountsList[index - 1]?.number
+    setAccountNumber(accountNo)
+    refetchTransactionList()
+  }
   return (
-    <ScrollView style={{height: '100%', width: '100%'}}>
-      <Animated.View entering={FadeInRight.duration(1000).delay(50)}>
-        <UserAccountCardView />
-      </Animated.View>
+    <ScrollView scrollEnabled={true}>
+      {!isFetchingAccounts && !!Object.keys(AccountsList).length && (
+        <UserAccountCarousel onSwipe={onAccountSelection} data={AccountsList} />
+      )}
       <View style={{flex: 1, flexGrow: 0.8}}>
         <QuickActions />
       </View>
@@ -112,15 +81,15 @@ const AccountScreen: React.FC<AccountScreenScreenProps> = ({
         <SeeAll>See All</SeeAll>
       </StyledView>
       <View style={{flex: 2, marginBottom: 150, width: '97%'}}>
-        {data &&
-          active === 1 &&
-          data.map((item, index) => (
+        {!isFetchingTransactions &&
+          !!Object.keys(TransactionsList).length &&
+          TransactionsList.map((item, index) => (
             <ListViewItem
-              key={0}
+              key={index}
               Icon={<LoadCard />}
-              title={'Card Fees *2395'}
-              subtitle={'12 Feb, 13:00'}
-              number={'-100000'}
+              title={item.name}
+              subtitle={item.timestamp}
+              number={item.amount}
             />
           ))}
       </View>

@@ -50,7 +50,7 @@ const AuthFeature = ({navigation}: Props) => {
   const bodyParams = {
     username: userName,
     password: password,
-    os: 'IOS',
+    os: 'IOS', // TODO
     language: useStore.getState().language,
     device_id: deviceId,
     os_version: '16.4', // TODO
