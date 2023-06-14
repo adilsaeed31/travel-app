@@ -12,8 +12,8 @@ import styled from 'styled-components/native'
 import {useStore} from '@Store'
 import {Eye, EyeClosed} from '@Assets'
 import {TEXT_VARIANTS} from '@Utils'
-
 import Text from '../TextView'
+
 interface CustomInputProps {
   label: string
   schema?: any
@@ -26,6 +26,7 @@ interface CustomInputProps {
   returnKeyType?: ReturnKeyTypeOptions
   keyboardType?: KeyboardTypeOptions
   onEndEditing?: () => {}
+  allowSpecialChars?: boolean
 }
 
 const InputWrapper = styled(View)<{isError: boolean; isFocused: boolean}>`
@@ -88,7 +89,7 @@ const CustomInput: FC<CustomInputProps> = ({
   returnKeyType,
   keyboardType,
   onEndEditing,
-
+  allowSpecialChars = false,
   ...rest
 }) => {
   const inputRef = useRef<TextInput>(null)
@@ -129,8 +130,8 @@ const CustomInput: FC<CustomInputProps> = ({
   }
 
   const handleChangeText = (text: string): void => {
-    if (text.length >= 3) {
-      validateInput(text)
+    if (!allowSpecialChars && !isPassword) {
+      text = text.replace(/[^\w\s]/g, '')
     }
     onChangeText(text)
     setInputValue(text)
