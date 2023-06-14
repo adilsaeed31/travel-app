@@ -53,16 +53,11 @@ const TopNavigationSimpleUsageShowcase: React.FC<PropsType> = ({
   const toggleLanguage = useStore(state => state.toggleLanguage)
 
   return (
-    <Container {...props} isRTL={isRTL}>
+    <Container {...props}>
       <StatusBar />
       {isBack ? (
         <TouchableOpacity onPress={onBack}>
-          <ViewSub>
-            <ArrowLeftIcon />
-            <LanguageBackText variant={TEXT_VARIANTS.bodyBold}>
-              {t('common:back')}
-            </LanguageBackText>
-          </ViewSub>
+          <ArrowLeftIcon />
         </TouchableOpacity>
       ) : (
         <ViewSub isRTL={isRTL}>
