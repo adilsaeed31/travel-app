@@ -19,10 +19,10 @@ function TCTextView({
   style,
   ...rest
 }: {
-  children: string | React.ReactElement | null
+  children?: string | React.ReactElement | null
   variant?: any
   className?: string
-  style?: string | object
+  style?: string | object | any
 }) {
   return (
     <StyledTextView

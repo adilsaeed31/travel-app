@@ -1,43 +1,18 @@
 import React, {memo} from 'react'
-import {Text} from 'react-native'
+import {View, Text} from 'react-native'
 import styled from 'styled-components/native'
 import cn from 'classnames'
+import Animated, {SlideInRight} from 'react-native-reanimated'
 
-const ListItemContainer = styled.View`
-  flex-direction: row;
-  align-items: center;
-  padding: 10px;
-  width: 100%;
-`
+import {useStore} from '@Store'
 
 const Circle = styled.View`
   width: 40px;
   height: 40px;
+  align-items: center;
   border-radius: ${20}px;
-  background-color: #f5f5f5;
-  align-items: center;
   justify-content: center;
-`
-
-const CircleContainer = styled.View`
-  flex: 1;
-  flex-grow: 0.3;
-  align-items: center;
-`
-const TitleContainer = styled.View`
-  flex: 1;
-`
-
-const Title = styled.Text`
-  font-style: normal;
-  font-weight: 400;
-  font-size: 13px;
-  line-height: 18px;
-`
-
-const Subtitle = styled.Text`
-  font-size: 14px;
-  color: #888888;
+  background-color: #f5f5f5;
 `
 
 const CREDIT = 'credit'
@@ -49,18 +24,25 @@ const TransItem: React.FC<{
   title: string
   subtitle: string
   number: string
-}> = ({icon, title, subtitle, number, type}) => {
+  index: number
+}> = ({icon, title, subtitle, number, type, index}) => {
+  const isRTL = useStore(state => state.isRTL)
+  const direction = isRTL ? 'rtl' : 'ltr'
+
   return (
-    <ListItemContainer>
-      <CircleContainer>
-        <Circle>
-          <Subtitle>{icon}</Subtitle>
-        </Circle>
-      </CircleContainer>
-      <TitleContainer>
-        <Title>{title}</Title>
-        <Subtitle>{subtitle}</Subtitle>
-      </TitleContainer>
+    <Animated.View
+      entering={SlideInRight.duration(300).delay(index * 50)}
+      style={{direction: direction}}
+      className="my-2 mx-4 flex-row items-center justify-center">
+      <Circle>
+        <Text>{icon}</Text>
+      </Circle>
+
+      <View className="flex-1 justify-center ml-4">
+        <Text>{title}</Text>
+        <Text>{subtitle}</Text>
+      </View>
+
       <Text
         className={cn('font-tc-regular text-sm', {
           'text-red-500': type === CREDIT,
@@ -68,7 +50,7 @@ const TransItem: React.FC<{
         })}>
         {number}
       </Text>
-    </ListItemContainer>
+    </Animated.View>
   )
 }
 

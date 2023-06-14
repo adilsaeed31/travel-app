@@ -2,8 +2,8 @@ import React, {memo, useEffect} from 'react'
 import {ScrollView} from 'react-native'
 import {useQuery} from '@tanstack/react-query'
 import Animated, {
-  FadeInRight,
   FadeInUp,
+  FadeInRight,
   LightSpeedInLeft,
 } from 'react-native-reanimated'
 
@@ -14,61 +14,26 @@ import {
   QuickLoads,
   UserTravelCard,
 } from '@Components'
+
 import {useStore} from '@Store'
-import {BASE_URL} from '@Utils'
-import {fetcher, token} from '@Api'
+import {getCardsData, getTransData} from '@Api'
 
 const TravelCardScreen: React.FC = () => {
-  const user = useStore(state => state.user)
   const setTransData = useStore(state => state.setTransData)
 
   const {
+    error,
+    isError,
     isLoading,
     data: cardData,
-    isError,
-    error,
   } = useQuery({
-    placeholderData: [],
-    queryKey: ['card', BASE_URL, token, user?.access_token],
-    queryFn: async () => {
-      const res: any = await fetcher(`${BASE_URL}/card/card`, {
-        token: user?.access_token ?? token,
-      })
-
-      console.log(res.ok, 'ok')
-
-      const data = await res.json()
-      console.log(data, 'data card')
-
-      if (data?.status > 200) {
-        return []
-      }
-
-      return data
-    },
+    queryKey: ['card'],
+    queryFn: getCardsData,
   })
 
   const {data: transData} = useQuery({
-    placeholderData: [],
-    queryKey: ['trans', BASE_URL, token, user?.access_token],
-    queryFn: async () => {
-      const res: any = await fetcher(`${BASE_URL}/card/transactions`, {
-        method: 'POST',
-        body: {currency: 'adil'},
-        token: user?.access_token ?? token,
-      })
-
-      console.log(res.ok, 'ok')
-
-      const data = await res.json()
-
-      if (data?.status > 200) {
-        return []
-      }
-
-      console.log(data, 'data trans')
-      return data
-    },
+    queryKey: ['trans', {currency: 'sar'}],
+    queryFn: ({queryKey}) => getTransData(queryKey),
   })
 
   useEffect(() => {
@@ -83,11 +48,11 @@ const TravelCardScreen: React.FC = () => {
     <ScrollView>
       <Animated.View entering={FadeInRight.duration(1000).delay(50)}>
         <UserTravelCard
+          error={error}
           data={cardData}
+          isError={isError}
           isLoading={isLoading}
           activeIndex={activeIndex}
-          isError={isError}
-          error={error}
         />
       </Animated.View>
 

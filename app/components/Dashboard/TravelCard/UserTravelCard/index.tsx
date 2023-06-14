@@ -86,12 +86,12 @@ const UserTravelCard: React.FC<{
   error: any
   activeIndex: number
 }> = ({data, isLoading, isError, error}) => {
-  console.log('================')
+  console.log('================ UserTravelCard')
   console.log('data', data)
   console.log('isLoading', isLoading)
   console.log('isError', isError)
-  console.log('error', error)
-  console.log('================')
+  console.log('error', error?.message)
+  console.log('================ UserTravelCard')
 
   const isRTL = useStore(state => state.isRTL)
   const [currentItem, setCurrentItem] = useState<number>(0)
@@ -123,7 +123,7 @@ const UserTravelCard: React.FC<{
     setCurrentItem(active)
   }
 
-  if (data?.length === 0) {
+  if (!data) {
     return (
       <View className="items-center">
         <ScrollView
@@ -144,13 +144,31 @@ const UserTravelCard: React.FC<{
             },
           )}>
           <ItemLoading key={0} i={0} scrollX={scrollX}>
-            <TravelCardSvg className="z-1" />
-            <Image className="relative z-0 -mt-7" source={Shadow} />
+            <View className="items-center justify-center">
+              <TravelCardSvg className="z-1" />
+              <Image className="relative z-0 -mt-7" source={Shadow} />
+              {isLoading ? (
+                <ActivityIndicator
+                  size="large"
+                  color={Colors.Armadillo}
+                  className="z-0 absolute top-2"
+                />
+              ) : null}
+            </View>
           </ItemLoading>
 
           <ItemLoading key={1} i={1} scrollX={scrollX}>
-            <TravelCardSvgBlack className="z-1" />
-            <Image className="relative z-0 -mt-7" source={Shadow} />
+            <View className="items-center justify-center">
+              <TravelCardSvgBlack className="z-1" />
+              <Image className="relative z-0 -mt-7" source={Shadow} />
+              {isLoading ? (
+                <ActivityIndicator
+                  size="large"
+                  color={Colors.Supernova}
+                  className="z-0 absolute top-2"
+                />
+              ) : null}
+            </View>
           </ItemLoading>
 
           <ItemLoading key={2} i={2} scrollX={scrollX}>
@@ -163,13 +181,6 @@ const UserTravelCard: React.FC<{
             <TCDot key={index} isActive={currentItem === index} hasRounded />
           ))}
         </View>
-        {isLoading ? (
-          <ActivityIndicator
-            size="large"
-            className="absolute top-14 mt-1 z-0"
-            color={Colors.Supernova}
-          />
-        ) : null}
       </View>
     )
   }
@@ -193,10 +204,14 @@ const UserTravelCard: React.FC<{
             useNativeDriver: false,
           },
         )}>
-        {data?.map((item: any, index: number) =>
-          index % 2 === 0 ? (
+        {data?.map((item: any, index: number) => {
+          return (
             <Item key={index} i={index} scrollX={scrollX}>
-              <TravelCardSvg className="z-0" />
+              {index % 2 === 0 ? (
+                <TravelCardSvg className="z-0" />
+              ) : (
+                <TravelCardSvgBlack className="z-0" />
+              )}
               <Image className="relative z-0 -mt-7" source={Shadow} />
               <TCTextView className="absolute top-10 left-4 z-1 text-tc-secondary font-tc-bold">
                 {item?.card?.name}
@@ -208,26 +223,8 @@ const UserTravelCard: React.FC<{
                 {item?.card?.expiry_date}
               </TCTextView>
             </Item>
-          ) : (
-            <Item key={index} i={index} scrollX={scrollX}>
-              <TravelCardSvgBlack className="z-1" />
-              <Image className="relative z-0 -mt-7" source={Shadow} />
-              <TCTextView className="absolute top-10 left-4 z-1 text-white font-tc-bold">
-                {item?.card?.name}
-              </TCTextView>
-              <TCTextView className="absolute top-16 left-4 z-1 text-white font-tc-bold">
-                {item?.card?.last_four_digits}
-              </TCTextView>
-              <TCTextView className="absolute top-20 left-4 mt-1  z-1 text-white font-tc-bold">
-                {item?.card?.expiry_date}
-              </TCTextView>
-            </Item>
-          ),
-        )}
-
-        <Item key={data?.length + 1} i={data?.length + 1} scrollX={scrollX}>
-          <AddNewCard />
-        </Item>
+          )
+        })}
       </ScrollView>
 
       <View className={cn(flexRowLayout(isRTL), '-mt-4')}>

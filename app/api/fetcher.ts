@@ -39,6 +39,7 @@ export const fetcher = async (
       disableAllSecurity: true,
       ...rest, // all other options for fetch method
     })
+
     console.log('Result Data :>>', res)
     return res
   } catch (err) {
