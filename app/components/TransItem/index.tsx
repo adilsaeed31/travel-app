@@ -1,6 +1,7 @@
-import React from 'react'
+import React, {memo} from 'react'
+import {Text} from 'react-native'
 import styled from 'styled-components/native'
-import {vh, vw} from '@Utils'
+import cn from 'classnames'
 
 const ListItemContainer = styled.View`
   flex-direction: row;
@@ -39,29 +40,36 @@ const Subtitle = styled.Text`
   color: #888888;
 `
 
-const Number = styled.Text`
-  font-style: normal;
-  flex: 1;
-  flex-grow: 0.5;
-  text-align: right;
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 14px;
-`
+const CREDIT = 'credit'
+const DEBIT = 'debit'
 
-const ListViewItem = ({Icon, title, subtitle, number}) => {
+const TransItem: React.FC<{
+  icon: any
+  type: string
+  title: string
+  subtitle: string
+  number: string
+}> = ({icon, title, subtitle, number, type}) => {
   return (
     <ListItemContainer>
       <CircleContainer>
-          {Icon}
+        <Circle>
+          <Subtitle>{icon}</Subtitle>
+        </Circle>
       </CircleContainer>
       <TitleContainer>
         <Title>{title}</Title>
         <Subtitle>{subtitle}</Subtitle>
       </TitleContainer>
-      <Number>{number}</Number>
+      <Text
+        className={cn('font-tc-regular text-sm', {
+          'text-red-500': type === CREDIT,
+          'text-green-500': type === DEBIT,
+        })}>
+        {number}
+      </Text>
     </ListItemContainer>
   )
 }
 
-export default ListViewItem
+export default memo(TransItem)

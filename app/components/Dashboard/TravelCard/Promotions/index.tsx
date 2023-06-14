@@ -4,7 +4,7 @@ import {Animated, Image, ScrollView, View} from 'react-native'
 import cn from 'classnames'
 
 import {useStore} from '@Store'
-import {Promotion1} from '@Assets'
+import {Promotion1, Promotion2, Promotion3} from '@Assets'
 import {TCTextView} from '@Components'
 import {ml, screenWidth} from '@Utils'
 
@@ -29,7 +29,7 @@ const Item = memo(
   },
 )
 
-const imageData = [0, 1, 2]
+const imageData = [Promotion1, Promotion2, Promotion3]
 
 const Promotions = () => {
   const {t} = useTranslation()
@@ -57,8 +57,8 @@ const Promotions = () => {
           },
         )}>
         {imageData.map((item, index) => (
-          <Item key={index.toString()} i={item} scrollX={scrollX}>
-            <Image className="w-80 h-20" source={Promotion1} />
+          <Item key={index.toString()} i={index} scrollX={scrollX}>
+            <Image source={item} />
           </Item>
         ))}
       </ScrollView>
