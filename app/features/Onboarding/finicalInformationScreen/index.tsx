@@ -824,7 +824,7 @@ function FinacialInformationScreen({navigation}: Props) {
                 setValues({
                   ...values,
                   occupation,
-                  //   monthlyPrimaryIncomAmount: '',
+                  monthlyPrimaryIncomAmount: '',
                 })
                 setErrors({
                   ...errors,
