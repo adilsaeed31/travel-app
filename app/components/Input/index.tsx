@@ -39,7 +39,6 @@ const InputWrapper = styled(View)<{isError: boolean; isFocused: boolean}>`
   padding: 12px 16px;
   background: #f5f8f9;
   border-radius: 12px;
-  margin-bottom: 8px;
   border: 0.5px solid
     ${props =>
       props.isError
@@ -62,7 +61,6 @@ const Input = styled(TextInput)`
   width: 85%;
   flex: 1;
   text-align: ${() => (useStore.getState().isRTL ? 'right' : 'left')};
-  padding: 0;
   text-decoration: none;
 `
 
@@ -138,8 +136,12 @@ const CustomInput: FC<CustomInputProps> = ({
 
   const handleChangeText = (text: string): void => {
     if (!allowSpecialChars && !isPassword) {
-      text = text.replace(/[^\w\s]/g, '')
+      text = text.replace(/[^\w]/g, '')
     }
+    if (!allowSpecialChars && isPassword) {
+      text = text.replace(/[^\S]/g, '')
+    }
+    setError(null)
     onChangeText(text)
     setInputValue(text)
   }

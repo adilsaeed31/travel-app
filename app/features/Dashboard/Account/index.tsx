@@ -15,6 +15,7 @@ import {styled} from 'styled-components/native'
 import {useStore} from '@Store'
 import useAccountApi from './useAccountApi'
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder'
+import {useTranslation} from 'react-i18next'
 
 type AccountScreenScreenProps = {
   navigation?: StackNavigationProp<{
@@ -57,6 +58,7 @@ const SeeAll = styled(TCTextView)`
 const AccountScreen: React.FC<AccountScreenScreenProps> = ({
   navigation,
 }: AccountScreenScreenProps) => {
+  const {t} = useTranslation()
   const active = useStore(state => state.active)
   const [accountNumber, setAccountNumber] = useState('')
 
@@ -98,8 +100,8 @@ const AccountScreen: React.FC<AccountScreenScreenProps> = ({
       </View>
       <Spacer size={SPACER_SIZES.BASE} />
       <StyledView>
-        <TextView>Transactions</TextView>
-        <SeeAll>See All</SeeAll>
+        <TextView>{t('Dashboard:Transactions')}</TextView>
+        <SeeAll>{t('Dashboard:seeAll')}</SeeAll>
       </StyledView>
       <View style={{flex: 2, marginBottom: 150, width: '97%'}}>
         {TransactionsList[0] !== 1 &&

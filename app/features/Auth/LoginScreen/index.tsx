@@ -13,7 +13,7 @@ import {
   Layout,
 } from '@Components'
 import styled from 'styled-components/native'
-import {SPACER_SIZES, TEXT_VARIANTS} from '@Utils'
+import {SPACER_SIZES, TEXT_VARIANTS, UserNameValidator} from '@Utils'
 import {Dimensions, Keyboard} from 'react-native'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {fetcher} from '@Api'
@@ -100,7 +100,8 @@ const AuthFeature = ({navigation}: Props) => {
 
   const handleLogin = () => {
     // Perform login logic here
-    refetch()
+    if (!userName && !password) refetch()
+
     if (Keyboard) {
       Keyboard.dismiss()
     }
@@ -141,12 +142,14 @@ const AuthFeature = ({navigation}: Props) => {
         </TCTextView>
         <LoginForm>
           <TCInput
-            maxLength={20}
+            maxLength={10}
             label={t('auth:userName')}
+            schema={UserNameValidator}
             onChangeText={setUserName}
           />
           <TCInput
             isPassword
+            maxLength={32}
             value={password}
             label={t('auth:password')}
             onChangeText={setPassword}

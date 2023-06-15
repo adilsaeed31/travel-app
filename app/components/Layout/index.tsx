@@ -141,7 +141,7 @@ const AppLayout: React.FC<LayoutProps> = ({
               style={{
                 // do not remove this below style props below will
                 // adjust the padding/spacing on ios and android
-                marginBottom: vh(insetEdges.top),
+                marginBottom: vh(50),
                 paddingLeft: vw(insetEdges.left) + vw(16),
                 paddingRight: vw(insetEdges.right) + vw(16),
                 paddingBottom: vh(insetEdges.bottom),
