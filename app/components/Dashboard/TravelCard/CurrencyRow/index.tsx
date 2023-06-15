@@ -27,9 +27,7 @@ const CurrencyRow = ({data, activeIndex}: {data: any; activeIndex: number}) => {
                 data?.[activeIndex]?.card?.currencies[activeIndex]?.balance ??
                 '212',
               separator: '.',
-              amount2:
-                data?.[activeIndex]?.card?.currencies[activeIndex]?.balance ??
-                '34',
+              amount2: '00',
               code:
                 data?.[activeIndex]?.card?.currencies[activeIndex]
                   ?.currency_code ?? 'SAR',
