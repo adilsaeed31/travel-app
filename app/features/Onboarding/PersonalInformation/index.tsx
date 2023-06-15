@@ -270,6 +270,7 @@ function PersonalInformation({navigation}: Props) {
         ? true
         : false,
     )
+    console.log(PersonalInformationData?.birth_country)
     if (
       PersonalInformationData?.birth_country?.name_ar ||
       PersonalInformationData?.birth_country?.name_ar
@@ -467,6 +468,7 @@ function PersonalInformation({navigation}: Props) {
                   onChangeText={val => setValues({...values, phoneNumber: val})}
                   label={t('onboarding:personalInformation:phoneNumber')}
                   keyboardType="number-pad"
+                  maxLength={15}
                   returnKeyType="done"
                 />
                 <InputSpacer />
