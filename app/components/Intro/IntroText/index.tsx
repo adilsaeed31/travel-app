@@ -12,7 +12,7 @@ const IntroText: React.FC<{
   isFirstBold?: boolean
 }> = ({one, two, isFirstBold = false}) => {
   return (
-    <View className="flex-1 justify-end items-center pb-48">
+    <View className="flex-1 justify-end items-center pb-32">
       <Animated.View entering={EnterAnimationDown}>
         {isFirstBold ? (
           <>
