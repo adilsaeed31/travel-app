@@ -2,8 +2,9 @@ import React from 'react'
 import {View, Text as TextView} from 'react-native'
 import styled from 'styled-components/native'
 import {AccountsBg, Share} from '@Assets'
-import {normalize} from '@Utils'
+import {normalize, vh, vw} from '@Utils'
 import {useTranslation} from 'react-i18next'
+import SkeletonPlaceholder from 'react-native-skeleton-placeholder'
 
 const Container = styled(View)`
   flex: 1;
@@ -88,16 +89,24 @@ const AccountDetails: React.FC = ({item}: any) => {
           Current Account
         </Text>
         <TextWrapper flexDirection={'row'}>
-          <Text lineHeight={normalize(27)} weight={700} size={normalize(22)}>
-            {parseInt(item.balance)}
-          </Text>
-          <Text
-            alignSelf={'center'}
-            lineHeight={normalize(18)}
-            weight={300}
-            size={normalize(12)}>
-            {(item.balance % 1).toFixed(2).slice(1)} {item.currency_code}
-          </Text>
+          {item !== 1 ? (
+            <Text lineHeight={normalize(27)} weight={700} size={normalize(22)}>
+              {parseInt(item?.balance)}
+            </Text>
+          ) : (
+            <SkeletonPlaceholder borderRadius={4}>
+              <SkeletonPlaceholder.Item width={vw(100)} height={vh(18)} />
+            </SkeletonPlaceholder>
+          )}
+          {item !== 1 && (
+            <Text
+              alignSelf={'center'}
+              lineHeight={normalize(18)}
+              weight={300}
+              size={normalize(12)}>
+              {(item?.balance % 1).toFixed(2).slice(1)} {item?.currency_code}
+            </Text>
+          )}
         </TextWrapper>
       </FirstSection>
       <Divider />
@@ -105,7 +114,13 @@ const AccountDetails: React.FC = ({item}: any) => {
         <LeftSection>
           <Text color={'#6B7278'}>{t('Dashboard:accountName')}</Text>
           <TextWrapper>
-            <Text>{item.name}</Text>
+            {item !== 1 ? (
+              <Text>{item?.name}</Text>
+            ) : (
+              <SkeletonPlaceholder borderRadius={4}>
+                <SkeletonPlaceholder.Item width={vw(100)} height={vh(18)} />
+              </SkeletonPlaceholder>
+            )}
           </TextWrapper>
         </LeftSection>
         <RightSection>
@@ -113,7 +128,13 @@ const AccountDetails: React.FC = ({item}: any) => {
             <Text color={'#6B7278'}>{t('Dashboard:accountNumber')}</Text>
           </TextWrapper>
           <TextWrapper>
-            <Text>{item.number}</Text>
+            {item !== 1 ? (
+              <Text>{item?.number}</Text>
+            ) : (
+              <SkeletonPlaceholder borderRadius={4}>
+                <SkeletonPlaceholder.Item width={vw(150)} height={vh(18)} />
+              </SkeletonPlaceholder>
+            )}
           </TextWrapper>
         </RightSection>
       </SectionWrapper>
@@ -124,7 +145,13 @@ const AccountDetails: React.FC = ({item}: any) => {
             <Text color={'#6B7278'}>{t('Dashboard:IBAN')}</Text>
           </TextWrapper>
           <TextWrapper>
-            <Text>{item.iban}</Text>
+            {item !== 1 ? (
+              <Text>{item?.iban}</Text>
+            ) : (
+              <SkeletonPlaceholder borderRadius={4}>
+                <SkeletonPlaceholder.Item width={vw(150)} height={vh(18)} />
+              </SkeletonPlaceholder>
+            )}
           </TextWrapper>
         </LeftSection>
         <RightSection flexGrow={0.4}>

@@ -9,11 +9,12 @@ import {
 } from '@Components'
 import ListViewItem from './ListViewItem'
 import {LoadCard} from '@Assets'
-import {SPACER_SIZES} from '@Utils'
+import {SPACER_SIZES, vw, vh} from '@Utils'
 import {StackNavigationProp} from '@react-navigation/stack'
 import {styled} from 'styled-components/native'
 import {useStore} from '@Store'
 import useAccountApi from './useAccountApi'
+import SkeletonPlaceholder from 'react-native-skeleton-placeholder'
 
 type AccountScreenScreenProps = {
   navigation?: StackNavigationProp<{
@@ -36,6 +37,12 @@ const StyledView = styled.View`
   align-content: center;
   align-items: center;
   padding-horizontal: 23px;
+`
+const ScaletonView = styled.View`
+  justify-content: space-between;
+  align-content: center;
+  align-items: center;
+  padding-vertical: 23px;
 `
 
 const SeeAll = styled(TCTextView)`
@@ -60,18 +67,32 @@ const AccountScreen: React.FC<AccountScreenScreenProps> = ({
     isFetching: isFetchingTransactions,
     data: TransactionsList,
     refetch: refetchTransactionList,
-  } = useAccountApi('/account/account/transactions/' + accountNumber)
+  } = useAccountApi(
+    '/account/account/transactions/' + accountNumber,
+    !accountNumber,
+  )
 
   const onAccountSelection = (index: number) => {
     const accountNo = AccountsList[index - 1]?.number
     setAccountNumber(accountNo)
     refetchTransactionList()
   }
+
+  function isObjectEmpty(obj) {
+    return obj !== undefined && obj !== null && Object.keys(obj).length === 0
+  }
+
+  useEffect(() => {
+    if (AccountsList[0] !== 1 ) {
+      setAccountNumber(AccountsList[0]?.number)
+      refetchTransactionList()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [AccountsList])
+
   return (
     <ScrollView scrollEnabled={true}>
-      {!isFetchingAccounts && !!Object.keys(AccountsList).length && (
-        <UserAccountCarousel onSwipe={onAccountSelection} data={AccountsList} />
-      )}
+      <UserAccountCarousel onSwipe={onAccountSelection} data={AccountsList} />
       <View style={{flex: 1, flexGrow: 0.8}}>
         <QuickActions />
       </View>
@@ -81,8 +102,7 @@ const AccountScreen: React.FC<AccountScreenScreenProps> = ({
         <SeeAll>See All</SeeAll>
       </StyledView>
       <View style={{flex: 2, marginBottom: 150, width: '97%'}}>
-        {!isFetchingTransactions &&
-          !!Object.keys(TransactionsList).length &&
+        {TransactionsList[0] !== 1 &&
           TransactionsList.map((item, index) => (
             <ListViewItem
               key={index}
@@ -92,6 +112,19 @@ const AccountScreen: React.FC<AccountScreenScreenProps> = ({
               number={item.amount}
             />
           ))}
+
+        {TransactionsList[0] === 1 && (
+          <ScaletonView>
+            <SkeletonPlaceholder borderRadius={4}>
+              <SkeletonPlaceholder.Item width={vw(300)} height={vh(18)} />
+            </SkeletonPlaceholder>
+            <SkeletonPlaceholder borderRadius={4}></SkeletonPlaceholder>
+
+            <SkeletonPlaceholder borderRadius={4}>
+              <SkeletonPlaceholder.Item width={vw(300)} height={vh(18)} />
+            </SkeletonPlaceholder>
+          </ScaletonView>
+        )}
       </View>
     </ScrollView>
   )
