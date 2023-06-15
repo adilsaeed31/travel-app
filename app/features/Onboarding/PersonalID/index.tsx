@@ -170,7 +170,7 @@ const PersonalIdScreen = ({navigation}: Props) => {
   useEffect(() => {
     if (data?.reference_number) {
       setOnboardingDetails(
-        '0' + state.mobileNumber,
+        state.mobileNumber,
         state.govtId,
         data.reference_number,
       )
