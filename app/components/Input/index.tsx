@@ -56,6 +56,7 @@ const InputLabel = styled(Text)<{isFocused: boolean}>`
 `
 
 const Input = styled(TextInput)`
+  padding: 0;
   font-size: 18px;
   font-weight: 500;
   line-height: 24px;
