@@ -11,7 +11,6 @@ export const getCardsData = async () => {
   })
 
   const data = await res.json()
-  console.log(data, 'data card')
 
   if (data?.status > 200) {
     throw Error(data?.message)
@@ -33,7 +32,6 @@ export const getTransData = async (
   })
 
   const data = await res.json()
-  console.log(data, 'data trans')
 
   if (data?.status > 200) {
     throw Error(data?.message)

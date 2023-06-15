@@ -22,7 +22,7 @@ const BottomSheet = () => {
   const enableBottomSheet = useStore(state => state.enableBottomSheet)
 
   const {data, isLoading, isError, error} = useQuery({
-    queryKey: ['trans', {currency: 'sar'}],
+    queryKey: ['trans', {currency: 'SAR'}],
     queryFn: ({queryKey}) => getTransData(queryKey),
   })
 
