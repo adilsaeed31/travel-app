@@ -11,11 +11,13 @@ import {Colors, flexRowLayout} from '@Utils'
 import {default as TCTextView} from '../../../TextView'
 import {default as QuickLoad} from '../../QuickLoad'
 
-const QuickLoads = ({data, activeIndex}: {data: any; activeIndex: number}) => {
+const QuickLoads = ({data}: {data: any}) => {
   const {t} = useTranslation()
   const isRTL = useStore(state => state.isRTL)
+  const activeCardIndex = useStore(state => state.activeCardIndex)
 
-  const code = data?.[activeIndex]?.card?.currencies[activeIndex]?.currency_code
+  const code =
+    data?.[activeCardIndex]?.card?.currencies[activeCardIndex]?.currency_code
 
   return (
     <View className={cn(flexRowLayout(isRTL), 'items-center my-4 ml-4')}>

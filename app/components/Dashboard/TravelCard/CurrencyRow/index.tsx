@@ -8,8 +8,9 @@ import {flexRowLayout} from '@Utils'
 import {TCTextView} from '@Components'
 import {DownArrow, EuroFlag} from '@Assets'
 
-const CurrencyRow = ({data, activeIndex}: {data: any; activeIndex: number}) => {
+const CurrencyRow = ({data}: {data: any}) => {
   const isRTL = useStore(state => state.isRTL)
+  const activeCardIndex = useStore(state => state.activeCardIndex)
 
   return (
     <View
@@ -24,12 +25,12 @@ const CurrencyRow = ({data, activeIndex}: {data: any; activeIndex: number}) => {
             defaults="<0>{{amount1}}</0><1>{{separator}}</1><2>{{amount2}}</2><3>{{code}}</3>"
             values={{
               amount1:
-                data?.[activeIndex]?.card?.currencies[activeIndex]?.balance ??
-                '212',
+                data?.[activeCardIndex]?.card?.currencies[activeCardIndex]
+                  ?.balance ?? '212',
               separator: '.',
               amount2: '00',
               code:
-                data?.[activeIndex]?.card?.currencies[activeIndex]
+                data?.[activeCardIndex]?.card?.currencies[activeCardIndex]
                   ?.currency_code ?? 'SAR',
             }}
             components={[

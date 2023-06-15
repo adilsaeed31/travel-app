@@ -23,8 +23,6 @@ const TravelCardScreen: React.FC = () => {
     queryFn: getCardsData,
   })
 
-  const activeIndex = Math.floor(Math.random() * 6) + 1
-
   return (
     <ScrollView>
       <UserTravelCard
@@ -32,16 +30,15 @@ const TravelCardScreen: React.FC = () => {
         data={cardData}
         isError={isError}
         isLoading={isLoading}
-        activeIndex={activeIndex}
       />
 
       <Animated.View entering={LightSpeedInLeft.duration(1000).delay(100)}>
-        <CurrencyRow data={cardData} activeIndex={activeIndex} />
+        <CurrencyRow data={cardData} />
       </Animated.View>
 
       <QuickActions />
 
-      <QuickLoads data={cardData} activeIndex={activeIndex} />
+      <QuickLoads data={cardData} />
 
       <Animated.View entering={FadeInUp.duration(1000).delay(150)}>
         <Promotions />
