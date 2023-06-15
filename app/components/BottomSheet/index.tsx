@@ -10,65 +10,6 @@ import {ChevronUp} from '@Assets'
 
 import TransItem from '../TransItem'
 
-const mockData = [
-  {
-    title: 'Adil',
-    amount: '100,00',
-    timestamp: '2023',
-    currency_code: 'SAR',
-    transaction_type: 'credit',
-  },
-  {
-    title: 'Adil2',
-    amount: '102,99',
-    timestamp: '2022',
-    currency_code: 'EUR',
-    transaction_type: 'credit',
-  },
-  {
-    title: 'Adil3',
-    amount: '101,32',
-    timestamp: '2021',
-    currency_code: 'QAR',
-    transaction_type: 'debit',
-  },
-  {
-    title: 'Adil4',
-    amount: '104,01',
-    timestamp: '2020',
-    currency_code: 'USD',
-    transaction_type: 'credit',
-  },
-  {
-    title: 'Adil',
-    amount: '100,00',
-    timestamp: '2023',
-    currency_code: 'SAR',
-    transaction_type: 'credit',
-  },
-  {
-    title: 'Adil2',
-    amount: '102,99',
-    timestamp: '2022',
-    currency_code: 'EUR',
-    transaction_type: 'credit',
-  },
-  {
-    title: 'Adil3',
-    amount: '101,32',
-    timestamp: '2021',
-    currency_code: 'QAR',
-    transaction_type: 'debit',
-  },
-  {
-    title: 'Adil4',
-    amount: '104,01',
-    timestamp: '2020',
-    currency_code: 'USD',
-    transaction_type: 'credit',
-  },
-]
-
 const BottomSheet = () => {
   const {t} = useTranslation()
 
@@ -110,7 +51,7 @@ const BottomSheet = () => {
         body={
           display ? (
             <>
-              {(transData ?? mockData)?.map(
+              {transData?.map(
                 (
                   {
                     title,
