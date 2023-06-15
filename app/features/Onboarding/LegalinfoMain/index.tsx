@@ -64,11 +64,16 @@ function LegalInformation({navigation}: Props) {
   })
 
   useEffect(() => {
+    console.log(
+      ['AS', 'GU', 'MP', 'PR', 'VI', 'US'].indexOf(
+        onBoardingProgress.personalInformation?.birth_country?.code,
+      ) > -1,
+    )
     if (
       onBoardingProgress.personalInformation?.birth_country?.code &&
       ['AS', 'GU', 'MP', 'PR', 'VI', 'US'].indexOf(
         onBoardingProgress.personalInformation?.birth_country?.code,
-      )
+      ) > -1
     ) {
       setDisableCountry(true)
       setValues({...values, notKsaResidents: true})
@@ -117,7 +122,7 @@ function LegalInformation({navigation}: Props) {
     let nVal = pepValue
       ? pepValue === 'I am related to politically exposed person'
         ? 'PEP'
-        : 'REP'
+        : 'RPE'
       : null
 
     return nVal ? nVal : null
@@ -138,7 +143,7 @@ function LegalInformation({navigation}: Props) {
           disability_type: values.specialNeedValue,
           disability_type_description:
             values.specialNeedValue === 'Other' ? values.specialNeedText : null,
-          pep_type: createPepType(values.pepValue),
+          pep_type: values.pepEnabled ? createPepType(values.pepValue) : null,
         },
         token: journeySecrets.access_token,
       })
