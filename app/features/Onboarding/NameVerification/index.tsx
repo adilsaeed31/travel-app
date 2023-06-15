@@ -131,6 +131,7 @@ function Screen({navigation}: Props) {
                 <RightPad>
                   <TCInput
                     value={state.first_name_en}
+                    isDisabled={!!state.first_name_en}
                     label="First name"
                     onChangeText={text => {
                       setState({...state, first_name_en: text})
@@ -140,6 +141,8 @@ function Screen({navigation}: Props) {
                 <LeftPad>
                   <TCInput
                     label="الاسم الأول"
+                    value={state.first_name_ar}
+                    isDisabled={!!state.first_name_ar}
                     onChangeText={text => {
                       setState({...state, first_name_ar: text})
                     }}
@@ -153,6 +156,8 @@ function Screen({navigation}: Props) {
                 <RightPad>
                   <TCInput
                     label="Second name"
+                    value={state.second_name_en}
+                    isDisabled={!!state.second_name_en}
                     onChangeText={text => {
                       setState({...state, second_name_en: text})
                     }}
@@ -161,6 +166,8 @@ function Screen({navigation}: Props) {
                 <LeftPad>
                   <TCInput
                     label="الاسم الثاني"
+                    value={state.second_name_ar}
+                    isDisabled={!!state.second_name_ar}
                     onChangeText={text => {
                       setState({...state, second_name_ar: text})
                     }}
@@ -174,6 +181,8 @@ function Screen({navigation}: Props) {
                 <RightPad>
                   <TCInput
                     label="Third name"
+                    value={state.third_name_en}
+                    isDisabled={!!state.third_name_en}
                     onChangeText={text => {
                       setState({...state, third_name_en: text})
                     }}
@@ -182,6 +191,8 @@ function Screen({navigation}: Props) {
                 <LeftPad>
                   <TCInput
                     label="الاسم الثالث"
+                    value={state.third_name_en}
+                    isDisabled={!!state.third_name_en}
                     onChangeText={text => {
                       setState({...state, third_name_en: text})
                     }}
@@ -195,6 +206,8 @@ function Screen({navigation}: Props) {
                 <RightPad>
                   <TCInput
                     label="Fourth name"
+                    value={state.last_name_en}
+                    isDisabled={!!state.last_name_en}
                     onChangeText={text => {
                       setState({...state, last_name_en: text})
                     }}
@@ -203,6 +216,8 @@ function Screen({navigation}: Props) {
                 <LeftPad>
                   <TCInput
                     label="الاسم الرابع"
+                    value={state.last_name_ar}
+                    isDisabled={!!state.last_name_ar}
                     onChangeText={text => {
                       setState({...state, last_name_ar: text})
                     }}

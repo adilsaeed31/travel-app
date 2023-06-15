@@ -1,4 +1,5 @@
 import React, {ReactNode, memo, useRef, useState} from 'react'
+import AnimatedRE, {FadeInRight} from 'react-native-reanimated'
 import {
   Animated,
   View,
@@ -15,8 +16,8 @@ import {TravelCardSvg, TravelCardSvgBlack, Shadow} from '@Assets'
 import {default as TCTextView} from '../../../TextView'
 import {default as AddNewCard} from '../AddNewCard'
 import {default as TCDot} from '../../../Intro/Dot'
-import AnimatedRE, {FadeInRight} from 'react-native-reanimated'
 
+const itemWidthPixel = 255
 const itemWidth = (screenWidth / 3) * 2
 const padding = (screenWidth - itemWidth) / 2
 const offset = itemWidth
@@ -52,7 +53,7 @@ const Item = memo(
     children,
     ...rest
   }: {
-    i?: number
+    i: number
     scrollX?: any
     children: ReactNode
   }) => {
@@ -98,24 +99,15 @@ const UserTravelCard: React.FC<{
       contentOffset: {x: scrollPos},
     },
   }: momentumScrollProps) => {
-    if (scrollPos === 0) {
-      setCurrentItem(0)
-    } else if (scrollPos > 200 && scrollPos < 500) {
-      setCurrentItem(1)
-    } else if (scrollPos > 500) {
-      setCurrentItem(2)
-    }
+    setCurrentItem(Math.round(scrollPos / itemWidth))
   }
 
   const onMomentumScrollEnd2 = ({
     nativeEvent: {
       contentOffset: {x: scrollPos},
-      layoutMeasurement: {width: layoutWidth},
     },
   }: momentumScrollProps) => {
-    const active = Math.floor(scrollPos / layoutWidth)
-
-    setCurrentItem(active)
+    setCurrentItem(Math.round(scrollPos / itemWidth))
   }
 
   if (!data) {
@@ -130,7 +122,7 @@ const UserTravelCard: React.FC<{
           snapToInterval={offset}
           scrollEventThrottle={16}
           contentContainerStyle={{
-            paddingHorizontal: padding + 16,
+            paddingHorizontal: padding,
           }}
           showsHorizontalScrollIndicator={false}
           onMomentumScrollEnd={onMomentumScrollEnd}
@@ -169,12 +161,26 @@ const UserTravelCard: React.FC<{
           </ItemLoading>
 
           <ItemLoading key={2} i={2} scrollX={scrollX}>
+            <View className="items-center justify-center">
+              <TravelCardSvg className="z-1" />
+              <Image className="relative z-0 -mt-7" source={Shadow} />
+              {isLoading ? (
+                <ActivityIndicator
+                  size="large"
+                  color={Colors.Supernova}
+                  className="z-0 absolute top-2"
+                />
+              ) : null}
+            </View>
+          </ItemLoading>
+
+          <ItemLoading key={3} i={3} scrollX={scrollX}>
             <AddNewCard />
           </ItemLoading>
         </ScrollView>
 
         <View className={cn(flexRowLayout(isRTL), '-mt-4')}>
-          {[0, 1, 2]?.map((_item, index) => (
+          {[0, 1, 2, 3]?.map((_item, index) => (
             <TCDot key={index} isActive={currentItem === index} hasRounded />
           ))}
         </View>
@@ -204,7 +210,11 @@ const UserTravelCard: React.FC<{
           },
         )}>
         {data?.map((item: any, index: number) => {
-          return (
+          return data.length - 1 === index ? (
+            <Item key={index} i={index} scrollX={scrollX2}>
+              <AddNewCard />
+            </Item>
+          ) : (
             <Item key={index} i={index} scrollX={scrollX2}>
               {index % 2 === 0 ? (
                 <TravelCardSvg className="z-0" />
