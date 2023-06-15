@@ -3,7 +3,6 @@ import {MockAccount, MockAccountTransaction, fetcher, token} from '@Api'
 import {BASE_URL} from '@Utils'
 import {useQuery} from '@tanstack/react-query'
 import {useStore} from '@Store'
-import {useNavigation} from '@react-navigation/native'
 import Toast from 'react-native-toast-message'
 
 const useAccountApi = (ApiName: String, isAccountSelected = false) => {
@@ -16,7 +15,7 @@ const useAccountApi = (ApiName: String, isAccountSelected = false) => {
     data: resp,
     refetch,
   } = useQuery({
-    queryKey: ['account', url, token],
+    queryKey: ['account', url, accessToken],
     queryFn: async () => {
       let res: any = await fetcher(url, {
         method: 'GET',

@@ -24,7 +24,7 @@ export const UserNameValidator = yup
   .string()
   .required('Please Enter a Value')
   .matches(
-    /^(?=[a-zA-Z0-9._]{2,20}$)(?!.*[_.]{2})[^_.].*[^_.]$/,
+    /^(?=[a-zA-Z0-9._]{8,11}$)(?!.*[_.]{8})[^_.].*[^_.]$/,
     'Invalid Format',
   )
 
