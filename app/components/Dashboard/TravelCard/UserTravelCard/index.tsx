@@ -86,9 +86,10 @@ const UserTravelCard: React.FC<{
   isLoading: boolean
   isError: boolean
   error: any
-  activeIndex: number
 }> = ({data, isLoading}) => {
   const isRTL = useStore(state => state.isRTL)
+  const setActiveCardIndex = useStore(state => state.setActiveCardIndex)
+
   const [currentItem, setCurrentItem] = useState<number>(0)
 
   const scrollX = useRef(new Animated.Value(0)).current
@@ -99,15 +100,9 @@ const UserTravelCard: React.FC<{
       contentOffset: {x: scrollPos},
     },
   }: momentumScrollProps) => {
-    setCurrentItem(Math.round(scrollPos / itemWidth))
-  }
-
-  const onMomentumScrollEnd2 = ({
-    nativeEvent: {
-      contentOffset: {x: scrollPos},
-    },
-  }: momentumScrollProps) => {
-    setCurrentItem(Math.round(scrollPos / itemWidth))
+    const itemCurrent = Math.round(scrollPos / itemWidth)
+    setCurrentItem(itemCurrent)
+    setActiveCardIndex(itemCurrent)
   }
 
   if (!data) {
@@ -161,26 +156,12 @@ const UserTravelCard: React.FC<{
           </ItemLoading>
 
           <ItemLoading key={2} i={2} scrollX={scrollX}>
-            <View className="items-center justify-center">
-              <TravelCardSvg className="z-1" />
-              <Image className="relative z-0 -mt-7" source={Shadow} />
-              {isLoading ? (
-                <ActivityIndicator
-                  size="large"
-                  color={Colors.Supernova}
-                  className="z-0 absolute top-2"
-                />
-              ) : null}
-            </View>
-          </ItemLoading>
-
-          <ItemLoading key={3} i={3} scrollX={scrollX}>
             <AddNewCard />
           </ItemLoading>
         </ScrollView>
 
         <View className={cn(flexRowLayout(isRTL), '-mt-4')}>
-          {[0, 1, 2, 3]?.map((_item, index) => (
+          {[0, 1, 2]?.map((_item, index) => (
             <TCDot key={index} isActive={currentItem === index} hasRounded />
           ))}
         </View>
@@ -202,7 +183,7 @@ const UserTravelCard: React.FC<{
           paddingHorizontal: padding + 16,
         }}
         showsHorizontalScrollIndicator={false}
-        onMomentumScrollEnd={onMomentumScrollEnd2}
+        onMomentumScrollEnd={onMomentumScrollEnd}
         onScroll={Animated.event(
           [{nativeEvent: {contentOffset: {x: scrollX2}}}],
           {

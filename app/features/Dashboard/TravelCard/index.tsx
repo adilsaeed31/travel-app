@@ -1,4 +1,4 @@
-import React, {memo} from 'react'
+import React, {memo, useEffect} from 'react'
 import {ScrollView} from 'react-native'
 import {useQuery} from '@tanstack/react-query'
 import Animated, {FadeInUp, LightSpeedInLeft} from 'react-native-reanimated'
@@ -10,9 +10,12 @@ import {
   QuickLoads,
   UserTravelCard,
 } from '@Components'
+import {useStore} from '@Store'
 import {getCardsData} from '@Api'
 
 const TravelCardScreen: React.FC = () => {
+  const setCardData = useStore(state => state.setCardData)
+
   const {
     error,
     isError,
@@ -23,7 +26,9 @@ const TravelCardScreen: React.FC = () => {
     queryFn: getCardsData,
   })
 
-  const activeIndex = Math.floor(Math.random() * 6) + 1
+  useEffect(() => {
+    setCardData(cardData)
+  }, [setCardData, cardData])
 
   return (
     <ScrollView>
@@ -32,16 +37,15 @@ const TravelCardScreen: React.FC = () => {
         data={cardData}
         isError={isError}
         isLoading={isLoading}
-        activeIndex={activeIndex}
       />
 
       <Animated.View entering={LightSpeedInLeft.duration(1000).delay(100)}>
-        <CurrencyRow data={cardData} activeIndex={activeIndex} />
+        <CurrencyRow data={cardData} />
       </Animated.View>
 
       <QuickActions />
 
-      <QuickLoads data={cardData} activeIndex={activeIndex} />
+      <QuickLoads data={cardData} />
 
       <Animated.View entering={FadeInUp.duration(1000).delay(150)}>
         <Promotions />

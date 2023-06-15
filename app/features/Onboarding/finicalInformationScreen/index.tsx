@@ -495,7 +495,7 @@ function FinacialInformationScreen({navigation}: Props) {
             label={t('onboarding:financialInformation:NameOfBussiness')}
             errorMessage={errors.nameOfBusiness}
             returnKeyType="done"
-            maxLength={50}
+            maxLength={40}
           />
 
           <Spacer />
@@ -541,6 +541,7 @@ function FinacialInformationScreen({navigation}: Props) {
             )}
             errorMessage={errors.monthlyPrimaryIncomAmount}
             keyboardType="numeric"
+            maxLength={6}
             returnKeyType="done"
           />
           <Spacer />
@@ -780,7 +781,7 @@ function FinacialInformationScreen({navigation}: Props) {
                       }
                       keyboardType="numeric"
                       returnKeyType="done"
-                      maxLength={10}
+                      maxLength={6}
                     />
                     <Spacer />
                   </View>

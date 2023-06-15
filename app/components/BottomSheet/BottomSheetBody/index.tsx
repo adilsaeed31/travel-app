@@ -24,7 +24,7 @@ const BottomSheetBody: React.FC<{
   if (hasDisplay && isError) {
     return (
       <View className="justify-center items-center mt-5">
-        <TCTextView className="text-large text-red-400 font-tc-regular">
+        <TCTextView className="mx-5 text-large text-red-400 font-tc-light">
           {error?.message}
         </TCTextView>
       </View>
