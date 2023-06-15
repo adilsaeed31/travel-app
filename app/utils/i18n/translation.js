@@ -133,6 +133,8 @@ export const translation = {
       currentAccount: 'Current Account',
       accountNumber: 'Account Number',
       IBAN: 'IBAN',
+      Transactions: 'Transactions',
+      seeAll: 'See All',
     },
     TravelCard: {
       currentCodeEuro: '{{amount}} {{code}}',
@@ -275,6 +277,8 @@ export const translation = {
       currentAccount: 'الحساب الحال',
       accountNumber: 'رقم حساب',
       IBAN: 'رقم الآيبان',
+      Transactions: 'المعاملات',
+      seeAll: 'اظهار الكل',
     },
     TravelCard: {
       currentCodeEuro: '{{code}} {{amount}} ',

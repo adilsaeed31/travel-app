@@ -14,12 +14,19 @@ import {Eye, EyeClosed} from '@Assets'
 import {TEXT_VARIANTS} from '@Utils'
 import Text from '../TextView'
 
+function formatSentence(sentence: any) {
+  var firstLetter = sentence.charAt(0).toUpperCase()
+  var restOfSentence = sentence.slice(1).toLowerCase()
+  return firstLetter + restOfSentence
+}
+
 interface CustomInputProps {
   label: string
   schema?: any
   value?: any
   isPassword?: boolean
   maxLength?: number
+  isDisabled?: boolean
   onChangeText?: (text: string) => void
   isValid?: (valid: boolean) => void
   errorMessage?: string
@@ -33,7 +40,6 @@ const InputWrapper = styled(View)<{isError: boolean; isFocused: boolean}>`
   padding: 12px 16px;
   background: #f5f8f9;
   border-radius: 12px;
-  margin-bottom: 8px;
   border: 0.5px solid
     ${props =>
       props.isError
@@ -56,13 +62,13 @@ const Input = styled(TextInput)`
   width: 85%;
   flex: 1;
   text-align: ${() => (useStore.getState().isRTL ? 'right' : 'left')};
-  padding: 0;
   text-decoration: none;
 `
 
 const ErrorText = styled(Text)`
   font-weight: 500;
   color: #f54d3f;
+
   padding-left: 16px;
 `
 
@@ -86,6 +92,7 @@ const CustomInput: FC<CustomInputProps> = ({
   onChangeText = () => {},
   isValid = () => {},
   errorMessage = '',
+  isDisabled,
   returnKeyType,
   keyboardType,
   onEndEditing,
@@ -131,8 +138,12 @@ const CustomInput: FC<CustomInputProps> = ({
 
   const handleChangeText = (text: string): void => {
     if (!allowSpecialChars && !isPassword) {
-      text = text.replace(/[^\w\s]/g, '')
+      text = text.replace(/[^\w]/g, '')
     }
+    if (!allowSpecialChars && isPassword) {
+      text = text.replace(/[^\S]/g, '')
+    }
+    setError(null)
     onChangeText(text)
     setInputValue(text)
   }
@@ -156,6 +167,7 @@ const CustomInput: FC<CustomInputProps> = ({
             cursorColor={'#8c8a86'}
             selectionColor={'#8c8a86'}
             returnKeyType={returnKeyType}
+            editable={isDisabled}
             keyboardType={keyboardType}
             onSubmitEditing={onEndEditing}
             {...rest}
@@ -167,7 +179,7 @@ const CustomInput: FC<CustomInputProps> = ({
           )}
         </HorizontalView>
       </InputWrapper>
-      {error && <ErrorText>{t(error)}</ErrorText>}
+      {error && <ErrorText>{formatSentence(t(error))}</ErrorText>}
     </>
   )
 }
