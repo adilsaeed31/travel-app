@@ -2,13 +2,12 @@ import {useStore} from '@Store'
 import {BASE_URL} from '@Utils'
 
 import {fetcher} from '../fetcher'
-import {token} from '../Mock/MockToken'
 
 export const getCardsData = async () => {
   const user = useStore.getState().user
 
   const res: any = await fetcher(`${BASE_URL}/card/card`, {
-    token: user?.access_token ?? token,
+    token: user?.access_token,
   })
 
   const data = await res.json()
@@ -30,7 +29,7 @@ export const getTransData = async (
   const res: any = await fetcher(`${BASE_URL}/card/transactions`, {
     method: 'POST',
     body: {currency},
-    token: user?.access_token ?? token,
+    token: user?.access_token,
   })
 
   const data = await res.json()
