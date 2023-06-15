@@ -56,8 +56,7 @@ function LegalInfoOther({navigation}: Props) {
       onBoardingProgress.personalInformation?.birth_country?.code &&
       ['AS', 'GU', 'MP', 'PR', 'VI', 'US'].indexOf(
         onBoardingProgress.personalInformation?.birth_country?.code,
-      ) &&
-      false
+      ) > -1
     ) {
       setDisableCountry(true)
       setValues({...values, isUsPerson: true})

@@ -171,6 +171,7 @@ const NafaqScreen = ({navigation, route}: Props) => {
           kycData: nafathPullData?.key_details,
         })
         setOnboardingProgress(true, true, nafathPullData?.key_details)
+
         navigation.navigate('personalInfo', {
           key_details: nafathPullData,
         })
@@ -315,7 +316,7 @@ const ButtonContainerSecond = styled(View)`
 const NafaaqImg = styled(Image)`
   height: 135px;
   width: 135px;
-  margin-top: ${isSmall ? 10 : 50}px;
+  margin-top: ${isSmall ? 30 : 90}px;
   margin-bottom: ${isSmall ? 10 : 34}px;
 `
 
