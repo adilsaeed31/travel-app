@@ -330,7 +330,7 @@ function PersonalInformation({navigation}: Props) {
       )}
       contentContainerStyle={styles.scrollViewContainer}>
       <Layout
-        isBack={false}
+        isBack={true}
         onBack={() => navigation.goBack()}
         isHeader={false}
         isLoading={isLoading || isGetDataLoading}
@@ -447,7 +447,6 @@ function PersonalInformation({navigation}: Props) {
                   onChangeText={val => setValues({...values, postalCode: val})}
                   label={t('onboarding:personalInformation:postalCode')}
                   errorMessage={errors.postalCode}
-                  keyboardType="number-pad"
                   returnKeyType="done"
                   maxLength={10}
                   schema={PostalCodeValidator}
@@ -459,7 +458,7 @@ function PersonalInformation({navigation}: Props) {
                   label={t('onboarding:personalInformation:city')}
                   errorMessage={errors.city}
                   returnKeyType="done"
-                  maxLength={10}
+                  maxLength={30}
                   schema={CityValidator}
                 />
                 <InputSpacer />
@@ -469,7 +468,6 @@ function PersonalInformation({navigation}: Props) {
                   label={t('onboarding:personalInformation:phoneNumber')}
                   keyboardType="number-pad"
                   returnKeyType="done"
-                  maxLength={10}
                 />
                 <InputSpacer />
               </LoginForm>
@@ -494,7 +492,7 @@ function PersonalInformation({navigation}: Props) {
                   )}
                   errorMessage={errors.contactName}
                   returnKeyType="done"
-                  maxLength={10}
+                  maxLength={50}
                   schema={ContactName}
                 />
                 <Spacer />
