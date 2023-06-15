@@ -41,8 +41,8 @@ const BottomSheet = () => {
         keyboardAware
         ref={bottomRef}
         isBackDrop={backDrop}
-        initialPosition={'15%'}
-        snapPoints={['15%', '80%']}
+        initialPosition={'16%'}
+        snapPoints={['16%', '80%']}
         isRoundBorderWithTipHeader={true}
         tipStyle={{backgroundColor: Colors.Supernova}}
         onChangeSnap={(snap: any) => {
