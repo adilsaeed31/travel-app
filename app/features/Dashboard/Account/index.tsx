@@ -83,11 +83,11 @@ const AccountScreen: React.FC<AccountScreenScreenProps> = ({
   }
 
   useEffect(() => {
-    if (AccountsList[0] !== 1 ) {
+    if (AccountsList[0] !== 1) {
       setAccountNumber(AccountsList[0]?.number)
       refetchTransactionList()
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps asda
   }, [AccountsList])
 
   return (
