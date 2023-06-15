@@ -1,24 +1,30 @@
 import React, {useRef, useState} from 'react'
-import {View, Text} from 'react-native'
+import {Text} from 'react-native'
 import BSheet from 'react-native-bottomsheet-reanimated'
 import Ripple from 'react-native-material-ripple'
+import {useQuery} from '@tanstack/react-query'
 import {useTranslation} from 'react-i18next'
 
 import {Colors} from '@Utils'
 import {useStore} from '@Store'
 import {ChevronUp} from '@Assets'
+import {getTransData} from '@Api'
 
-import TransItem from '../TransItem'
+import BottomSheetBody from './BottomSheetBody'
 
 const BottomSheet = () => {
   const {t} = useTranslation()
 
   const bottomRef = useRef(null)
   const [backDrop, setBackDrop] = useState<boolean>(false)
-  const [display, setDisplay] = useState<boolean>(false)
+  const [hasDisplay, setDisplay] = useState<boolean>(false)
 
-  const transData = useStore(state => state.transData)
   const enableBottomSheet = useStore(state => state.enableBottomSheet)
+
+  const {data, isLoading, isError, error} = useQuery({
+    queryKey: ['trans', {currency: 'sar'}],
+    queryFn: ({queryKey}) => getTransData(queryKey),
+  })
 
   if (enableBottomSheet) {
     return (
@@ -30,9 +36,9 @@ const BottomSheet = () => {
         snapPoints={['15%', '80%']}
         isRoundBorderWithTipHeader={true}
         tipStyle={{backgroundColor: Colors.Supernova}}
-        onChangeSnap={(data: any) => {
-          setBackDrop(data.index === 1)
-          setDisplay(data.index === 1)
+        onChangeSnap={(snap: any) => {
+          setBackDrop(snap.index === 1)
+          setDisplay(snap.index === 1)
         }}
         header={
           <>
@@ -49,36 +55,13 @@ const BottomSheet = () => {
           </>
         }
         body={
-          display ? (
-            <>
-              {transData?.map(
-                (
-                  {
-                    title,
-                    amount,
-                    timestamp,
-                    currency_code,
-                    transaction_type,
-                  }: any,
-                  index,
-                ) => {
-                  return (
-                    <TransItem
-                      key={index}
-                      index={index}
-                      title={title}
-                      number={amount}
-                      subtitle={timestamp}
-                      icon={currency_code}
-                      type={transaction_type}
-                    />
-                  )
-                },
-              )}
-            </>
-          ) : (
-            <View />
-          )
+          <BottomSheetBody
+            data={data}
+            error={error}
+            isError={isError}
+            isLoading={isLoading}
+            hasDisplay={hasDisplay}
+          />
         }
       />
     )

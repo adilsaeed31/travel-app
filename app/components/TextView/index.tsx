@@ -1,6 +1,7 @@
 import React, {memo} from 'react'
 import {Text} from 'react-native'
 import {styled} from 'styled-components/native'
+import {styled as NWStyled} from 'nativewind'
 import {useStore} from '@Store'
 
 const StyledTextView = styled(Text)<{
@@ -35,4 +36,4 @@ function TCTextView({
   )
 }
 
-export default memo(TCTextView)
+export default memo(NWStyled(TCTextView))

@@ -40,7 +40,7 @@ export const fetcher = async (
       ...rest, // all other options for fetch method
     })
 
-    console.log('Result Data :>>', res)
+    // console.log('Result Data :>>', res)
     return res
   } catch (err) {
     console.log('API Error :>> ', err)

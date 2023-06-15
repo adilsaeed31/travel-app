@@ -9,18 +9,43 @@ import {
 import cn from 'classnames'
 
 import {useStore} from '@Store'
-import {TCTextView} from '@Components'
 import {flexRowLayout, screenWidth, Colors} from '@Utils'
 import {TravelCardSvg, TravelCardSvgBlack, Shadow} from '@Assets'
 
+import {default as TCTextView} from '../../../TextView'
 import {default as AddNewCard} from '../AddNewCard'
 import {default as TCDot} from '../../../Intro/Dot'
+import AnimatedRE, {FadeInRight} from 'react-native-reanimated'
 
 const itemWidth = (screenWidth / 3) * 2
 const padding = (screenWidth - itemWidth) / 2
 const offset = itemWidth
 
 const ItemLoading = memo(
+  ({
+    i,
+    scrollX,
+    children,
+    ...rest
+  }: {
+    i: number
+    scrollX?: any
+    children: ReactNode
+  }) => {
+    const scale = scrollX.interpolate({
+      inputRange: [-offset + i * offset, i * offset, offset + i * offset],
+      outputRange: [0.85, 1, 0.85],
+    })
+
+    return (
+      <Animated.View {...rest} style={{width: itemWidth, transform: [{scale}]}}>
+        {children}
+      </Animated.View>
+    )
+  },
+)
+
+const Item = memo(
   ({
     i,
     scrollX,
@@ -44,30 +69,6 @@ const ItemLoading = memo(
   },
 )
 
-const Item = memo(
-  ({
-    // i,
-    // scrollX,
-    children,
-    ...rest
-  }: {
-    i?: number
-    scrollX?: any
-    children: ReactNode
-  }) => {
-    // const scale = scrollX.interpolate({
-    //   inputRange: [-offset + i * offset, i * offset, offset + i * offset],
-    //   outputRange: [0.85, 1, 0.85],
-    // })
-
-    return (
-      <Animated.View {...rest} style={{width: itemWidth}}>
-        {children}
-      </Animated.View>
-    )
-  },
-)
-
 type momentumScrollProps = {
   nativeEvent: {
     contentOffset: {
@@ -85,18 +86,12 @@ const UserTravelCard: React.FC<{
   isError: boolean
   error: any
   activeIndex: number
-}> = ({data, isLoading, isError, error}) => {
-  console.log('================ UserTravelCard')
-  console.log('data', data)
-  console.log('isLoading', isLoading)
-  console.log('isError', isError)
-  console.log('error', error?.message)
-  console.log('================ UserTravelCard')
-
+}> = ({data, isLoading}) => {
   const isRTL = useStore(state => state.isRTL)
   const [currentItem, setCurrentItem] = useState<number>(0)
 
   const scrollX = useRef(new Animated.Value(0)).current
+  const scrollX2 = useRef(new Animated.Value(0)).current
 
   const onMomentumScrollEnd = ({
     nativeEvent: {
@@ -125,7 +120,9 @@ const UserTravelCard: React.FC<{
 
   if (!data) {
     return (
-      <View className="items-center">
+      <AnimatedRE.View
+        className="items-center"
+        entering={FadeInRight.duration(1000).delay(50)}>
         <ScrollView
           horizontal
           pagingEnabled
@@ -181,12 +178,14 @@ const UserTravelCard: React.FC<{
             <TCDot key={index} isActive={currentItem === index} hasRounded />
           ))}
         </View>
-      </View>
+      </AnimatedRE.View>
     )
   }
 
   return (
-    <View className="items-center">
+    <AnimatedRE.View
+      className="items-center"
+      entering={FadeInRight.duration(1000).delay(1000)}>
       <ScrollView
         horizontal
         pagingEnabled
@@ -199,27 +198,45 @@ const UserTravelCard: React.FC<{
         showsHorizontalScrollIndicator={false}
         onMomentumScrollEnd={onMomentumScrollEnd2}
         onScroll={Animated.event(
-          [{nativeEvent: {contentOffset: {x: scrollX}}}],
+          [{nativeEvent: {contentOffset: {x: scrollX2}}}],
           {
             useNativeDriver: false,
           },
         )}>
         {data?.map((item: any, index: number) => {
           return (
-            <Item key={index} i={index} scrollX={scrollX}>
+            <Item key={index} i={index} scrollX={scrollX2}>
               {index % 2 === 0 ? (
                 <TravelCardSvg className="z-0" />
               ) : (
                 <TravelCardSvgBlack className="z-0" />
               )}
               <Image className="relative z-0 -mt-7" source={Shadow} />
-              <TCTextView className="absolute top-10 left-4 z-1 text-tc-secondary font-tc-bold">
+              <TCTextView
+                className={cn(
+                  'absolute top-10 left-4 z-1 font-semibold text-tc-secondary',
+                  {
+                    'text-white': index % 2 !== 0,
+                  },
+                )}>
                 {item?.card?.name}
               </TCTextView>
-              <TCTextView className="absolute top-16 left-4 z-1 text-tc-secondary font-tc-bold">
+              <TCTextView
+                className={cn(
+                  'absolute top-16 left-4 z-1 font-semibold text-tc-secondary',
+                  {
+                    'text-white': index % 2 !== 0,
+                  },
+                )}>
                 {item?.card?.last_four_digits}
               </TCTextView>
-              <TCTextView className="absolute top-20 left-4 mt-1 z-1 text-tc-secondary font-tc-bold">
+              <TCTextView
+                className={cn(
+                  'absolute top-20 left-4 mt-1 z-1 font-semibold text-tc-secondary',
+                  {
+                    'text-white': index % 2 !== 0,
+                  },
+                )}>
                 {item?.card?.expiry_date}
               </TCTextView>
             </Item>
@@ -232,7 +249,7 @@ const UserTravelCard: React.FC<{
           <TCDot key={index} isActive={currentItem === index} hasRounded />
         ))}
       </View>
-    </View>
+    </AnimatedRE.View>
   )
 }
 
