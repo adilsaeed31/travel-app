@@ -94,7 +94,7 @@ const OtpPersonalIdScreen = ({navigation, route}: Props) => {
       let req: any = await fetcher(BASE_URL + '/onboarding/id/verify', {
         method: 'POST',
         body: {
-          mobile_number: mobileNumber,
+          mobile_number: '0' + mobileNumber,
           id: govtId,
         },
         token: otpData.access_token,
@@ -115,7 +115,7 @@ const OtpPersonalIdScreen = ({navigation, route}: Props) => {
       let req: any = await fetcher(BASE_URL + '/auth/otp', {
         method: 'POST',
         body: {
-          mobile_number: mobileNumber,
+          mobile_number: '0' + mobileNumber,
           identity_number: govtId,
           role: 'ONBOARDING',
         },
