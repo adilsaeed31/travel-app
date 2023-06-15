@@ -1,7 +1,9 @@
+/* eslint-disable radix */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect} from 'react'
 import Text from '../TextView'
 import styled from 'styled-components/native'
+import {useAppState} from '@Hooks'
 import {TEXT_VARIANTS} from '@Utils'
 
 const formatTime = (time: number): string => {
@@ -39,6 +41,21 @@ const Timer: React.FC<TimerProps> = ({
   onTimerComplete = () => {},
 }) => {
   const [time, setTime] = useState(seconds)
+  const [leaveTime, setLeaveTime] = useState<number>(0)
+  const {appStateVisible} = useAppState()
+
+  useEffect(() => {
+    console.log('AppState', appStateVisible)
+    if (appStateVisible === 'active' && leaveTime) {
+      let distance = parseInt(String((Date.now() - leaveTime) / 1000))
+      setLeaveTime(0)
+      setTime(prevTime => prevTime - distance)
+    }
+
+    if (appStateVisible === 'background' || appStateVisible === 'inactive') {
+      setLeaveTime(Date.now())
+    }
+  }, [appStateVisible])
 
   useEffect(() => {
     setTime(seconds)
