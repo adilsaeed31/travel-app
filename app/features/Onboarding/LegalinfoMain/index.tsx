@@ -23,11 +23,11 @@ import {useStore} from '@Store'
 
 type IFormTYpe = {
   notKsaResidents: boolean
-  pepEnabled: boolean
-  pepValue?: string | undefined
+  pepEnabled: boolean | null | undefined
+  pepValue?: string | undefined | null
   specialNeed: boolean
-  specialNeedValue?: string
-  specialNeedText?: string | null
+  specialNeedValue?: string | null | undefined
+  specialNeedText?: string | null | undefined
 }
 
 const FormValues = {
@@ -118,7 +118,10 @@ function LegalInformation({navigation}: Props) {
 
     setErrors(err)
   }
-  const createPepType = (pepValue: string | undefined) => {
+  const createPepType = (pepValue: string | undefined | null) => {
+    if (!pepValue) {
+      return null
+    }
     let nVal = pepValue
       ? pepValue === 'I am related to politically exposed person'
         ? 'PEP'
@@ -241,6 +244,7 @@ function LegalInformation({navigation}: Props) {
                   setValues({
                     ...values,
                     pepEnabled: !values.pepEnabled,
+                    pepValue: null,
                   })
                 }>
                 {t('No')}
@@ -290,6 +294,8 @@ function LegalInformation({navigation}: Props) {
                   setValues({
                     ...values,
                     specialNeed: !values.specialNeed,
+                    specialNeedValue: '',
+                    specialNeedText: '',
                   })
                 }>
                 {t('No')}
