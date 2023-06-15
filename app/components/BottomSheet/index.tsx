@@ -19,10 +19,19 @@ const BottomSheet = () => {
   const [backDrop, setBackDrop] = useState<boolean>(false)
   const [hasDisplay, setDisplay] = useState<boolean>(false)
 
+  const cardData = useStore(state => state.cardData)
+  const activeCardIndex = useStore(state => state.activeCardIndex)
   const enableBottomSheet = useStore(state => state.enableBottomSheet)
 
   const {data, isLoading, isError, error} = useQuery({
-    queryKey: ['trans', {currency: 'SAR'}],
+    queryKey: [
+      'trans',
+      {
+        currency:
+          cardData?.[activeCardIndex]?.card?.currencies[activeCardIndex]
+            ?.currency_code ?? 'SAR',
+      },
+    ],
     queryFn: ({queryKey}) => getTransData(queryKey),
   })
 

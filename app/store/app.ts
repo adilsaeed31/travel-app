@@ -10,9 +10,10 @@ export type AppStateProps = {
   hasIntroSeen: boolean
   isAppReady: boolean
   active: number
-  enableBottomSheet: boolean
   transData: string[]
+  cardData: string[]
   activeCardIndex: number
+  enableBottomSheet: boolean
 
   toggleLanguage: () => void
   introHasBeenSeen: () => void
@@ -21,6 +22,7 @@ export type AppStateProps = {
   reset: () => void
   toggleBottomSheet: () => void
   setTransData: (data: any) => void
+  setCardData: (data: any) => void
   setActiveCardIndex: (index: number) => void
 }
 
@@ -32,6 +34,7 @@ const AppState: StateCreator<AppStateProps> = set => ({
   isAppReady: false,
   enableBottomSheet: true,
   transData: [],
+  cardData: [],
   activeCardIndex: 0,
   toggleLanguage: () => {
     i18n.changeLanguage(i18n.language === 'ar' ? 'en' : 'ar')
@@ -66,6 +69,8 @@ const AppState: StateCreator<AppStateProps> = set => ({
     set(state => ({enableBottomSheet: !state.enableBottomSheet})),
 
   setTransData: data => set(() => ({transData: data})),
+
+  setCardData: data => set(() => ({cardData: data})),
 
   setActiveCardIndex: (index: number) => set(() => ({activeCardIndex: index})),
 })

@@ -156,26 +156,12 @@ const UserTravelCard: React.FC<{
           </ItemLoading>
 
           <ItemLoading key={2} i={2} scrollX={scrollX}>
-            <View className="items-center justify-center">
-              <TravelCardSvg className="z-1" />
-              <Image className="relative z-0 -mt-7" source={Shadow} />
-              {isLoading ? (
-                <ActivityIndicator
-                  size="large"
-                  color={Colors.Supernova}
-                  className="z-0 absolute top-2"
-                />
-              ) : null}
-            </View>
-          </ItemLoading>
-
-          <ItemLoading key={3} i={3} scrollX={scrollX}>
             <AddNewCard />
           </ItemLoading>
         </ScrollView>
 
         <View className={cn(flexRowLayout(isRTL), '-mt-4')}>
-          {[0, 1, 2, 3]?.map((_item, index) => (
+          {[0, 1, 2]?.map((_item, index) => (
             <TCDot key={index} isActive={currentItem === index} hasRounded />
           ))}
         </View>

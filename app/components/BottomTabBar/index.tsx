@@ -17,9 +17,6 @@ import {
 } from '@Assets'
 import {useStore} from '@Store'
 import {Colors, flexRowLayout, vw, screenWidth as width} from '@Utils'
-
-import {default as BottomSheet} from '../BottomSheet'
-
 const BottomTabBar: React.FC<BottomTabBarProps> = ({
   state,
   descriptors,
@@ -83,94 +80,91 @@ const BottomTabBar: React.FC<BottomTabBarProps> = ({
   }
 
   return (
-    <>
-      <BottomSheet />
-      <Animated.View entering={ZoomInDown.duration(1200).delay(250)}>
-        <View
-          style={{direction: direction}}
-          {...rest}
-          className={cn(
-            flexRowLayout(isRTL),
-            'bar-width-05 border-tc-tab h-16 m-5 rounded-3xl bg-tc-bottom-tab overflow-hidden',
-          )}>
-          {state.routes.map((route, index) => {
-            const {options} = descriptors[route.key]
-            const label: any =
-              options.tabBarLabel !== undefined
-                ? options.tabBarLabel
-                : options.title !== undefined
-                ? options.title
-                : route.name
+    <Animated.View entering={ZoomInDown.duration(1200).delay(250)}>
+      <View
+        style={{direction: direction}}
+        {...rest}
+        className={cn(
+          flexRowLayout(isRTL),
+          'bar-width-05 border-tc-tab h-16 m-5 rounded-3xl bg-tc-bottom-tab overflow-hidden',
+        )}>
+        {state.routes.map((route, index) => {
+          const {options} = descriptors[route.key]
+          const label: any =
+            options.tabBarLabel !== undefined
+              ? options.tabBarLabel
+              : options.title !== undefined
+              ? options.title
+              : route.name
 
-            const isFocused = state.index === index
+          const isFocused = state.index === index
 
-            const onPress = (activeIndex: number) => {
-              if (active !== activeIndex) {
-                setActive(activeIndex)
-              }
-
-              const event = navigation.emit({
-                type: 'tabPress',
-                target: route.key,
-                canPreventDefault: true,
-              })
-
-              if (!isFocused && !event.defaultPrevented) {
-                navigation.navigate({name: route.name, merge: true} as any)
-              }
+          const onPress = (activeIndex: number) => {
+            if (active !== activeIndex) {
+              setActive(activeIndex)
             }
 
-            const onLongPress = () => {
-              navigation.emit({
-                type: 'tabLongPress',
-                target: route.key,
-              })
+            const event = navigation.emit({
+              type: 'tabPress',
+              target: route.key,
+              canPreventDefault: true,
+            })
+
+            if (!isFocused && !event.defaultPrevented) {
+              navigation.navigate({name: route.name, merge: true} as any)
             }
+          }
 
-            return (
-              <Ripple
-                onPress={() => onPress(index)}
-                key={label.toLowerCase()}
-                onLongPress={onLongPress}
-                accessibilityRole="button"
-                testID={options.tabBarTestID}
-                rippleColor={Colors.Supernova}
-                className={cn(
-                  'flex-1',
-                  flexRowLayout(isRTL),
-                  'justify-center items-center',
-                )}
-                onLayout={e => onLayout(e.nativeEvent.layout.width, index)}
-                accessibilityLabel={options.tabBarAccessibilityLabel}
-                accessibilityState={isFocused ? {selected: true} : {}}>
-                <View className="justify-center items-center">
-                  {renderIcon(label.toLowerCase(), isFocused)}
-                  <Text
-                    className={cn(
-                      'mt-2 text-tc-ios-base font-tc-regular',
-                      isFocused
-                        ? 'text-tc-bottom-tab-text'
-                        : 'text-tc-bottom-tab-text-inactive',
-                    )}>
-                    {t(`common:${label.toLowerCase()}`)}
-                  </Text>
-                </View>
-              </Ripple>
-            )
-          })}
+          const onLongPress = () => {
+            navigation.emit({
+              type: 'tabLongPress',
+              target: route.key,
+            })
+          }
 
-          <AnimatedRN.View
-            style={[
-              styles.headerBar,
-              {
-                width: vw(32),
-                transform: [{translateX: barTranslate}],
-              },
-            ]}
-          />
-        </View>
-      </Animated.View>
-    </>
+          return (
+            <Ripple
+              onPress={() => onPress(index)}
+              key={label.toLowerCase()}
+              onLongPress={onLongPress}
+              accessibilityRole="button"
+              testID={options.tabBarTestID}
+              rippleColor={Colors.Supernova}
+              className={cn(
+                'flex-1',
+                flexRowLayout(isRTL),
+                'justify-center items-center',
+              )}
+              onLayout={e => onLayout(e.nativeEvent.layout.width, index)}
+              accessibilityLabel={options.tabBarAccessibilityLabel}
+              accessibilityState={isFocused ? {selected: true} : {}}>
+              <View className="justify-center items-center">
+                {renderIcon(label.toLowerCase(), isFocused)}
+                <Text
+                  className={cn(
+                    'mt-2 text-tc-ios-base font-tc-regular',
+                    isFocused
+                      ? 'text-tc-bottom-tab-text'
+                      : 'text-tc-bottom-tab-text-inactive',
+                  )}>
+                  {t(`common:${label.toLowerCase()}`)}
+                </Text>
+              </View>
+            </Ripple>
+          )
+        })}
+
+        <AnimatedRN.View
+          style={[
+            styles.headerBar,
+            {
+              width: vw(32),
+              transform: [{translateX: barTranslate}],
+            },
+          ]}
+        />
+      </View>
+    </Animated.View>
   )
 }
 
