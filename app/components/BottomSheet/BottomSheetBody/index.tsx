@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {memo} from 'react'
 import {View} from 'react-native'
 
 import {default as TCTextView} from '../../TextView'
@@ -55,4 +55,4 @@ const BottomSheetBody: React.FC<{
   return <View />
 }
 
-export default BottomSheetBody
+export default memo(BottomSheetBody)
