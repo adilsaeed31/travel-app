@@ -330,7 +330,7 @@ function PersonalInformation({navigation}: Props) {
       )}
       contentContainerStyle={styles.scrollViewContainer}>
       <Layout
-        isBack={true}
+        isBack={false}
         onBack={() => navigation.goBack()}
         isHeader={false}
         isLoading={isLoading || isGetDataLoading}
