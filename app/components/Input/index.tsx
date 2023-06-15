@@ -26,6 +26,7 @@ interface CustomInputProps {
   value?: any
   isPassword?: boolean
   maxLength?: number
+  isDisabled?: boolean
   onChangeText?: (text: string) => void
   isValid?: (valid: boolean) => void
   errorMessage?: string
@@ -91,6 +92,7 @@ const CustomInput: FC<CustomInputProps> = ({
   onChangeText = () => {},
   isValid = () => {},
   errorMessage = '',
+  isDisabled,
   returnKeyType,
   keyboardType,
   onEndEditing,
@@ -165,6 +167,7 @@ const CustomInput: FC<CustomInputProps> = ({
             cursorColor={'#8c8a86'}
             selectionColor={'#8c8a86'}
             returnKeyType={returnKeyType}
+            editable={isDisabled}
             keyboardType={keyboardType}
             onSubmitEditing={onEndEditing}
             {...rest}
