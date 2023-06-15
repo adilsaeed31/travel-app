@@ -14,6 +14,12 @@ import {Eye, EyeClosed} from '@Assets'
 import {TEXT_VARIANTS} from '@Utils'
 import Text from '../TextView'
 
+function formatSentence(sentence: any) {
+  var firstLetter = sentence.charAt(0).toUpperCase()
+  var restOfSentence = sentence.slice(1).toLowerCase()
+  return firstLetter + restOfSentence
+}
+
 interface CustomInputProps {
   label: string
   schema?: any
@@ -63,6 +69,7 @@ const Input = styled(TextInput)`
 const ErrorText = styled(Text)`
   font-weight: 500;
   color: #f54d3f;
+
   padding-left: 16px;
 `
 
@@ -167,7 +174,7 @@ const CustomInput: FC<CustomInputProps> = ({
           )}
         </HorizontalView>
       </InputWrapper>
-      {error && <ErrorText>{t(error)}</ErrorText>}
+      {error && <ErrorText>{formatSentence(t(error))}</ErrorText>}
     </>
   )
 }
