@@ -159,7 +159,13 @@ const NafaqScreen = ({navigation, route}: Props) => {
     let timer: any = null
     if (nafathPullData?.kyc_status && nafathPullData.kyc_status === 'SUCCESS') {
       if (nafathPullData?.name_mismatch) {
-        setOnboardingProgress(true, true, nafathPullData?.key_details)
+        setOnboardingProgress({
+          ...onBoardingProgress,
+          isOTPVerified: true,
+          isNafathVerified: true,
+          kycData: nafathPullData?.key_details,
+        })
+
         navigation.navigate('NameVerification', {
           key_details: nafathPullData,
         })

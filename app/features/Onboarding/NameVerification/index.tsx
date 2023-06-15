@@ -41,7 +41,6 @@ function Screen({navigation}: Props) {
   )
 
   const onBoardingProgress = useStore((store: any) => store.onBoardingProgress)
-
   useEffect(() => {
     console.log(isRTL)
     setState({
@@ -64,7 +63,7 @@ function Screen({navigation}: Props) {
       if (journeySecretsData) {
         journeySecrets = JSON.parse(journeySecretsData)
       }
-      let req: any = await fetcher(BASE_URL + '/onboarding/id/ekyc', {
+      let req: any = await fetcher(BASE_URL + '/onboarding/personal/names', {
         method: 'POST',
         body: {
           first_name_ar: state.first_name_ar,

@@ -6,7 +6,7 @@ import {Colors} from '@Utils'
 
 interface IRadioBUtton {
   onPress: () => void
-  selected: boolean
+  selected: boolean | null | undefined
   disabled?: boolean
   children: React.ReactNode
 }
