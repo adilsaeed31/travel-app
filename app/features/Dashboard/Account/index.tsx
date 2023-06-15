@@ -118,7 +118,12 @@ const AccountScreen: React.FC<AccountScreenScreenProps> = ({
             <SkeletonPlaceholder borderRadius={4}>
               <SkeletonPlaceholder.Item width={vw(300)} height={vh(18)} />
             </SkeletonPlaceholder>
-            <SkeletonPlaceholder borderRadius={4}></SkeletonPlaceholder>
+            <Spacer horizontal={false} size={SPACER_SIZES.BASE} />
+
+            <SkeletonPlaceholder borderRadius={4}>
+              <SkeletonPlaceholder.Item width={vw(300)} height={vh(18)} />
+            </SkeletonPlaceholder>
+            <Spacer horizontal={false} size={SPACER_SIZES.BASE} />
 
             <SkeletonPlaceholder borderRadius={4}>
               <SkeletonPlaceholder.Item width={vw(300)} height={vh(18)} />
