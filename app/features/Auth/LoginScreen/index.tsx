@@ -83,6 +83,7 @@ const AuthFeature = ({navigation}: Props) => {
     if (!isFetching && data && isFocused) {
       if (status >= 200 && status < 300) {
         if (data.token_hold) {
+          setIsAuthFailed(false)
           navigation.navigate('OTPAuth', {user: data, resendParams: bodyParams})
           setstatus(0)
         } else {
@@ -90,6 +91,7 @@ const AuthFeature = ({navigation}: Props) => {
           setIsAuthFailed(false)
         }
       } else if (status > 299 && status < 400) {
+        setIsAuthFailed(false)
         navigation.navigate('OTPAuth')
       } else if (status > 399 && status < 500) {
         setIsAuthFailed(true)
@@ -100,8 +102,12 @@ const AuthFeature = ({navigation}: Props) => {
 
   const handleLogin = () => {
     // Perform login logic here
-    if (!userName && !password) refetch()
-
+    if (!!userName && !!password) {
+      setIsAuthFailed(true)
+      refetch()
+    } else {
+      setIsAuthFailed(false)
+    }
     if (Keyboard) {
       Keyboard.dismiss()
     }
@@ -156,7 +162,11 @@ const AuthFeature = ({navigation}: Props) => {
           />
         </LoginForm>
         <ViewWrapper>
-          <TCLinkButton onPress={() => navigation.navigate('WIP')}>
+          <TCLinkButton
+            onPress={() => {
+              setIsAuthFailed(false)
+              navigation.navigate('WIP')
+            }}>
             {t('auth:buttonForget')}
           </TCLinkButton>
         </ViewWrapper>
@@ -178,6 +188,7 @@ const AuthFeature = ({navigation}: Props) => {
               callbacks={[
                 () => {
                   setPassword('')
+                  setIsAuthFailed(false)
                   navigation.navigate('PersonalID')
                 },
               ]}>
