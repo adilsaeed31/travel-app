@@ -74,7 +74,7 @@ const ErrorText = styled(Text)`
 `
 
 const HorizontalView = styled(View)`
-  flex-direction: row;
+  flex-direction: ${() => (useStore.getState().isRTL ? 'row-reverse' : 'row')};
   width: 100%;
   justify-content: space-between;
 `
