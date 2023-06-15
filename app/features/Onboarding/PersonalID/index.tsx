@@ -228,16 +228,6 @@ const PersonalIdScreen = ({navigation}: Props) => {
         />
         {statusError && <ErrorText>{statusError}</ErrorText>}
         <DisclaimerView isKeyboardVisible={!!keyboardHeight} isRTL={isRTL}>
-          {/* <Checkbox
-            onChange={newStatus => {
-              setState({...state, isEmailCheck: newStatus})
-            }}
-            label={
-              <AgreeText variant={TEXT_VARIANTS.label}>
-                {t('onboarding:agreeEmail')}
-              </AgreeText>
-            }
-          /> */}
           <Checkbox
             onChange={newStatus => {
               if (newStatus) {
@@ -326,10 +316,6 @@ const LoginText = styled(Text)`
 const TermText = styled(Text)`
   color: rgba(63, 61, 54, 0.8);
   line-height: 16px;
-`
-
-const AgreeText = styled(Text)`
-  color: rgba(63, 61, 54, 0.8);
 `
 
 const Row = styled(View)<{isRTL: boolean | undefined}>`
