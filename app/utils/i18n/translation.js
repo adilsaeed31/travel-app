@@ -8,6 +8,7 @@ export const translation = {
       menu: 'Menu',
       someThingWentWrong: 'Some thing went wrong',
       downstreamFailMsg: 'Downstream Failure',
+      emptyFields: 'Please enter your username and password.',
     },
     intro: {
       next: 'Next',
@@ -157,6 +158,7 @@ export const translation = {
       menu: 'قائمة طعام',
       someThingWentWrong: 'حدث خطآ ما',
       downstreamFailMsg: 'حدث خطآ ما',
+      emptyFields: 'الرجاء إدخال اسم المستخدم وكلمة المرور',
     },
     intro: {
       next: 'التالي',

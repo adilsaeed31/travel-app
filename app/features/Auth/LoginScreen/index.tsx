@@ -22,6 +22,7 @@ import {BASE_URL} from '@Utils'
 import {useStore} from '@Store'
 import {useIsFocused} from '@react-navigation/native'
 import DeviceInfo from 'react-native-device-info'
+import Toast from 'react-native-toast-message'
 
 type Props = {
   navigation: StackNavigationProp<{
@@ -103,10 +104,16 @@ const AuthFeature = ({navigation}: Props) => {
   const handleLogin = () => {
     // Perform login logic here
     if (!!userName && !!password) {
-      setIsAuthFailed(true)
+      setIsAuthFailed(false)
       refetch()
     } else {
-      setIsAuthFailed(false)
+      Toast.show({
+        type: 'error',
+        text2: t('common:emptyFields'),
+        position: 'top',
+        topOffset: 100,
+        visibilityTime: 5000,
+      })
     }
     if (Keyboard) {
       Keyboard.dismiss()
