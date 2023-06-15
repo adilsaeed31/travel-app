@@ -6,8 +6,8 @@ import {useStore} from '@Store'
 import {useNavigation} from '@react-navigation/native'
 import Toast from 'react-native-toast-message'
 
-const useAccountApi = (ApiName: String, Params?: String) => {
-  const [data, setData] = useState({})
+const useAccountApi = (ApiName: String, isAccountSelected = false) => {
+  const [data, setData] = useState([1])
   const accessToken = useStore.getState().user?.access_token
 
   const url = `${BASE_URL}${ApiName}`
@@ -35,7 +35,7 @@ const useAccountApi = (ApiName: String, Params?: String) => {
             message: res || e?.message,
             path: ApiName,
           },
-          status: res?.status,
+          status: 500,
         }
         return error // something went wrong
       }
@@ -51,7 +51,7 @@ const useAccountApi = (ApiName: String, Params?: String) => {
   useEffect(() => {
     if (isObjectEmpty(resp) || !resp) {
       refetch()
-    } else {
+    } else if (!isAccountSelected) {
       switch (resp?.status) {
         case 200: // Success
           setData(resp.data)
@@ -60,17 +60,9 @@ const useAccountApi = (ApiName: String, Params?: String) => {
         case 401: // Unauthorized
         case 404: // Not Found
         case resp?.status >= 400 && resp?.status: // Internal Server Error
-          //TODO remove this , Mocking response for now
-          const Mockdata =
-            ApiName === '/account/account'
-              ? MockAccount
-              : MockAccountTransaction
-          setData(Mockdata)
-          // eslint-disable-next-line no-alert
-
           Toast.show({
             type: 'error',
-            text1: resp?.status,
+            text1: resp?.data?.status,
             text2: resp?.data?.message,
             position: 'top',
             topOffset: 100,

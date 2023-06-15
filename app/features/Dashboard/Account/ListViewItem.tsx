@@ -52,9 +52,7 @@ const Number = styled.Text`
 const ListViewItem = ({Icon, title, subtitle, number}) => {
   return (
     <ListItemContainer>
-      <CircleContainer>
-          {Icon}
-      </CircleContainer>
+      <CircleContainer>{Icon}</CircleContainer>
       <TitleContainer>
         <Title>{title}</Title>
         <Subtitle>{subtitle}</Subtitle>

@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import styled from 'styled-components/native'
 import Carousel, {PaginationLight} from 'react-native-x-carousel'
 import AccountDetails from './AccountView'
-import {Dimensions} from 'react-native'
+import {Dimensions, Text} from 'react-native'
 import {default as TCDot} from '../../../Intro/Dot'
 
 const {width} = Dimensions.get('window')
@@ -11,7 +11,19 @@ const Carousal = ({data, onSwipe}: {data: any; onSwipe: any}) => {
   const [selectedIndex, setSelectedIndex] = useState(1)
   return (
     <Container>
-      {data && (
+      {data[0] === 1 && (
+        <Carousel
+          pagination={PaginationLight}
+          renderItem={(item: any, index: number) => (
+            <Card key={index}>
+              <AccountDetails item={item} />
+            </Card>
+          )}
+          data={data}
+          loop
+        />
+      )}
+      {data[0] !== 1 && (
         <Carousel
           onPage={({current}: {current: number}) => {
             setSelectedIndex(current)
@@ -28,7 +40,7 @@ const Carousal = ({data, onSwipe}: {data: any; onSwipe: any}) => {
         />
       )}
       <DotWrapper>
-        {data &&
+        {data[0] !== 1 &&
           data?.map((item, index) => (
             <TCDot
               key={index}
