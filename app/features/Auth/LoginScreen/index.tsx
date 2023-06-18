@@ -93,9 +93,18 @@ const AuthFeature = ({navigation}: Props) => {
         }
       } else if (status > 299 && status < 400) {
         setIsAuthFailed(false)
-        navigation.navigate('OTPAuth')
+        navigation.navigate('OTPAuth', {user: data, resendParams: bodyParams})
       } else if (status > 399 && status < 500) {
         setIsAuthFailed(true)
+      } else if (status > 499 && status < 600) {
+        Toast.show({
+          type: 'error',
+          text1: t('common:someThingWentWrong'),
+          text2: t('common:networkmessage'),
+          position: 'top',
+          topOffset: 100,
+          visibilityTime: 5000,
+        })
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -162,7 +171,7 @@ const AuthFeature = ({navigation}: Props) => {
           />
           <TCInput
             isPassword
-            maxLength={32}
+            maxLength={20}
             value={password}
             label={t('auth:password')}
             onChangeText={setPassword}

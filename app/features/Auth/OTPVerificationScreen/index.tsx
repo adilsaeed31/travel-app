@@ -83,10 +83,7 @@ const OtpAuthScreen = ({navigation, route}: Props) => {
       try {
         yup
           .object({
-            otp: yup
-              .string()
-              .required('Please Enter OTP')
-              .length(4, 'Please Enter OTP'),
+            otp: yup.string().required('Please Enter OTP').length(4, ''),
           })
           .validateSync(state)
 
@@ -194,7 +191,8 @@ const OtpAuthScreen = ({navigation, route}: Props) => {
             setState({...state, otp: otp})
           }}
           onTimerComplete={() => {
-            setResendAvailable(true)
+            if (resendCount <= 2) setResendAvailable(true)
+            else setResendAvailable(false)
           }}
           resetCount={resendCount}
           finishTimer={finishTimer}
@@ -208,8 +206,10 @@ const OtpAuthScreen = ({navigation, route}: Props) => {
             {resendAvailable ? (
               <TouchableOpacity
                 onPress={() => {
-                  resendOTP()
-                  setResendCount(resendCount + 1)
+                  if (resendCount <= 2) {
+                    resendOTP()
+                    setResendCount(resendCount + 1)
+                  }
                 }}>
                 <BottomText variant={TEXT_VARIANTS.body}>
                   {t('onboarding:resendOTP')}
