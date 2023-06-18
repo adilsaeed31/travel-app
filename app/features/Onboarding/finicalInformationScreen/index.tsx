@@ -446,6 +446,7 @@ function FinacialInformationScreen({navigation}: Props) {
             errorMessage={errors.monthlyPrimaryIncomAmount}
             keyboardType="numeric"
             returnKeyType="done"
+            maxLength={6}
           />
           <Spacer />
         </>
