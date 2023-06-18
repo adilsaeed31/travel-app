@@ -1,4 +1,3 @@
-import {AnyKindOfDictionary, slice, valuesIn} from 'lodash'
 import {Platform} from 'react-native'
 
 export function flexRowLayout(dir: boolean = false): string {
