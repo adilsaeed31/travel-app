@@ -7,6 +7,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Platform,
+  StyleSheet,
 } from 'react-native'
 import styled from 'styled-components/native'
 import {useSafeAreaInsets} from 'react-native-safe-area-context'
@@ -94,15 +95,18 @@ const AppLayout: React.FC<LayoutProps> = ({
   // scrollview and keyboard avoidingview and others flag
 
   if (hasDashboardLayout) {
-    const viewStyle = {
-      flex: 1,
-      direction: direction,
-      backgroundColor: 'white',
-      // do not remove this below style props below will
-      // adjust the padding/spacing on ios and android
-      paddingTop: insetEdges.top,
-    }
-    return <View style={viewStyle}>{children}</View>
+    const dashStyle = StyleSheet.create({
+      dashboardContainer: {
+        flex: 1,
+        direction: direction,
+        backgroundColor: 'white',
+        // do not remove this below style props below will
+        // adjust the padding/spacing on ios and android
+        paddingTop: insetEdges.top,
+      },
+    })
+
+    return <View style={dashStyle.dashboardContainer}>{children}</View>
   }
 
   return (
