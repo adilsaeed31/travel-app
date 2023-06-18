@@ -13,8 +13,8 @@ export {default as BottomTabBar} from './BottomTabBar'
 export {default as DatePicker} from './DatePicker'
 
 export {default as Dot} from './Dot'
-export {default as BottomSheet} from './BottomSheet'
 export {default as TransItem} from './TransItem'
+export {default as BottomSheet} from './BottomSheet'
 
 // Screen and feature components in one line import
 export * from './Intro'

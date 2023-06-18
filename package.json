@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "@eva-design/eva": "^2.2.0",
+    "@gorhom/bottom-sheet": "^4.4.7",
     "@react-native-masked-view/masked-view": "^0.2.9",
     "@react-navigation/bottom-tabs": "^6.5.7",
     "@react-navigation/drawer": "^6.6.2",
@@ -39,7 +40,6 @@
     "react-i18next": "^12.2.2",
     "react-native": "0.71.7",
     "react-native-asset": "2.1.1",
-    "react-native-bottomsheet-reanimated": "^0.3.1",
     "react-native-date-picker": "^3.0.0",
     "react-native-device-info": "^10.6.0",
     "react-native-encrypted-storage": "^4.0.3",
