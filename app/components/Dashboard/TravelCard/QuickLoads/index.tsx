@@ -34,19 +34,19 @@ const QuickLoads = ({data}: {data: any}) => {
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <View className={cn(flexRowLayout(isRTL))}>
             <QuickLoad
-              name={t('TravelCard:currentCodeEuro', {amount: '100', code})}
+              name={t('TravelCard:currentCodeEuro', {amount: 100, code})}
             />
 
             <QuickLoad
-              name={t('TravelCard:currentCodeEuro', {amount: '200', code})}
+              name={t('TravelCard:currentCodeEuro', {amount: 200, code})}
             />
 
             <QuickLoad
-              name={t('TravelCard:currentCodeEuro', {amount: '300', code})}
+              name={t('TravelCard:currentCodeEuro', {amount: 500, code})}
             />
 
             <QuickLoad
-              name={t('TravelCard:currentCodeEuro', {amount: '400', code})}
+              name={t('TravelCard:currentCodeEuro', {amount: 1000, code})}
             />
           </View>
         </ScrollView>

@@ -6,7 +6,8 @@ export const translation = {
       home: 'Home',
       loyalty: 'Loyalty',
       menu: 'Menu',
-      someThingWentWrong: 'Some thing went wrong',
+      someThingWentWrong: 'Something went wrong',
+      networkmessage: 'Please make sure you are connected to network',
       downstreamFailMsg: 'Downstream Failure',
       emptyFields: 'Please enter your username and password.',
     },
@@ -113,8 +114,9 @@ export const translation = {
       create: 'Create',
       passRule1: '8-16 Characters',
       passRule2: 'Special Characters',
-      passRule3: 'Numbers',
-      passRule4: 'Upper & Lower Case',
+      passRule3: 'Minimum 2 numbers required',
+      passRule4: 'Minimum one uppercase and one lowercase required',
+      passRule5: 'Password and Confirm Password do not match',
     },
     auth: {
       title: 'Welcome to Travel App {{name}}',
@@ -147,6 +149,7 @@ export const translation = {
       addNew: 'Add New Card',
       doMore: 'Do more with SAIB',
       recentTrans: 'Recent Transactions',
+      noTransactions: 'No Transactions found',
     },
   },
   ar: {
@@ -260,6 +263,7 @@ export const translation = {
       passRule2: 'الشخصيات الخاصة',
       passRule3: 'أرقام',
       passRule4: 'الأحرف الكبيرة والصغيرة',
+      passRule5: 'الأحرف الكبيرة والصغيرة',
     },
     auth: {
       title: 'مرحباً بك في تطبيق السفر, {{name}}',
@@ -292,6 +296,7 @@ export const translation = {
       addNew: 'إضافة بطاقة جديدة',
       doMore: 'افعل المزيد مع البنك السعودي للاستثمار',
       recentTrans: 'المعاملات الأخيرة',
+      noTransactions: 'لم يتم العثور على معاملات',
     },
   },
 }
