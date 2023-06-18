@@ -351,14 +351,16 @@ function FinacialInformationScreen({navigation}: Props) {
     if (currentOccupationCode >= 4) {
       if (values.primarySourceOfIncome && values.monthlyPrimaryIncomAmount) {
         validationResult = true
+      } else {
+        return (validationResult = false)
       }
     }
-    if (
-      currentOccupationCode == 3 &&
-      values.investmentType &&
-      values.monthlyPrimaryIncomAmount
-    ) {
-      validationResult = true
+    if (currentOccupationCode == 3) {
+      if (values.investmentType && values.monthlyPrimaryIncomAmount) {
+        validationResult = true
+      } else {
+        return (validationResult = false)
+      }
     }
     if (
       currentOccupationCode == 1 &&
@@ -375,23 +377,30 @@ function FinacialInformationScreen({navigation}: Props) {
         validationResult = true
       }
     }
-
-    if (
-      currentOccupationCode == 2 &&
-      values.nameOfBusiness &&
-      values.jobCategory &&
-      values.jobTitle &&
-      values.monthlyPrimaryIncomAmount
-    ) {
-      validationResult = true
+    if (currentOccupationCode == 2) {
+      if (
+        values.nameOfBusiness &&
+        values.jobCategory &&
+        values.jobTitle &&
+        values.monthlyPrimaryIncomAmount
+      ) {
+        validationResult = true
+      } else {
+        return (validationResult = false)
+      }
     }
+
     if (values.AddetionalSourceOfIncome) {
       if (values.AnotherAddetionalSourceOfIncome) {
-        !values.AnotherAddetionalSourceOfIncomeAmount ||
-        !values.AnotherAddetionalSourceOfIncome
-          ? (validationResult = true)
-          : (validationResult = false)
-        return
+        let nodValideAddetionalInformation =
+          !values.AnotherAddetionalSourceOfIncomeAmount ||
+          !values.AnotherAddetionalSourceOfIncome ||
+          !values.AddetionalSourceOfIncomeSource ||
+          !values.AddetionalSourceOfIncomeAmount
+        if (nodValideAddetionalInformation) {
+          return (validationResult = false)
+        }
+        return (validationResult = true)
       }
       !values.AddetionalSourceOfIncomeSource ||
       !values.AddetionalSourceOfIncomeAmount
@@ -646,15 +655,17 @@ function FinacialInformationScreen({navigation}: Props) {
             <RadioWrapper isRTL={!!isRTL}>
               <RadioButton
                 selected={!values.AddetionalSourceOfIncome}
-                onPress={() =>
+                onPress={() => {
                   setValues({
                     ...values,
                     AddetionalSourceOfIncome: !values.AddetionalSourceOfIncome,
                     AnotherAddetionalSourceOfIncome: false,
-                    AnotherAddetionalSourceOfIncomeSource: '',
-                    AnotherAddetionalSourceOfIncomeAmount: '',
+                    AddetionalSourceOfIncomeSource: null,
+                    AnotherAddetionalSourceOfIncomeSource: null,
+                    AddetionalSourceOfIncomeAmount: null,
+                    AnotherAddetionalSourceOfIncomeAmount: null,
                   })
-                }>
+                }}>
                 {t('onboarding:financialInformation:no')}
               </RadioButton>
               <RadioButton
@@ -690,8 +701,12 @@ function FinacialInformationScreen({navigation}: Props) {
                   isOpen={
                     currentOpendIndx == SheetsIndexs.addetionalSourceOfIncome
                   }
-                  title={t('onboarding:financialInformation:selectSector')}
-                  subTitle={t('onboarding:financialInformation:selectSector')}
+                  title={t(
+                    'onboarding:financialInformation:additionalIncomeSource',
+                  )}
+                  subTitle={t(
+                    'onboarding:financialInformation:additionalIncomeSource',
+                  )}
                   onSheetClose={() => setCurrentOpenedInx(-1)}
                   hasSearch
                 />
@@ -710,16 +725,14 @@ function FinacialInformationScreen({navigation}: Props) {
                 <Spacer />
                 {!values.AnotherAddetionalSourceOfIncome && (
                   <AnotherAddetionalIconmeSourceWrapper
-                    onPress={() =>
+                    onPress={() => {
                       setValues({
                         ...values,
                         AnotherAddetionalSourceOfIncome: true,
                       })
-                    }>
+                    }}>
                     <AnotherAddetionalIconmeSource>
-                      {t(
-                        'onboarding:financialInformation:additionalIncomeSource',
-                      )}
+                      {t('onboarding:financialInformation:addAnotherSource')}
                     </AnotherAddetionalIconmeSource>
                   </AnotherAddetionalIconmeSourceWrapper>
                 )}
@@ -749,9 +762,11 @@ function FinacialInformationScreen({navigation}: Props) {
                         currentOpendIndx ==
                         SheetsIndexs.anotheraddetionalSourceOfIncome
                       }
-                      title={t('onboarding:financialInformation:selectSector')}
+                      title={t(
+                        'onboarding:financialInformation:additionalIncomeSource',
+                      )}
                       subTitle={t(
-                        'onboarding:financialInformation:selectSector',
+                        'onboarding:financialInformation:additionalIncomeSource',
                       )}
                       onSheetClose={() => setCurrentOpenedInx(-1)}
                       hasSearch
@@ -788,11 +803,6 @@ function FinacialInformationScreen({navigation}: Props) {
   return (
     <ScrollerView
       keyboardShouldPersistTaps="always"
-      key={
-        String(values.occupation) +
-        String(values.AddetionalSourceOfIncome) +
-        String(values.AnotherAddetionalSourceOfIncome)
-      }
       contentContainerStyle={styles.container}>
       <Layout
         isBack={true}
@@ -906,11 +916,18 @@ const FormWrapper = styled(SafeAreaView)<{isRTL: boolean}>``
 
 const ScrollerView = styled.ScrollView``
 const AnotherAddetionalIconmeSourceWrapper = styled(TouchableOpacity)`
-  margin-top: 32px;
+  margin-top: 10px;
   margin-bottom: 32px;
   justify-content: center;
   align-items: center;
   width: 100%;
+  padding: 12px 16px;
+  height: 70px;
+
+  background: #fcfcfc;
+  border: 0.5px solid rgba(60, 60, 60, 0.4);
+  border-radius: 12px;
+  background-color: #f5f8f9;
 `
 const AnotherAddetionalIconmeSource = styled(Text)`
   font-style: normal;
@@ -921,6 +938,17 @@ const AnotherAddetionalIconmeSource = styled(Text)`
   color: #3f3d36;
   text-align: center;
   text-decoration-line: underline;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 18px;
+  /* identical to box height, or 120% */
+
+  display: flex;
+  align-items: center;
+
+  /* Color/Black-Secondary */
+
+  color: #8c8a86;
 `
 const styles = StyleSheet.create({
   container: {
