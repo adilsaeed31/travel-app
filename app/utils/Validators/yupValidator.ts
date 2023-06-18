@@ -25,6 +25,12 @@ export const passwordValidator = yup
 export const UserNameValidator = yup
   .string()
   .required('Please Enter a Value')
+  .min(8, 'Please enter minimum 8 character')
+  .max(10, 'Please enter maximum 10 character')
+  .matches(
+    /^(?!.*?(.)\1{2})/,
+    'Please dont enter three or more consecutive and identical characters',
+  )
   .matches(
     /^(?=[a-zA-Z0-9._]{8,11}$)(?!.*[_.]{8})[^_.].*[^_.]$/,
     'Invalid Format',

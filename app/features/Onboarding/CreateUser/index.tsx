@@ -7,7 +7,7 @@ import {StackNavigationProp} from '@react-navigation/stack'
 import {Formik} from 'formik'
 import * as Yup from 'yup'
 import {useMutation} from '@tanstack/react-query'
-import {Colors, BASE_URL, getItem} from '@Utils'
+import {Colors, BASE_URL, getItem, UserNameValidator} from '@Utils'
 import {useStore} from '@Store'
 import {Layout, TCInput, TCButton, TCTextView, PassRules} from '@Components'
 import {fetcher} from '@Api'
@@ -25,12 +25,16 @@ type CreateUserForm = {
 // validation for create user form
 const CreateUserSchema = Yup.object().shape({
   userName: Yup.string()
-    .min(3, 'Too Short!')
-    .max(20, 'Too Long!')
-    .required('Please Enter a Value'),
+    .required('Please Enter a Value')
+    .min(8, 'Please enter minimum 8 character')
+    .max(10, 'Please enter maximum 10 character')
+    .matches(
+      /^(?!.*?(.)\1{2})/,
+      'Please dont enter three or more consecutive and identical characters',
+    ),
   password: Yup.string()
     .min(8, 'Too Short!')
-    .max(16, 'Too Long!')
+    .max(21, 'Too Long!')
     .required('Please Enter a Value'),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref('password')], 'Passwords must match')
@@ -40,7 +44,6 @@ const CreateUserSchema = Yup.object().shape({
 function CreateUser({navigation}: CreateUserProps) {
   const {t} = useTranslation()
   const isRTL = useStore(state => state.isRTL)
-
   const setUser = useStore((state: any) => state.setUser)
   const [state, setState] = useState<any>({
     passwordOne: false,
@@ -109,20 +112,14 @@ function CreateUser({navigation}: CreateUserProps) {
               setState({...state, values: values})
               mutate()
             }}>
-            {({
-              values,
-              errors,
-
-              touched,
-              handleChange,
-              handleSubmit,
-            }) => {
+            {({values, errors, touched, handleChange, handleSubmit}) => {
               return (
                 <>
                   <View className="flex-1 mt-6 gap-6">
                     <View>
                       <TCInput
-                        maxLength={20}
+                        maxLength={10}
+                        schema={UserNameValidator}
                         value={values.userName}
                         label={t('auth:userName')}
                         onChangeText={handleChange('userName')}
@@ -163,7 +160,7 @@ function CreateUser({navigation}: CreateUserProps) {
                           !!(
                             values.password &&
                             values.password.length > 7 &&
-                            values.password.length < 17
+                            values.password.length < 21
                           )
                         }
                         passwordTwo={
@@ -200,7 +197,7 @@ function CreateUser({navigation}: CreateUserProps) {
                       !(
                         values.password &&
                         values.password.length > 7 &&
-                        values.password.length < 17 &&
+                        values.password.length < 21 &&
                         /[!@#$%^&*(),.?":{}|<>]/.test(values?.password) &&
                         /\d/.test(values?.password) &&
                         /[A-Z]/.test(values?.password) &&
