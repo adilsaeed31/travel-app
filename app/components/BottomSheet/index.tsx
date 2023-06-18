@@ -80,29 +80,27 @@ const BottomSheet = () => {
     )
   }
 
-  return (
-    enableBottomSheet && (
-      <BSheet
-        ref={bottomSheetRef}
-        snapPoints={snapPoints}
-        onChange={handleSheetChanges}
-        handleComponent={handleComponent}>
-        <View className="p-3">
-          <Text className="text-sm font-tc-regular text-slate-400 text-left">
-            {t('TravelCard:recentTrans')}
-          </Text>
+  return enableBottomSheet ? (
+    <BSheet
+      ref={bottomSheetRef}
+      snapPoints={snapPoints}
+      onChange={handleSheetChanges}
+      handleComponent={handleComponent}>
+      <View className="p-3">
+        <Text className="text-sm font-tc-regular text-slate-400 text-left">
+          {t('TravelCard:recentTrans')}
+        </Text>
 
-          <BottomSheetBody
-            data={data}
-            error={error}
-            isError={isError}
-            isLoading={isLoading}
-            hasDisplay={hasDisplay}
-          />
-        </View>
-      </BSheet>
-    )
-  )
+        <BottomSheetBody
+          data={data}
+          error={error}
+          isError={isError}
+          isLoading={isLoading}
+          hasDisplay={hasDisplay}
+        />
+      </View>
+    </BSheet>
+  ) : null
 }
 
 export default BottomSheet
