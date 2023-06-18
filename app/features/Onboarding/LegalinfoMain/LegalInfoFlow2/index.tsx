@@ -12,7 +12,7 @@ import {
   Spacer,
 } from '@Components'
 import {TEXT_VARIANTS, Colors, SPACER_SIZES, BASE_URL, getItem} from '@Utils'
-import {StackNavigationProp} from '@react-navigation/stack'
+import {NativeStackNavigationProp} from '@react-navigation/native-stack'
 import styled from 'styled-components/native'
 import {countriesList, noTinList} from '../masterData'
 import {AppContext, AppProviderProps} from '@Context'
@@ -41,7 +41,7 @@ const FormValues = {
 }
 
 type Props = {
-  navigation: StackNavigationProp<any>
+  navigation: NativeStackNavigationProp<any>
   route: any
 }
 

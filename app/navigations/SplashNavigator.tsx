@@ -1,18 +1,18 @@
 import React from 'react'
-import {createStackNavigator} from '@react-navigation/stack'
+import {createNativeStackNavigator} from '@react-navigation/native-stack'
 
 import {IntroFeature} from '@Features'
 import {SplashScreen} from '@Screens'
 
-const {Navigator, Screen} = createStackNavigator()
+const {Navigator, Screen} = createNativeStackNavigator()
 
 const SplashNavigator = () => {
   return (
     <Navigator
       initialRouteName="Splash"
       screenOptions={{
+        animation: 'none',
         headerShown: false,
-        animationEnabled: false,
       }}>
       <Screen name="Splash" component={SplashScreen} />
       <Screen name="Intro" component={IntroFeature} />

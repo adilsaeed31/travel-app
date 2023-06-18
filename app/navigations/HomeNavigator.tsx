@@ -1,12 +1,17 @@
 import React from 'react'
-import {createStackNavigator} from '@react-navigation/stack'
+import {createNativeStackNavigator} from '@react-navigation/native-stack'
 
 import {DashboardFeature, LoadFundsScreen} from '@Features'
 
-const {Navigator, Screen} = createStackNavigator()
+const {Navigator, Screen} = createNativeStackNavigator()
 
 const HomeNavigator = () => (
-  <Navigator initialRouteName="Dashboard" screenOptions={{headerShown: false}}>
+  <Navigator
+    initialRouteName="Dashboard"
+    screenOptions={{
+      headerShown: false,
+      animation: 'slide_from_right',
+    }}>
     <Screen name="Dashboard" component={DashboardFeature} />
     <Screen name="LoadFunds" component={LoadFundsScreen} />
   </Navigator>

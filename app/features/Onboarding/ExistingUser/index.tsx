@@ -1,13 +1,13 @@
 import React from 'react'
 import {View, Text, Image} from 'react-native'
 import {useTranslation} from 'react-i18next'
-import {StackNavigationProp} from '@react-navigation/stack'
+import {NativeStackNavigationProp} from '@react-navigation/native-stack'
 
 import {Layout, TCButton as Button} from '@Components'
 import {WarnIconImg} from '@Assets'
 
 type ExistingScreenProps = {
-  navigation: StackNavigationProp<{Auth: undefined}>
+  navigation: NativeStackNavigationProp<{Auth: undefined}>
 }
 
 function ExistingScreen({navigation}: ExistingScreenProps) {

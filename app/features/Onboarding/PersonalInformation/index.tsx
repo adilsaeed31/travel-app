@@ -4,7 +4,7 @@
 import React, {useContext, useState, useMemo, useEffect} from 'react'
 import {View, SafeAreaView, ScrollView, StyleSheet} from 'react-native'
 import {fetcher} from '@Api'
-import {StackNavigationProp} from '@react-navigation/stack'
+import {NativeStackNavigationProp} from '@react-navigation/native-stack'
 import {useTranslation} from 'react-i18next'
 import {
   Layout,
@@ -134,7 +134,7 @@ const FormValues = {
 }
 
 type Props = {
-  navigation: StackNavigationProp<any>
+  navigation: NativeStackNavigationProp<any>
 }
 
 function PersonalInformation({navigation}: Props) {

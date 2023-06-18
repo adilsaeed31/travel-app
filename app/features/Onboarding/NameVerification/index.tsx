@@ -10,7 +10,7 @@ import {
   TCInput,
 } from '@Components'
 import {TEXT_VARIANTS, Colors, BASE_URL, getItem} from '@Utils'
-import {StackNavigationProp} from '@react-navigation/stack'
+import {NativeStackNavigationProp} from '@react-navigation/native-stack'
 import styled from 'styled-components/native'
 import {AppContext, AppProviderProps} from '@Context'
 import {useStore} from '@Store'
@@ -18,7 +18,7 @@ import {fetcher} from '@Api'
 import {useMutation} from '@tanstack/react-query'
 
 type Props = {
-  navigation: StackNavigationProp<any>
+  navigation: NativeStackNavigationProp<any>
   route: any
 }
 

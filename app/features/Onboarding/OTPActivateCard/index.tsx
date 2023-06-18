@@ -11,7 +11,7 @@ import {
 import {SPACER_SIZES, TEXT_VARIANTS} from '@Utils'
 import styled from 'styled-components/native'
 import {Edit} from '@Assets'
-import {StackNavigationProp} from '@react-navigation/stack'
+import {NativeStackNavigationProp} from '@react-navigation/native-stack'
 
 const StyledButton = styled(Button)`
   margin-left: 32px;
@@ -58,7 +58,7 @@ const StickyButton = styled.TouchableOpacity`
 `
 
 type Props = {
-  navigation: StackNavigationProp<{
+  navigation: NativeStackNavigationProp<{
     AfterOtpPersonalId: undefined
     PersonalID: undefined
   }>

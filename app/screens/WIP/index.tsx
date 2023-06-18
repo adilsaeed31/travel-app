@@ -1,14 +1,14 @@
 import React from 'react'
 import {View, Text} from 'react-native'
 import {useTranslation} from 'react-i18next'
-import {StackNavigationProp} from '@react-navigation/stack'
+import {NativeStackNavigationProp} from '@react-navigation/native-stack'
 import LottieView from 'lottie-react-native'
 
 import {wipAnimation} from '@Assets'
 import {Layout, TCButton as Button} from '@Components'
 
 type ExistingScreenProps = {
-  navigation: StackNavigationProp<{Auth: undefined}>
+  navigation: NativeStackNavigationProp<{Auth: undefined}>
 }
 
 function WIPScreen({navigation}: ExistingScreenProps) {

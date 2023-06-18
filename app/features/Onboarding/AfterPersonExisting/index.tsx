@@ -1,7 +1,7 @@
 import React from 'react'
 import {View, Text} from 'react-native'
 import {useTranslation} from 'react-i18next'
-import {StackNavigationProp} from '@react-navigation/stack'
+import {NativeStackNavigationProp} from '@react-navigation/native-stack'
 import styled from 'styled-components/native'
 
 import {Layout, TCButton as Button} from '@Components'
@@ -12,7 +12,7 @@ const WarningIconWithShadow = styled(WarnIcon)`
 `
 
 type ExistingScreenProps = {
-  navigation: StackNavigationProp<any>
+  navigation: NativeStackNavigationProp<any>
 }
 
 function AfterPersonExisting({navigation}: ExistingScreenProps) {

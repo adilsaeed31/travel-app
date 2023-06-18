@@ -10,7 +10,7 @@ import {
 import ListViewItem from './ListViewItem'
 import {LoadCard} from '@Assets'
 import {SPACER_SIZES, vw, vh} from '@Utils'
-import {StackNavigationProp} from '@react-navigation/stack'
+import {NativeStackNavigationProp} from '@react-navigation/native-stack'
 import {styled} from 'styled-components/native'
 import {useStore} from '@Store'
 import useAccountApi from './useAccountApi'
@@ -18,7 +18,7 @@ import SkeletonPlaceholder from 'react-native-skeleton-placeholder'
 import {useTranslation} from 'react-i18next'
 
 type AccountScreenScreenProps = {
-  navigation?: StackNavigationProp<{
+  navigation?: NativeStackNavigationProp<{
     dataObj?: any
   }>
 }

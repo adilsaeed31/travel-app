@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react'
 import {View} from 'react-native'
 import {useTranslation} from 'react-i18next'
 import styled from 'styled-components/native'
-import {StackNavigationProp} from '@react-navigation/stack'
+import {NativeStackNavigationProp} from '@react-navigation/native-stack'
 import {Formik} from 'formik'
 import * as Yup from 'yup'
 import {useMutation} from '@tanstack/react-query'
@@ -13,7 +13,7 @@ import {Layout, TCInput, TCButton, TCTextView, PassRules} from '@Components'
 import {fetcher} from '@Api'
 
 type CreateUserProps = {
-  navigation: StackNavigationProp<{}>
+  navigation: NativeStackNavigationProp<{}>
 }
 
 type CreateUserForm = {

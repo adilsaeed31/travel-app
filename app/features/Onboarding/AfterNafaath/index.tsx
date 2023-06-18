@@ -9,7 +9,7 @@ import {
 } from '@Components'
 import {SPACER_SIZES, TEXT_VARIANTS} from '@Utils'
 import styled from 'styled-components/native'
-import {StackNavigationProp} from '@react-navigation/stack'
+import {NativeStackNavigationProp} from '@react-navigation/native-stack'
 import {Cross} from '@Assets'
 
 const isSmall = Dimensions.get('window').height < 750
@@ -51,7 +51,7 @@ const ButtonContainerSecond = styled(View)`
 `
 
 type Props = {
-  navigation: StackNavigationProp<any>
+  navigation: NativeStackNavigationProp<any>
 }
 
 const PersonalIdScreen = ({navigation}: Props) => {

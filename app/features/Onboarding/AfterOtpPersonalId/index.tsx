@@ -13,7 +13,7 @@ import * as yup from 'yup'
 import {useMutation} from '@tanstack/react-query'
 import {SPACER_SIZES, TEXT_VARIANTS, BASE_URL} from '@Utils'
 import styled from 'styled-components/native'
-import {StackNavigationProp} from '@react-navigation/stack'
+import {NativeStackNavigationProp} from '@react-navigation/native-stack'
 import {Return, Cross} from '@Assets'
 import {MobileNumberValidator} from '@Utils'
 import {fetcher} from '@Api'
@@ -22,7 +22,7 @@ import {useStore} from '@Store'
 const isSmall = Dimensions.get('window').height < 750
 
 type Props = {
-  navigation: StackNavigationProp<any>
+  navigation: NativeStackNavigationProp<any>
   route: any
 }
 
