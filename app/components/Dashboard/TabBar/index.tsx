@@ -85,7 +85,7 @@ const TCTabBar: React.FC = () => {
               rippleContainerBorderRadius={16}
               onPress={() => onPressHeader(index)}
               onLayout={e => onHeaderLayout(e.nativeEvent.layout.width, index)}>
-              <TCTextView className="text-tc-ios-base text-tc-tab-text">
+              <TCTextView className="text-tc-ios-base leading-3 text-tc-tab-text">
                 {item}
               </TCTextView>
             </Ripple>
@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
     height: 4,
     bottom: 0,
     // do not change below margin it's fixed for animated border
-    marginLeft: 16,
+    marginStart: 16,
     position: 'absolute',
     borderTopLeftRadius: 8,
     borderTopRightRadius: 8,
