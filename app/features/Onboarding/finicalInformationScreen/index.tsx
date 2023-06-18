@@ -445,8 +445,6 @@ function FinacialInformationScreen({navigation}: Props) {
             )}
             errorMessage={errors.monthlyPrimaryIncomAmount}
             keyboardType="numeric"
-            returnKeyType="done"
-            maxLength={6}
           />
           <Spacer />
         </>
@@ -464,7 +462,6 @@ function FinacialInformationScreen({navigation}: Props) {
             onChangeText={val => setValues({...values, investmentType: val})}
             label={t('onboarding:financialInformation:InvestmentType')}
             errorMessage={errors.investmentType}
-            returnKeyType="done"
             maxLength={50}
           />
           <Spacer />
@@ -478,7 +475,6 @@ function FinacialInformationScreen({navigation}: Props) {
             )}
             errorMessage={errors.monthlyPrimaryIncomAmount}
             keyboardType="numeric"
-            returnKeyType="done"
           />
           <Spacer />
         </>
@@ -495,7 +491,6 @@ function FinacialInformationScreen({navigation}: Props) {
             onChangeText={val => setValues({...values, nameOfBusiness: val})}
             label={t('onboarding:financialInformation:NameOfBussiness')}
             errorMessage={errors.nameOfBusiness}
-            returnKeyType="done"
             maxLength={40}
           />
 
@@ -543,7 +538,6 @@ function FinacialInformationScreen({navigation}: Props) {
             errorMessage={errors.monthlyPrimaryIncomAmount}
             keyboardType="numeric"
             maxLength={6}
-            returnKeyType="done"
           />
           <Spacer />
         </>
@@ -615,7 +609,6 @@ function FinacialInformationScreen({navigation}: Props) {
                   'onboarding:financialInformation:MonthlyPrimaryIncomeAmount',
                 )}
                 errorMessage={errors.monthlyPrimaryIncomAmount}
-                returnKeyType="done"
                 keyboardType="numeric"
               />
               <Spacer />
@@ -712,7 +705,6 @@ function FinacialInformationScreen({navigation}: Props) {
                     'onboarding:financialInformation:MonthlyPrimaryIncomeAmount',
                   )}
                   errorMessage={errors.AddetionalSourceOfIncomeAmount}
-                  returnKeyType="done"
                   keyboardType="numeric"
                 />
                 <Spacer />
@@ -781,7 +773,6 @@ function FinacialInformationScreen({navigation}: Props) {
                         errors.AnotherAddetionalSourceOfIncomeAmount
                       }
                       keyboardType="numeric"
-                      returnKeyType="done"
                       maxLength={6}
                     />
                     <Spacer />
