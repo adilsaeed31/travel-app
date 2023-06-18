@@ -54,7 +54,6 @@ const LoyaltyScreen2 = ({navigation}: any) => (
 const LoyaltyNavigator = () => (
   <Navigator
     screenOptions={{
-      headerShown: false,
       animation: 'slide_from_right',
     }}>
     <Screen name="One" component={LoyaltyScreen} />

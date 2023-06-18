@@ -80,13 +80,15 @@ const BottomTabBar: React.FC<BottomTabBarProps> = ({
   }
 
   return (
-    <Animated.View entering={ZoomInDown.duration(1200).delay(250)}>
+    <Animated.View
+      entering={ZoomInDown.duration(1200).delay(250)}
+      className="justify-end pb-4 bg-white">
       <View
         style={{direction: direction}}
         {...rest}
         className={cn(
           flexRowLayout(isRTL),
-          'bar-width-05 border-tc-tab h-16 m-5 rounded-3xl bg-tc-bottom-tab overflow-hidden',
+          'bar-width-05 border-tc-tab h-16 m-5 rounded-3xl bg-tc-bottom-tab overflow-hidden ',
         )}>
         {state.routes.map((route, index) => {
           const {options} = descriptors[route.key]

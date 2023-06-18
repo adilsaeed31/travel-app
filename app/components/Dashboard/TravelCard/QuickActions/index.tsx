@@ -22,7 +22,7 @@ const QuickActions = () => {
         <QuickAction
           icon={<LoadIcon />}
           name={t('TravelCard:load')}
-          onPress={() => navigator.navigate('Home', {screen: 'LoadFunds'})}
+          onPress={() => navigator.navigate('LoadFunds')}
         />
       </Animated.View>
 
