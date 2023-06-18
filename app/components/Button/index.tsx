@@ -43,9 +43,6 @@ const StyledView = styled(View)<any>`
   border-bottom-right-radius: 24px;
   border-bottom-left-radius: 0px;
   border-top-right-radius: 0px;
-  opacity: ${props => {
-    return props.disabled ? 0.7 : 1
-  }};
 `
 
 interface ButtonProps extends RippleProps {

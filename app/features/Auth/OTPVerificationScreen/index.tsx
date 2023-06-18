@@ -199,7 +199,7 @@ const OtpAuthScreen = ({navigation, route}: Props) => {
         />
         <Spacer size={SPACER_SIZES.BASE * 2} />
         <Row isRTL={isRTL}>
-          <TouchableOpacity onPress={() => navigation.navigate('PersonalID')}>
+          <TouchableOpacity>
             <Row isRTL={isRTL}></Row>
           </TouchableOpacity>
           <View>
@@ -288,9 +288,9 @@ const StickyButtonContainer = styled.View<{keyboardHeight: Number}>`
   align-items: center;
 `
 
-const StickyButton = styled.TouchableOpacity<{isDisabled?: boolean}>`
-  background-color: ${props => (props.isDisabled ? '#E1E1E1' : '#f8d03b')};
-  border: 1px solid ${props => (props.isDisabled ? '#E1E1E1' : '#f8d03b')};
+const StickyButton = styled.TouchableOpacity<{disabled?: boolean}>`
+  background-color: ${props => (props.disabled ? '#E1E1E1' : '#f8d03b')};
+  border: 1px solid ${props => (props.disabled ? '#E1E1E1' : '#f8d03b')};
   width: 100%;
   min-height: 56px;
   align-items: center;
