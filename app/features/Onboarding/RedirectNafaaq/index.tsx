@@ -12,14 +12,14 @@ import {
 import {SPACER_SIZES, TEXT_VARIANTS, BASE_URL, getItem} from '@Utils'
 import styled from 'styled-components/native'
 import {useMutation} from '@tanstack/react-query'
-import {StackNavigationProp} from '@react-navigation/stack'
+import {NativeStackNavigationProp} from '@react-navigation/native-stack'
 import {NafaathLogo} from '@Assets'
 import {useStore} from '@Store'
 import {fetcher} from '@Api'
 import {useFocusEffect} from '@react-navigation/native'
 
 type Props = {
-  navigation: StackNavigationProp<any>
+  navigation: NativeStackNavigationProp<any>
   route: any
 }
 

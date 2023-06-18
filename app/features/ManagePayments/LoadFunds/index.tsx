@@ -15,7 +15,7 @@ import {
 import styled from 'styled-components/native'
 import {SPACER_SIZES, TEXT_VARIANTS, UserNameValidator} from '@Utils'
 import {Dimensions, Keyboard} from 'react-native'
-import {StackNavigationProp} from '@react-navigation/stack'
+import {NativeStackNavigationProp} from '@react-navigation/native-stack'
 import {fetcher} from '@Api'
 import {useQuery} from '@tanstack/react-query'
 import {BASE_URL} from '@Utils'
@@ -25,7 +25,7 @@ import DeviceInfo from 'react-native-device-info'
 import Toast from 'react-native-toast-message'
 
 type Props = {
-  navigation: StackNavigationProp<{
+  navigation: NativeStackNavigationProp<{
     AfterOtpPersonalId: undefined
     PersonalID: undefined
     Existing: undefined

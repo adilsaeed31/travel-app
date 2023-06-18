@@ -9,7 +9,7 @@ import {
 } from 'react-native'
 import {useTranslation} from 'react-i18next'
 import styled from 'styled-components/native'
-import {StackNavigationProp} from '@react-navigation/stack'
+import {NativeStackNavigationProp} from '@react-navigation/native-stack'
 import {useMutation} from '@tanstack/react-query'
 import * as yup from 'yup'
 import {
@@ -63,7 +63,7 @@ const Terms = () => {
 
 interface AlreadyAccountProps {
   isKeyboardVisible: boolean
-  navigation: StackNavigationProp<any>
+  navigation: NativeStackNavigationProp<any>
 }
 
 const AlreadyAccount = ({
@@ -90,7 +90,7 @@ const AlreadyAccount = ({
 }
 
 type Props = {
-  navigation: StackNavigationProp<any>
+  navigation: NativeStackNavigationProp<any>
 }
 
 const PersonalIdScreen = ({navigation}: Props) => {

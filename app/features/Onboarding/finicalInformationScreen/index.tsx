@@ -11,7 +11,7 @@ import {View, SafeAreaView, TouchableOpacity, StyleSheet} from 'react-native'
 import {fetcher} from '@Api'
 import {useMutation} from '@tanstack/react-query'
 import {SheetData, SheetsIndexs} from './SheetData'
-import {StackNavigationProp} from '@react-navigation/stack'
+import {NativeStackNavigationProp} from '@react-navigation/native-stack'
 import {useTranslation} from 'react-i18next'
 import {
   Layout,
@@ -225,7 +225,7 @@ const MapStateForAPi = (values: IFormTYpe) => {
 }
 
 type Props = {
-  navigation: StackNavigationProp<any>
+  navigation: NativeStackNavigationProp<any>
   route: any
 }
 

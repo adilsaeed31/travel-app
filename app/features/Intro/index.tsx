@@ -7,7 +7,7 @@ import Animated, {
   BounceInUp,
 } from 'react-native-reanimated'
 import {useTranslation} from 'react-i18next'
-import {StackNavigationProp} from '@react-navigation/stack'
+import {NativeStackNavigationProp} from '@react-navigation/native-stack'
 import {useSafeAreaInsets} from 'react-native-safe-area-context'
 import cn from 'classnames'
 
@@ -29,7 +29,7 @@ const EnterAnimationLeft = FadeInLeft.duration(1000).delay(50)
 const EnterAnimationBounceInUp = BounceInUp.duration(1000).delay(50)
 
 const IntroFeature: React.FC<{
-  navigation: StackNavigationProp<{Auth?: undefined}>
+  navigation: NativeStackNavigationProp<{Auth?: undefined}>
 }> = ({navigation}) => {
   const {t} = useTranslation()
   const {appStateVisible} = useAppState()

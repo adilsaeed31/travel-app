@@ -1,32 +1,22 @@
 import React from 'react'
 
-import {
-  BottomTabBarProps,
-  createBottomTabNavigator,
-} from '@react-navigation/bottom-tabs'
+import {createNativeStackNavigator} from '@react-navigation/native-stack'
 
-import {HelpScreen} from '@Screens'
-import {LoyaltyNavigator, HomeNavigator} from '@Navigations'
-import {BottomTabBar} from '@Components'
+import {LoadFundsScreen} from '@Features'
+import HomeNavigator from './HomeNavigator'
 
-const {Navigator, Screen} = createBottomTabNavigator()
-
-// below to wrap as function component for tabBar prop
-const tabBar = (props: BottomTabBarProps) => <BottomTabBar {...props} />
+const {Navigator, Screen} = createNativeStackNavigator()
 
 const AppNavigator = () => (
-  <Navigator tabBar={tabBar}>
+  <Navigator initialRouteName="Root">
     <Screen
-      name="Home"
+      name="Root"
       options={{
         headerShown: false,
       }}
       component={HomeNavigator}
     />
-
-    <Screen name="Loyalty" component={LoyaltyNavigator} />
-
-    <Screen name="Menu" component={HelpScreen} />
+    <Screen name="LoadFunds" component={LoadFundsScreen} />
   </Navigator>
 )
 

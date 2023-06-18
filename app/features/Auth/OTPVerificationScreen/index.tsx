@@ -5,7 +5,7 @@ import {View, Keyboard, Dimensions, TouchableOpacity} from 'react-native'
 import {useTranslation} from 'react-i18next'
 import styled from 'styled-components/native'
 import {useMutation} from '@tanstack/react-query'
-import {StackNavigationProp} from '@react-navigation/stack'
+import {NativeStackNavigationProp} from '@react-navigation/native-stack'
 import {
   Layout,
   TCButton as Button,
@@ -21,7 +21,7 @@ import {useStore} from '@Store'
 import {useFocusEffect} from '@react-navigation/native'
 
 type Props = {
-  navigation: StackNavigationProp<any>
+  navigation: NativeStackNavigationProp<any>
   route: any
 }
 

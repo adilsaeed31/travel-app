@@ -47,7 +47,7 @@ const BottomSheet = () => {
     }
   })
 
-  const snapPoints = useMemo(() => ['5%', '70%'], [])
+  const snapPoints = useMemo(() => ['4%', '70%'], [])
 
   const handleSheetChanges = useCallback(
     (index: number) => {

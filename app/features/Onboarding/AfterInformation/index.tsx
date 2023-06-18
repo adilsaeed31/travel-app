@@ -9,7 +9,7 @@ import {
 } from '@Components'
 import {SPACER_SIZES, TEXT_VARIANTS} from '@Utils'
 import styled from 'styled-components/native'
-import {StackNavigationProp} from '@react-navigation/stack'
+import {NativeStackNavigationProp} from '@react-navigation/native-stack'
 import {CheckWarning} from '@Assets'
 import {AppProviderProps, AppContext} from '@Context'
 
@@ -44,7 +44,7 @@ const Body = styled(Text)`
 `
 
 type Props = {
-  navigation: StackNavigationProp<{PersonalID: undefined}>
+  navigation: NativeStackNavigationProp<{PersonalID: undefined}>
 }
 
 const PersonalIdScreen = ({navigation}: Props) => {
