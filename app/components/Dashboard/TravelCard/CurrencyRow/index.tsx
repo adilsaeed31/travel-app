@@ -4,13 +4,19 @@ import {Trans} from 'react-i18next'
 import cn from 'classnames'
 
 import {useStore} from '@Store'
-import {flexRowLayout} from '@Utils'
 import {TCTextView} from '@Components'
 import {DownArrow, EuroFlag} from '@Assets'
+import {currencyFormat, flexRowLayout} from '@Utils'
 
 const CurrencyRow = ({data}: {data: any}) => {
   const isRTL = useStore(state => state.isRTL)
   const activeCardIndex = useStore(state => state.activeCardIndex)
+
+  const [baseUnit, dotUnit] = currencyFormat(
+    data?.[activeCardIndex]?.card?.currencies[activeCardIndex]?.balance,
+  )
+  const currencyCode =
+    data?.[activeCardIndex]?.card?.currencies[activeCardIndex]?.currency_code
 
   return (
     <View
@@ -26,14 +32,10 @@ const CurrencyRow = ({data}: {data: any}) => {
           <Trans
             defaults="<0>{{amount1}}</0><1>{{separator}}</1><2>{{amount2}}</2><3>{{code}}</3>"
             values={{
-              amount1:
-                data?.[activeCardIndex]?.card?.currencies[activeCardIndex]
-                  ?.balance ?? '212',
+              amount1: baseUnit,
               separator: '.',
-              amount2: '34',
-              code:
-                data?.[activeCardIndex]?.card?.currencies[activeCardIndex]
-                  ?.currency_code ?? 'SAR',
+              amount2: dotUnit,
+              code: currencyCode,
             }}
             components={[
               <TCTextView className="font-tc-bold text-2xl leading-9 text-tc-secondary" />,
