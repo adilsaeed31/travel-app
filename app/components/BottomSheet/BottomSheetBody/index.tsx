@@ -1,5 +1,6 @@
 import React, {memo} from 'react'
 import {View} from 'react-native'
+import {useTranslation} from 'react-i18next'
 
 import {default as TCTextView} from '../../TextView'
 import TransItem from '../../TransItem'
@@ -11,6 +12,8 @@ const BottomSheetBody: React.FC<{
   isLoading: boolean
   hasDisplay: boolean
 }> = ({isLoading, isError, error, hasDisplay, data}) => {
+  const {t} = useTranslation()
+
   if (hasDisplay && isLoading) {
     return (
       <View className="justify-center items-center mt-5">
@@ -24,7 +27,7 @@ const BottomSheetBody: React.FC<{
   if (hasDisplay && isError) {
     return (
       <View className="justify-center items-center mt-5">
-        <TCTextView className="mx-5 text-large text-red-400">
+        <TCTextView className="mx-5 text-large font-tc-light text-red-900">
           {error?.message}
         </TCTextView>
       </View>
@@ -32,6 +35,16 @@ const BottomSheetBody: React.FC<{
   }
 
   if (hasDisplay) {
+    if (!data) {
+      return (
+        <View className="justify-center items-center mt-5">
+          <TCTextView className="text-large text-tc-secondary">
+            {t('TravelCard:noTransactions')}
+          </TCTextView>
+        </View>
+      )
+    }
+
     return data?.map(
       (
         {title, amount, timestamp, currency_code, transaction_type}: any,

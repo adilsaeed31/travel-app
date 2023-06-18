@@ -147,6 +147,7 @@ export const translation = {
       addNew: 'Add New Card',
       doMore: 'Do more with SAIB',
       recentTrans: 'Recent Transactions',
+      noTransactions: 'No Transactions found',
     },
   },
   ar: {
@@ -292,6 +293,7 @@ export const translation = {
       addNew: 'إضافة بطاقة جديدة',
       doMore: 'افعل المزيد مع البنك السعودي للاستثمار',
       recentTrans: 'المعاملات الأخيرة',
+      noTransactions: 'لم يتم العثور على معاملات',
     },
   },
 }
