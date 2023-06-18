@@ -17,10 +17,8 @@ const tabBar = (props: BottomTabBarProps) => <BottomTabBar {...props} />
 
 const HomeNavigator = () => (
   <Tab.Navigator
+    screenOptions={{headerShown: false}}
     tabBar={tabBar}
-    screenOptions={{
-      headerShown: false,
-    }}
     initialRouteName="Home">
     <Tab.Screen name="Home" component={DashboardFeature} />
     <Tab.Screen name="Loyalty" component={LoyaltyNavigator} />
