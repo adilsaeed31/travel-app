@@ -89,7 +89,7 @@ const AccountScreen: React.FC<AccountScreenScreenProps> = ({
       setAccountNumber(AccountsList[0]?.number)
       refetchTransactionList()
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps asda
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [AccountsList])
 
   return (

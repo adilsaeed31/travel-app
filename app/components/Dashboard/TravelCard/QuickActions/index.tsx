@@ -9,15 +9,21 @@ import {flexRowLayout} from '@Utils'
 import {AddCurrencyIcon, LoadIcon, ManageIcon, UnloadIcon} from '@Assets'
 
 import QuickAction from '../../QuickAction'
+import {useNavigation} from '@react-navigation/native'
 
 const QuickActions = () => {
   const {t} = useTranslation()
   const isRTL = useStore(state => state.isRTL)
+  const navigator = useNavigation()
 
   return (
     <View className={cn(flexRowLayout(isRTL), 'justify-between m-4')}>
       <Animated.View entering={ZoomInEasyDown.duration(500).delay(100)}>
-        <QuickAction icon={<LoadIcon />} name={t('TravelCard:load')} />
+        <QuickAction
+          onPress={() => navigator.navigate('Home', {screen: 'LoadFunds'})}
+          icon={<LoadIcon />}
+          name={t('TravelCard:load')}
+        />
       </Animated.View>
 
       <Animated.View entering={ZoomInEasyDown.duration(500).delay(150)}>
