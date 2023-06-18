@@ -12,8 +12,9 @@ import cn from 'classnames'
 
 import {useStore} from '@Store'
 import {ProfileIcon} from '@Assets'
-import {TCTextView} from '@Components'
 import {Colors, flexRowLayout, screenWidth as width} from '@Utils'
+
+import TCTextView from '../../TextView'
 
 const TravelCard = lazy(() => import('../../../features/Dashboard/TravelCard'))
 const Account = lazy(() => import('../../../features/Dashboard/Account'))
