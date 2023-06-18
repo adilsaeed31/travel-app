@@ -6,8 +6,7 @@ import {
 } from '@react-navigation/bottom-tabs'
 
 import {HelpScreen} from '@Screens'
-import {DashboardFeature} from '@Features'
-import {LoyaltyNavigator} from '@Navigations'
+import {LoyaltyNavigator, HomeNavigator} from '@Navigations'
 import {BottomTabBar} from '@Components'
 
 const {Navigator, Screen} = createBottomTabNavigator()
@@ -22,7 +21,7 @@ const AppNavigator = () => (
       options={{
         headerShown: false,
       }}
-      component={DashboardFeature}
+      component={HomeNavigator}
     />
 
     <Screen name="Loyalty" component={LoyaltyNavigator} />
