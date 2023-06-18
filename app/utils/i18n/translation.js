@@ -93,7 +93,8 @@ export const translation = {
         financialInformation: 'Financial Information',
         occupation: 'Occupation',
         continue: 'Continue',
-        additionalIncomeSource: 'Additional Income source',
+        additionalIncomeSource: 'Add income source',
+        addAnotherSource:'+ Add income source (Optional)',
         MonthlyPrimaryIncomeAmount: 'Monthly primary income amount',
         selectSector: 'Select sector',
         yes: 'Yes',
@@ -253,6 +254,8 @@ export const translation = {
         monthlyIncomeValidation:
           'معدل الدخل الشهري لابد ان يكون بين  {{min}} - {{max}} ريال',
         primarySourceOfIncome: 'مصدر الدخل الرئيسي',
+        addAnotherSource: 'اضافة مصدر اخر للدخل (اختياري)+',
+
       },
       createUserTitle: 'معلومات المستخدم',
       create: 'يخلق',
