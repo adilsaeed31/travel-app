@@ -32,12 +32,12 @@ export function currencyFormat(value: number): string[] {
   try {
     const currency = new Intl.NumberFormat('en-US')
 
-    const leftUnit = value.toString().slice(0, value.toString().length - 2)
-    const rightUnit = value.toString().slice(-2)
+    const baseUnit = value.toString().slice(0, value.toString().length - 2)
+    const dotUnit = value.toString().slice(-2)
 
-    const formattedCurrency = currency.format(Number(leftUnit))
+    const formattedCurrency = currency.format(Number(baseUnit))
 
-    return [formattedCurrency, rightUnit]
+    return [formattedCurrency, dotUnit]
   } catch (e: any) {
     console.log('Error in currencyFormat', e.message)
     return ['000', '00']

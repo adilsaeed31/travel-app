@@ -22,14 +22,13 @@ const CurrencyRow = ({data}: {data: any}) => {
     <View
       className={cn(
         flexRowLayout(isRTL),
-        'py-2 px-3 m-4 border rounded-2xl border-tc-tab justify-between',
+        'py-2 px-3 m-4 border rounded-2xl border-tc-tab justify-between items-center',
       )}>
       <View className={cn(flexRowLayout(isRTL), 'items-center')}>
         <Image source={EuroFlag} />
-        <View
-          className="flex-row items-center justify-start"
-          style={styles.leftSpace}>
+        <View style={styles.leftSpace} className="flex-row items-center">
           <Trans
+            className="flex-1 items-center justify-center"
             defaults="<0>{{amount1}}</0><1>{{separator}}</1><2>{{amount2}}</2><3>{{code}}</3>"
             values={{
               amount1: baseUnit,
@@ -38,11 +37,20 @@ const CurrencyRow = ({data}: {data: any}) => {
               code: currencyCode,
             }}
             components={[
-              <TCTextView className="font-tc-bold text-2xl leading-9 text-tc-secondary" />,
-              <TCTextView className="font-tc-light text-tc-secondary" />,
-              <TCTextView className="font-tc-light text-tc-secondary" />,
               <TCTextView
-                style={styles.separator}
+                style={styles.font24}
+                className="font-tc-bold text-tc-secondary"
+              />,
+              <TCTextView
+                style={styles.font15}
+                className="font-tc-light text-tc-secondary"
+              />,
+              <TCTextView
+                style={styles.font15}
+                className="font-tc-light text-tc-secondary"
+              />,
+              <TCTextView
+                style={[styles.separator, styles.font15]}
                 className="font-tc-light text-tc-secondary"
               />,
             ]}
@@ -65,6 +73,14 @@ const styles = StyleSheet.create({
   separator: {
     marginStart: 4,
     marginEnd: 8,
+  },
+  font24: {
+    fontSize: 24,
+    lineHeight: 24,
+  },
+  font15: {
+    fontSize: 15,
+    lineHeight: 24,
   },
 })
 
