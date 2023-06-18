@@ -193,7 +193,7 @@ const OtpPersonalIdScreen = ({navigation, route}: Props) => {
           break
         case status > 399 && status <= 500:
           if (invalidAttempts < 2) {
-            setStatusError('Invalid Otp. Please try Again')
+            setStatusError('Invalid OTP. Please try again')
             setInvalidAttempts(invalidAttempts + 1)
           } else {
             navigation.navigate('AfterOtpPersonalId', {

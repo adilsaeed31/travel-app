@@ -113,8 +113,9 @@ export const translation = {
       create: 'Create',
       passRule1: '8-16 Characters',
       passRule2: 'Special Characters',
-      passRule3: 'Numbers',
-      passRule4: 'Upper & Lower Case',
+      passRule3: 'Minimum 2 numbers required',
+      passRule4: 'Minimum one uppercase and one lowercase required',
+      passRule5: 'Password and Confirm Password do not match',
     },
     auth: {
       title: 'Welcome to Travel App {{name}}',
@@ -261,6 +262,7 @@ export const translation = {
       passRule2: 'الشخصيات الخاصة',
       passRule3: 'أرقام',
       passRule4: 'الأحرف الكبيرة والصغيرة',
+      passRule5: 'الأحرف الكبيرة والصغيرة',
     },
     auth: {
       title: 'مرحباً بك في تطبيق السفر, {{name}}',

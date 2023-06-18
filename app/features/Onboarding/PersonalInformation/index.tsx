@@ -326,9 +326,6 @@ function PersonalInformation({navigation}: Props) {
   return (
     <ScrollView
       keyboardShouldPersistTaps="always"
-      key={String(
-        showAdditionalInformation + String(values.countryOfBirth || ''),
-      )}
       contentContainerStyle={styles.scrollViewContainer}>
       <Layout
         isBack={false}
@@ -515,6 +512,7 @@ function PersonalInformation({navigation}: Props) {
                   label={t('onboarding:personalInformation:mobileNumber')}
                   errorMessage={errors.mobileNumber}
                   returnKeyType="done"
+                  maxLength={15}
                 />
                 <Spacer />
               </LoginForm>
