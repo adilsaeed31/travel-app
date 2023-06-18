@@ -412,7 +412,6 @@ function PersonalInformation({navigation}: Props) {
                   }
                   label={t('onboarding:personalInformation:buldingNumber')}
                   errorMessage={errors.buldingNumber}
-                  returnKeyType="done"
                   maxLength={10}
                 />
                 <InputSpacer />
@@ -421,7 +420,6 @@ function PersonalInformation({navigation}: Props) {
                   onChangeText={val => setValues({...values, streetNanme: val})}
                   label={t('onboarding:personalInformation:streetNanme')}
                   errorMessage={errors.streetNanme}
-                  returnKeyType="done"
                   maxLength={50}
                 />
                 <InputSpacer />
@@ -430,7 +428,6 @@ function PersonalInformation({navigation}: Props) {
                   onChangeText={val => setValues({...values, district: val})}
                   label={t('onboarding:personalInformation:district')}
                   errorMessage={errors.district}
-                  returnKeyType="done"
                   maxLength={50}
                 />
                 <InputSpacer />
@@ -439,7 +436,6 @@ function PersonalInformation({navigation}: Props) {
                   onChangeText={val => setValues({...values, poBox: val})}
                   label={t('onboarding:personalInformation:poBox')}
                   errorMessage={errors.poBox}
-                  returnKeyType="done"
                   maxLength={10}
                 />
                 <InputSpacer />
@@ -448,7 +444,6 @@ function PersonalInformation({navigation}: Props) {
                   onChangeText={val => setValues({...values, postalCode: val})}
                   label={t('onboarding:personalInformation:postalCode')}
                   errorMessage={errors.postalCode}
-                  returnKeyType="done"
                   maxLength={10}
                   schema={PostalCodeValidator}
                 />
@@ -458,9 +453,9 @@ function PersonalInformation({navigation}: Props) {
                   onChangeText={val => setValues({...values, city: val})}
                   label={t('onboarding:personalInformation:city')}
                   errorMessage={errors.city}
-                  returnKeyType="done"
                   maxLength={30}
                   schema={CityValidator}
+                  allowSpecialChars
                 />
                 <InputSpacer />
                 <TCInput
@@ -469,7 +464,6 @@ function PersonalInformation({navigation}: Props) {
                   label={t('onboarding:personalInformation:phoneNumber')}
                   keyboardType="number-pad"
                   maxLength={15}
-                  returnKeyType="done"
                 />
                 <InputSpacer />
               </LoginForm>
@@ -493,9 +487,9 @@ function PersonalInformation({navigation}: Props) {
                     'onboarding:personalInformation:addetionalContactNanme',
                   )}
                   errorMessage={errors.contactName}
-                  returnKeyType="done"
                   maxLength={50}
                   schema={ContactName}
+                  allowSpecialChars
                 />
                 <Spacer />
                 <TCInput
@@ -503,7 +497,6 @@ function PersonalInformation({navigation}: Props) {
                   onChangeText={val => setValues({...values, relation: val})}
                   label={t('onboarding:personalInformation:relation')}
                   errorMessage={errors.relation}
-                  returnKeyType="done"
                   maxLength={10}
                 />
                 <Spacer />
@@ -514,7 +507,8 @@ function PersonalInformation({navigation}: Props) {
                   }
                   label={t('onboarding:personalInformation:mobileNumber')}
                   errorMessage={errors.mobileNumber}
-                  returnKeyType="done"
+                  keyboardType="number-pad"
+                  maxLength={15}
                 />
                 <Spacer />
               </LoginForm>
