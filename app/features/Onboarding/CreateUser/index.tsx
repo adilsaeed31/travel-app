@@ -173,13 +173,22 @@ function CreateUser({navigation}: CreateUserProps) {
                           )
                         }
                         passwordThree={
-                          !!(values?.password && /\d/.test(values?.password))
+                          !!(
+                            values?.password &&
+                            /^(?=.*\d\D*\d).*$/.test(values?.password)
+                          )
                         }
                         passwordFour={
                           !!(
                             values?.password &&
                             /[A-Z]/.test(values?.password) &&
                             /[a-z]/.test(values?.password)
+                          )
+                        }
+                        passwordFive={
+                          !!(
+                            values?.password &&
+                            values?.password === values?.confirmPassword
                           )
                         }
                       />

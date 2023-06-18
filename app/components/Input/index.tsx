@@ -26,6 +26,7 @@ interface CustomInputProps {
   value?: any
   isPassword?: boolean
   maxLength?: number
+  width?: any
   isDisabled?: boolean
   onChangeText?: (text: string) => void
   isValid?: (valid: boolean) => void
@@ -36,10 +37,15 @@ interface CustomInputProps {
   allowSpecialChars?: boolean
 }
 
-const InputWrapper = styled(View)<{isError: boolean; isFocused: boolean}>`
+const InputWrapper = styled(View)<{
+  isError: boolean
+  isFocused: boolean
+  width: any
+}>`
   padding: 12px 16px;
   background: #f5f8f9;
   border-radius: 12px;
+  width: ${props => (props.width ? props.width : '100%')};
   border: 0.5px solid
     ${props =>
       props.isError
@@ -69,7 +75,7 @@ const Input = styled(TextInput)`
 const ErrorText = styled(Text)`
   font-weight: 500;
   color: #f54d3f;
-
+  margin-top: 4px;
   padding-left: 16px;
 `
 
@@ -97,6 +103,7 @@ const CustomInput: FC<CustomInputProps> = ({
   returnKeyType,
   keyboardType,
   onEndEditing,
+  width,
   allowSpecialChars = false,
   ...rest
 }) => {
@@ -121,7 +128,6 @@ const CustomInput: FC<CustomInputProps> = ({
 
   const handleBlur = (): void => {
     setIsFocused(false)
-    validateInput(inputValue)
   }
 
   const validateInput = (text: any): void => {
@@ -147,11 +153,12 @@ const CustomInput: FC<CustomInputProps> = ({
     setError(null)
     onChangeText(text)
     setInputValue(text)
+    validateInput(text)
   }
 
   return (
     <>
-      <InputWrapper isError={!!error} isFocused={isFocused}>
+      <InputWrapper isError={!!error} isFocused={isFocused} width={width}>
         <InputLabel variant={TEXT_VARIANTS.label} isFocused={isFocused}>
           {label}
         </InputLabel>

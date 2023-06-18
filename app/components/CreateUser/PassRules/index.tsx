@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {memo} from 'react'
 import {View} from 'react-native'
 import {useTranslation} from 'react-i18next'
@@ -15,7 +16,14 @@ const PassRules: React.FC<{
   passwordTwo: boolean
   passwordThree: boolean
   passwordFour: boolean
-}> = ({passwordOne, passwordTwo, passwordThree, passwordFour}) => {
+  passwordFive: boolean
+}> = ({
+  passwordOne,
+  passwordTwo,
+  passwordThree,
+  passwordFour,
+  passwordFive,
+}) => {
   const {t} = useTranslation()
   const isRTL = useStore(state => state.isRTL)
 
@@ -46,6 +54,15 @@ const PassRules: React.FC<{
         <Dot isActive={passwordFour} />
         <TCTextView className={cn(toggleTextActiveCls(passwordFour))}>
           {t('onboarding:passRule4')}
+        </TCTextView>
+      </View>
+
+      <View
+        style={{marginTop: 12}}
+        className={cn(flexRowLayout(isRTL), 'items-center')}>
+        <Dot isActive={passwordFive} />
+        <TCTextView className={cn(toggleTextActiveCls(passwordFive))}>
+          {t('onboarding:passRule5')}
         </TCTextView>
       </View>
     </>

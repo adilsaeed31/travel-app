@@ -2,15 +2,17 @@ import * as yup from 'yup'
 
 export const GovtIdValidator = yup
   .string()
-  .required('Please Enter a Value')
+  .required('Please enter a value')
+  .matches(/^[12]\d*$/, 'National id or Iqama Number Should Start with 1 or 2 ')
   .length(10, 'Please Enter 10 characters')
   .matches(/^\d{10}$/, 'Please Enter Number only')
-  .matches(/^[12]\d*$/, 'National id or Iqama Number Should Start with 1 or 2 ')
 
 export const MobileNumberValidator = yup
   .string()
   .required('Please Enter a Value')
-  .matches(/^(5)\d{8}$/, 'Please Enter Valid Mobile Number that starts with 5')
+  .matches(/^[5]\d*$/, 'Mobile number should start with 5')
+  .length(9, 'Please Enter 9 characters')
+  .matches(/^\d{9}$/, 'Please Enter Number only')
 
 export const passwordValidator = yup
   .string()
