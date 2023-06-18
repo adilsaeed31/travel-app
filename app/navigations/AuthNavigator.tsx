@@ -31,7 +31,7 @@ const {Navigator, Screen} = createNativeStackNavigator()
 const AuthNavigator = () => {
   return (
     <Navigator
-      initialRouteName="FinicalInformation"
+      initialRouteName="Auth"
       screenOptions={{
         headerShown: false,
         gestureEnabled: false,
