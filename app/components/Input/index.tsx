@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   ReturnKeyTypeOptions,
   KeyboardTypeOptions,
+  TextInputProps,
 } from 'react-native'
 import {useTranslation} from 'react-i18next'
 import styled from 'styled-components/native'
@@ -20,7 +21,7 @@ function formatSentence(sentence: any) {
   return firstLetter + restOfSentence
 }
 
-interface CustomInputProps {
+type CustomInputProps = {
   label: string
   schema?: any
   value?: any
@@ -34,8 +35,9 @@ interface CustomInputProps {
   returnKeyType?: ReturnKeyTypeOptions
   keyboardType?: KeyboardTypeOptions
   onEndEditing?: () => {}
+  className?: string
   allowSpecialChars?: boolean
-}
+} & TextInputProps
 
 const InputWrapper = styled(View)<{
   isError: boolean
@@ -105,7 +107,7 @@ const CustomInput: FC<CustomInputProps> = ({
   onEndEditing,
   width,
   allowSpecialChars = false,
-  ...rest
+  style,
 }) => {
   const inputRef = useRef<TextInput>(null)
   const [isFocused, setIsFocused] = useState<boolean>(false)
@@ -157,7 +159,7 @@ const CustomInput: FC<CustomInputProps> = ({
   }
 
   return (
-    <>
+    <View style={style}>
       <InputWrapper isError={!!error} isFocused={isFocused} width={width}>
         <InputLabel variant={TEXT_VARIANTS.label} isFocused={isFocused}>
           {label}
@@ -178,7 +180,6 @@ const CustomInput: FC<CustomInputProps> = ({
             editable={isDisabled}
             keyboardType={keyboardType}
             onSubmitEditing={onEndEditing}
-            {...rest}
           />
           {isPassword && (
             <LinkContainer onPress={() => setShowPassword(!showPassword)}>
@@ -188,7 +189,7 @@ const CustomInput: FC<CustomInputProps> = ({
         </HorizontalView>
       </InputWrapper>
       {error && <ErrorText>{formatSentence(t(error))}</ErrorText>}
-    </>
+    </View>
   )
 }
 
