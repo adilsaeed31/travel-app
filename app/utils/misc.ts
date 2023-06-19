@@ -45,7 +45,7 @@ export function currencyFormat(value: number): string[] {
 }
 
 export function prependZeroIfNotPresent(value: number | string): string {
-  const regex = /^(?!0)\d/
+  const regex = /^[0]{1}[0-9]*$/
   let strValue = value.toString()
   if (!regex.test(strValue)) {
     strValue = '0' + strValue
