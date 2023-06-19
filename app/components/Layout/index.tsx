@@ -31,6 +31,7 @@ type LayoutProps = {
   isLoading?: boolean
   onScroll?: () => void
   hasDashboardLayout?: boolean
+  isVersion?: boolean
 }
 
 const Container = styled(View)`
@@ -83,6 +84,7 @@ const AppLayout: React.FC<LayoutProps> = ({
   isLoading = false,
   onScroll = () => {},
   onBack = () => {},
+  isVersion = false,
   children,
   hasDashboardLayout = false,
   ...rest
@@ -158,9 +160,11 @@ const AppLayout: React.FC<LayoutProps> = ({
           </Container>
         </TouchableOpacity>
         {/* Added Version display it'll get version from version xcode and android gradle versionName */}
-        <Text className="absolute bottom-20 left-0 right-0 text-center text-xs text-slate-400 font-tc-light z-0">
-          Version {appVersion}
-        </Text>
+        {isVersion ? (
+          <Text className="absolute bottom-20 left-0 right-0 text-center text-xs text-slate-400 font-tc-light z-0">
+            Version {appVersion}
+          </Text>
+        ) : null}
       </ScrollView>
     </KeyboardAvoidingView>
   )

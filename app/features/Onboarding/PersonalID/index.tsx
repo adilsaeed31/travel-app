@@ -1,93 +1,31 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useState, useContext} from 'react'
-import {
-  TouchableOpacity,
-  View,
-  Keyboard,
-  Dimensions,
-  Platform,
-} from 'react-native'
+import {TouchableOpacity, View, Keyboard, Platform} from 'react-native'
+import * as yup from 'yup'
 import {useTranslation} from 'react-i18next'
-import styled from 'styled-components/native'
 import {NativeStackNavigationProp} from '@react-navigation/native-stack'
 import {useMutation} from '@tanstack/react-query'
-import * as yup from 'yup'
+import {NativeWindStyleSheet} from 'nativewind'
+import cn from 'classnames'
 import {
   Layout,
   TCButton as Button,
   TCTextView as Text,
   TCInput as Input,
   TCCheckbox as Checkbox,
-  Spacer,
+  KeyboardStickyButton,
 } from '@Components'
 import {
   GovtIdValidator,
   MobileNumberValidator,
   TermsCheckvalidator,
-  BASE_URL,
-  SPACER_SIZES,
   TEXT_VARIANTS,
+  screenHeight,
 } from '@Utils'
 import {AppProviderProps, AppContext} from '@Context'
-import {fetcher} from '@Api'
+import {triggerOTP} from '@Api'
 import {useStore} from '@Store'
 
-const isSmall = Dimensions.get('window').height < 750
-
-const Terms = () => {
-  const {t} = useTranslation()
-  const {isRTL} = useContext<AppProviderProps>(AppContext)
-  return (
-    <View>
-      <Row isRTL={isRTL}>
-        <TermText variant={TEXT_VARIANTS.label}>
-          {t('onboarding:readAccept')}
-        </TermText>
-        <TouchableOpacity onPress={() => {}}>
-          <UnderlineText variant={TEXT_VARIANTS.label}>
-            {t('onboarding:disclaimer')}
-          </UnderlineText>
-        </TouchableOpacity>
-        <TermText variant={TEXT_VARIANTS.label}>{t('onboarding:and')}</TermText>
-      </Row>
-      <View>
-        <TouchableOpacity onPress={() => {}}>
-          <UnderlineText variant={TEXT_VARIANTS.label}>
-            {t('onboarding:termsConditions')}
-          </UnderlineText>
-        </TouchableOpacity>
-      </View>
-    </View>
-  )
-}
-
-interface AlreadyAccountProps {
-  isKeyboardVisible: boolean
-  navigation: NativeStackNavigationProp<any>
-}
-
-const AlreadyAccount = ({
-  isKeyboardVisible,
-  navigation,
-}: AlreadyAccountProps) => {
-  const {t} = useTranslation()
-  const {isRTL} = useContext<AppProviderProps>(AppContext)
-  return (
-    <RowCenter isRTL={isRTL} isKeyboardVisible={isKeyboardVisible}>
-      <TermText variant={TEXT_VARIANTS.body}>
-        {t('onboarding:alreadyAccount')}
-      </TermText>
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate('Auth')
-        }}>
-        <LoginText variant={TEXT_VARIANTS.body}>
-          {t('onboarding:login')}
-        </LoginText>
-      </TouchableOpacity>
-    </RowCenter>
-  )
-}
+const isSmall = screenHeight < 750
 
 type Props = {
   navigation: NativeStackNavigationProp<any>
@@ -97,8 +35,7 @@ const PersonalIdScreen = ({navigation}: Props) => {
   const {t} = useTranslation()
   const {isRTL} = useContext<AppProviderProps>(AppContext)
   const [state, setState] = useState<any>({})
-  const [keyboardHeight, setKeyboardHeight] = useState<Number>(0)
-  const [termsError, setTermsError] = useState<any>(false)
+  const [isKeyboardVisible, setKeyboardVisible] = useState<boolean>(false)
   const [statusError, setStatusError] = useState<any>(false)
   const [isButtonDisabled, setButtonDisabled] = useState(true)
   const setOnboardingDetails = useStore(
@@ -106,18 +43,7 @@ const PersonalIdScreen = ({navigation}: Props) => {
   )
 
   const {isLoading, data, mutate, reset} = useMutation({
-    mutationFn: async () => {
-      let req: any = await fetcher(BASE_URL + '/auth/otp', {
-        method: 'POST',
-        body: {
-          mobile_number: '0' + state.mobileNumber,
-          identity_number: state.govtId,
-          role: 'ONBOARDING',
-        },
-      })
-      let res = await req.json()
-      return res
-    },
+    mutationFn: () => triggerOTP(state),
   })
 
   useEffect(() => {
@@ -134,38 +60,7 @@ const PersonalIdScreen = ({navigation}: Props) => {
     } catch (err: any) {
       setButtonDisabled(true)
     }
-  }, [
-    state.govtId,
-    state.mobileNumber,
-    state.isTermsCheck,
-    state.isEmailCheck,
-    state,
-  ])
-
-  useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener(
-      Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow',
-      e => {
-        setKeyboardHeight(e.endCoordinates.height)
-      },
-    )
-
-    const keyboardDidHideListener = Keyboard.addListener(
-      Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide',
-      () => {
-        setKeyboardHeight(0)
-      },
-    )
-
-    return () => {
-      keyboardDidShowListener.remove()
-      keyboardDidHideListener.remove()
-    }
-  }, [])
-
-  const onComplete = () => {
-    mutate()
-  }
+  }, [state])
 
   useEffect(() => {
     if (data?.reference_number) {
@@ -195,17 +90,42 @@ const PersonalIdScreen = ({navigation}: Props) => {
           setStatusError('')
       }
     }
-  }, [data])
+  }, [
+    data,
+    setOnboardingDetails,
+    state.govtId,
+    state.mobileNumber,
+    reset,
+    navigation,
+  ])
 
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow',
+      () => {
+        setKeyboardVisible(true)
+      },
+    )
+
+    const keyboardDidHideListener = Keyboard.addListener(
+      Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide',
+      () => {
+        setKeyboardVisible(false)
+      },
+    )
+
+    return () => {
+      keyboardDidShowListener.remove()
+      keyboardDidHideListener.remove()
+    }
+  }, [])
   return (
     <>
       <Layout isLoading={isLoading}>
-        <Spacer horizontal={false} size={SPACER_SIZES.BASE * 3} />
-        <Text variant={TEXT_VARIANTS.heading}>
-          {t('onboarding:openAccount')}
-        </Text>
-        <Spacer horizontal={false} size={SPACER_SIZES.BASE * 3} />
+        <Text className="heading-1 my-6">{t('onboarding:openAccount')}</Text>
+
         <Input
+          className="mb-6"
           label={t('onboarding:nationalID')}
           schema={GovtIdValidator}
           onChangeText={text => {
@@ -215,7 +135,7 @@ const PersonalIdScreen = ({navigation}: Props) => {
           value={state.govtId}
           keyboardType="numeric"
         />
-        <Spacer horizontal={false} size={SPACER_SIZES.BASE * 4} />
+
         <Input
           label={t('onboarding:mobileNumber')}
           schema={MobileNumberValidator}
@@ -225,142 +145,122 @@ const PersonalIdScreen = ({navigation}: Props) => {
           maxLength={9}
           value={state.mobileNumber}
           keyboardType="numeric"
+          className="mb-6"
         />
-        {statusError && <ErrorText>{statusError}</ErrorText>}
-        <DisclaimerView isKeyboardVisible={!!keyboardHeight} isRTL={isRTL}>
+
+        {statusError && (
+          <Text className="text-center text-tc-danger font-bold">
+            {statusError}
+          </Text>
+        )}
+
+        <View
+          className={cn({
+            'mx-4': true,
+            'w-full': true,
+            'below-disclaimer': !(isSmall || isKeyboardVisible),
+            absolute: !(isSmall || isKeyboardVisible),
+          })}>
           <Checkbox
             onChange={newStatus => {
-              if (newStatus) {
-                setTermsError(false)
-              }
-
               setState({...state, isTermsCheck: newStatus})
             }}
-            label={<Terms />}
+            label={
+              <View>
+                <View
+                  className={cn({
+                    'flex-row': !isRTL,
+                    'flex-row-reverse': isRTL,
+                  })}>
+                  <Text className="text-tc-secondary">
+                    {t('onboarding:readAccept')}
+                  </Text>
+                  <TouchableOpacity onPress={() => {}}>
+                    <Text className="text-tc-secondary">
+                      {t('onboarding:disclaimer')}
+                    </Text>
+                  </TouchableOpacity>
+                  <Text className="text-tc-secondary">
+                    {t('onboarding:and')}
+                  </Text>
+                </View>
+                <View>
+                  <TouchableOpacity onPress={() => {}}>
+                    <Text className="text-tc-secondary ">
+                      {t('onboarding:termsConditions')}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            }
           />
-          {termsError && <ErrorText>{termsError}</ErrorText>}
-        </DisclaimerView>
+        </View>
 
-        {!keyboardHeight && (
-          <ButtonContainer>
-            <StyledButton onPress={onComplete} disabled={isButtonDisabled}>
+        {!isKeyboardVisible && (
+          <View
+            className={cn({
+              'mx-4': true,
+              'w-full': true,
+              'below-button': !(isSmall || isKeyboardVisible),
+              absolute: !(isSmall || isKeyboardVisible),
+            })}>
+            <Button onPress={mutate} disabled={isButtonDisabled}>
               <Text variant={TEXT_VARIANTS.body}>
                 {t('onboarding:continue')}
               </Text>
-            </StyledButton>
-          </ButtonContainer>
+            </Button>
+          </View>
         )}
-        <AlreadyAccount
-          isKeyboardVisible={!!keyboardHeight}
-          navigation={navigation}
-        />
-      </Layout>
-      {!!keyboardHeight && (
-        <StickyButtonContainer keyboardHeight={keyboardHeight}>
-          <StickyButton
+        <View
+          className={cn({
+            'mx-4': true,
+            'w-full': true,
+            'flex-row': !isRTL,
+            'justify-center': true,
+            'flex-row-reverse': isRTL,
+            'below-already': true,
+            absolute: true,
+          })}>
+          <Text className="text-tc-secondary">
+            {t('onboarding:alreadyAccount')}
+          </Text>
+          <TouchableOpacity
             onPress={() => {
-              if (!isButtonDisabled) {
-                onComplete()
-              }
-            }}
-            isDisabled={isButtonDisabled}
-            activeOpacity={isButtonDisabled ? 1 : 0.5}>
-            <Text variant={TEXT_VARIANTS.body}>{t('onboarding:continue')}</Text>
-          </StickyButton>
-        </StickyButtonContainer>
-      )}
+              navigation.navigate('Auth')
+            }}>
+            <Text className="text-tc-secondary">{t('onboarding:login')}</Text>
+          </TouchableOpacity>
+        </View>
+      </Layout>
+
+      <KeyboardStickyButton
+        onPress={mutate}
+        isDisabled={isButtonDisabled}
+        value={t('onboarding:continue')}
+      />
     </>
   )
 }
 
-const StyledButton = styled(Button)`
-  margin: 0px;
-`
-
-const ButtonContainer = styled(View)`
-  position: ${isSmall ? 'static' : 'absolute'};
-  bottom: ${isSmall ? '0px' : '107px'};
-  width: ${isSmall ? '100%' : Dimensions.get('window').width + 'px'};
-  padding-left: ${isSmall ? '0px' : '32px'};
-  padding-right: ${isSmall ? '0px' : '32px'};
-`
-
-const DisclaimerView = styled(View)<{
-  isKeyboardVisible: boolean
-  isRTL?: boolean
-}>`
-  position: ${props =>
-    props.isKeyboardVisible || isSmall ? 'static' : 'absolute'};
-  bottom: ${props => (props.isKeyboardVisible || isSmall ? '0px' : '195px')};
-  margin-left: ${props =>
-    props.isKeyboardVisible || props.isRTL || isSmall ? '0px' : '32px'};
-  margin-right: ${props =>
-    props.isKeyboardVisible || props.isRTL || isSmall ? '32px' : '0px'};
-  right: ${props => (props.isRTL ? '32px' : '0px')};
-  left: ${props => (props.isRTL ? '32px' : '0px')};
-  margin-top: 16px;
-`
-
-const UnderlineText = styled(Text)`
-  text-decoration-color: rgba(63, 61, 54, 0.8);
-  color: rgba(63, 61, 54, 0.8);
-  line-height: 16px;
-`
-
-const LoginText = styled(Text)`
-  color: #3f3d36;
-  line-height: 16px;
-  font-weight: 700;
-`
-
-const TermText = styled(Text)`
-  color: rgba(63, 61, 54, 0.8);
-  line-height: 16px;
-`
-
-const Row = styled(View)<{isRTL: boolean | undefined}>`
-  flex-direction: ${({isRTL}) => (isRTL ? 'row-reverse' : 'row')};
-  align-items: center;
-  width: 100%;
-  margin-top: 3px;
-`
-
-const StickyButtonContainer = styled.View<{keyboardHeight: Number}>`
-  position: absolute;
-  bottom: ${props =>
-    Platform.OS === 'ios' ? props.keyboardHeight + 'px' : '0px'};
-  left: 0;
-  right: 0;
-  align-items: center;
-`
-
-const StickyButton = styled.TouchableOpacity<{isDisabled?: boolean}>`
-  background-color: ${props => (props.isDisabled ? '#E1E1E1' : '#f8d03b')};
-  border: 1px solid ${props => (props.isDisabled ? '#E1E1E1' : '#f8d03b')};
-  width: 100%;
-  min-height: 56px;
-  align-items: center;
-  justify-content: center;
-`
-
-const RowCenter = styled.View<{
-  isKeyboardVisible: boolean
-  isRTL: boolean | undefined
-}>`
-  position: ${props => (props.isKeyboardVisible ? 'static' : 'absolute')};
-  bottom: ${props => (props.isKeyboardVisible ? '0px' : '51px')};
-  flex-direction: ${props => (props.isRTL ? 'row-reverse' : 'row')};
-
-  justify-content: center;
-  margin-top: ${props => (props.isKeyboardVisible ? '24px' : '0px')};
-  width: ${props =>
-    props.isKeyboardVisible ? '100%' : Dimensions.get('window').width + 'px'};
-`
-
-const ErrorText = styled(Text)`
-  font-weight: 500;
-  color: #f54d3f;
-  padding-left: 16px;
-`
-
 export default PersonalIdScreen
+
+NativeWindStyleSheet.create({
+  styles: {
+    'heading-1': {
+      fontSize: 28,
+      fontWeight: '700',
+    },
+
+    'below-disclaimer': {
+      bottom: 165,
+    },
+
+    'below-button': {
+      bottom: 95,
+    },
+
+    'below-already': {
+      bottom: 50,
+    },
+  },
+})
