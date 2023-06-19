@@ -4,8 +4,7 @@ import {View} from 'react-native'
 import {useTranslation} from 'react-i18next'
 import styled from 'styled-components/native'
 import {NativeStackNavigationProp} from '@react-navigation/native-stack'
-import {Formik} from 'formik'
-import * as Yup from 'yup'
+
 import {useMutation} from '@tanstack/react-query'
 import {Colors, BASE_URL, getItem, UserNameValidator} from '@Utils'
 import {useStore} from '@Store'
@@ -15,31 +14,6 @@ import {fetcher} from '@Api'
 type CreateUserProps = {
   navigation: NativeStackNavigationProp<{}>
 }
-
-type CreateUserForm = {
-  userName: string | null
-  password: string | null
-  confirmPassword: string | null
-}
-
-// validation for create user form
-const CreateUserSchema = Yup.object().shape({
-  userName: Yup.string()
-    .required('Please Enter a Value')
-    .min(8, 'Please enter minimum 8 character')
-    .max(10, 'Please enter maximum 10 character')
-    .matches(
-      /^(?!.*?(.)\1{2})/,
-      'Please dont enter three or more consecutive and identical characters',
-    ),
-  password: Yup.string()
-    .min(8, 'Too Short!')
-    .max(21, 'Too Long!')
-    .required('Please Enter a Value'),
-  confirmPassword: Yup.string()
-    .oneOf([Yup.ref('password')], 'Passwords must match')
-    .required('Please Enter a Value'),
-})
 
 function CreateUser({navigation}: CreateUserProps) {
   const {t} = useTranslation()
@@ -52,12 +26,6 @@ function CreateUser({navigation}: CreateUserProps) {
     passwordFour: false,
     values: {},
   })
-  // initial values for create user form
-  const initialValues: CreateUserForm = {
-    userName: '',
-    password: '',
-    confirmPassword: '',
-  }
 
   const {
     isLoading: isLoading,
@@ -91,6 +59,14 @@ function CreateUser({navigation}: CreateUserProps) {
     }
   }, [uData])
 
+  const setFieldValue = (key: string, val: string) => {
+    setState({...state, values: {...state.values, [key]: val}})
+  }
+
+  const handleSubmit = () => {
+    mutate()
+  }
+
   return (
     <>
       <Layout
@@ -104,114 +80,89 @@ function CreateUser({navigation}: CreateUserProps) {
             <TCTextView>{t('onboarding:createUserTitle')}</TCTextView>
           </Header>
 
-          <Formik
-            validateOnMount
-            initialValues={initialValues}
-            validationSchema={CreateUserSchema}
-            onSubmit={(values: any) => {
-              setState({...state, values: values})
-              mutate()
-            }}>
-            {({values, errors, touched, handleChange, handleSubmit}) => {
-              return (
-                <>
-                  <View className="flex-1 mt-6 gap-6">
-                    <View>
-                      <TCInput
-                        maxLength={10}
-                        schema={UserNameValidator}
-                        value={values.userName}
-                        label={t('auth:userName')}
-                        onChangeText={handleChange('userName')}
-                      />
+          <View className="flex-1 mt-6 gap-6">
+            <View>
+              <TCInput
+                maxLength={10}
+                schema={UserNameValidator}
+                value={state.values.userName}
+                label={t('auth:userName')}
+                onChangeText={val => setFieldValue('userName', val)}
+              />
+            </View>
 
-                      {touched.userName && errors.userName ? (
-                        <ErrorText>{errors.userName}</ErrorText>
-                      ) : null}
-                    </View>
+            <View>
+              <TCInput
+                isPassword
+                value={state.values.password}
+                label={t('auth:password')}
+                onChangeText={val => setFieldValue('password', val)}
+              />
+            </View>
 
-                    <View>
-                      <TCInput
-                        isPassword
-                        value={values.password}
-                        label={t('auth:password')}
-                        onChangeText={handleChange('password')}
-                      />
-                      {touched.password && errors.password ? (
-                        <ErrorText>{errors.password}</ErrorText>
-                      ) : null}
-                    </View>
+            <View>
+              <TCInput
+                isPassword
+                value={state.values.confirmPassword}
+                label={t('auth:confirmPassword')}
+                onChangeText={val => setFieldValue('confirmPassword', val)}
+              />
+            </View>
 
-                    <View>
-                      <TCInput
-                        isPassword
-                        value={values.confirmPassword}
-                        label={t('auth:confirmPassword')}
-                        onChangeText={handleChange('confirmPassword')}
-                      />
-                      {touched.confirmPassword && errors.confirmPassword ? (
-                        <ErrorText>{errors.confirmPassword}</ErrorText>
-                      ) : null}
-                    </View>
+            <View>
+              <PassRules
+                passwordOne={
+                  !!(
+                    state.values.password &&
+                    state.values.password.length > 7 &&
+                    state.values.password.length < 21
+                  )
+                }
+                passwordTwo={
+                  !!(
+                    state.values?.password &&
+                    /[!@#$%^&*(),.?":{}|<>]/.test(state.values?.password)
+                  )
+                }
+                passwordThree={
+                  !!(
+                    state.values?.password &&
+                    /^(?=.*\d\D*\d).*$/.test(state.values?.password)
+                  )
+                }
+                passwordFour={
+                  !!(
+                    state.values?.password &&
+                    /[A-Z]/.test(state.values?.password) &&
+                    /[a-z]/.test(state.values?.password)
+                  )
+                }
+                passwordFive={
+                  !!(
+                    state.values?.password &&
+                    state.values?.password === state.values?.confirmPassword
+                  )
+                }
+              />
+            </View>
+          </View>
 
-                    <View>
-                      <PassRules
-                        passwordOne={
-                          !!(
-                            values.password &&
-                            values.password.length > 7 &&
-                            values.password.length < 21
-                          )
-                        }
-                        passwordTwo={
-                          !!(
-                            values?.password &&
-                            /[!@#$%^&*(),.?":{}|<>]/.test(values?.password)
-                          )
-                        }
-                        passwordThree={
-                          !!(
-                            values?.password &&
-                            /^(?=.*\d\D*\d).*$/.test(values?.password)
-                          )
-                        }
-                        passwordFour={
-                          !!(
-                            values?.password &&
-                            /[A-Z]/.test(values?.password) &&
-                            /[a-z]/.test(values?.password)
-                          )
-                        }
-                        passwordFive={
-                          !!(
-                            values?.password &&
-                            values?.password === values?.confirmPassword
-                          )
-                        }
-                      />
-                    </View>
-                  </View>
-
-                  <StyledButton
-                    disabled={
-                      !(
-                        values.password &&
-                        values.password.length > 7 &&
-                        values.password.length < 21 &&
-                        /[!@#$%^&*(),.?":{}|<>]/.test(values?.password) &&
-                        /\d/.test(values?.password) &&
-                        /[A-Z]/.test(values?.password) &&
-                        /[a-z]/.test(values?.password) &&
-                        values.password === values.confirmPassword
-                      )
-                    }
-                    onPress={handleSubmit}>
-                    <TCTextView>{t('onboarding:create')}</TCTextView>
-                  </StyledButton>
-                </>
+          <StyledButton
+            disabled={
+              !(
+                state.values.password &&
+                state.values.password.length > 7 &&
+                state.values.password.length < 21 &&
+                /[!@#$%^&*(),.?":{}|<>]/.test(state.values?.password) &&
+                /\d/.test(state.values?.password) &&
+                /[A-Z]/.test(state.values?.password) &&
+                /[a-z]/.test(state.values?.password) &&
+                state.values.password === state.values.confirmPassword
               )
-            }}
-          </Formik>
+            }
+            onPress={handleSubmit}>
+            <TCTextView>{t('onboarding:create')}</TCTextView>
+          </StyledButton>
         </View>
       </Layout>
     </>
@@ -233,12 +184,6 @@ const StyledButton = styled(TCButton)`
   margin-right: 32px;
   width: 100%;
   align-self: center;
-`
-
-const ErrorText = styled(TCTextView)`
-  font-weight: 500;
-  color: #f54d3f;
-  padding-left: 16px;
 `
 
 export default CreateUser
