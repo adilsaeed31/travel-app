@@ -1,6 +1,8 @@
 import React, {FC, memo, useEffect, useState} from 'react'
-import {Platform, Keyboard} from 'react-native'
+import {Platform, Keyboard, TouchableOpacity} from 'react-native'
 import Text from '../TextView'
+import cn from 'classnames'
+import {NativeWindStyleSheet} from 'nativewind'
 import styled from 'styled-components/native'
 
 type KeyboardProps = {
@@ -33,41 +35,51 @@ const Button: FC<KeyboardProps> = ({value, isDisabled, onPress = () => {}}) => {
     }
   }, [])
 
-  if (!keyboardHeight) {
+  if (keyboardHeight) {
     return null
   }
   return (
-    <StickyButtonContainer keyboardHeight={keyboardHeight}>
-      <StickyButton
-        onPress={() => {
-          if (!isDisabled && onPress) {
-            onPress()
-          }
-        }}
-        isDisabled={isDisabled}
-        activeOpacity={isDisabled ? 1 : 0.5}>
-        <Text>{value}</Text>
+    <>
+      <StickyButton keyboardHeight={keyboardHeight}>
+        <TouchableOpacity
+          className={cn({
+            'py-4': true,
+            'w-full': true,
+            'justify-center': true,
+            yallowButton: isDisabled,
+            grayButton: !isDisabled,
+          })}
+          onPress={() => {
+            if (!isDisabled && onPress) {
+              onPress()
+            }
+          }}
+          activeOpacity={isDisabled ? 1 : 0.5}>
+          <Text className="text-center">{value}</Text>
+        </TouchableOpacity>
       </StickyButton>
-    </StickyButtonContainer>
+    </>
   )
 }
 
-const StickyButtonContainer = styled.View<{keyboardHeight: Number}>`
+const StickyButton = styled.View<{keyboardHeight: Number}>`
   position: absolute;
-  bottom: ${props =>
-    Platform.OS === 'ios' ? props.keyboardHeight + 'px' : '0px'};
+  bottom: ${props => props.keyboardHeight + 'px'};
   left: 0;
   right: 0;
   align-items: center;
 `
 
-const StickyButton = styled.TouchableOpacity<{isDisabled?: boolean}>`
-  background-color: ${props => (props.isDisabled ? '#E1E1E1' : '#f8d03b')};
-  border: 1px solid ${props => (props.isDisabled ? '#E1E1E1' : '#f8d03b')};
-  width: 100%;
-  min-height: 56px;
-  align-items: center;
-  justify-content: center;
-`
+NativeWindStyleSheet.create({
+  styles: {
+    yallowButton: {
+      backgroundColor: '#f8d03b',
+    },
+
+    grayButton: {
+      backgroundColor: '#E1E1E1',
+    },
+  },
+})
 
 export default memo(Button)
