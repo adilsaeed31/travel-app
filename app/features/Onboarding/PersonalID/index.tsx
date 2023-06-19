@@ -18,7 +18,6 @@ import {
   GovtIdValidator,
   MobileNumberValidator,
   TermsCheckvalidator,
-  TEXT_VARIANTS,
   screenHeight,
 } from '@Utils'
 import {AppProviderProps, AppContext} from '@Context'
@@ -119,6 +118,7 @@ const PersonalIdScreen = ({navigation}: Props) => {
       keyboardDidHideListener.remove()
     }
   }, [])
+
   return (
     <>
       <Layout isLoading={isLoading}>
@@ -205,9 +205,7 @@ const PersonalIdScreen = ({navigation}: Props) => {
               absolute: !(isSmall || isKeyboardVisible),
             })}>
             <Button onPress={mutate} disabled={isButtonDisabled}>
-              <Text variant={TEXT_VARIANTS.body}>
-                {t('onboarding:continue')}
-              </Text>
+              <Text>{t('onboarding:continue')}</Text>
             </Button>
           </View>
         )}
@@ -242,8 +240,6 @@ const PersonalIdScreen = ({navigation}: Props) => {
   )
 }
 
-export default PersonalIdScreen
-
 NativeWindStyleSheet.create({
   styles: {
     'heading-1': {
@@ -264,3 +260,5 @@ NativeWindStyleSheet.create({
     },
   },
 })
+
+export default PersonalIdScreen
