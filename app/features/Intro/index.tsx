@@ -56,21 +56,21 @@ const IntroFeature: React.FC<{
     setCurrentValue(currentValue + FirstSlideFrame)
   }
 
-  const onLayoutRender = () => {
-    nextAnimRef.current!.play(0, FirstSlideFrame)
+  const reRenderAnimation = () => {
+    if (updatedValue.current === FirstSlideFrame) {
+      nextAnimRef.current?.play(0, FirstSlideFrame)
+    } else if (updatedValue.current === MiddleSlideFrame) {
+      nextAnimRef.current?.play(FirstSlideFrame, MiddleSlideFrame)
+    } else if (updatedValue.current >= LastSlideFrame) {
+      nextAnimRef.current?.play(MiddleSlideFrame, LastSlideFrame)
+    }
   }
 
   useEffect(() => {
     // below code is for to check the if the animation
     // rendering or not on the app background|inactive
     if (appStateVisible === 'active') {
-      if (updatedValue.current === FirstSlideFrame) {
-        nextAnimRef.current?.play(0, FirstSlideFrame)
-      } else if (updatedValue.current === MiddleSlideFrame) {
-        nextAnimRef.current?.play(FirstSlideFrame, MiddleSlideFrame)
-      } else if (updatedValue.current >= LastSlideFrame) {
-        nextAnimRef.current?.play(MiddleSlideFrame, LastSlideFrame)
-      }
+      reRenderAnimation()
     }
   }, [appStateVisible])
 
@@ -115,7 +115,7 @@ const IntroFeature: React.FC<{
         ref={nextAnimRef}
         resizeMode="cover"
         source={introAnimation}
-        onLayout={onLayoutRender}
+        onLayout={reRenderAnimation}
       />
 
       <View className="flex-1 p-8">
