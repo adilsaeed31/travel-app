@@ -46,7 +46,7 @@ type Props = {
 }
 
 function Screen({navigation}: Props) {
-  const [currentOpendIndx, setCurrentOpenedInx] = useState(-1)
+  const [currentOpendIndx, setCurrentOpenedInx] = useState('-1')
   const {isRTL} = useContext<AppProviderProps>(AppContext)
   const {t} = useTranslation()
 
@@ -65,7 +65,7 @@ function Screen({navigation}: Props) {
 
   const onBoardingProgress = useStore((store: any) => store.onBoardingProgress)
 
-  const ToggleSheet = (indx: number) => {
+  const ToggleSheet = (indx: string) => {
     setCurrentOpenedInx(indx)
     let err = errors
 
@@ -228,7 +228,7 @@ function Screen({navigation}: Props) {
                     .filter(i => i.code !== 'SA')
                     .map(c => (isRTL ? c.nameAr : c.nameEn))}
                   label={t('Select Country') || ''}
-                  toogleClick={() => ToggleSheet(0)}
+                  toogleClick={() => ToggleSheet('0')}
                   value={undefined}
                   error={undefined}
                   onItemSelected={val =>
@@ -252,9 +252,9 @@ function Screen({navigation}: Props) {
                       ],
                     })
                   }
-                  isOpen={currentOpendIndx === 0}
+                  isOpen={currentOpendIndx === '0'}
                   title={t('Select Country')}
-                  onSheetClose={() => setCurrentOpenedInx(-1)}
+                  onSheetClose={() => setCurrentOpenedInx('-1')}
                   hasSearch={true}
                 />
               </>
@@ -274,7 +274,7 @@ function Screen({navigation}: Props) {
                         isRTL ? c.nameAr : c.nameEn,
                       )}
                       label={t('Country') || ''}
-                      toogleClick={() => ToggleSheet(0)}
+                      toogleClick={() => ToggleSheet(index + '1')}
                       value={item.country}
                       error={undefined}
                       onItemSelected={() =>
@@ -298,9 +298,9 @@ function Screen({navigation}: Props) {
                           ],
                         })
                       }
-                      isOpen={currentOpendIndx === 0}
+                      isOpen={currentOpendIndx === index + '1'}
                       title={t('Select Country')}
-                      onSheetClose={() => setCurrentOpenedInx(-1)}
+                      onSheetClose={() => setCurrentOpenedInx('-1')}
                       hasSearch={true}
                     />
                     <Spacer size={SPACER_SIZES.BASE * 2} />
@@ -350,7 +350,7 @@ function Screen({navigation}: Props) {
                       <DropDown
                         data={noTinList.map(c => (isRTL ? c.nameAr : c.nameEn))}
                         label={t('Reason for not having a TIN')}
-                        toogleClick={() => ToggleSheet(0)}
+                        toogleClick={() => ToggleSheet(index + '2')}
                         value={values.countries[index].noTinReason}
                         error={undefined}
                         onItemSelected={val => {
@@ -358,9 +358,9 @@ function Screen({navigation}: Props) {
                           sT.countries[index].noTinReason = val
                           setValues(sT)
                         }}
-                        isOpen={currentOpendIndx === 0}
+                        isOpen={currentOpendIndx === index + '2'}
                         title={t('Reason for not having a TIN')}
-                        onSheetClose={() => setCurrentOpenedInx(-1)}
+                        onSheetClose={() => setCurrentOpenedInx('-1')}
                         hasSearch={false}
                       />
                     )}

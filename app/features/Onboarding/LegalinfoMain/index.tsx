@@ -346,6 +346,7 @@ function LegalInformation({navigation}: Props) {
               </>
             ) : null}
           </View>
+          <Spacer size={SPACER_SIZES.BASE * 2} />
           {statusError ? <ErrorText>{statusError}</ErrorText> : null}
           <StyledButton disabled={!isFormValid} onPress={mutate}>
             <Text variant={TEXT_VARIANTS.body}>
