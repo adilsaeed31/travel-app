@@ -34,6 +34,7 @@ module.exports = {
           dot: '#D7D7D7',
           'dot-active': '#4CD964',
           'quick-text-color': '#2C343B',
+          danger: '#f54d3f',
         },
       },
     },

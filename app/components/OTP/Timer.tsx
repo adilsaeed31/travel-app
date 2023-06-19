@@ -49,7 +49,8 @@ const Timer: React.FC<TimerProps> = ({
     if (appStateVisible === 'active' && leaveTime) {
       let distance = parseInt(String((Date.now() - leaveTime) / 1000))
       setLeaveTime(0)
-      setTime(prevTime => prevTime - distance)
+
+      setTime(prevTime => (prevTime - distance > 0 ? prevTime - distance : 0))
     }
 
     if (appStateVisible === 'background' || appStateVisible === 'inactive') {
@@ -72,7 +73,7 @@ const Timer: React.FC<TimerProps> = ({
 
     if (time > 0) {
       interval = setInterval(() => {
-        setTime(prevTime => prevTime - 1)
+        setTime(prevTime => (prevTime - 1 > 0 ? prevTime - 1 : 0))
       }, 1000)
     } else {
       onTimerComplete()
