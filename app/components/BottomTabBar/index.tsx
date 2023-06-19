@@ -88,7 +88,7 @@ const BottomTabBar: React.FC<BottomTabBarProps> = ({
         {...rest}
         className={cn(
           flexRowLayout(isRTL),
-          'bar-width-05 border-tc-tab h-16 m-5 rounded-3xl bg-tc-bottom-tab overflow-hidden ',
+          'bar-width-05 border-tc-tab h-16 m-5 rounded-3xl bg-tc-bottom-tab overflow-hidden',
         )}>
         {state.routes.map((route, index) => {
           const {options} = descriptors[route.key]
@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 4,
     bottom: 0,
-    marginLeft: 40,
+    marginStart: 40,
     position: 'absolute',
     borderTopLeftRadius: 8,
     borderTopRightRadius: 8,

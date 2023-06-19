@@ -22,7 +22,7 @@ const BottomSheet = () => {
   const scaleY = useSharedValue(1)
   const bottomSheetRef = useRef<BSheet>(null)
 
-  const [isOpen, setIsOpen] = useState<boolean>(true)
+  const [isOpen, setIsOpen] = useState<boolean>(false)
   const [hasDisplay, setDisplay] = useState<boolean>(false)
 
   const cardData = useStore(state => state.cardData)
@@ -52,10 +52,10 @@ const BottomSheet = () => {
   const handleSheetChanges = useCallback(
     (index: number) => {
       scaleY.value = index === 1 ? -1 : 1
-      setIsOpen(!isOpen)
+      setIsOpen(index === 1)
       setDisplay(index === 1)
     },
-    [isOpen, scaleY],
+    [scaleY],
   )
 
   const onPress = useCallback(() => {
