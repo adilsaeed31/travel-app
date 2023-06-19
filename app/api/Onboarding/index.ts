@@ -1,4 +1,4 @@
-import {BASE_URL} from '@Utils'
+import {BASE_URL, prependZeroIfNotPresent} from '@Utils'
 
 import {fetcher} from '../fetcher'
 
@@ -9,7 +9,7 @@ export const triggerOTP = async (state: {
   let req: any = await fetcher(BASE_URL + '/auth/otp', {
     method: 'POST',
     body: {
-      mobile_number: '0' + state.mobileNumber,
+      mobile_number: prependZeroIfNotPresent(state.mobileNumber),
       identity_number: state.govtId,
       role: 'ONBOARDING',
     },
