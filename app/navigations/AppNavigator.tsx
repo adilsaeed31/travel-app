@@ -16,7 +16,13 @@ const AppNavigator = () => (
       }}
       component={HomeNavigator}
     />
-    <Screen name="LoadFunds" component={LoadFundsScreen} />
+    <Screen
+      name="LoadFunds"
+      component={LoadFundsScreen}
+      options={{
+        headerShown: false,
+      }}
+    />
   </Navigator>
 )
 

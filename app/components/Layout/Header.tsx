@@ -51,17 +51,26 @@ const TopNavigationSimpleUsageShowcase: React.FC<PropsType> = ({
   const {t} = useTranslation()
   const isRTL = useStore(state => state.isRTL)
   const toggleLanguage = useStore(state => state.toggleLanguage)
+  const reset = useStore(state => state?.reset)
+  const setUser = useStore(state => state?.setUser)
 
   return (
     <Container {...props}>
       <StatusBar />
+     
       {isBack ? (
         <TouchableOpacity onPress={onBack}>
           <ArrowLeftIcon />
         </TouchableOpacity>
       ) : (
         <ViewSub isRTL={isRTL}>
+          <TouchableOpacity
+            onPress={() => {
+              reset()
+              setUser(null)
+            }}>
           <SaibLogo />
+          </TouchableOpacity>
           {canLanguageChange ? (
             <>
               <TouchableOpacity onPress={toggleLanguage}>
