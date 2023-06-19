@@ -1,9 +1,7 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useState, useContext} from 'react'
 import * as yup from 'yup'
-import {View, Keyboard, Dimensions, TouchableOpacity} from 'react-native'
+import {View, Keyboard, TouchableOpacity, Platform} from 'react-native'
 import {useTranslation} from 'react-i18next'
-import styled from 'styled-components/native'
 import {useMutation} from '@tanstack/react-query'
 import {NativeStackNavigationProp} from '@react-navigation/native-stack'
 import {
@@ -11,14 +9,16 @@ import {
   TCButton as Button,
   TCTextView as Text,
   TCOTP as OTP,
-  Spacer,
+  KeyboardStickyButton,
 } from '@Components'
-import {SPACER_SIZES, TEXT_VARIANTS, BASE_URL, setItem} from '@Utils'
+import {BASE_URL, setItem} from '@Utils'
 import {AppProviderProps, AppContext} from '@Context'
 import {fetcher} from '@Api'
 import {Edit} from '@Assets'
 import {useStore} from '@Store'
 import {useFocusEffect} from '@react-navigation/native'
+import {NativeWindStyleSheet} from 'nativewind'
+import cn from 'classnames'
 
 type Props = {
   navigation: NativeStackNavigationProp<any>
@@ -30,14 +30,12 @@ const OtpPersonalIdScreen = ({navigation, route}: Props) => {
 
   const {isRTL} = useContext<AppProviderProps>(AppContext)
   const [state, setState] = useState<any>({})
-
   const [error, setError] = useState<string>('')
   const [statusError, setStatusError] = useState<any>(false)
   const [resendCount, setResendCount] = useState<number>(1)
   const [tahaquqFailCount, setTahaquqFailCount] = useState<number>(0)
-
   const [finishTimer, setFinishTimer] = useState<number>(1)
-  const [keyboardHeight, setKeyboardHeight] = useState<Number>(0)
+  const [isKeyboardVisible, setKeyboardVisible] = useState<boolean>(false)
   const [isButtonDisabled, setButtonDisabled] = useState(true)
   const [resendAvailable, setResendAvailable] = useState<boolean>(false)
   const [invalidAttempts, setInvalidAttempts] = useState<number>(0)
@@ -99,7 +97,6 @@ const OtpPersonalIdScreen = ({navigation, route}: Props) => {
         },
         token: otpData.access_token,
       })
-      // TODO :  need to remove static token with otpData.access_token
       let res = await req.json()
       return res
     },
@@ -147,20 +144,20 @@ const OtpPersonalIdScreen = ({navigation, route}: Props) => {
         setButtonDisabled(true)
       }
     }
-  }, [state.otp])
+  }, [state, state.otp])
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
-      'keyboardWillShow',
-      e => {
-        setKeyboardHeight(e.endCoordinates.height)
+      Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow',
+      () => {
+        setKeyboardVisible(true)
       },
     )
 
     const keyboardDidHideListener = Keyboard.addListener(
-      'keyboardWillHide',
+      Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide',
       () => {
-        setKeyboardHeight(0)
+        setKeyboardVisible(false)
       },
     )
 
@@ -206,7 +203,7 @@ const OtpPersonalIdScreen = ({navigation, route}: Props) => {
           setStatusError('')
       }
     }
-  }, [otpData])
+  }, [finishTimer, invalidAttempts, navigation, otpData, verifyTahaquq])
 
   useEffect(() => {
     if (
@@ -260,7 +257,16 @@ const OtpPersonalIdScreen = ({navigation, route}: Props) => {
           setStatusError('')
       }
     }
-  }, [tahaquqData])
+  }, [
+    navigation,
+    onBoardingProgress,
+    resetOTP,
+    resetTahaquq,
+    setOnboardingProgress,
+    state.otp,
+    tahaquqData,
+    tahaquqFailCount,
+  ])
 
   useEffect(() => {
     setStatusError('')
@@ -286,7 +292,7 @@ const OtpPersonalIdScreen = ({navigation, route}: Props) => {
           setStatusError('')
       }
     }
-  }, [resendData])
+  }, [navigation, resendData])
 
   const onComplete = () => {
     if (state.otp.length === 4) {
@@ -299,9 +305,8 @@ const OtpPersonalIdScreen = ({navigation, route}: Props) => {
   return (
     <>
       <Layout isLoading={isOTPLoading || isTahaquqLoading || isResend}>
-        <Spacer horizontal={false} size={SPACER_SIZES.BASE * 3} />
-        <Text variant={TEXT_VARIANTS.heading}>{t('onboarding:enterOTP')}</Text>
-        <Spacer size={SPACER_SIZES.BASE * 3} />
+        <Text className="heading-1 my-6">{t('onboarding:enterOTP')}</Text>
+
         <OTP
           value={state.otp}
           onChangeText={otp => {
@@ -313,15 +318,30 @@ const OtpPersonalIdScreen = ({navigation, route}: Props) => {
           resetCount={resendCount}
           finishTimer={finishTimer}
         />
-        <Spacer size={SPACER_SIZES.BASE * 2} />
-        <Row isRTL={isRTL}>
+
+        <View
+          className={cn({
+            'flex-row': !isRTL,
+            'flex-row-reverse': isRTL,
+            'justify-between': true,
+            'mt-4': true,
+          })}>
           <TouchableOpacity onPress={() => navigation.navigate('PersonalID')}>
-            <Row isRTL={isRTL}>
-              <EditIcon />
-              <BottomText variant={TEXT_VARIANTS.body}>
+            <View
+              className={cn({
+                'flex-row': !isRTL,
+                'flex-row-reverse': isRTL,
+              })}>
+              <Edit />
+              <Text
+                className={cn({
+                  'text-tc-secondary': true,
+                  'mt-[6]': true,
+                  'mx-[6]': true,
+                })}>
                 {mobileNumber}
-              </BottomText>
-            </Row>
+              </Text>
+            </View>
           </TouchableOpacity>
           <View>
             {resendAvailable ? (
@@ -332,126 +352,76 @@ const OtpPersonalIdScreen = ({navigation, route}: Props) => {
                   setResendAvailable(false)
                   setResendCount(resendCount + 1)
                 }}>
-                <BottomText variant={TEXT_VARIANTS.body}>
+                <Text
+                  className={cn({
+                    'text-tc-secondary': true,
+                    'mt-[6]': true,
+                  })}>
                   {t('onboarding:resendOTP')}
-                </BottomText>
+                </Text>
               </TouchableOpacity>
             ) : (
-              <BottomText variant={TEXT_VARIANTS.body} disabled={true}>
+              <Text
+                className={cn({
+                  'text-tc-secondary': true,
+                  'mt-[6]': true,
+                  'opacity-40': true,
+                })}>
                 {t('onboarding:resendOTP')}
-              </BottomText>
+              </Text>
             )}
           </View>
-        </Row>
+        </View>
 
         {statusError && state.otp ? (
-          <ErrorWrapper>
-            <ErrorLabel>{statusError}</ErrorLabel>
-          </ErrorWrapper>
+          <View className="flex-row justify-center content-start bg-[#ffdede] my-5 min-h-[56] rounded-b-[16] rounded-t-[16]">
+            <Text className="text-center text-tc-danger">{statusError}</Text>
+          </View>
         ) : null}
 
         {error && state.otp ? (
-          <ErrorWrapper>
-            <ErrorLabel>{error}</ErrorLabel>
-          </ErrorWrapper>
+          <View className="flex-row justify-center content-start bg-[#ffdede] my-5 min-h-[56] rounded-b-[16] rounded-t-[16]">
+            <Text className="text-center text-tc-danger">{statusError}</Text>
+          </View>
         ) : null}
 
-        {!keyboardHeight && (
-          <ButtonContainer>
+        {!isKeyboardVisible && (
+          <View
+            className={cn({
+              'mx-4': true,
+              'w-full': true,
+              'below-button': !isKeyboardVisible,
+              absolute: !isKeyboardVisible,
+            })}>
             <Button
               onPress={onComplete}
               disabled={isButtonDisabled || state.otp.length < 4}>
-              <Text variant={TEXT_VARIANTS.body}>{t('onboarding:Verify')}</Text>
+              <Text>{t('onboarding:Verify')}</Text>
             </Button>
-          </ButtonContainer>
+          </View>
         )}
       </Layout>
-      {!!keyboardHeight && (
-        <StickyButtonContainer keyboardHeight={keyboardHeight}>
-          <StickyButton
-            onPress={() => {
-              if (!isButtonDisabled && state.otp.length === 4) {
-                onComplete()
-              }
-            }}
-            isDisabled={isButtonDisabled || state.otp.length < 4}
-            activeOpacity={
-              (isButtonDisabled || state.otp.length) < 4 ? 1 : 0.5
-            }>
-            <Text variant={TEXT_VARIANTS.body}>{t('onboarding:Verify')}</Text>
-          </StickyButton>
-        </StickyButtonContainer>
-      )}
+
+      <KeyboardStickyButton
+        onPress={onComplete}
+        isDisabled={isButtonDisabled || state.otp.length < 4}
+        value={t('onboarding:Verify')}
+      />
     </>
   )
 }
 
-const ButtonContainer = styled(View)`
-  position: absolute;
-  bottom: 34px;
-  width: ${Dimensions.get('window').width}px;
-  padding-left: 32px;
-  padding-right: 32px;
-`
+NativeWindStyleSheet.create({
+  styles: {
+    'heading-1': {
+      fontSize: 28,
+      fontWeight: '700',
+    },
 
-const Row = styled(View)<{isRTL: boolean | undefined}>`
-  display: flex;
-  flex-direction: ${({isRTL}) => (isRTL ? 'row-reverse' : 'row')};
-  justify-content: space-between;
-`
-
-const EditIcon = styled(Edit)`
-  margin-right: 6px;
-`
-
-const BottomText = styled(Text)<{disabled?: boolean}>`
-  line-height: 20px;
-  color: #3f3d36;
-  opacity: ${props => (props.disabled ? '0.4' : '1')};
-`
-
-const StickyButtonContainer = styled.View<{keyboardHeight: Number}>`
-  position: absolute;
-  bottom: ${props => props.keyboardHeight + 'px'};
-  left: 0;
-  right: 0;
-  align-items: center;
-`
-
-const StickyButton = styled.TouchableOpacity<{isDisabled?: boolean}>`
-  background-color: ${props => (props.isDisabled ? '#E1E1E1' : '#f8d03b')};
-  border: 1px solid ${props => (props.isDisabled ? '#E1E1E1' : '#f8d03b')};
-  width: 100%;
-  min-height: 56px;
-  align-items: center;
-  justify-content: center;
-`
-
-const ErrorWrapper = styled.View`
-  flex-direction: row;
-  justify-content: center;
-  align-items: flex-start;
-  background: #ffdede;
-  border-radius: 16px;
-  min-height: 60px;
-  margin-top: 20px;
-  margin-bottom: 20px;
-`
-
-const ErrorLabel = styled.Text`
-  font-family: 'Co Text';
-  font-style: normal;
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 28px;
-  align-self: center;
-  max-width: 90%;
-  /* or 200% */
-
-  text-align: center;
-  letter-spacing: -0.4px;
-
-  color: #de2e2e;
-`
+    'below-button': {
+      bottom: 95,
+    },
+  },
+})
 
 export default OtpPersonalIdScreen
