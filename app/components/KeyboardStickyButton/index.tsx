@@ -35,9 +35,10 @@ const Button: FC<KeyboardProps> = ({value, isDisabled, onPress = () => {}}) => {
     }
   }, [])
 
-  if (keyboardHeight) {
+  if (!keyboardHeight) {
     return null
   }
+
   return (
     <>
       <StickyButton keyboardHeight={keyboardHeight}>
