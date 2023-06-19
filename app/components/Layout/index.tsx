@@ -15,9 +15,9 @@ import {ActivityIndicator} from 'react-native'
 
 import {BottomBg, FlightPath} from '@Assets'
 import {useStore} from '@Store'
-import {vh, vw} from '@Utils'
-
+import {appVersion, vh, vw} from '@Utils'
 import Header from './Header'
+import {Text} from 'react-native'
 
 type LayoutProps = {
   isHeader?: boolean
@@ -157,6 +157,10 @@ const AppLayout: React.FC<LayoutProps> = ({
             </ContentWrapper>
           </Container>
         </TouchableOpacity>
+        {/* Added Version display it'll get version from version xcode and android gradle versionName */}
+        <Text className="absolute bottom-20 left-0 right-0 text-center text-xs text-slate-400 font-tc-light z-0">
+          Version {appVersion}
+        </Text>
       </ScrollView>
     </KeyboardAvoidingView>
   )
