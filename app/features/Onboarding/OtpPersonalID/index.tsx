@@ -395,7 +395,13 @@ const OtpPersonalIdScreen = ({navigation, route}: Props) => {
             })}>
             <Button
               onPress={onComplete}
-              disabled={isButtonDisabled || state.otp.length < 4}>
+              disabled={
+                isButtonDisabled ||
+                state.otp.length < 4 ||
+                isOTPLoading ||
+                isTahaquqLoading ||
+                isResend
+              }>
               <Text>{t('onboarding:Verify')}</Text>
             </Button>
           </View>
@@ -404,7 +410,13 @@ const OtpPersonalIdScreen = ({navigation, route}: Props) => {
 
       <KeyboardStickyButton
         onPress={onComplete}
-        isDisabled={isButtonDisabled || state.otp.length < 4}
+        isDisabled={
+          isButtonDisabled ||
+          state.otp.length < 4 ||
+          isOTPLoading ||
+          isTahaquqLoading ||
+          isResend
+        }
         value={t('onboarding:Verify')}
       />
     </>
