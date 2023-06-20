@@ -17,6 +17,8 @@ export {default as Dot} from './Dot'
 export {default as TransItem} from './TransItem'
 export {default as BottomSheet} from './BottomSheet'
 
+export {default as Switch} from './Switch'
+export {default as Modal} from './Modal'
 // Screen and feature components in one line import
 export * from './Intro'
 export * from './Dashboard'

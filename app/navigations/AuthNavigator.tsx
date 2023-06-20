@@ -28,7 +28,6 @@ import {
   LegalInfoFlow4,
 } from '@Features'
 import {WIPScreen, DownstreamFail} from '@Screens'
-
 const {Navigator, Screen} = createStackNavigator()
 
 const AuthNavigator = () => {
