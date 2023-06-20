@@ -1,17 +1,19 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useState} from 'react'
-import {View, Dimensions} from 'react-native'
+import {View} from 'react-native'
 import {useTranslation} from 'react-i18next'
+import {NativeWindStyleSheet} from 'nativewind'
+import cn from 'classnames'
+
 import {
   Layout,
   TCButton as Button,
   TCTextView as Text,
   TCInput as Input,
-  Spacer,
 } from '@Components'
 import * as yup from 'yup'
 import {useMutation} from '@tanstack/react-query'
-import {SPACER_SIZES, TEXT_VARIANTS, BASE_URL} from '@Utils'
+import {TEXT_VARIANTS, BASE_URL, screenHeight} from '@Utils'
 import styled from 'styled-components/native'
 import {NativeStackNavigationProp} from '@react-navigation/native-stack'
 import {Return, Cross} from '@Assets'
@@ -19,7 +21,7 @@ import {MobileNumberValidator} from '@Utils'
 import {fetcher} from '@Api'
 import {useStore} from '@Store'
 
-const isSmall = Dimensions.get('window').height < 750
+const isSmall = screenHeight < 750
 
 type Props = {
   navigation: NativeStackNavigationProp<any>
@@ -78,7 +80,7 @@ const AfterOtpPersonalIDScreen = ({navigation, route}: Props) => {
         case status > 399 && status <= 500:
           setState({
             ...state,
-            error: 'Something went wrong. Please try after some time',
+            error: 'common:someThingWentWrong',
           })
           break
       }
@@ -91,15 +93,15 @@ const AfterOtpPersonalIDScreen = ({navigation, route}: Props) => {
 
   useEffect(() => {
     let data = route.params
-    if (data.case === 'Bandwidth Limit Exceeded') {
+    if (data?.case === 'Bandwidth Limit Exceeded') {
       setState({...state, step: STPES.attempts})
     }
 
-    if (data.case === 'Invalid Attempts') {
+    if (data?.case === 'Invalid Attempts') {
       setState({...state, step: STPES.phoneAttempts})
     }
 
-    if (data.case === 'Invalid Identity') {
+    if (data?.case === 'Invalid Identity') {
       setState({...state, step: STPES.identityAttempts})
     }
   }, [])
@@ -149,13 +151,13 @@ const AfterOtpPersonalIDScreen = ({navigation, route}: Props) => {
       const status = OTPdata?.status
       switch (true) {
         case status === 409:
-          setStatusError('OTP already Exist, Please wait for a minute')
+          setStatusError('onboarding:otpAlreadyExist')
           break
         case status === 509:
           setState({...state, step: STPES.attempts})
           break
         case status > 399 && status <= 500:
-          setStatusError('Some Error Occurred. Please try after some time')
+          setStatusError('common:someThingWentWrong')
           break
         default:
           setStatusError('')
@@ -168,67 +170,65 @@ const AfterOtpPersonalIDScreen = ({navigation, route}: Props) => {
       <Layout
         isHeader={false}
         isBackground={false}
+        isScrollable={false}
         isLoading={isResend || isLoading}>
-        {isSmall ? (
-          <Spacer horizontal={false} size={SPACER_SIZES.BASE * 10} />
-        ) : (
-          <Spacer horizontal={false} size={SPACER_SIZES.BASE * 23} />
-        )}
-
-        <Row>
+        <View
+          className={cn({
+            'flex-row justify-center': true,
+            'mt-20': isSmall,
+            'mt-40': !isSmall,
+            'mb-8': isSmall || state.step === STPES.identityAttempts,
+            'mb-[112]': !(isSmall || state.step === STPES.identityAttempts),
+          })}>
           {(state.step === STPES.attempts ||
             state.step === STPES.phoneAttempts) && <ReturnImg />}
           {state.step === STPES.identityAttempts && <CrossImg />}
-        </Row>
-        {isSmall || state.step === STPES.identityAttempts ? (
-          <Spacer horizontal={false} size={SPACER_SIZES.BASE * 4} />
-        ) : (
-          <Spacer horizontal={false} size={SPACER_SIZES.BASE * 14} />
-        )}
+        </View>
 
         {state.step === STPES.attempts && (
-          <Heading variant={TEXT_VARIANTS.subheading}>
+          <Text className="text-xl text-center text-tc-dark-gray ">
             {t('onboarding:phoneError')}
-          </Heading>
+          </Text>
         )}
 
         {state.step === STPES.phoneAttempts && (
-          <Heading variant={TEXT_VARIANTS.subheading}>
+          <Text className="text-xl text-center text-tc-dark-gray">
             {t('onboarding:threeAttempts')}
-          </Heading>
+          </Text>
         )}
 
         {state.step === STPES.identityAttempts && (
-          <Heading variant={TEXT_VARIANTS.subheading}>
+          <Text className="text-xl text-center text-tc-dark-gray">
             {t('onboarding:identityError')}
-          </Heading>
+          </Text>
         )}
-
-        <Spacer horizontal={false} size={SPACER_SIZES.BASE * 2} />
 
         {state.step === STPES.attempts && (
-          <Body variant={TEXT_VARIANTS.label}>
+          <Text className="text-sm text-center text-tc-dark-gray mt-4">
             {t('onboarding:phoneAttempts')}
-          </Body>
+          </Text>
         )}
 
         {state.step === STPES.phoneAttempts && (
-          <Body variant={TEXT_VARIANTS.label}>{t('onboarding:tryAgain')}</Body>
+          <Text className="text-sm text-center text-tc-dark-gray mt-4">
+            {t('onboarding:tryAgain')}
+          </Text>
         )}
 
         {state.step === STPES.identityAttempts && (
-          <Body variant={TEXT_VARIANTS.label}>
+          <Text className="text-sm text-center text-tc-dark-gray mt-4 mb-6">
             {t('onboarding:identityAttempts')}
-          </Body>
+          </Text>
         )}
 
         {state.error && (
-          <Body variant={TEXT_VARIANTS.label}>{state.error}</Body>
+          <Text className="text-center my-4 text-tc-danger font-bold">
+            {t(state.error)}
+          </Text>
         )}
 
         {state.step === STPES.identityAttempts && (
           <>
-            <Spacer horizontal={false} size={SPACER_SIZES.BASE * 3} />
             <Input
               label={t('onboarding:mobileNumber')}
               schema={MobileNumberValidator}
@@ -238,13 +238,17 @@ const AfterOtpPersonalIDScreen = ({navigation, route}: Props) => {
               maxLength={9}
               value={state.mobileNumber}
             />
-            {statusError && <ErrorText>{statusError}</ErrorText>}
+            {statusError && (
+              <Text className="text-center my-4 text-tc-danger font-bold">
+                {t(statusError)}
+              </Text>
+            )}
           </>
         )}
 
         {state.step === STPES.identityAttempts && (
           <>
-            <ButtonContainer>
+            <View className="absolute bottom-button-1 mx-4 w-full">
               <Button
                 onPress={() => {
                   OTPMutate()
@@ -254,53 +258,34 @@ const AfterOtpPersonalIDScreen = ({navigation, route}: Props) => {
                   {t('onboarding:continue')}
                 </Text>
               </Button>
-            </ButtonContainer>
-            <ButtonContainerSecondary>
+            </View>
+            <View className="absolute bottom-button-2 mx-4 w-full">
               <Button varient="transparent" onPress={onComplete}>
                 <Text variant={TEXT_VARIANTS.body}>
                   {t('onboarding:backLogin')}
                 </Text>
               </Button>
-            </ButtonContainerSecondary>
+            </View>
           </>
         )}
         {state.step === STPES.attempts && (
-          <ButtonContainer>
+          <View className="absolute bottom-button-3 mx-4 w-full">
             <Button onPress={onComplete}>
-              <Text variant={TEXT_VARIANTS.body}>
-                {t('onboarding:backLogin')}
-              </Text>
+              <Text className="font-base">{t('onboarding:backLogin')}</Text>
             </Button>
-          </ButtonContainer>
+          </View>
         )}
         {state.step === STPES.phoneAttempts && (
-          <ButtonContainer>
+          <View className="absolute bottom-button-3 mx-4 w-full">
             <Button onPress={resendOTP}>
-              <Text variant={TEXT_VARIANTS.body}>
-                {t('onboarding:resendOTP')}
-              </Text>
+              <Text className="font-base">{t('onboarding:resendOTP')}</Text>
             </Button>
-          </ButtonContainer>
+          </View>
         )}
       </Layout>
     </>
   )
 }
-
-const ButtonContainer = styled(View)`
-  position: absolute;
-  bottom: 120px;
-  width: ${Dimensions.get('window').width}px;
-  padding-left: 32px;
-  padding-right: 32px;
-`
-const ButtonContainerSecondary = styled(View)`
-  position: absolute;
-  bottom: 50px;
-  width: ${Dimensions.get('window').width}px;
-  padding-left: 32px;
-  padding-right: 32px;
-`
 
 const ReturnImg = styled(Return)`
   box-shadow: 0px 4px 12px rgba(52, 61, 69, 0.12);
@@ -309,25 +294,18 @@ const CrossImg = styled(Cross)`
   box-shadow: 0px 4px 12px rgba(52, 61, 69, 0.12);
 `
 
-const Row = styled(View)`
-  flex-direction: row;
-  justify-content: center;
-`
-
-const Heading = styled(Text)`
-  line-height: 28px;
-  text-align: center;
-  color: #1c1c1c;
-`
-const Body = styled(Text)`
-  line-height: 28px;
-  text-align: center;
-  color: #1c1c1c;
-`
-const ErrorText = styled(Text)`
-  font-weight: 500;
-  color: #f54d3f;
-  padding-left: 16px;
-`
+NativeWindStyleSheet.create({
+  styles: {
+    'bottom-button-1': {
+      bottom: 120,
+    },
+    'bottom-button-2': {
+      bottom: 50,
+    },
+    'bottom-button-3': {
+      bottom: 95,
+    },
+  },
+})
 
 export default AfterOtpPersonalIDScreen

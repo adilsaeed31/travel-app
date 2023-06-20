@@ -10,7 +10,7 @@ import {Layout, TCButton as Button, TCTextView as Text} from '@Components'
 import {BASE_URL, getItem, screenHeight} from '@Utils'
 import {useMutation} from '@tanstack/react-query'
 import {NativeStackNavigationProp} from '@react-navigation/native-stack'
-import {NafaathLogo} from '@Assets'
+import {NafaathLogoImg} from '@Assets'
 import {useStore} from '@Store'
 import {fetcher} from '@Api'
 import {useFocusEffect} from '@react-navigation/native'
@@ -223,7 +223,7 @@ const NafaqScreen = ({navigation, route}: Props) => {
               'mb-[10]': isSmall,
               'mb-[34]': !isSmall,
             })}
-            source={NafaathLogo}
+            source={NafaathLogoImg}
           />
         </View>
 
@@ -284,7 +284,7 @@ const NafaqScreen = ({navigation, route}: Props) => {
 NativeWindStyleSheet.create({
   styles: {
     'bottom-button-1': {
-      bottom: 50,
+      bottom: 95,
     },
   },
 })

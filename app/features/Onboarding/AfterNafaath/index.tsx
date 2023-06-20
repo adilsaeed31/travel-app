@@ -58,7 +58,7 @@ const PersonalIdScreen = ({navigation}: Props) => {
   const {t} = useTranslation()
 
   const onRedirectApp = () => {
-    navigation.navigate('RedirectNafaaq', {
+    navigation.navigate('RedirectNafaath', {
       historyPage: 'AfterNafaath',
       type: 'app',
       redirectRef: Math.floor(Math.random() * 10000000),
@@ -66,7 +66,7 @@ const PersonalIdScreen = ({navigation}: Props) => {
   }
 
   const onRedirectWeb = () => {
-    navigation.navigate('RedirectNafaaq', {
+    navigation.navigate('RedirectNafaath', {
       historyPage: 'AfterNafaath',
       type: 'web',
       redirectRef: Math.floor(Math.random() * 10000000),
