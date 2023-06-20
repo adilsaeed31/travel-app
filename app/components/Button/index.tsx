@@ -6,7 +6,7 @@ import Ripple, {RippleProps} from 'react-native-material-ripple'
 import Text from '../TextView'
 
 const Textview = styled(Text)<any>`
-  font-weight: 400;
+  font-weight: 700;
   font-size: 17px;
 `
 
@@ -21,7 +21,7 @@ const StyledView = styled(View)<any>`
         return '#E1E1E1'
       }
       if (props.varient === 'primary') {
-        return '#f8d03b'
+        return '#FFD900'
       }
       if (props.varient === 'transparent') {
         return '#352D0F'
@@ -32,7 +32,7 @@ const StyledView = styled(View)<any>`
       return '#E1E1E1'
     }
     if (props.varient === 'primary') {
-      return '#f8d03b'
+      return '#FFD900'
     }
     if (props.varient === 'transparent') {
       return 'transpant'

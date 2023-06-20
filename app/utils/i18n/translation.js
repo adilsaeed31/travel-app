@@ -11,6 +11,7 @@ export const translation = {
       networkmessage: 'Please make sure you are connected to network',
       downstreamFailMsg: 'Downstream Failure',
       emptyFields: 'Please enter your username and password.',
+      confirm: 'Confirm',
       emptyValue: 'Please enter a value',
     },
     intro: {
@@ -182,6 +183,7 @@ export const translation = {
       someThingWentWrong: 'حدث خطآ ما',
       downstreamFailMsg: 'حدث خطآ ما',
       emptyFields: 'الرجاء إدخال اسم المستخدم وكلمة المرور',
+      confirm: 'يتأكد',
       emptyValue: 'ادخل قيمه من فضلك',
       invalidFormat: 'تنسيق غير صالح',
     },

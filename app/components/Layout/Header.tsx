@@ -57,7 +57,7 @@ const TopNavigationSimpleUsageShowcase: React.FC<PropsType> = ({
   return (
     <Container {...props}>
       <StatusBar />
-     
+
       {isBack ? (
         <TouchableOpacity onPress={onBack}>
           <ArrowLeftIcon />
@@ -69,7 +69,7 @@ const TopNavigationSimpleUsageShowcase: React.FC<PropsType> = ({
               reset()
               setUser(null)
             }}>
-          <SaibLogo />
+            <SaibLogo />
           </TouchableOpacity>
           {canLanguageChange ? (
             <>
