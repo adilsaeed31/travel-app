@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useState, useContext} from 'react'
 import * as yup from 'yup'
 import {View, Keyboard, TouchableOpacity, Platform} from 'react-native'
@@ -132,8 +133,8 @@ const OtpPersonalIdScreen = ({navigation, route}: Props) => {
           .object({
             otp: yup
               .string()
-              .required('Please Enter OTP')
-              .length(4, 'Please Enter OTP'),
+              .required('onboarding:pleaseOtp')
+              .length(4, 'onboarding:pleaseOtp'),
           })
           .validateSync(state)
 
@@ -175,10 +176,10 @@ const OtpPersonalIdScreen = ({navigation, route}: Props) => {
       const status = otpData?.status
       switch (true) {
         case status === 409:
-          setStatusError('OTP already Exist, Please wait for a minute')
+          setStatusError('onboarding:otpAlreadyExist')
           break
         case status === 403:
-          setStatusError('OTP Expired, Please try again')
+          setStatusError('onboarding:otpExpired')
           setResendAvailable(true)
           setFinishTimer(finishTimer + 1)
           break
@@ -190,7 +191,7 @@ const OtpPersonalIdScreen = ({navigation, route}: Props) => {
           break
         case status > 399 && status <= 500:
           if (invalidAttempts < 2) {
-            setStatusError('Invalid OTP. Please try again')
+            setStatusError('onboarding:invalidOTP')
             setInvalidAttempts(invalidAttempts + 1)
           } else {
             navigation.navigate('AfterOtpPersonalId', {
@@ -203,7 +204,7 @@ const OtpPersonalIdScreen = ({navigation, route}: Props) => {
           setStatusError('')
       }
     }
-  }, [finishTimer, invalidAttempts, navigation, otpData, verifyTahaquq])
+  }, [otpData])
 
   useEffect(() => {
     if (
@@ -242,13 +243,13 @@ const OtpPersonalIdScreen = ({navigation, route}: Props) => {
       const status = tahaquqData?.status
       switch (true) {
         case status === 403:
-          setStatusError('OTP Expired, Please try again')
+          setStatusError('onboarding:otpExpired')
           break
         case status === 409:
-          setStatusError('OTP already Exist, Please wait for a minute')
+          setStatusError('onboarding:otpAlreadyExist')
           break
         case status > 399 && status < 500:
-          setStatusError('Some Error Occurred. Please try After Some Time')
+          setStatusError('common:someThingWentWrong')
           break
         case status >= 500:
           navigation.navigate('DownstreamFail')
@@ -257,16 +258,7 @@ const OtpPersonalIdScreen = ({navigation, route}: Props) => {
           setStatusError('')
       }
     }
-  }, [
-    navigation,
-    onBoardingProgress,
-    resetOTP,
-    resetTahaquq,
-    setOnboardingProgress,
-    state.otp,
-    tahaquqData,
-    tahaquqFailCount,
-  ])
+  }, [tahaquqData])
 
   useEffect(() => {
     setStatusError('')
@@ -286,25 +278,27 @@ const OtpPersonalIdScreen = ({navigation, route}: Props) => {
           })
           break
         case status > 399 && status <= 500:
-          setStatusError('Something went wrong. Please try after some time')
+          setStatusError('common:someThingWentWrong')
           break
         default:
           setStatusError('')
       }
     }
-  }, [navigation, resendData])
+  }, [resendData])
 
   const onComplete = () => {
     if (state.otp.length === 4) {
       verifyOtp()
     } else {
-      setError('Please Enter OTP')
+      setError('onboarding:pleaseOtp')
     }
   }
 
   return (
     <>
-      <Layout isLoading={isOTPLoading || isTahaquqLoading || isResend}>
+      <Layout
+        isScrollable={false}
+        isLoading={isOTPLoading || isTahaquqLoading || isResend}>
         <Text className="heading-1 my-6">{t('onboarding:enterOTP')}</Text>
 
         <OTP
@@ -374,14 +368,14 @@ const OtpPersonalIdScreen = ({navigation, route}: Props) => {
         </View>
 
         {statusError && state.otp ? (
-          <View className="flex-row justify-center content-start bg-[#ffdede] my-5 min-h-[56] rounded-b-[16] rounded-t-[16]">
-            <Text className="text-center text-tc-danger">{statusError}</Text>
+          <View className="flex-row justify-center py-5 content-center bg-[#ffdede] my-5 min-h-[56] rounded-b-[16] rounded-t-[16]">
+            <Text className="text-center text-tc-danger">{t(statusError)}</Text>
           </View>
         ) : null}
 
         {error && state.otp ? (
-          <View className="flex-row justify-center content-start bg-[#ffdede] my-5 min-h-[56] rounded-b-[16] rounded-t-[16]">
-            <Text className="text-center text-tc-danger">{statusError}</Text>
+          <View className="flex-row justify-center py-5 content-center bg-[#ffdede] my-5 min-h-[56] rounded-b-[16] rounded-t-[16]">
+            <Text className="text-center text-tc-danger">{t(statusError)}</Text>
           </View>
         ) : null}
 
