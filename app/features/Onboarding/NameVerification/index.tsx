@@ -99,7 +99,7 @@ function Screen({navigation}: Props) {
         },
       })
       reset()
-      navigation.navigate('personalInfo')
+      navigation.navigate('PersonalInfo')
     } else {
     }
   }, [data])

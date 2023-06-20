@@ -5,6 +5,7 @@ export type OnBoardingStoreProps = {
   govtId?: string
   onboardingMobileNumber?: string
   onBoardingProgress?: any
+  setOnboardingProgress?: (rest: any) => void
 }
 
 const OnBoardingState: StateCreator<OnBoardingStoreProps> = set => ({

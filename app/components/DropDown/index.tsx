@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react'
+import React, {useContext, useState, memo} from 'react'
 import {
   View,
   Pressable,
@@ -86,7 +86,7 @@ interface IDropDownProps {
 }
 const SheetHeight = Dimensions.get('window').height / 1.8
 
-export default function DropDown({
+const DropDown: React.FC<IDropDownProps> = ({
   data = [],
   label = '',
   toogleClick,
@@ -99,7 +99,7 @@ export default function DropDown({
   onSheetClose,
   onItemSelected,
   dynamicHeight = false,
-}: IDropDownProps) {
+}) => {
   const {isRTL} = useContext<AppProviderProps>(AppContext)
   const [searchVaue, setSearchValue] = useState('')
   const SearchResult = searchVaue
@@ -107,6 +107,10 @@ export default function DropDown({
         word?.toLowerCase()?.includes(searchVaue?.toLowerCase()),
       )
     : data
+
+  // marginBottom style condition below
+  const dynamicHeightStyle = dynamicHeight ? undefined : 100
+
   const renderContent = () => {
     return (
       <SheetContentWrapper dynamicHeight={dynamicHeight} key={10}>
@@ -120,7 +124,7 @@ export default function DropDown({
               <Close />
             </TouchableOpacity>
           </TitelWrapper>
-          {/* <Subtitle isRTL={!!isRTL}>{subTitle}</Subtitle> */}
+
           {hasSearch && (
             <InputWrapper>
               <Search />
@@ -135,7 +139,7 @@ export default function DropDown({
           )}
           <FlatListWrapper>
             <FlatList
-              style={{marginBottom: dynamicHeight ? undefined : 100}}
+              style={{marginBottom: dynamicHeightStyle}}
               keyboardShouldPersistTaps="always"
               data={SearchResult}
               keyExtractor={(_item, i) => String(i)}
@@ -281,3 +285,5 @@ const TitelWrapper = styled(View)<{isRTL: boolean}>`
   justify-content: space-between;
   align-items: center;
 `
+
+export default memo(DropDown)
