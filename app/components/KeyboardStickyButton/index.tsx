@@ -47,8 +47,8 @@ const Button: FC<KeyboardProps> = ({value, isDisabled, onPress = () => {}}) => {
             'py-4': true,
             'w-full': true,
             'justify-center': true,
-            yallowButton: isDisabled,
-            grayButton: !isDisabled,
+            yallowButton: !isDisabled,
+            grayButton: isDisabled,
           })}
           onPress={() => {
             if (!isDisabled && onPress) {
