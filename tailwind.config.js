@@ -11,6 +11,7 @@ module.exports = {
       },
 
       fontSize: {
+        'tc-sub-title': 14,
         'tc-title': 24,
         'tc-ios-base': 13,
       },
@@ -19,7 +20,7 @@ module.exports = {
       },
       colors: {
         tc: {
-          primary: '#f8d03b',
+          primary: '#FFD900',
           secondary: '#3f3d36',
           black: '#131109',
           gray: '#4f4f4f',
@@ -41,6 +42,7 @@ module.exports = {
           'load-card-text': '#72788E',
           'load-card': '#F8F9FD',
           'load-input-card': '#FAF9F8',
+          'sub-text': '#7F858A',
           danger: '#f54d3f',
         },
       },

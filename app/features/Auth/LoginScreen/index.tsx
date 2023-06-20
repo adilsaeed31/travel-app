@@ -155,14 +155,17 @@ const AuthFeature = ({navigation}: Props) => {
 
   return (
     <>
-      <Layout backgroundIndex={2} isScrollable={false} isLoading={isFetching}>
-        <Spacer horizontal={false} size={SPACER_SIZES.BASE} />
+      <Layout
+        isVersion={true}
+        backgroundIndex={2}
+        isScrollable={false}
+        isLoading={isFetching}>
         <TCTextView
-          className="text-tc-black pt-8"
+          className="text-tc-black pt-10"
           variant={TEXT_VARIANTS.heading}>
           {t('auth:buttonLogin')}
         </TCTextView>
-        <LoginForm>
+        <LoginForm className="pt-2">
           <TCInput
             maxLength={10}
             label={t('auth:userName')}
