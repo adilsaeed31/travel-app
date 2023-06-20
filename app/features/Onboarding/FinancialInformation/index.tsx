@@ -1,18 +1,17 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react/no-unstable-nested-components */
-/* eslint-disable eqeqeq */
-
-// /* eslint-disable react/no-unstable-nested-components */
-// /* eslint-disable react-native/no-inline-styles */
-// /* eslint-disable eqeqeq */
-
-import React, {useContext, useEffect, useMemo, useState} from 'react'
+import React, {
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+  memo,
+  useCallback,
+} from 'react'
 import {View, SafeAreaView, TouchableOpacity, StyleSheet} from 'react-native'
-import {fetcher} from '@Api'
-import {useMutation} from '@tanstack/react-query'
-import {SheetData, SheetsIndexs} from './SheetData'
 import {NativeStackNavigationProp} from '@react-navigation/native-stack'
+import {useMutation} from '@tanstack/react-query'
+import styled from 'styled-components/native'
 import {useTranslation} from 'react-i18next'
+
 import {
   Layout,
   TCButton as Button,
@@ -22,9 +21,12 @@ import {
   TCInput,
   DatePicker,
 } from '@Components'
-import {TEXT_VARIANTS, Colors, getItem, BASE_URL} from '@Utils'
-import styled from 'styled-components/native'
+import {fetcher} from '@Api'
+import {useMasterData} from '@Hooks'
 import {AppContext, AppProviderProps} from '@Context'
+import {TEXT_VARIANTS, Colors, getItem, BASE_URL} from '@Utils'
+
+import {SheetData, SheetsIndexs} from './SheetData'
 
 function getFormattedDate(date: Date) {
   let year = date?.getFullYear()
@@ -35,7 +37,9 @@ function getFormattedDate(date: Date) {
 
 type IFormTYpe = {
   occupation: string | null
+  occupationCode?: string | null
   jobCategory: string | null
+  jobCategoryCode?: string | null | undefined
   nameOfBusiness: string | null
   jobTitle: string | null
   sector: string | null
@@ -54,7 +58,9 @@ type IFormTYpe = {
 
 const FormValues = {
   occupation: '',
+  occupationCode: '',
   jobCategory: '',
+  jobCategoryCode: '',
   nameOfBusiness: '',
   jobTitle: '',
   sector: '',
@@ -71,171 +77,20 @@ const FormValues = {
   AnotherAddetionalSourceOfIncomeAmount: '',
 }
 
-const GenerateMinMaxIncome = (code: number) => {
-  //'Housewife' ||'Unemployed' ||'Not authorized to work' ||Student' >4// 'Investor' 3 //Business & Professional' 2 //  'Salary/Pension' 1
-  let minIncome =
-    code == 3 ? 300 : code == 2 ? 300 : code >= 4 ? 300 : code == 1 ? 300 : 3000
-  let maxIncome =
-    code == 3
-      ? 10000000
-      : code == 2
-      ? 5000000
-      : code >= 4
-      ? 100000
-      : code == 1
-      ? 500000
-      : 500000
-  return {
-    minIncome,
-    maxIncome,
-  }
-}
-const MapApiApiToState = (
-  values: IFormTYpe,
-  fincialInformationGetData: any,
-  isRTL: boolean,
-) => {
-  let occupation = fincialInformationGetData?.occupation?.code
-    ? SheetData.Occupation.find(
-        p => p.code == fincialInformationGetData?.occupation?.code,
-      )
-    : null
-  let jobCategory = fincialInformationGetData?.employment?.category
-    ? isRTL
-      ? fincialInformationGetData?.employment?.category.name_ar
-      : fincialInformationGetData?.employment?.category.name_en
-    : null
-  let jobTitle = !fincialInformationGetData?.employment?.title
-    ? null
-    : isRTL
-    ? fincialInformationGetData?.employment?.title?.description_ar
-    : fincialInformationGetData?.employment?.title?.description_en
-  let sector = fincialInformationGetData?.employment?.sector
-    ? isRTL
-      ? fincialInformationGetData?.employment?.sector?.description_ar
-      : fincialInformationGetData?.employment?.sector?.description_en
-    : null
-  let dateOfJoin = fincialInformationGetData?.employment?.joining_date
-  let primarySourceOfIncome = fincialInformationGetData?.primary_income?.source
-    ? SheetData.primarySourceOfIncome.find(
-        c => c.type_code == fincialInformationGetData?.primary_income?.source,
-      )
-    : null
-  return {
-    ...values,
-    sector,
-    jobCategory,
-    jobTitle,
-    dateOfJoin,
-    primarySourceOfIncome: primarySourceOfIncome
-      ? isRTL
-        ? primarySourceOfIncome.description_ar
-        : primarySourceOfIncome.description_en
-      : null,
-    occupation: occupation
-      ? isRTL
-        ? occupation.description_ar
-        : occupation.description_en
-      : null,
-    nameOfBusiness: fincialInformationGetData?.business_name || null,
-    monthlyPrimaryIncomAmount:
-      fincialInformationGetData?.primary_income?.amount ||
-      values.monthlyPrimaryIncomAmount,
-    investmentType: fincialInformationGetData?.investment_type,
-    AddetionalSourceOfIncome: fincialInformationGetData?.additional_income_list
-      ?.length
-      ? true
-      : false,
-    AddetionalSourceOfIncomeSource: fincialInformationGetData
-      ?.additional_income_list?.length
-      ? fincialInformationGetData?.additional_income_list[0]?.source
-      : '',
-    AddetionalSourceOfIncomeAmount: fincialInformationGetData
-      ?.additional_income_list?.length
-      ? fincialInformationGetData?.additional_income_list[0]?.amount
-      : '',
-    AnotherAddetionalSourceOfIncome:
-      fincialInformationGetData?.additional_income_list?.length > 1
-        ? true
-        : false,
-    AnotherAddetionalSourceOfIncomeSource: fincialInformationGetData
-      ?.additional_income_list?.length
-      ? fincialInformationGetData?.additional_income_list[0]?.source
-      : '',
-    AnotherAddetionalSourceOfIncomeAmount: fincialInformationGetData
-      ?.additional_income_list?.length
-      ? fincialInformationGetData?.additional_income_list[0]?.amount
-      : '',
-  }
-}
-const MapStateForAPi = (values: IFormTYpe) => {
-  let occupation = SheetData.Occupation.find(
-    c =>
-      c.description_ar == values.occupation ||
-      c.description_en == values.occupation,
-  )
-  let business_name = values.nameOfBusiness
-  let tilte = SheetData.jobTitle.find(
-    c =>
-      c.descriptionAr == values.jobTitle || c.descriptionEn == values.jobTitle,
-  )
-  let sector = SheetData.sectors.find(
-    sec =>
-      sec.descriptionAr == values.sector || sec.descriptionEn == values.sector,
-  )
-  let category = SheetData.jobCategory.find(
-    c => c.nameAr || values.jobCategory || c.nameEn == values.jobCategory,
-  )
-  let additional_income_list = []
-  if (values.AddetionalSourceOfIncome) {
-    additional_income_list.push({
-      amount: values.AddetionalSourceOfIncomeAmount,
-      source: values.AddetionalSourceOfIncomeSource,
-    })
-    if (values.AnotherAddetionalSourceOfIncome) {
-      additional_income_list.push({
-        amount: values.AnotherAddetionalSourceOfIncomeAmount,
-        source: values.AnotherAddetionalSourceOfIncomeSource,
-      })
-    }
-  }
-  return {
-    occupation: occupation,
-    business_name: business_name,
-    employment: {
-      title: tilte || null,
-      sector: sector || null,
-      joining_date: values.dateOfJoin,
-      joining_date_calendar: 'gregorian',
-      category,
-    },
-    primary_income: {
-      amount: values.monthlyPrimaryIncomAmount,
-      source: values.primarySourceOfIncome
-        ? SheetData.primarySourceOfIncome.find(
-            c =>
-              c.description_ar == values.primarySourceOfIncome ||
-              c.description_en == values.primarySourceOfIncome,
-          )?.type_code
-        : null,
-    },
-    investment_type: values.investmentType,
-    additional_income_list,
-  }
-}
-
 type Props = {
   navigation: NativeStackNavigationProp<any>
   route: any
 }
 
-function FinacialInformationScreen({navigation}: Props) {
+type ItemProps = {nameAr: string; nameEn: string; code?: string}
+
+function FinancialInformation({navigation}: Props) {
   const [currentOpendIndx, setCurrentOpenedInx] = useState(-1)
   const {isRTL} = useContext<AppProviderProps>(AppContext)
   const [systemErrorMessage, setSystemErrorMessage] = useState('')
 
   const {t} = useTranslation()
-  const [values, setValues] = useState<IFormTYpe>({
+  const [values, setValues] = useState<IFormTYpe | any>({
     ...FormValues,
   })
   const [errors, setErrors] = useState({
@@ -245,6 +100,7 @@ function FinacialInformationScreen({navigation}: Props) {
   const ToggleSheet = (indx: number) => {
     setCurrentOpenedInx(indx)
   }
+
   const {
     isLoading,
     data: FinicailInformationPostResult,
@@ -260,12 +116,35 @@ function FinacialInformationScreen({navigation}: Props) {
       let req: any = await fetcher(BASE_URL + '/onboarding/financial', {
         method: 'POST',
         token: journeySecrets.access_token,
-        body: MapStateForAPi(values),
+        body: MapStateForAPi(),
       })
       let res = await req.json()
       return res
     },
   })
+
+  // below hook will fetch all master data information
+  const {
+    sectors,
+    jobCategories,
+    jobOccupations,
+    additionalIncomes,
+    primaryIncomeSources,
+  } = useMasterData({
+    job: values?.jobCategoryCode,
+    occupation: values?.occupationCode,
+  })
+
+  // below function will get the code of array data of given content apis
+  const getItemCode = (
+    list: ItemProps[],
+    selectedItem: string,
+  ): string | undefined => {
+    return list?.find(
+      (item: ItemProps) =>
+        item.nameAr === selectedItem || item.nameEn === selectedItem,
+    )?.code
+  }
 
   useEffect(() => {
     if (FinicailInformationPostResult?.onboarding_application_id) {
@@ -276,26 +155,29 @@ function FinacialInformationScreen({navigation}: Props) {
       FinicailInformationPostResult &&
       !FinicailInformationPostResult?.onboarding_application_id
     ) {
-      setSystemErrorMessage(t('common:someThingWentWrong'))
+      setSystemErrorMessage(t('common:someThingWentWrong') as string)
     }
-  }, [FinicailInformationPostResult])
+  }, [FinicailInformationPostResult, navigation, t])
 
   const handelPostForm = () => {
     let currentOccupationCode =
-      SheetData.Occupation.find(
-        sheet =>
-          sheet.description_ar === values.occupation ||
-          sheet.description_en === values.occupation,
+      jobOccupations?.data?.find(
+        (item: ItemProps) =>
+          item.nameAr === values.occupation ||
+          item.nameEn === values.occupation,
       )?.code || (values.occupation ? 1 : 0)
-    const {maxIncome, minIncome} = GenerateMinMaxIncome(currentOccupationCode)
+
+    const {max: maxIncome, min: minIncome} = primaryIncomeSources?.data[0]
 
     let alreadyFetchedFromGosiForSalaried =
       currentOccupationCode === 1 && GosiSuccess
+
     const isValideMonthlyPrimaryIncome =
       alreadyFetchedFromGosiForSalaried || !values.monthlyPrimaryIncomAmount
         ? true
         : values.monthlyPrimaryIncomAmount >= minIncome &&
           values.monthlyPrimaryIncomAmount <= maxIncome
+
     if (!isValideMonthlyPrimaryIncome) {
       return setErrors({
         ...errors,
@@ -310,8 +192,10 @@ function FinacialInformationScreen({navigation}: Props) {
         monthlyPrimaryIncomAmount: '',
       })
     }
+
     PostFinicailInformationReques()
   }
+
   const {
     isLoading: LoadingFincialInformation,
     data: fincialInformationGetData,
@@ -333,29 +217,31 @@ function FinacialInformationScreen({navigation}: Props) {
   })
   useEffect(() => {
     GetFinicalInformationMutate()
-  }, [])
+  }, [GetFinicalInformationMutate])
+
   const GosiSuccess = fincialInformationGetData?.primary_income
 
-  useEffect(() => {
-    setValues(MapApiApiToState(values, fincialInformationGetData, !!isRTL))
-  }, [fincialInformationGetData])
   const isFormValid = useMemo(() => {
     let currentOccupationCode =
-      SheetData.Occupation.find(
-        sheet =>
-          sheet.description_ar === values.occupation ||
-          sheet.description_en === values.occupation,
+      jobOccupations?.data?.find(
+        (item: ItemProps) =>
+          item.nameAr === values.occupation ||
+          item.nameEn === values.occupation,
       )?.code || 1
+
     let validationResult = false
 
-    if (currentOccupationCode >= 4) {
+    if (
+      ['HOME', 'STDN', 'NONE', 'NOTA'].includes(currentOccupationCode) ||
+      currentOccupationCode >= 4
+    ) {
       if (values.primarySourceOfIncome && values.monthlyPrimaryIncomAmount) {
         validationResult = true
       } else {
         return (validationResult = false)
       }
     }
-    if (currentOccupationCode == 3) {
+    if (currentOccupationCode === 'INVS' || currentOccupationCode === 3) {
       if (values.investmentType && values.monthlyPrimaryIncomAmount) {
         validationResult = true
       } else {
@@ -363,7 +249,7 @@ function FinacialInformationScreen({navigation}: Props) {
       }
     }
     if (
-      currentOccupationCode == 1 &&
+      (currentOccupationCode === 'SLRY' || currentOccupationCode === 1) &&
       values.jobCategory &&
       values.jobCategory &&
       values.jobTitle &&
@@ -377,7 +263,7 @@ function FinacialInformationScreen({navigation}: Props) {
         validationResult = true
       }
     }
-    if (currentOccupationCode == 2) {
+    if (currentOccupationCode === 'PRFL' || currentOccupationCode === 2) {
       if (
         values.nameOfBusiness &&
         values.jobCategory &&
@@ -408,27 +294,182 @@ function FinacialInformationScreen({navigation}: Props) {
         : (validationResult = true)
     }
     return validationResult
-  }, [values])
+  }, [GosiSuccess, jobOccupations?.data, values])
 
-  const RenderCurrentForm = () => {
+  /**
+   * below functions copied from the outer function component scope
+   * there are some variables used that are pointing to static masterdata
+   * file but now that has been changed with API calls so moving to the inner
+   * function component scope and changing the variables from masterdata file
+   * to APIs and also changing the functions arguments as per inner scope and
+   * also wrapping into useMemo and useCallback functions to avoid expensive
+   * calculations to avoid re-renders. And also moving useEffect to bottom
+   * before render html to avoid react hook rules
+   */
+
+  const MapApiApiToState = useCallback(() => {
+    let occupation = fincialInformationGetData?.occupation?.code
+      ? jobOccupations?.data?.find(
+          (item: {code: number}) =>
+            item.code === fincialInformationGetData?.occupation?.code,
+        )
+      : null
+    let jobCategory = fincialInformationGetData?.employment?.category
+      ? isRTL
+        ? fincialInformationGetData?.employment?.category.name_ar
+        : fincialInformationGetData?.employment?.category.name_en
+      : null
+    let jobTitle = !fincialInformationGetData?.employment?.title
+      ? ''
+      : isRTL
+      ? fincialInformationGetData?.employment?.title?.description_ar
+      : fincialInformationGetData?.employment?.title?.description_en
+    let sector = fincialInformationGetData?.employment?.sector
+      ? isRTL
+        ? fincialInformationGetData?.employment?.sector?.description_ar
+        : fincialInformationGetData?.employment?.sector?.description_en
+      : null
+    let dateOfJoin = fincialInformationGetData?.employment?.joining_date
+    let primarySourceOfIncome = fincialInformationGetData?.primary_income
+      ?.source
+      ? SheetData.primarySourceOfIncome.find(
+          c =>
+            c.type_code === fincialInformationGetData?.primary_income?.source,
+        )
+      : null
+    return {
+      ...values,
+      sector,
+      jobCategory,
+      jobTitle,
+      dateOfJoin,
+      primarySourceOfIncome: primarySourceOfIncome
+        ? isRTL
+          ? primarySourceOfIncome.description_ar
+          : primarySourceOfIncome.description_en
+        : null,
+      occupation: occupation
+        ? isRTL
+          ? occupation.description_ar
+          : occupation.description_en
+        : null,
+      nameOfBusiness: fincialInformationGetData?.business_name || null,
+      monthlyPrimaryIncomAmount:
+        fincialInformationGetData?.primary_income?.amount ||
+        values.monthlyPrimaryIncomAmount,
+      investmentType: fincialInformationGetData?.investment_type,
+      AddetionalSourceOfIncome: fincialInformationGetData
+        ?.additional_income_list?.length
+        ? true
+        : false,
+      AddetionalSourceOfIncomeSource: fincialInformationGetData
+        ?.additional_income_list?.length
+        ? fincialInformationGetData?.additional_income_list[0]?.source
+        : '',
+      AddetionalSourceOfIncomeAmount: fincialInformationGetData
+        ?.additional_income_list?.length
+        ? fincialInformationGetData?.additional_income_list[0]?.amount
+        : '',
+      AnotherAddetionalSourceOfIncome:
+        fincialInformationGetData?.additional_income_list?.length > 1
+          ? true
+          : false,
+      AnotherAddetionalSourceOfIncomeSource: fincialInformationGetData
+        ?.additional_income_list?.length
+        ? fincialInformationGetData?.additional_income_list[0]?.source
+        : '',
+      AnotherAddetionalSourceOfIncomeAmount: fincialInformationGetData
+        ?.additional_income_list?.length
+        ? fincialInformationGetData?.additional_income_list[0]?.amount
+        : '',
+    }
+  }, [fincialInformationGetData, isRTL, jobOccupations?.data, values])
+
+  const MapStateForAPi = () => {
+    let occupation = jobOccupations?.data?.find(
+      (item: ItemProps) =>
+        item.nameAr === values.occupation || item.nameEn === values.occupation,
+    )
+    let business_name = values.nameOfBusiness
+
+    let tilte = values.jobTitle
+
+    let sector = sectors?.data?.find(
+      (item: ItemProps) =>
+        item.nameAr === values.sector || item.nameEn === values.sector,
+    )
+
+    let category = jobCategories?.data?.find(
+      (item: ItemProps) =>
+        item.nameAr || values.jobCategory || item.nameEn === values.jobCategory,
+    )
+
+    let additional_income_list = []
+    if (values.AddetionalSourceOfIncome) {
+      additional_income_list.push({
+        amount: values.AddetionalSourceOfIncomeAmount,
+        source: values.AddetionalSourceOfIncomeSource,
+      })
+      if (values.AnotherAddetionalSourceOfIncome) {
+        additional_income_list.push({
+          amount: values.AnotherAddetionalSourceOfIncomeAmount,
+          source: values.AnotherAddetionalSourceOfIncomeSource,
+        })
+      }
+    }
+    return {
+      occupation: occupation,
+      business_name: business_name,
+      employment: {
+        title: tilte || null,
+        sector: sector || null,
+        joining_date: values.dateOfJoin,
+        joining_date_calendar: 'gregorian',
+        category,
+      },
+      primary_income: {
+        amount: values.monthlyPrimaryIncomAmount,
+        source: values.primarySourceOfIncome
+          ? SheetData.primarySourceOfIncome.find(
+              c =>
+                c.description_ar === values.primarySourceOfIncome ||
+                c.description_en === values.primarySourceOfIncome,
+            )?.type_code
+          : null,
+      },
+      investment_type: values.investmentType,
+      additional_income_list,
+    }
+  }
+
+  /**
+   * above functions ends here
+   */
+
+  useEffect(() => {
+    setValues(MapApiApiToState())
+  }, [fincialInformationGetData])
+
+  const renderCurrentForm = () => {
     let CurrentFormView = null
     let currentOccupationCode =
-      SheetData.Occupation.find(
-        sheet =>
-          sheet.description_ar === values.occupation ||
-          sheet.description_en === values.occupation,
+      jobOccupations?.data?.find(
+        (item: ItemProps) =>
+          item.nameAr === values.occupation ||
+          item.nameEn === values.occupation,
       )?.code || (values.occupation ? 1 : 0)
-    console.log('currentOccupationCode', currentOccupationCode)
+
     if (
       //'Housewife' ||'Unemployed' ||'Not authorized to work' ||Student'
+      ['HOME', 'STDN', 'NONE', 'NOTA'].includes(currentOccupationCode) ||
       currentOccupationCode >= 4
     ) {
       CurrentFormView = (
         <>
           <DropDown
             dynamicHeight
-            data={SheetData.primarySourceOfIncome.map(income =>
-              isRTL ? income.description_ar : income.description_en,
+            data={primaryIncomeSources?.data?.map((item: ItemProps) =>
+              isRTL ? item.nameAr : item?.nameEn,
             )}
             label={t('onboarding:financialInformation:primarySourceOfIncome')}
             toogleClick={() => ToggleSheet(SheetsIndexs.primarySourceOfIncome)}
@@ -437,7 +478,7 @@ function FinacialInformationScreen({navigation}: Props) {
             }}
             value={values.primarySourceOfIncome}
             error={errors.primarySourceOfIncome}
-            isOpen={currentOpendIndx == SheetsIndexs.primarySourceOfIncome}
+            isOpen={currentOpendIndx === SheetsIndexs.primarySourceOfIncome}
             title={t('onboarding:financialInformation:jobCategory')}
             subTitle={t('onboarding:financialInformation:jobCategory')}
             onSheetClose={() => setCurrentOpenedInx(-1)}
@@ -462,6 +503,7 @@ function FinacialInformationScreen({navigation}: Props) {
 
     if (
       // 'Investor'
+      currentOccupationCode === 'INVS' ||
       currentOccupationCode === 3
     ) {
       CurrentFormView = (
@@ -491,6 +533,7 @@ function FinacialInformationScreen({navigation}: Props) {
     }
     if (
       //Business & Professional'
+      currentOccupationCode === 'PRFL' ||
       currentOccupationCode === 2
     ) {
       CurrentFormView = (
@@ -504,38 +547,43 @@ function FinacialInformationScreen({navigation}: Props) {
           />
 
           <Spacer />
+
           <DropDown
-            data={SheetData.jobCategory.map(cat =>
-              !isRTL ? cat.nameEn : cat.nameAr,
+            data={jobCategories?.data?.map((item: ItemProps) =>
+              !isRTL ? item.nameEn : item.nameAr,
             )}
             label={t('onboarding:financialInformation:jobCategory')}
             toogleClick={() => ToggleSheet(SheetsIndexs.jobCategory)}
-            onItemSelected={jobCategory => setValues({...values, jobCategory})}
+            onItemSelected={jobCategory =>
+              setValues({
+                ...values,
+                sector: null, // this will remove the selection of sector if job category changes
+                jobCategory,
+                jobCategoryCode: getItemCode(jobCategories?.data, jobCategory),
+              })
+            }
             value={values.jobCategory}
             error={errors.jobCategory}
-            isOpen={currentOpendIndx == SheetsIndexs.jobCategory}
+            isOpen={currentOpendIndx === SheetsIndexs.jobCategory}
             title={t('onboarding:financialInformation:jobCategory')}
             subTitle={t('onboarding:financialInformation:jobCategory')}
             onSheetClose={() => setCurrentOpenedInx(-1)}
             hasSearch
           />
+
           <Spacer />
-          <DropDown
-            data={SheetData.jobTitle.map(title =>
-              isRTL ? title.descriptionAr : title.descriptionEn,
-            )}
-            label={t('onboarding:financialInformation:jobTitle')}
-            toogleClick={() => ToggleSheet(SheetsIndexs.jobTitle)}
-            onItemSelected={jobTitle => setValues({...values, jobTitle})}
+
+          <TCInput
             value={values.jobTitle}
-            error={errors.jobTitle}
-            isOpen={currentOpendIndx == SheetsIndexs.jobTitle}
-            title={t('onboarding:financialInformation:jobTitle')}
-            subTitle={t('onboarding:financialInformation:jobTitle')}
-            onSheetClose={() => setCurrentOpenedInx(-1)}
-            hasSearch
+            onChangeText={val => setValues({...values, jobTitle: val})}
+            label={t('onboarding:financialInformation:jobTitle')}
+            errorMessage={errors.jobTitle}
+            keyboardType="default"
+            maxLength={50}
           />
+
           <Spacer />
+
           <TCInput
             value={String(values.monthlyPrimaryIncomAmount)}
             onChangeText={val =>
@@ -548,64 +596,70 @@ function FinacialInformationScreen({navigation}: Props) {
             keyboardType="numeric"
             maxLength={6}
           />
+
           <Spacer />
         </>
       )
     }
     if (
-      //let currentOccupationCode =
       //  'Salary/Pension'
+      currentOccupationCode === 'SLRY' ||
       currentOccupationCode === 1
     ) {
       CurrentFormView = (
         <>
           <DropDown
-            data={SheetData.jobCategory.map(cat =>
-              isRTL ? cat.nameAr : cat.nameEn,
+            data={jobCategories?.data?.map((item: ItemProps) =>
+              isRTL ? item.nameAr : item.nameEn,
             )}
             label={t('onboarding:financialInformation:jobCategory') || ''}
             toogleClick={() => ToggleSheet(SheetsIndexs.jobCategory)}
-            onItemSelected={jobCategory => setValues({...values, jobCategory})}
+            onItemSelected={jobCategory =>
+              setValues({
+                ...values,
+                sector: null, // this will remove the selection of sector if job category changes
+                jobCategory,
+                jobCategoryCode: getItemCode(jobCategories?.data, jobCategory),
+              })
+            }
             value={values.jobCategory}
             error={errors.jobCategory}
-            isOpen={currentOpendIndx == SheetsIndexs.jobCategory}
+            isOpen={currentOpendIndx === SheetsIndexs.jobCategory}
             title={t('onboarding:financialInformation:jobCategory')}
             subTitle={t('onboarding:financialInformation:jobCategory')}
             onSheetClose={() => setCurrentOpenedInx(-1)}
             hasSearch
           />
+
           <Spacer />
-          <DropDown
-            data={SheetData.jobTitle.map(job =>
-              isRTL ? job.descriptionAr : job.descriptionEn,
-            )}
-            label={t('onboarding:financialInformation:jobTitle') || ''}
-            toogleClick={() => ToggleSheet(SheetsIndexs.jobTitle)}
-            onItemSelected={jobTitle => setValues({...values, jobTitle})}
+
+          <TCInput
             value={values.jobTitle}
-            error={errors.jobTitle}
-            isOpen={currentOpendIndx == SheetsIndexs.jobTitle}
-            title={t('onboarding:financialInformation:jobTitle')}
-            subTitle={t('onboarding:financialInformation:jobTitle')}
-            onSheetClose={() => setCurrentOpenedInx(-1)}
-            hasSearch
+            onChangeText={val => setValues({...values, jobTitle: val})}
+            label={t('onboarding:financialInformation:jobTitle')}
+            errorMessage={errors.jobTitle}
+            keyboardType="default"
+            maxLength={50}
           />
+
           <Spacer />
+
           <DropDown
-            data={SheetData.sectors.map(sect =>
-              isRTL ? sect.descriptionAr : sect.descriptionEn,
+            data={sectors?.data?.map((item: ItemProps) =>
+              isRTL ? item.nameAr : item.nameEn,
             )}
             label={t('onboarding:financialInformation:selectSector') || ''}
             toogleClick={() => ToggleSheet(SheetsIndexs.sector)}
             onItemSelected={sector => setValues({...values, sector})}
             value={values.sector}
             error={errors.sector}
-            isOpen={currentOpendIndx == SheetsIndexs.sector}
+            isOpen={currentOpendIndx === SheetsIndexs.sector}
             title={t('onboarding:financialInformation:selectSector')}
             subTitle={t('onboarding:financialInformation:selectSector')}
             onSheetClose={() => setCurrentOpenedInx(-1)}
             hasSearch
           />
+
           {!GosiSuccess && (
             <View>
               <Spacer />
@@ -620,7 +674,9 @@ function FinacialInformationScreen({navigation}: Props) {
                 errorMessage={errors.monthlyPrimaryIncomAmount}
                 keyboardType="numeric"
               />
+
               <Spacer />
+
               <DatePicker
                 label={t('onboarding:financialInformation:DateOfJoin')}
                 value={values.dateOfJoin}
@@ -684,8 +740,8 @@ function FinacialInformationScreen({navigation}: Props) {
               <View>
                 <DropDown
                   dynamicHeight
-                  data={SheetData.addetionalSourceOfIncome.map(src =>
-                    isRTL ? src.description_ar : src.description_en,
+                  data={additionalIncomes?.data?.map((item: ItemProps) =>
+                    isRTL ? item.nameAr : item.nameEn,
                   )}
                   label={t(
                     'onboarding:financialInformation:additionalIncomeSource',
@@ -699,7 +755,7 @@ function FinacialInformationScreen({navigation}: Props) {
                   value={values.AddetionalSourceOfIncomeSource}
                   error={errors.AddetionalSourceOfIncomeSource}
                   isOpen={
-                    currentOpendIndx == SheetsIndexs.addetionalSourceOfIncome
+                    currentOpendIndx === SheetsIndexs.addetionalSourceOfIncome
                   }
                   title={t(
                     'onboarding:financialInformation:additionalIncomeSource',
@@ -721,6 +777,7 @@ function FinacialInformationScreen({navigation}: Props) {
                   )}
                   errorMessage={errors.AddetionalSourceOfIncomeAmount}
                   keyboardType="numeric"
+                  maxLength={6}
                 />
                 <Spacer />
                 {!values.AnotherAddetionalSourceOfIncome && (
@@ -739,8 +796,8 @@ function FinacialInformationScreen({navigation}: Props) {
                 {values.AnotherAddetionalSourceOfIncome && (
                   <View>
                     <DropDown
-                      data={SheetData.addetionalSourceOfIncome.map(src =>
-                        isRTL ? src.description_ar : src.description_en,
+                      data={additionalIncomes?.data?.map((item: ItemProps) =>
+                        isRTL ? item.nameAr : item.nameEn,
                       )}
                       label={t(
                         'onboarding:financialInformation:additionalIncomeSource',
@@ -759,7 +816,7 @@ function FinacialInformationScreen({navigation}: Props) {
                       value={values.AnotherAddetionalSourceOfIncomeSource}
                       error={errors.AnotherAddetionalSourceOfIncomeSource}
                       isOpen={
-                        currentOpendIndx ==
+                        currentOpendIndx ===
                         SheetsIndexs.anotheraddetionalSourceOfIncome
                       }
                       title={t(
@@ -800,6 +857,7 @@ function FinacialInformationScreen({navigation}: Props) {
       </View>
     )
   }
+
   return (
     <ScrollerView
       keyboardShouldPersistTaps="always"
@@ -816,8 +874,8 @@ function FinacialInformationScreen({navigation}: Props) {
               {t('onboarding:financialInformation:financialInformation') || ''}
             </Header>
             <DropDown
-              data={SheetData.Occupation.map(d =>
-                isRTL ? d.description_ar : d.description_en,
+              data={jobOccupations?.data?.map((item: ItemProps) =>
+                isRTL ? item?.nameAr : item?.nameEn,
               )}
               label={t('onboarding:financialInformation:occupation') || ''}
               toogleClick={() => ToggleSheet(SheetsIndexs.Occupation)}
@@ -826,6 +884,7 @@ function FinacialInformationScreen({navigation}: Props) {
                 setValues({
                   ...values,
                   occupation,
+                  occupationCode: getItemCode(jobOccupations?.data, occupation),
                   monthlyPrimaryIncomAmount: '',
                 })
                 setErrors({
@@ -835,7 +894,7 @@ function FinacialInformationScreen({navigation}: Props) {
               }}
               value={values.occupation}
               error={errors.occupation}
-              isOpen={currentOpendIndx == SheetsIndexs.Occupation}
+              isOpen={currentOpendIndx === SheetsIndexs.Occupation}
               title={t('onboarding:financialInformation:occupation')}
               subTitle={t('onboarding:financialInformation:occupation')}
               onSheetClose={() => setCurrentOpenedInx(-1)}
@@ -844,7 +903,7 @@ function FinacialInformationScreen({navigation}: Props) {
             />
 
             <Spacer />
-            {RenderCurrentForm()}
+            {renderCurrentForm()}
           </FormWrapper>
           <View>
             {systemErrorMessage?.length ? (
@@ -866,7 +925,7 @@ function FinacialInformationScreen({navigation}: Props) {
   )
 }
 
-export default FinacialInformationScreen
+export default memo(FinancialInformation)
 
 const Spacer = styled(View)`
   margin-bottom: 20px;

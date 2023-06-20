@@ -17,3 +17,18 @@ export const triggerOTP = async (state: {
   let res = await req.json()
   return res
 }
+
+export const getMasterData = async (endpoint: string) => {
+  const res: any = await fetcher(
+    `${BASE_URL}/content/public/lookup/${endpoint}`,
+    {},
+  )
+
+  const data = await res.json()
+
+  if (data?.status > 200) {
+    throw Error(data?.message)
+  }
+
+  return data
+}

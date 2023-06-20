@@ -1,33 +1,31 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable eqeqeq */
-
-import React, {useContext, useState, useMemo, useEffect} from 'react'
+import React, {useState, useMemo, useEffect, useCallback, memo} from 'react'
 import {View, SafeAreaView, ScrollView, StyleSheet} from 'react-native'
-import {fetcher} from '@Api'
 import {NativeStackNavigationProp} from '@react-navigation/native-stack'
+import styled from 'styled-components/native'
+import {useMutation} from '@tanstack/react-query'
 import {useTranslation} from 'react-i18next'
 import {
   Layout,
+  TCInput,
+  DropDown,
+  RadioButton,
   TCButton as Button,
   TCTextView as Text,
-  RadioButton,
-  DropDown,
-  TCInput,
 } from '@Components'
-import {TEXT_VARIANTS, Colors, BASE_URL, getItem} from '@Utils'
-import {useMutation} from '@tanstack/react-query'
-import {countriesList, SaudiList, educationList} from './masterData'
-import styled from 'styled-components/native'
-import {PostalCodeValidator, CityValidator, ContactName} from './validators'
+
+import {fetcher} from '@Api'
 import {useStore} from '@Store'
-import {AppContext, AppProviderProps} from '@Context'
+import {useMasterData} from '@Hooks'
+import {TEXT_VARIANTS, Colors, BASE_URL, getItem} from '@Utils'
+
+import {PostalCodeValidator, CityValidator, ContactName} from './validators'
 
 type IFormTYpe = {
   city: string | null
   education: string | null
   countryOfBirth: string | null
   buldingNumber: string | null
-  streetNanme: string | null
+  streetName: string | null
   district: string | null
   poBox: string | null
   postalCode: string | null
@@ -36,94 +34,13 @@ type IFormTYpe = {
   relation: string | null
   mobileNumber: string | null
 }
-const MapApiToState = (apiResponse: any, isRTL: boolean | undefined) => {
-  return {
-    countryOfBirth: isRTL
-      ? apiResponse?.birth_country?.name_ar
-      : apiResponse?.birth_country?.name_en,
-    city: isRTL
-      ? apiResponse?.birth_city?.name_ar || apiResponse?.offshore_address?.city
-      : apiResponse?.birth_city?.name_en || apiResponse?.offshore_address?.city,
-    education: isRTL
-      ? apiResponse?.education?.level_name_ar
-      : apiResponse?.education?.level_name_en,
-    phoneNumber: apiResponse?.offshore_address?.contact_number,
-    buldingNumber: apiResponse?.offshore_address?.building_number,
-    postalCode: apiResponse?.offshore_address?.postal_code,
-    streetNanme: apiResponse?.offshore_address?.street,
-    district: apiResponse?.offshore_address?.district,
-    contactName: apiResponse?.additional_contact?.name,
-    relation: apiResponse?.additional_contact?.relation,
-    mobileNumber: apiResponse?.additional_contact?.contact_number,
-    poBox: apiResponse?.offshore_address?.po_box,
-  }
-}
-const MapFormValuesForApi = (
-  values: IFormTYpe,
-  IsSaudi: boolean,
-  showAdditionalInformation: boolean,
-  isRTL: boolean | undefined,
-) => {
-  let educationOb = educationList.find(
-    e => e.levelNameEn == values.education || e.levelNameAr == values.education,
-  )
-  let birthCountryOb = countriesList.find(
-    e => e.nameAr == values.countryOfBirth || e.nameEn == values.countryOfBirth,
-  )
-  let birthCity = SaudiList.find(c =>
-    isRTL ? c.nameAr == values.city : c.nameEn == values.city,
-  )
-  let education = {
-    level_code: educationOb?.levelCode,
-    level_name_en: educationOb?.levelNameEn,
-    level_name_ar: educationOb?.levelNameAr,
-  }
-  let birth_country = {
-    code: birthCountryOb?.code,
-    name_en: birthCountryOb?.nameEn,
-    name_ar: birthCountryOb?.nameAr,
-  }
-  let birth_city = !IsSaudi
-    ? null
-    : {
-        code: birthCity?.code,
-        name_en: birthCity?.nameEn,
-        name_ar: birthCity?.nameAr,
-      }
-  let offshore_address = IsSaudi
-    ? null
-    : {
-        building_number: values.buldingNumber,
-        street: values.streetNanme,
-        district: values.district,
-        postal_code: values.postalCode,
-        city: values.city,
-        contact_number: values.phoneNumber,
-        country: values.countryOfBirth,
-      }
-  let additional_contact = !showAdditionalInformation
-    ? null
-    : {
-        name: values.contactName,
-        relation: values.relation,
-        contact_number: values.mobileNumber,
-      }
-  let po_box = values.poBox
-  return {
-    education,
-    birth_country,
-    birth_city,
-    offshore_address,
-    additional_contact,
-    po_box,
-  }
-}
+
 const FormValues = {
   education: '',
   countryOfBirth: '',
   city: '',
   buldingNumber: '',
-  streetNanme: '',
+  streetName: '',
   district: '',
   poBox: '',
   postalCode: '',
@@ -137,52 +54,59 @@ type Props = {
   navigation: NativeStackNavigationProp<any>
 }
 
+type NameProps = {nameAr: string; nameEn: string}
+
 function PersonalInformation({navigation}: Props) {
-  const [showAdditionalInformation, setShowAdditionalInformation] =
-    useState(false)
-  const [currentOpendIndx, setCurrentOpenedInx] = useState(-1)
-  const {isRTL} = useContext<AppProviderProps>(AppContext)
-  const [disabledFields, setDisabledFields] = useState({countryOfBirth: false})
   const {t} = useTranslation()
+
+  const isRTL = useStore(state => state.isRTL)
+  const onBoardingProgress = useStore(state => state.onBoardingProgress)
+  const setOnboardingProgress = useStore(state => state.setOnboardingProgress)
+
   const [values, setValues] = useState<IFormTYpe>({
     ...FormValues,
   })
   const [errors, setErrors] = useState({
     ...FormValues,
   })
-
-  const setOnboardingProgress = useStore(
-    (store: any) => store.setOnboardingProgress,
-  )
-
-  const onBoardingProgress = useStore((store: any) => store.onBoardingProgress)
-
+  const [currentOpendIndx, setCurrentOpenedInx] = useState(-1)
   const [systemErrorMessage, setSystemErrorMessage] = useState<any>('')
+  const [disabledFields, setDisabledFields] = useState({countryOfBirth: false})
+  const [showAdditionalInformation, setShowAdditionalInformation] =
+    useState(false)
+
+  // below hook will fetch all master data information
+  const {countries, educationLevels, cities} = useMasterData({
+    country: values?.countryOfBirth ?? 'SA',
+  })
+
   const IsSaudi = useMemo(() => {
-    const current = countriesList.findIndex(
-      country =>
-        country.nameAr == values?.countryOfBirth ||
-        country.nameEn == values?.countryOfBirth,
+    const current = countries?.data?.findIndex(
+      (country: NameProps) =>
+        country.nameAr === values?.countryOfBirth ||
+        country.nameEn === values?.countryOfBirth,
     )
+
     const isSaudiSelected =
-      current == -1 ? false : countriesList[current].code == 'SA'
+      current === -1 ? false : countries?.data?.[current]?.code === 'SA'
     return isSaudiSelected || !values?.countryOfBirth
-  }, [values.countryOfBirth])
+  }, [countries, values?.countryOfBirth])
 
   const ToggleSheet = (indx: number) => {
     setCurrentOpenedInx(indx)
     let err = errors
-    if (indx == 0) {
+    if (indx === 0) {
       err.education = ''
     }
-    if (indx == 1) {
+    if (indx === 1) {
       err.countryOfBirth = ''
     }
-    if (indx == 2) {
+    if (indx === 2) {
       err.city = ''
     }
     setErrors(err)
   }
+
   const isFormValid = useMemo(() => {
     let isValid = false
     if (values.education && values.countryOfBirth && values.city) {
@@ -191,7 +115,7 @@ function PersonalInformation({navigation}: Props) {
     if (!IsSaudi) {
       if (
         values.buldingNumber &&
-        values.streetNanme &&
+        values.streetName &&
         values.district &&
         values.postalCode &&
         values.city &&
@@ -224,13 +148,8 @@ function PersonalInformation({navigation}: Props) {
 
       let req: any = await fetcher(BASE_URL + '/onboarding/personal', {
         method: 'POST',
-        body: MapFormValuesForApi(
-          values,
-          IsSaudi,
-          showAdditionalInformation,
-          isRTL,
-        ),
-        token: journeySecrets.access_token,
+        body: MapFormValuesForApi(),
+        token: journeySecrets?.access_token,
       })
       let res = await req.json()
       return res
@@ -249,54 +168,12 @@ function PersonalInformation({navigation}: Props) {
         journeySecrets = JSON.parse(journeySecretsData)
       }
       let req: any = await fetcher(BASE_URL + '/onboarding/personal', {
-        method: 'GET',
-        token: journeySecrets.access_token,
+        token: journeySecrets?.access_token,
       })
       let res = await req.json()
       return res
     },
   })
-  useEffect(() => {
-    GetPersonalInformationData()
-  }, [])
-
-  useEffect(() => {
-    setValues({
-      ...values,
-      ...MapApiToState(PersonalInformationData, isRTL),
-    })
-    setShowAdditionalInformation(
-      PersonalInformationData?.additional_contact?.contact_number
-        ? true
-        : false,
-    )
-    console.log(PersonalInformationData?.birth_country)
-    if (
-      PersonalInformationData?.birth_country?.name_ar ||
-      PersonalInformationData?.birth_country?.name_ar
-    ) {
-      setDisabledFields({...disabledFields, countryOfBirth: true})
-    }
-  }, [PersonalInformationData])
-
-  useEffect(() => {
-    if (data?.onboarding_application_id) {
-      setOnboardingProgress({
-        ...onBoardingProgress,
-        personalInformation: MapFormValuesForApi(
-          values,
-          IsSaudi,
-          showAdditionalInformation,
-          isRTL,
-        ),
-      })
-      navigation.navigate('FinicalInformation')
-    }
-
-    if (data && !data?.onboarding_application_id) {
-      setSystemErrorMessage(t('common:someThingWentWrong'))
-    }
-  }, [data])
 
   const RenderCHeckbox = React.useMemo(
     () => (
@@ -317,12 +194,162 @@ function PersonalInformation({navigation}: Props) {
         </RadioButton>
       </RadioWrapper>
     ),
-    [showAdditionalInformation],
+    [isRTL, showAdditionalInformation, t],
   )
+
   const handlePostPersonalInformation = () => {
     setSystemErrorMessage('')
     mutate()
   }
+
+  /**
+   * below functions copied from the outer function component scope
+   * there are some variables used that are pointing to static masterdata
+   * file but now that has been changed with API calls so moving to the inner
+   * function component scope and changing the variables from masterdata file
+   * to APIs and also changing the functions arguments as per inner scope and
+   * also wrapping into useMemo and useCallback functions to avoid expensive
+   * calculations to avoid re-renders. And also moving useEffect to bottom
+   * before render html to avoid react hook rules
+   */
+
+  const MapApiToState = useCallback(
+    (apiResponse: any) => {
+      return {
+        countryOfBirth: isRTL
+          ? apiResponse?.birth_country?.name_ar
+          : apiResponse?.birth_country?.name_en,
+        city: isRTL
+          ? apiResponse?.birth_city?.name_ar ||
+            apiResponse?.offshore_address?.city
+          : apiResponse?.birth_city?.name_en ||
+            apiResponse?.offshore_address?.city,
+        education: isRTL
+          ? apiResponse?.education?.level_name_ar
+          : apiResponse?.education?.level_name_en,
+        phoneNumber: apiResponse?.offshore_address?.contact_number,
+        buldingNumber: apiResponse?.offshore_address?.building_number,
+        postalCode: apiResponse?.offshore_address?.postal_code,
+        streetName: apiResponse?.offshore_address?.street,
+        district: apiResponse?.offshore_address?.district,
+        contactName: apiResponse?.additional_contact?.name,
+        relation: apiResponse?.additional_contact?.relation,
+        mobileNumber: apiResponse?.additional_contact?.contact_number,
+        poBox: apiResponse?.offshore_address?.po_box,
+      }
+    },
+    [isRTL],
+  )
+
+  const MapFormValuesForApi = useCallback(() => {
+    let educationOb = educationLevels?.data?.find(
+      (item: NameProps) =>
+        item.nameEn === values.education || item.nameAr === values.education,
+    )
+    let birthCountryOb = countries?.data?.find(
+      (item: NameProps) =>
+        item.nameAr === values.countryOfBirth ||
+        item.nameEn === values.countryOfBirth,
+    )
+    let birthCity = cities?.data?.find((item: NameProps) =>
+      isRTL ? item.nameAr === values.city : item.nameEn === values.city,
+    )
+    let education = {
+      level_code: educationOb?.code,
+      level_name_en: educationOb?.nameEn,
+      level_name_ar: educationOb?.nameAr,
+    }
+    let birth_country = {
+      code: birthCountryOb?.code,
+      name_en: birthCountryOb?.nameEn,
+      name_ar: birthCountryOb?.nameAr,
+    }
+    let birth_city = !IsSaudi
+      ? null
+      : {
+          code: birthCity?.code,
+          name_en: birthCity?.nameEn,
+          name_ar: birthCity?.nameAr,
+        }
+    let offshore_address = IsSaudi
+      ? null
+      : {
+          building_number: values.buldingNumber,
+          street: values.streetName,
+          district: values.district,
+          postal_code: values.postalCode,
+          city: values.city,
+          contact_number: values.phoneNumber,
+          country: values.countryOfBirth,
+        }
+    let additional_contact = !showAdditionalInformation
+      ? null
+      : {
+          name: values.contactName,
+          relation: values.relation,
+          contact_number: values.mobileNumber,
+        }
+    let po_box = values.poBox
+    return {
+      education,
+      birth_country,
+      birth_city,
+      offshore_address,
+      additional_contact,
+      po_box,
+    }
+  }, [
+    showAdditionalInformation,
+    educationLevels?.data,
+    countries?.data,
+    cities?.data,
+    IsSaudi,
+    values,
+    isRTL,
+  ])
+
+  /**
+   * above functions ends here
+   */
+
+  useEffect(() => {
+    GetPersonalInformationData()
+  }, [GetPersonalInformationData])
+
+  useEffect(() => {
+    setValues({
+      ...values,
+      ...MapApiToState(PersonalInformationData),
+    })
+
+    setShowAdditionalInformation(
+      PersonalInformationData?.additional_contact?.contact_number
+        ? true
+        : false,
+    )
+
+    if (
+      PersonalInformationData?.birth_country?.name_ar ||
+      PersonalInformationData?.birth_country?.name_ar
+    ) {
+      setDisabledFields({...disabledFields, countryOfBirth: true})
+    }
+  }, [PersonalInformationData])
+
+  useEffect(() => {
+    if (data?.onboarding_application_id) {
+      setOnboardingProgress?.({
+        ...onBoardingProgress,
+        personalInformation: MapFormValuesForApi(),
+      })
+      navigation.navigate('FinancialInformation')
+    }
+
+    if (!data?.onboarding_application_id) {
+      setSystemErrorMessage(t('common:someThingWentWrong'))
+    }
+  }, [data])
+
   return (
     <ScrollView
       keyboardShouldPersistTaps="always"
@@ -338,32 +365,34 @@ function PersonalInformation({navigation}: Props) {
         isBackground={true}>
         <SafeAreaWrapper>
           <View>
-            <Spacer />
             <Header isRTL={!!isRTL}>
               {t('onboarding:personalInformation:personalInformation')}
             </Header>
+
             <DropDown
+              hasSearch
               dynamicHeight
-              data={educationList.map(c =>
-                isRTL ? c.levelNameAr : c.levelNameEn,
+              toogleClick={() => ToggleSheet(0)}
+              data={educationLevels?.data?.map((item: NameProps) =>
+                isRTL ? item.nameAr : item.nameEn,
               )}
               label={t('onboarding:personalInformation:education') || ''}
-              toogleClick={() => ToggleSheet(0)}
               onItemSelected={education => setValues({...values, education})}
               value={values.education}
               error={errors.education}
-              isOpen={currentOpendIndx == 0}
+              isOpen={currentOpendIndx === 0}
               title={t('onboarding:personalInformation:education')}
               subTitle={t('onboarding:personalInformation:education')}
               onSheetClose={() => setCurrentOpenedInx(-1)}
-              hasSearch
             />
             <Spacer />
             <DropDown
               disabled={disabledFields.countryOfBirth}
-              data={countriesList
-                .filter(c => c.code !== 'SA')
-                .map(c => (isRTL ? c.nameAr : c.nameEn))}
+              data={countries?.data
+                ?.filter((c: {code: string}) => c.code !== 'SA')
+                .map((c: {nameAr: string; nameEn: string}) =>
+                  isRTL ? c.nameAr : c.nameEn,
+                )}
               toogleClick={() => {
                 ToggleSheet(1)
                 setValues({...values, city: null})
@@ -375,7 +404,7 @@ function PersonalInformation({navigation}: Props) {
               subTitle={
                 t('onboarding:personalInformation:countryOfBirth') || ''
               }
-              isOpen={currentOpendIndx == 1}
+              isOpen={currentOpendIndx === 1}
               onSheetClose={() => setCurrentOpenedInx(-1)}
               hasSearch
               onItemSelected={countryOfBirth =>
@@ -385,7 +414,9 @@ function PersonalInformation({navigation}: Props) {
             <Spacer />
             {IsSaudi ? (
               <DropDown
-                data={SaudiList.map(c => (isRTL ? c.nameAr : c.nameEn))}
+                data={cities?.data?.map((c: {nameAr: string; nameEn: string}) =>
+                  isRTL ? c.nameAr : c.nameEn,
+                )}
                 disabled={!values.countryOfBirth}
                 toogleClick={() => {
                   if (!values.countryOfBirth) {
@@ -398,13 +429,17 @@ function PersonalInformation({navigation}: Props) {
                 error={errors.city}
                 title={t('onboarding:personalInformation:city')}
                 subTitle={t('onboarding:personalInformation:city')}
-                isOpen={currentOpendIndx == 2}
+                isOpen={currentOpendIndx === 2}
                 onSheetClose={() => setCurrentOpenedInx(-1)}
                 hasSearch
                 onItemSelected={city => setValues({...values, city})}
               />
             ) : (
               <LoginForm>
+                <AdditionalInformation>
+                  {t('onboarding:personalInformation:enterHomeCountry')}
+                </AdditionalInformation>
+                <Spacer />
                 <TCInput
                   value={values.buldingNumber}
                   onChangeText={val =>
@@ -416,10 +451,10 @@ function PersonalInformation({navigation}: Props) {
                 />
                 <InputSpacer />
                 <TCInput
-                  value={values.streetNanme}
-                  onChangeText={val => setValues({...values, streetNanme: val})}
-                  label={t('onboarding:personalInformation:streetNanme')}
-                  errorMessage={errors.streetNanme}
+                  value={values.streetName}
+                  onChangeText={val => setValues({...values, streetName: val})}
+                  label={t('onboarding:personalInformation:streetName')}
+                  errorMessage={errors.streetName}
                   maxLength={50}
                 />
                 <InputSpacer />
@@ -536,7 +571,7 @@ function PersonalInformation({navigation}: Props) {
   )
 }
 
-export default PersonalInformation
+export default memo(PersonalInformation)
 
 const ErrorView = styled(View)`
   padding: 14px 16px;

@@ -17,7 +17,7 @@ import {
   OtpVerificationScreen,
   PersonalInformation,
   AfterPersonExisting,
-  FinicalInformation,
+  FinancialInformation,
   NameVerification,
   LegalinfoMain,
   LegalInfoOther,
@@ -48,9 +48,9 @@ const AuthNavigator = () => {
       <Screen name="RedirectNafaath" component={RedirectNafaath} />
       <Screen name="AfterNafaath" component={AfterNafaath} />
       <Screen name="NameVerification" component={NameVerification} />
-      <Screen name="personalInfo" component={PersonalInformation} />
+      <Screen name="PersonalInfo" component={PersonalInformation} />
       <Screen name="AfterInformation" component={AfterInformation} />
-      <Screen name="FinicalInformation" component={FinicalInformation} />
+      <Screen name="FinancialInformation" component={FinancialInformation} />
       <Screen name="LegalinfoMain" component={LegalinfoMain} />
       <Screen name="LegalInfoOther" component={LegalInfoOther} />
       <Screen name="LegalInfoFlow1" component={LegalInfoFlow1} />

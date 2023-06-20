@@ -26,10 +26,7 @@ export const CityValidator = yup
   .required('Please Enter a Value')
   .min(2, 'min char')
 
-export const ContactName = yup
-  .string()
-  .required('Please Enter a Value')
-  .min(2, 'min char')
+export const ContactName = yup.string().required('Please Enter a Value')
 
 export const relationValidaor = yup
   .string()

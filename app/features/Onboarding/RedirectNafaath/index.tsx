@@ -154,7 +154,7 @@ const NafaqScreen = ({navigation, route}: Props) => {
         })
         setOnboardingProgress(true, true, nafathPullData?.key_details)
 
-        navigation.navigate('personalInfo', {
+        navigation.navigate('PersonalInfo', {
           key_details: nafathPullData,
         })
       }
