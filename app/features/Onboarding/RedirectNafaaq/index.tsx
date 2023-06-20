@@ -1,16 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
 import React, {useEffect, useState} from 'react'
-import {View, Dimensions, Image, Platform, Linking} from 'react-native'
+import {View, Image, Platform, Linking} from 'react-native'
 import {useTranslation} from 'react-i18next'
-import {
-  Layout,
-  TCButton as Button,
-  TCTextView as Text,
-  Spacer,
-} from '@Components'
-import {SPACER_SIZES, TEXT_VARIANTS, BASE_URL, getItem} from '@Utils'
-import styled from 'styled-components/native'
+import cn from 'classnames'
+import {NativeWindStyleSheet} from 'nativewind'
+
+import {Layout, TCButton as Button, TCTextView as Text} from '@Components'
+import {BASE_URL, getItem, screenHeight} from '@Utils'
 import {useMutation} from '@tanstack/react-query'
 import {NativeStackNavigationProp} from '@react-navigation/native-stack'
 import {NafaathLogo} from '@Assets'
@@ -23,18 +20,17 @@ type Props = {
   route: any
 }
 
-const isSmall = Dimensions.get('window').height < 750
+const isSmall = screenHeight < 750
 
 const NafaqScreen = ({navigation, route}: Props) => {
   const {t} = useTranslation()
   const [state, setState] = useState<any>({})
-  const govtId = useStore((store: any) => store.govtId)
   const [statusError, setStatusError] = useState<any>(false)
+  const govtId = useStore((store: any) => store.govtId)
 
   const setOnboardingProgress = useStore(
     (store: any) => store.setOnboardingProgress,
   )
-
   const onBoardingProgress = useStore((store: any) => store.onBoardingProgress)
 
   useFocusEffect(() => {
@@ -56,22 +52,6 @@ const NafaqScreen = ({navigation, route}: Props) => {
             ? 'nafath://request'
             : 'saf.sa.gov.nic.myid://request'
 
-        Linking.openURL(URL)
-      }, 1000)
-    }
-
-    if (
-      data?.historyPage === 'AfterNafaath' &&
-      data?.type === 'web' &&
-      state.redirectRef !== data.redirectRef
-    ) {
-      setState({
-        startTime: Date.now(),
-        redirectRef: data.redirectRef,
-      })
-      nafathPush()
-      setTimeout(() => {
-        let URL = 'https://my.nafath.sa/login'
         Linking.openURL(URL)
       }, 1000)
     }
@@ -142,14 +122,10 @@ const NafaqScreen = ({navigation, route}: Props) => {
       const status = nafathPushData?.status
       switch (true) {
         case status === 409:
-          setStatusError(
-            'Nafaath Request already Exist, Please wait for two minutes',
-          )
+          setStatusError('onboarding:nafathExist')
           break
         case status === 502:
-          setStatusError(
-            'Could not connect with nafaath system, please try after some time',
-          )
+          setStatusError('onboarding:nafathNotConnect')
           break
       }
     }
@@ -223,11 +199,6 @@ const NafaqScreen = ({navigation, route}: Props) => {
     Linking.openURL(URL)
   }
 
-  const onRedirectWeb = () => {
-    let URL = 'https://my.nafath.sa/login'
-    Linking.openURL(URL)
-  }
-
   const onRetry = () => {
     setStatusError(false)
     setState({...state, startTime: Date.now()})
@@ -241,62 +212,68 @@ const NafaqScreen = ({navigation, route}: Props) => {
 
   return (
     <>
-      <Layout isLoading={isNafadLoading} isHeader={false}>
-        <Row>
-          <NafaaqImg source={NafaathLogo} />
-        </Row>
+      <Layout isScrollable={false} isLoading={isNafadLoading} isHeader={false}>
+        <View className="flex-row justify-center">
+          <Image
+            className={cn({
+              'h-[135]': true,
+              'w-[135]': true,
+              'mt-[30]': isSmall,
+              'mt-[90]': !isSmall,
+              'mb-[10]': isSmall,
+              'mb-[34]': !isSmall,
+            })}
+            source={NafaathLogo}
+          />
+        </View>
+
         {!state.transectionID || !state.randomVal ? (
           <>
-            <Body variant={TEXT_VARIANTS.label}>
+            <Text className="text-center text-tc-gray text-sm">
               {t('onboarding:redirectNafath')}
-            </Body>
+            </Text>
             {statusError && (
               <>
-                <Spacer size={SPACER_SIZES.BASE * 2} />
-                <ErrorText>{statusError}</ErrorText>
+                <Text className="text-center my-4 text-tc-danger font-bold">
+                  {t(statusError)}
+                </Text>
 
-                <ButtonContainer>
+                <View className="absolute bottom-button-3 mx-4 w-full">
                   <Button onPress={onRetry}>
-                    <Text variant={TEXT_VARIANTS.body}>
-                      {t('onboarding:retry')}
-                    </Text>
+                    <Text className="font-base">{t('common:retry')}</Text>
                   </Button>
-                </ButtonContainer>
+                </View>
               </>
             )}
           </>
         ) : (
           <>
-            <CenterHeading variant={TEXT_VARIANTS.subheading}>
+            <Text className="text-center font-bold text-2xl">
               {t('onboarding:verificationThroughNafath')}
-            </CenterHeading>
-            <Spacer size={SPACER_SIZES.BASE * (isSmall ? 1 : 4)} />
-            <Body variant={TEXT_VARIANTS.label}>
+            </Text>
+            <Text
+              className={cn({
+                'text-center': true,
+                'text-tc-gray': true,
+                'text-sm': true,
+                'mt-[8]': isSmall,
+                'mt-[32]': !isSmall,
+              })}>
               {t('onboarding:authCode')}
-            </Body>
-            <CircleContainer>
-              <Circle>
-                <Text>{state.randomVal}</Text>
-              </Circle>
-            </CircleContainer>
-            <Body variant={TEXT_VARIANTS.label}>
+            </Text>
+            <View className="justify-center content-center flex-row">
+              <View className=" bg-tc-primary rounded-t-[32] rounded-b-[32] h-16 w-16 text-3xl font-bold justify-center content-center">
+                <Text className="text-center ">{state.randomVal}</Text>
+              </View>
+            </View>
+            <Text className="text-center text-tc-gray text-sm mb-4">
               {t('onboarding:selectCode')}
-            </Body>
-
-            <ButtonContainer>
+            </Text>
+            <View className="absolute bottom-button-1 mx-4 w-full">
               <Button onPress={onRedirectApp}>
-                <Text variant={TEXT_VARIANTS.body}>
-                  {t('onboarding:nafathByApp')}
-                </Text>
+                <Text className="font-base">{t('onboarding:nafathByApp')}</Text>
               </Button>
-            </ButtonContainer>
-            <ButtonContainerSecond>
-              <Button onPress={onRedirectWeb} varient="transparent">
-                <Text variant={TEXT_VARIANTS.body}>
-                  {t('onboarding:nafathByWeb')}
-                </Text>
-              </Button>
-            </ButtonContainerSecond>
+            </View>
           </>
         )}
       </Layout>
@@ -304,64 +281,12 @@ const NafaqScreen = ({navigation, route}: Props) => {
   )
 }
 
-const ButtonContainer = styled(View)`
-  position: absolute;
-  bottom: 114px;
-  width: ${Dimensions.get('window').width}px;
-  padding-left: 32px;
-  padding-right: 32px;
-`
-
-const ButtonContainerSecond = styled(View)`
-  position: absolute;
-  bottom: 34px;
-  width: ${Dimensions.get('window').width}px;
-  padding-left: 32px;
-  padding-right: 32px;
-`
-const NafaaqImg = styled(Image)`
-  height: 135px;
-  width: 135px;
-  margin-top: ${isSmall ? 30 : 90}px;
-  margin-bottom: ${isSmall ? 10 : 34}px;
-`
-
-const Row = styled(View)`
-  flex-direction: row;
-  justify-content: center;
-`
-
-const Body = styled(Text)`
-  line-height: 28px;
-  text-align: center;
-  color: #4f4f4f;
-`
-
-const CenterHeading = styled(Text)`
-  text-align: center;
-  font-weight: bold;
-`
-
-const CircleContainer = styled(View)`
-  display: flex;
-  justify-content: center;
-  flex-direction: row;
-`
-const Circle = styled(View)`
-  background-color: #f8d03b;
-  border-radius: 32px;
-  height: 64px;
-  width: 64px;
-  font-size: 30px;
-  font-weight: bold;
-  justify-content: center;
-  align-items: center;
-`
-const ErrorText = styled(Text)`
-  font-weight: 500;
-  color: #f54d3f;
-  padding-left: 16px;
-  text-align: center;
-`
+NativeWindStyleSheet.create({
+  styles: {
+    'bottom-button-1': {
+      bottom: 50,
+    },
+  },
+})
 
 export default NafaqScreen

@@ -22,6 +22,7 @@ module.exports = {
           primary: '#f8d03b',
           secondary: '#3f3d36',
           black: '#131109',
+          gray: '#4f4f4f',
           'black-btn': '#352D0F',
           'tab-text': '#343D45',
           'text-black': '#0E1215',

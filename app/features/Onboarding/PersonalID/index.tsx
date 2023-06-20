@@ -149,7 +149,7 @@ const PersonalIdScreen = ({navigation}: Props) => {
         />
 
         {statusError && (
-          <Text className="text-center text-tc-danger font-bold">
+          <Text className="text-center my-4 text-tc-danger font-bold">
             {statusError}
           </Text>
         )}
@@ -204,7 +204,7 @@ const PersonalIdScreen = ({navigation}: Props) => {
               'below-button': !(isSmall || isKeyboardVisible),
               absolute: !(isSmall || isKeyboardVisible),
             })}>
-            <Button onPress={mutate} disabled={isButtonDisabled}>
+            <Button onPress={mutate} disabled={isButtonDisabled || isLoading}>
               <Text>{t('onboarding:continue')}</Text>
             </Button>
           </View>
@@ -233,7 +233,7 @@ const PersonalIdScreen = ({navigation}: Props) => {
 
       <KeyboardStickyButton
         onPress={mutate}
-        isDisabled={isButtonDisabled}
+        isDisabled={isButtonDisabled || isLoading}
         value={t('onboarding:continue')}
       />
     </>

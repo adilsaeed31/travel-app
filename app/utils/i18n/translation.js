@@ -2,6 +2,7 @@ export const translation = {
   en: {
     common: {
       back: 'Back',
+      retry: 'Retry',
       required: 'required',
       home: 'Home',
       loyalty: 'Loyalty',
@@ -63,6 +64,9 @@ export const translation = {
         'To continue with the account opening process, please verify yourself with Nafath',
       nafathByApp: 'Verify by Nafath App',
       nafathByWeb: 'Verify by Nafath web portal',
+      nafathExist: 'Nafaath Request already Exist, Please wait for two minutes',
+      nafathNotConnect:
+        'Could not connect with nafaath system, please try after some time',
       confirmCall:
         'Your account opening application is submitted successfully & you will receive a call to confirm the account opening.',
       ref: 'Ref. #',
@@ -232,6 +236,8 @@ export const translation = {
         'للمتابعة في عملية انشاء الحساب, فضلاً أثبت هويتك عن طريق نفاذ',
       nafathByApp: 'التحقق عن طريق تطبيق نفاذ',
       nafathByWeb: 'التحقق طريق موقع نفاذ',
+      nafathExist: 'طلب نافاث موجود بالفعل ، يرجى الانتظار لمدة دقيقتين',
+      nafathNotConnect: 'تعذر الاتصال بنظام نافاث ، يرجى المحاولة بعد قليل',
       confirmCall: 'عملية إنشاء حسابك تمت بنجاح و سيصلك إتصال للتأكيد',
       ref: 'رقم مرجع التسجيل',
       returnLogin: 'العودة لصفحة تسجيل الدخول',
