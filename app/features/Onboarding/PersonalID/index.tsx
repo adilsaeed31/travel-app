@@ -121,7 +121,7 @@ const PersonalIdScreen = ({navigation}: Props) => {
 
   return (
     <>
-      <Layout isLoading={isLoading}>
+      <Layout isScrollable={false} isLoading={isLoading}>
         <Text className="heading-1 my-6">{t('onboarding:openAccount')}</Text>
 
         <Input
