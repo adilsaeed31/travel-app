@@ -1,7 +1,7 @@
 export {default as PersonalID} from './PersonalID'
 export {default as OtpPersonalID} from './OtpPersonalID'
 export {default as AfterOtpPersonalId} from './AfterOtpPersonalId'
-export {default as RedirectNafaaq} from './RedirectNafaaq'
+export {default as RedirectNafaath} from './RedirectNafaath'
 export {default as AfterNafaath} from './AfterNafaath'
 export {default as AfterInformation} from './AfterInformation'
 export {default as ActivateCard} from './ActivateCard'

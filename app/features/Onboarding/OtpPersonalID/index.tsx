@@ -220,7 +220,7 @@ const OtpPersonalIdScreen = ({navigation, route}: Props) => {
         resetOTP()
         resetTahaquq()
         setOnboardingProgress({...onBoardingProgress, isOTPVerified: true})
-        navigation.navigate('RedirectNafaaq')
+        navigation.navigate('RedirectNafaath')
         return
       }
       if (state.otp && tahaquqData && tahaquqData.match === false) {

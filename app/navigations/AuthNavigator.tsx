@@ -9,7 +9,7 @@ import {
   PersonalID,
   OtpPersonalID,
   AfterOtpPersonalId,
-  RedirectNafaaq,
+  RedirectNafaath,
   AfterNafaath,
   AfterInformation,
   OTPActivateCard,
@@ -45,7 +45,7 @@ const AuthNavigator = () => {
       <Screen name="PersonalID" component={PersonalID} />
       <Screen name="OtpPersonalId" component={OtpPersonalID} />
       <Screen name="AfterOtpPersonalId" component={AfterOtpPersonalId} />
-      <Screen name="RedirectNafaaq" component={RedirectNafaaq} />
+      <Screen name="RedirectNafaath" component={RedirectNafaath} />
       <Screen name="AfterNafaath" component={AfterNafaath} />
       <Screen name="NameVerification" component={NameVerification} />
       <Screen name="personalInfo" component={PersonalInformation} />
