@@ -1,5 +1,8 @@
 import React from 'react'
-import {createNativeStackNavigator} from '@react-navigation/native-stack'
+import {
+  CardStyleInterpolators,
+  createStackNavigator,
+} from '@react-navigation/stack'
 
 import {
   AuthFeature,
@@ -26,7 +29,7 @@ import {
 } from '@Features'
 import {WIPScreen, DownstreamFail} from '@Screens'
 
-const {Navigator, Screen} = createNativeStackNavigator()
+const {Navigator, Screen} = createStackNavigator()
 
 const AuthNavigator = () => {
   return (
@@ -35,7 +38,7 @@ const AuthNavigator = () => {
       screenOptions={{
         headerShown: false,
         gestureEnabled: false,
-        animation: 'slide_from_right',
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       }}>
       <Screen name="Auth" component={AuthFeature} />
       <Screen name="OTPAuth" component={OtpVerificationScreen} />
@@ -58,8 +61,8 @@ const AuthNavigator = () => {
       <Screen name="CreateUser" component={CreateUser} />
       <Screen name="ActivateCard" component={ActivateCard} />
       <Screen name="OTPActivateCard" component={OTPActivateCard} />
-      <Screen name="WIP" component={WIPScreen} />
       <Screen name="DownstreamFail" component={DownstreamFail} />
+      <Screen name="WIP" component={WIPScreen} />
     </Navigator>
   )
 }
