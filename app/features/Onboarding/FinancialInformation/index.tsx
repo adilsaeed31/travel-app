@@ -885,7 +885,7 @@ function FinancialInformation({navigation}: Props) {
               )}
               label={t('onboarding:financialInformation:occupation') || ''}
               toogleClick={() => ToggleSheet(SheetsIndexs.Occupation)}
-              disabled={fincialInformationGetData?.occupation?.code}
+              disabled={!!fincialInformationGetData?.occupation?.code}
               onItemSelected={occupation => {
                 setValues({
                   ...values,
