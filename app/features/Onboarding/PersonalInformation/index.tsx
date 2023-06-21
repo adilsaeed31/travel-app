@@ -24,6 +24,7 @@ type IFormTYpe = {
   city: string | null
   education: string | null
   countryOfBirth: string | null
+  countryOfBirthCode?: string | undefined
   buldingNumber: string | null
   streetName: string | null
   district: string | null
@@ -38,6 +39,7 @@ type IFormTYpe = {
 const FormValues = {
   education: '',
   countryOfBirth: '',
+  countryOfBirthCode: '',
   city: '',
   buldingNumber: '',
   streetName: '',
@@ -54,7 +56,7 @@ type Props = {
   navigation: NativeStackNavigationProp<any>
 }
 
-type NameProps = {nameAr: string; nameEn: string}
+type ItemProps = {nameAr: string; nameEn: string; code?: string}
 
 function PersonalInformation({navigation}: Props) {
   const {t} = useTranslation()
@@ -77,18 +79,19 @@ function PersonalInformation({navigation}: Props) {
 
   // below hook will fetch all master data information
   const {countries, educationLevels, cities} = useMasterData({
-    country: values?.countryOfBirth ?? 'SA',
+    country: values?.countryOfBirthCode,
   })
 
   const IsSaudi = useMemo(() => {
     const current = countries?.data?.findIndex(
-      (country: NameProps) =>
+      (country: ItemProps) =>
         country.nameAr === values?.countryOfBirth ||
         country.nameEn === values?.countryOfBirth,
     )
 
     const isSaudiSelected =
       current === -1 ? false : countries?.data?.[current]?.code === 'SA'
+
     return isSaudiSelected || !values?.countryOfBirth
   }, [countries, values?.countryOfBirth])
 
@@ -243,26 +246,22 @@ function PersonalInformation({navigation}: Props) {
 
   const MapFormValuesForApi = useCallback(() => {
     let educationOb = educationLevels?.data?.find(
-      (item: NameProps) =>
+      (item: ItemProps) =>
         item.nameEn === values.education || item.nameAr === values.education,
     )
     let birthCountryOb = countries?.data?.find(
-      (item: NameProps) =>
+      (item: ItemProps) =>
         item.nameAr === values.countryOfBirth ||
         item.nameEn === values.countryOfBirth,
     )
-    let birthCity = cities?.data?.find((item: NameProps) =>
+    let birthCity = cities?.data?.find((item: ItemProps) =>
       isRTL ? item.nameAr === values.city : item.nameEn === values.city,
     )
     let education = {
-      level_code: educationOb?.code,
-      level_name_en: educationOb?.nameEn,
-      level_name_ar: educationOb?.nameAr,
+      ...educationOb,
     }
     let birth_country = {
-      code: birthCountryOb?.code,
-      name_en: birthCountryOb?.nameEn,
-      name_ar: birthCountryOb?.nameAr,
+      ...birthCountryOb,
     }
     let birth_city = !IsSaudi
       ? null
@@ -317,6 +316,21 @@ function PersonalInformation({navigation}: Props) {
   }, [GetPersonalInformationData])
 
   useEffect(() => {
+    if (IsSaudi) {
+      const countryCode = countries?.data?.filter(
+        (item: ItemProps) =>
+          item.nameAr === values?.countryOfBirth ||
+          item.nameEn === values?.countryOfBirth,
+      )?.[0]?.code
+
+      setValues(prev => ({
+        ...prev,
+        countryOfBirthCode: countryCode,
+      }))
+    }
+  }, [IsSaudi, countries?.data, values?.countryOfBirth])
+
+  useEffect(() => {
     setValues({
       ...values,
       ...MapApiToState(PersonalInformationData),
@@ -329,7 +343,7 @@ function PersonalInformation({navigation}: Props) {
     )
 
     if (
-      PersonalInformationData?.birth_country?.name_ar ||
+      PersonalInformationData?.birth_country?.name_en ||
       PersonalInformationData?.birth_country?.name_ar
     ) {
       setDisabledFields({...disabledFields, countryOfBirth: true})
@@ -345,10 +359,10 @@ function PersonalInformation({navigation}: Props) {
       navigation.navigate('FinancialInformation')
     }
 
-    if (!data?.onboarding_application_id) {
+    if (data && !data?.onboarding_application_id) {
       setSystemErrorMessage(t('common:someThingWentWrong'))
     }
-  }, [data])
+  }, [data, data?.onboarding_application_id])
 
   return (
     <ScrollView
@@ -373,7 +387,7 @@ function PersonalInformation({navigation}: Props) {
               hasSearch
               dynamicHeight
               toogleClick={() => ToggleSheet(0)}
-              data={educationLevels?.data?.map((item: NameProps) =>
+              data={educationLevels?.data?.map((item: ItemProps) =>
                 isRTL ? item.nameAr : item.nameEn,
               )}
               label={t('onboarding:personalInformation:education') || ''}

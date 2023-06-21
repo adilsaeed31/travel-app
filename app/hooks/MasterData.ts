@@ -3,9 +3,9 @@ import {useQueries} from '@tanstack/react-query'
 import {getMasterData} from '@Api'
 
 type masterDataProps = {
-  occupation?: string
-  country?: string
-  job?: string
+  occupation?: string | undefined
+  country?: string | undefined
+  job?: string | undefined
 }
 
 const useMasterData = ({country, job, occupation}: masterDataProps) => {
