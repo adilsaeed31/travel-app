@@ -11,6 +11,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack'
 import {useMutation} from '@tanstack/react-query'
 import styled from 'styled-components/native'
 import {useTranslation} from 'react-i18next'
+import cn from 'classnames'
 
 import {
   Layout,
@@ -22,9 +23,10 @@ import {
   DatePicker,
 } from '@Components'
 import {fetcher} from '@Api'
+import {PlusIcon} from '@Assets'
 import {useMasterData} from '@Hooks'
 import {AppContext, AppProviderProps} from '@Context'
-import {TEXT_VARIANTS, Colors, getItem, BASE_URL} from '@Utils'
+import {TEXT_VARIANTS, Colors, getItem, BASE_URL, flexRowLayout} from '@Utils'
 
 import {SheetData, SheetsIndexs} from './SheetData'
 
@@ -208,13 +210,13 @@ function FinancialInformation({navigation}: Props) {
         journeySecrets = JSON.parse(journeySecretsData)
       }
       let req: any = await fetcher(BASE_URL + '/onboarding/financial', {
-        method: 'GET',
         token: journeySecrets.access_token,
       })
       let res = await req.json()
       return res
     },
   })
+
   useEffect(() => {
     GetFinicalInformationMutate()
   }, [GetFinicalInformationMutate])
@@ -308,12 +310,9 @@ function FinancialInformation({navigation}: Props) {
    */
 
   const MapApiApiToState = useCallback(() => {
-    let occupation = fincialInformationGetData?.occupation?.code
-      ? jobOccupations?.data?.find(
-          (item: {code: number}) =>
-            item.code === fincialInformationGetData?.occupation?.code,
-        )
-      : null
+    let occupation = fincialInformationGetData?.occupation
+    let occupationCode = fincialInformationGetData?.occupation?.code
+
     let jobCategory = fincialInformationGetData?.employment?.category
       ? isRTL
         ? fincialInformationGetData?.employment?.category.name_ar
@@ -332,9 +331,9 @@ function FinancialInformation({navigation}: Props) {
     let dateOfJoin = fincialInformationGetData?.employment?.joining_date
     let primarySourceOfIncome = fincialInformationGetData?.primary_income
       ?.source
-      ? SheetData.primarySourceOfIncome.find(
-          c =>
-            c.type_code === fincialInformationGetData?.primary_income?.source,
+      ? primaryIncomeSources?.data?.find(
+          (item: {code: string}) =>
+            item.code === fincialInformationGetData?.primary_income?.source,
         )
       : null
     return {
@@ -345,14 +344,15 @@ function FinancialInformation({navigation}: Props) {
       dateOfJoin,
       primarySourceOfIncome: primarySourceOfIncome
         ? isRTL
-          ? primarySourceOfIncome.description_ar
-          : primarySourceOfIncome.description_en
+          ? primarySourceOfIncome.name_ar
+          : primarySourceOfIncome.name_en
         : null,
       occupation: occupation
         ? isRTL
-          ? occupation.description_ar
-          : occupation.description_en
+          ? occupation.name_ar
+          : occupation.name_en
         : null,
+      occupationCode,
       nameOfBusiness: fincialInformationGetData?.business_name || null,
       monthlyPrimaryIncomAmount:
         fincialInformationGetData?.primary_income?.amount ||
@@ -383,13 +383,15 @@ function FinancialInformation({navigation}: Props) {
         ? fincialInformationGetData?.additional_income_list[0]?.amount
         : '',
     }
-  }, [fincialInformationGetData, isRTL, jobOccupations?.data, values])
+  }, [isRTL, values, fincialInformationGetData, primaryIncomeSources?.data])
 
   const MapStateForAPi = () => {
-    let occupation = jobOccupations?.data?.find(
-      (item: ItemProps) =>
-        item.nameAr === values.occupation || item.nameEn === values.occupation,
-    )
+    // let occupation = jobOccupations?.data?.find(
+    //   (item: ItemProps) =>
+    //     item.nameAr === values.occupation || item.nameEn === values.occupation,
+    // )
+    let occupation = fincialInformationGetData?.occupation
+
     let business_name = values.nameOfBusiness
 
     let tilte = values.jobTitle
@@ -750,6 +752,7 @@ function FinancialInformation({navigation}: Props) {
                     ToggleSheet(SheetsIndexs.addetionalSourceOfIncome)
                   }
                   onItemSelected={AddetionalSourceOfIncomeSource => {
+                    // AddetionalSourceOfIncomeAmount
                     setValues({...values, AddetionalSourceOfIncomeSource})
                   }}
                   value={values.AddetionalSourceOfIncomeSource}
@@ -788,9 +791,12 @@ function FinancialInformation({navigation}: Props) {
                         AnotherAddetionalSourceOfIncome: true,
                       })
                     }}>
-                    <AnotherAddetionalIconmeSource>
-                      {t('onboarding:financialInformation:addAnotherSource')}
-                    </AnotherAddetionalIconmeSource>
+                    <View className={cn(flexRowLayout(isRTL))}>
+                      <PlusIcon className="mr-2" />
+                      <AnotherAddetionalIconmeSource>
+                        {t('onboarding:financialInformation:addAnotherSource')}
+                      </AnotherAddetionalIconmeSource>
+                    </View>
                   </AnotherAddetionalIconmeSourceWrapper>
                 )}
                 {values.AnotherAddetionalSourceOfIncome && (
@@ -879,7 +885,7 @@ function FinancialInformation({navigation}: Props) {
               )}
               label={t('onboarding:financialInformation:occupation') || ''}
               toogleClick={() => ToggleSheet(SheetsIndexs.Occupation)}
-              disabled={GosiSuccess}
+              disabled={false}
               onItemSelected={occupation => {
                 setValues({
                   ...values,
@@ -974,11 +980,11 @@ const SafeAreaWrapper = styled(SafeAreaView)`
 const FormWrapper = styled(SafeAreaView)<{isRTL: boolean}>``
 
 const ScrollerView = styled.ScrollView``
+
 const AnotherAddetionalIconmeSourceWrapper = styled(TouchableOpacity)`
   margin-top: 10px;
   margin-bottom: 32px;
   justify-content: center;
-  align-items: center;
   width: 100%;
   padding: 12px 16px;
   height: 70px;
