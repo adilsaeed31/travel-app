@@ -1,7 +1,7 @@
-import i18n from 'i18next'
 import {StateCreator} from 'zustand'
 
 import {clearStorage} from '@Utils'
+import {useStore} from '@Store'
 
 // below is the example to set the multiple files state and store
 export type AppStateProps = {
@@ -37,8 +37,6 @@ const AppState: StateCreator<AppStateProps> = set => ({
   cardData: [],
   activeCardIndex: 0,
   toggleLanguage: () => {
-    i18n.changeLanguage(i18n.language === 'ar' ? 'en' : 'ar')
-
     set(state => ({
       language: state.language === 'en' ? 'ar' : 'en',
       isRTL: !state.isRTL,

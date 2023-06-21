@@ -4,7 +4,6 @@ import {EurLogo, SarLogo} from '@Assets'
 import {useTranslation} from 'react-i18next'
 
 import {TCButton as Button, TCTextView, Layout} from '@Components'
-import {SPACER_SIZES, TEXT_VARIANTS, UserNameValidator} from '@Utils'
 import {NativeStackNavigationProp} from '@react-navigation/native-stack'
 import FundsView from './Components/FundsView'
 
@@ -23,12 +22,10 @@ const LoadFundsScreen = ({navigation}: Props) => {
         isBack={true}
         isScrollable={false}
         isLoading={false}>
-        <View className="flex-1 flex-grow-0 flex-row justify-between">
-          <TCTextView className="text-black text-xl font-bold pt-3">
-            Load
-          </TCTextView>
+        <View className="flex-1 flex-grow-0 flex-row justify-between pt-4">
+          <TCTextView className="text-black text-xl font-bold">Load</TCTextView>
         </View>
-        <View className="flex-1 flex-grow-0 flex-row justify-between pb-3 pt-9">
+        <View className="flex-1 flex-grow-0 flex-row justify-between pb-3 pt-8">
           <TCTextView className="text-xl text-tc-tab-text font-bold pt-8">
             Source
           </TCTextView>

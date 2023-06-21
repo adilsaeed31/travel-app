@@ -5,11 +5,12 @@
  * @format
  */
 
-import React from 'react'
+import React, {useEffect} from 'react'
 import i18next from 'i18next'
 import {LogBox} from 'react-native'
 import {QueryClientProvider} from '@tanstack/react-query'
 import {GestureHandlerRootView} from 'react-native-gesture-handler'
+import i18n from 'i18next'
 
 import {queryClient} from '@Api'
 import {translation} from '@Utils'
@@ -29,6 +30,7 @@ interface CustomLanguageDetectorType {
 }
 
 function App(): React.JSX.Element {
+  const language = useStore(state => state.language)
   const languageDetector: CustomLanguageDetectorType = {
     type: 'languageDetector',
     async: true,
@@ -44,6 +46,9 @@ function App(): React.JSX.Element {
     resources: translation,
   })
 
+  useEffect(() => {
+    i18n.changeLanguage(language)
+  }, [language])
   LogBox.ignoreAllLogs()
 
   return (
